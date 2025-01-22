@@ -38,7 +38,9 @@
                     </el-row>
                 </el-aside>
                 <el-container>
-                    <el-main>Main</el-main>
+                    <el-main>
+                        <slot></slot>
+                    </el-main>
                     <el-footer>Footer</el-footer>
                 </el-container>
             </el-container>
