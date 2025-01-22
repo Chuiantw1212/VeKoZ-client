@@ -1,12 +1,8 @@
 <template>
     <div class="votionCalendar">
-        <ElButton>+</ElButton>
-        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'>
-            <template v-slot:eventContent='arg'>
-                <b>{{ arg.timeText }}</b>
-                <i>{{ arg.event.title }}</i>
-            </template>
-        </FullCalendar>
+        <ElButton size="small">123</ElButton>
+        <ElButton small>123</ElButton>
+        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
     </div>
 </template>
 <script setup lang="ts">
@@ -67,6 +63,7 @@ function toggleEventAddingBtn(event: Event) {
     button.type = 'button'
     button.classList.add('addEventBtn')
     button.classList.add('el-button')
+    button.classList.add('el-button--small')
     button.innerHTML = "+"
     dayTop.append(button)
 }
@@ -92,7 +89,7 @@ onBeforeUnmount(() => {
     }
 
     .addEventBtn {
-        transform: translate(10px, 10px);
+        transform: translate(4px, 4px);
     }
 }
 </style>
