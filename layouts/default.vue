@@ -1,9 +1,13 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>
+        <HeaderMenu></HeaderMenu>
+      </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <el-aside width="200px">
+          <SideMenu></SideMenu>
+        </el-aside>
         <el-container>
           <el-main>
             <slot></slot>
@@ -14,3 +18,7 @@
     </el-container>
   </div>
 </template>
+<script setup lang="ts">
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import SideMenu from '~/components/SideMenu.vue';
+</script>
