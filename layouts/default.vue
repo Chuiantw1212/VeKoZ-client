@@ -1,10 +1,16 @@
 <template>
-  <main class="px-10 py-20 text-center">
-    <RightTopMenu class="absolute top-4 right-4" />
-
-    <slot />
-    <div class="mx-auto mt-5 text-center text-sm opacity-25">
-      [Default Layout]
-    </div>
-  </main>
+  <div class="common-layout">
+    <el-container>
+      <el-header>Header</el-header>
+      <el-container>
+        <el-aside width="200px">Aside</el-aside>
+        <el-container>
+          <el-main>
+            <slot></slot>
+          </el-main>
+          <el-footer>Footer</el-footer>
+        </el-container>
+      </el-container>
+    </el-container>
+  </div>
 </template>

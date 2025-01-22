@@ -1,14 +1,15 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'home',
+  layout: 'default',
 })
 </script>
 
 <template>
-  <div class="page-index">
-    <TheLogos />
-    <TheExamples />
-  </div>
+  主要內容
+  <!-- <div class="page-index"> -->
+    <!-- <TheLogos /> -->
+    <!-- <TheExamples /> -->
+  <!-- </div> -->
 </template>
 
 <style>
