@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { repository } from "~/../package.json";
+import { repository } from "~/package.json";
 </script>
 
 <template>
