@@ -49,7 +49,8 @@
 </template>
 
 <script lang="ts" setup>
-import '~/assets/dark.scss'
+import '~/assets/index.scss'
+// import 'element-plus/theme-chalk/dark/css-vars.css'
 import { ref } from 'vue'
 
 const activeIndex = ref('1')
@@ -58,8 +59,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
 }
 </script>
 
-<style>
-.el-menu--horizontal>.el-menu-item:nth-child(1) {
+<style lang="scss" scoped>
+// @import url("~/assets/index.scss");
+/* .el-menu--horizontal>.el-menu-item:nth-child(1) {
     margin-right: auto;
-}
+} */
 </style>
