@@ -1,26 +1,18 @@
 $-colors: (
-  'primary': (
-    'base': rgba(107,33,168, 1),
+  'primary': ('base': #409eff,
   ),
-  'success': (
-    'base': green,
+  'success': ('base': green,
   ),
-  'warning': (
-    'base': #f9a23c,
+  'warning': ('base': #f9a23c,
   ),
-  'danger': (
-    'base': #ff3300,
+  'danger': ('base': #ff3300,
   ),
-  'error': (
-    'base': #f56c6c,
+  'error': ('base': #f56c6c,
   ),
-  'info': (
-    'base': #909399,
+  'info': ('base': #909399,
   ),
 );
 
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  $colors: $-colors
-);
+@forward 'element-plus/theme-chalk/src/common/var.scss' with ($colors: $-colors);
 
 @use './dark.scss';

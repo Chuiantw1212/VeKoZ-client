@@ -1,7 +1,12 @@
 <template>
     <div class="votionCalendar">
-        <!-- <h1>Demo App</h1> -->
-        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions' />
+        <ElButton>+</ElButton>
+        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'>
+            <template v-slot:eventContent='arg'>
+                <b>{{ arg.timeText }}</b>
+                <i>{{ arg.event.title }}</i>
+            </template>
+        </FullCalendar>
     </div>
 </template>
 <script setup lang="ts">
@@ -9,6 +14,10 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
+/**
+ * Vue3範例
+ * https://github.com/fullcalendar/fullcalendar-examples/blob/main/vue3/src/DemoApp.vue
+ */
 const calendarOptions = reactive({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
@@ -25,8 +34,8 @@ const calendarOptions = reactive({
         // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
         // alert('Current view: ' + info.view.type);
         // change the day's background color just for fun
-        info.dayEl.style.backgroundColor = 'red';
-    }
+        // info.dayEl.style.backgroundColor = 'red';
+    },
 })
 
 function locateToday() {
@@ -35,18 +44,31 @@ function locateToday() {
 }
 
 function listenToDateCell(isOn: boolean) {
-    const items = document.querySelectorAll('.fc-daygrid-day-events')
+    const items = document.querySelectorAll('.fc-daygrid-day-frame')
     if (isOn) {
         items.forEach(item => {
-            item.addEventListener('mouseEnter', toggleEventAddingBtn)
+            item.addEventListener('mouseenter', toggleEventAddingBtn)
         })
     }
 }
 
-function toggleEventAddingBtn(event: any) {
-    console.log({
-        event
+function toggleEventAddingBtn(event: Event) {
+    const dayFrame = event.target as any
+    const dayTop = dayFrame.querySelector('.fc-daygrid-day-top')
+
+    // 移除所有的事件增加按鈕
+    const items = document.querySelectorAll('.addEventBtn')
+    items.forEach(item => {
+        item.remove()
     })
+
+    // 顯示新增按鈕上去
+    const button = document.createElement("button")
+    button.type = 'button'
+    button.classList.add('addEventBtn')
+    button.classList.add('el-button')
+    button.innerHTML = "+"
+    dayTop.append(button)
 }
 
 onMounted(() => {
@@ -67,6 +89,10 @@ onBeforeUnmount(() => {
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
+    }
+
+    .addEventBtn {
+        transform: translate(10px, 10px);
     }
 }
 </style>
