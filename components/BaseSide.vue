@@ -18,13 +18,7 @@ function handleClose(key: string, keyPath: string[]) {
 </script>
 
 <template>
-  <el-menu
-    router
-    default-active="1"
-    class="el-menu-vertical-demo"
-    @open="handleOpen"
-    @close="handleClose"
-  >
+  <el-menu router default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
     <el-sub-menu index="1">
       <template #title>
         <el-icon>

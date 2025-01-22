@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: [
-    '@element-plus/nuxt'
+    '@element-plus/nuxt',
+    '@unocss/nuxt',
   ],
   elementPlus: { /** Options */ },
 })
