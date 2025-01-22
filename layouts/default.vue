@@ -6,7 +6,7 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <!-- <SideMenu></SideMenu> -->
+          <SideMenu></SideMenu>
         </el-aside>
         <el-container>
           <el-main>
@@ -20,5 +20,5 @@
 </template>
 <script setup lang="ts">
 import HeaderMenu from '@/components/HeaderMenu.vue'
-// import SideMenu from '@/components/SideMenu.vue';
+import SideMenu from '@/components/SideMenu.vue';
 </script>
