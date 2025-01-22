@@ -5,7 +5,7 @@
         <HeaderMenu></HeaderMenu>
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside>
           <SideMenu></SideMenu>
         </el-aside>
         <el-container>

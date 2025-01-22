@@ -2,7 +2,7 @@
   <div>
     <el-row class="tac">
       <el-col :span="12">
-        <h5 class="mb-2">Default colors</h5>
+        <!-- <h5 class="mb-2">Default colors</h5> -->
         <el-menu default-active="2" class="el-menu-vertical-demo">
           <el-sub-menu index="1">
             <template #title>
@@ -31,7 +31,7 @@
           </el-menu-item>
           <el-menu-item index="3" disabled>
             <el-icon>
-              <document />
+              <!-- <document /> -->
             </el-icon>
             <span>Navigator Three</span>
           </el-menu-item>
