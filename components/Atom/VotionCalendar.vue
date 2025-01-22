@@ -15,7 +15,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 const calendarOptions = reactive({
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
-    weekends: false,
     events: [
         { title: 'Meeting', start: new Date() }
     ],
@@ -32,22 +31,35 @@ const calendarOptions = reactive({
     },
 })
 
-function locateToday() {
-    const dateNow = new Date()
-    const day = dateNow.getDay()
-}
-
 function listenToDateCell(isOn: boolean) {
-    const items = document.querySelectorAll('.fc-daygrid-day-frame')
+    const frames = document.querySelectorAll('.fc-daygrid-day-frame')
     if (isOn) {
-        items.forEach(item => {
+        frames.forEach(item => {
             item.addEventListener('mouseenter', toggleEventAddingBtn)
         })
     } else {
-        items.forEach(item => {
+        frames.forEach(item => {
             item.removeEventListener('mouseenter', toggleEventAddingBtn)
         })
     }
+}
+
+function listenToFcButton(isOn: boolean) {
+    const fcButtons = document.querySelectorAll('.fc-button')
+    if (isOn) {
+        fcButtons.forEach(item => {
+            item.addEventListener('click', resetDateCellListener)
+        })
+    } else {
+        fcButtons.forEach(item => {
+            item.removeEventListener('click', resetDateCellListener)
+        })
+    }
+}
+
+function resetDateCellListener() {
+    listenToDateCell(false)
+    listenToDateCell(true)
 }
 
 function toggleEventAddingBtn(event: Event) {
@@ -71,14 +83,15 @@ function toggleEventAddingBtn(event: Event) {
 }
 
 onMounted(() => {
-    locateToday()
     nextTick(() => {
         listenToDateCell(true)
+        listenToFcButton(true)
     })
 })
 
 onBeforeUnmount(() => {
     listenToDateCell(false)
+    listenToFcButton(false)
 })
 </script>
 
