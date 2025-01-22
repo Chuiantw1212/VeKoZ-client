@@ -43,6 +43,10 @@ function listenToDateCell(isOn: boolean) {
         items.forEach(item => {
             item.addEventListener('mouseenter', toggleEventAddingBtn)
         })
+    } else {
+        items.forEach(item => {
+            item.removeEventListener('mouseenter', toggleEventAddingBtn)
+        })
     }
 }
 
