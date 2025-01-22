@@ -1,7 +1,5 @@
 <template>
     <div class="votionCalendar">
-        <ElButton size="small">123</ElButton>
-        <ElButton small>123</ElButton>
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
     </div>
 </template>
