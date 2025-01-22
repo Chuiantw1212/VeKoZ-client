@@ -1,6 +1,8 @@
 <template>
-    <h1>Demo App</h1>
-    <FullCalendar :options='calendarOptions' />
+    <div class="votionCalendar">
+        <!-- <h1>Demo App</h1> -->
+        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions' />
+    </div>
 </template>
 <script setup lang="ts">
 import FullCalendar from '@fullcalendar/vue3'
@@ -32,7 +34,39 @@ function locateToday() {
     const day = dateNow.getDay()
 }
 
+function listenToDateCell(isOn: boolean) {
+    const items = document.querySelectorAll('.fc-daygrid-day-events')
+    if (isOn) {
+        items.forEach(item => {
+            item.addEventListener('mouseEnter', toggleEventAddingBtn)
+        })
+    }
+}
+
+function toggleEventAddingBtn(event: any) {
+    console.log({
+        event
+    })
+}
+
 onMounted(() => {
     locateToday()
+    nextTick(() => {
+        listenToDateCell(true)
+    })
+})
+
+onBeforeUnmount(() => {
+    listenToDateCell(false)
 })
 </script>
+
+<style lang="scss" scoped>
+:deep(.votionCalendar__calendar) {
+    .fc-daygrid-day-top {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+}
+</style>
