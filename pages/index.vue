@@ -1,16 +1,15 @@
+<template>
+  <VotionCalendar></VotionCalendar>
+</template>
+
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
 })
-</script>
 
-<template>
-  主要內容
-  <!-- <div class="page-index"> -->
-    <!-- <TheLogos /> -->
-    <!-- <TheExamples /> -->
-  <!-- </div> -->
-</template>
+import VotionCalendar from '~/components/Atom/VotionCalendar.vue';
+
+</script>
 
 <style>
 .page-index {
