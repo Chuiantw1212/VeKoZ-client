@@ -8,7 +8,7 @@
     >
       <el-menu-item index="0">
         <img
-          style="width: 100px"
+          style="width: 28px"
           src="@/assets/logo.png"
           alt="Element logo"
         />
