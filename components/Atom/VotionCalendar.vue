@@ -1,12 +1,22 @@
 <template>
     <div class="votionCalendar">
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
+
+        <el-dialog v-model="dialogTableVisible" title="Shipping address">
+            <!-- <el-table :data="gridData">
+                <el-table-column property="date" label="Date" width="150" />
+                <el-table-column property="name" label="Name" width="200" />
+                <el-table-column property="address" label="Address" />
+            </el-table> -->
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
+
+const dialogTableVisible = ref(false)
 
 /**
  * Vue3範例
@@ -31,6 +41,7 @@ const calendarOptions = reactive({
     },
 })
 
+// Methods
 function listenToDateCell(isOn: boolean) {
     const frames = document.querySelectorAll('.fc-daygrid-day-frame')
     if (isOn) {
