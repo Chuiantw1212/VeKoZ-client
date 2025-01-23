@@ -52,7 +52,9 @@ function addFirebaseListener() {
   }
 }
 
-function handleSignOut() {
+async function handleSignOut() {
+  const auth = getAuth()
+  await signOut(auth)
   router.push({
     name: 'signin',
   })

@@ -23,9 +23,7 @@
         </el-row>
       </el-form>
     </div>
-    <!-- <div class="votion__container">
-      <img src="@/assets/mock/活動月曆.jpg">
-    </div> -->
+    <h1>登入前的月曆</h1>
     <VotionCalendar></VotionCalendar>
   </div>
 </template>
