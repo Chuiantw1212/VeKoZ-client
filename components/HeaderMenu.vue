@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="el-menu-demo" mode="horizontal">
+  <el-menu mode="horizontal">
     <el-menu-item>
       <NuxtLink to="/">
         <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
@@ -7,14 +7,14 @@
     </el-menu-item>
     <el-menu-item>
       <NuxtLink v-if="isSignedIn" @click="handleSignOut()">
-        Sign Out
+        登出
       </NuxtLink>
       <NuxtLink v-else to="/signin">
-        Sign In
+        登入/註冊
       </NuxtLink>
     </el-menu-item>
     <el-menu-item>
-      <el-avatar class="mr-3" :size="32" :src="avatar" />
+      <el-avatar :size="32" :src="avatar" />
     </el-menu-item>
   </el-menu>
 </template>
