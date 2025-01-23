@@ -1,5 +1,5 @@
 <template>
-  <el-menu mode="horizontal">
+  <el-menu mode="horizontal" :ellipsis="false">
     <el-menu-item>
       <NuxtLink to="/">
         <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
@@ -10,7 +10,7 @@
         登出
       </NuxtLink>
       <NuxtLink v-else to="/signin">
-        登入/註冊
+        登入
       </NuxtLink>
     </el-menu-item>
     <el-menu-item>
