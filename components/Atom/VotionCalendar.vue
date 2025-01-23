@@ -2,12 +2,18 @@
     <div class="votionCalendar">
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
-        <el-dialog v-model="dialogTableVisible" title="Shipping address">
-            <!-- <el-table :data="gridData">
-                <el-table-column property="date" label="Date" width="150" />
-                <el-table-column property="name" label="Name" width="200" />
-                <el-table-column property="address" label="Address" />
-            </el-table> -->
+        <el-dialog v-model="dialogTableVisible">
+            <el-form :model="eventForm" label-width="auto">
+                <el-form-item label="事件名稱">
+                    <el-input v-model="eventForm.name" size="large" />
+                </el-form-item>
+                <!-- 那些很重要，但是學生不需要知道的幕後 -->
+                <template v-for="(item, index) in todoList">
+                    <el-form-item :label="item.name">
+                        <el-date-picker v-if="item.type === 'date'" v-model="item.value" type="date" />
+                    </el-form-item>
+                </template>
+            </el-form>
         </el-dialog>
     </div>
 </template>
@@ -16,7 +22,22 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
-const dialogTableVisible = ref(false)
+const dialogTableVisible = ref(true)
+
+const eventForm = reactive({
+    name: '',
+})
+
+const todoList = reactive([
+    {
+        name: '海報製作截止日',
+        type: 'date',
+        value: ''
+    },
+    {
+
+    }
+])
 
 /**
  * Vue3範例
@@ -93,6 +114,11 @@ function toggleEventAddingBtn(event: Event) {
     <path fill="currentColor"
         d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path>
 </svg></i>`
+    button.onclick = () => {
+        dialogTableVisible.value = true;
+    }
+
+    // 顯示新增按鈕上去
     dayTop.append(button)
 }
 
