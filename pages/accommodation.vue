@@ -16,7 +16,7 @@
  */
 const tableData = [
   {
-    name: '2F-Q 安靜區大桌座位',
+    name: '齊文藝 2F-Q 安靜區大桌座位',
     address: '台北車站南陽街32號',
     description: '預定須知',
   },

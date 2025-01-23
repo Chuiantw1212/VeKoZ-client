@@ -10,8 +10,14 @@
                 <el-form-item label="講師">
                     <el-input v-model="eventForm.actor" />
                 </el-form-item>
-                <el-form-item label="線下地址">
-                    <el-input v-model="eventForm.location" />
+                <el-form-item label="線下空間">
+                    <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
+                    <el-select v-model="eventForm.locationName" @change="setLocationAddress($event)">
+                        <el-option v-for="item in tableData" :key="item.uid" :label="item.name" :value="item.name" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="實體地址">
+                    <el-input :model-value="eventForm.locationAddress" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="線上連結">
                     <el-input v-model="eventForm.actor" />
@@ -36,14 +42,32 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 const dialogTableVisible = ref(false)
 
+// Mock Data
+const tableData = [
+    {
+        uid: '1',
+        name: '齊文藝 2F-Q 安靜區大桌座位',
+        address: '台北車站南陽街32號',
+        description: '預定須知',
+    },
+    {
+        uid: '2',
+        name: 'TCCC台灣文創訓練中心',
+        address: '台灣台北市中山區長安東路一段27號2樓',
+        description: '預定須知',
+    },
+]
+
 /**
- * 參考網址
+ * 這邊資料要使用SQL格式，避免物件，未來方便轉換資料用
+ * Event參考網址
  * https://schema.org/Event
  */
 const eventForm = reactive({
     name: '活動名稱',
     actor: 'EN Chu',
-    location: '台北車站南陽街32號',
+    locationName: '',
+    locationAddress: '',
 })
 
 const todoList = reactive([
@@ -81,6 +105,17 @@ const calendarOptions = reactive({
 })
 
 // Methods
+function setLocationAddress(locationName: string) {
+    if (locationName) {
+        const selectedItem = tableData.find(item => {
+            return item.name === locationName
+        })
+        if (selectedItem) {
+            eventForm.locationAddress = selectedItem.address
+        }
+    }
+}
+
 function listenToDateCell(isOn: boolean) {
     const frames = document.querySelectorAll('.fc-daygrid-day-frame')
     if (isOn) {
