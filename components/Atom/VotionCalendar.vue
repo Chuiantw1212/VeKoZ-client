@@ -50,7 +50,10 @@
 <script setup lang="ts">
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
+// import frLocale from '@fullcalendar/core/locales/fr';
 import interactionPlugin from '@fullcalendar/interaction';
+import allLocales from '@fullcalendar/core/locales-all.js';
 
 const dialogTableVisible = ref(false)
 
@@ -113,6 +116,8 @@ const calendarOptions = reactive({
     events: [
         { title: 'Meeting', start: new Date() }
     ],
+    locale: 'zh-tw',
+    // allLocales
     dateClick: function (info: any) {
         /**
          * 選取日期

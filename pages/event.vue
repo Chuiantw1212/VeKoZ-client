@@ -2,7 +2,7 @@
     <div class="event">
         <div class="event__header">
             <h1>事件管理</h1>
-            <el-button>樣板編輯</el-button>
+            <el-button>樣板選擇</el-button>
         </div>
         <br />
         <VotionCalendar></VotionCalendar>
