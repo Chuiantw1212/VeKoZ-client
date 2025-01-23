@@ -4,13 +4,10 @@
     </div>
 </template>
 <script setup lang="ts">
-import firebase from 'firebase/compat/app'
-import "firebase/compat/auth";
+const { $firebase } = useNuxtApp()
 
 function initializeFirebaseUI() {
-    console.log({
-        firebase
-    })
+    const nuxtAppFirebase = $firebase as any
     // https://firebase.google.com/docs/auth/web/firebaseui
     const uiConfig = {
         callbacks: {
@@ -19,8 +16,8 @@ function initializeFirebaseUI() {
             },
         },
         signInOptions: [
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            nuxtAppFirebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            nuxtAppFirebase.auth.EmailAuthProvider.PROVIDER_ID,
         ],
         signInFlow: 'popup',
         // Terms of service url.
@@ -30,18 +27,12 @@ function initializeFirebaseUI() {
     };
 
     const firebaseui = (window as any).firebaseui
-
-    try {
-        if (firebaseui.auth.AuthUI.getInstance()) {
-            const ui = firebaseui.auth.AuthUI.getInstance()
-            ui?.start('#firebaseui-auth-container', uiConfig)
-        } else {
-            const ui = new firebaseui.auth.AuthUI(firebase.auth())
-            ui?.start('#firebaseui-auth-container', uiConfig)
-        }
-
-    } catch (error) {
-        console.log(error)
+    if (firebaseui.auth.AuthUI.getInstance()) {
+        const ui = firebaseui.auth.AuthUI.getInstance()
+        ui?.start('#firebaseui-auth-container', uiConfig)
+    } else {
+        const ui = new firebaseui.auth.AuthUI(nuxtAppFirebase.auth())
+        ui?.start('#firebaseui-auth-container', uiConfig)
     }
     return
 }

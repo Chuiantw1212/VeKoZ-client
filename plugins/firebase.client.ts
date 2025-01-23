@@ -1,6 +1,7 @@
 // Firebase
 import firebase from 'firebase/compat/app'
 import "firebase/compat/performance";
+import "firebase/compat/auth";
 (window as any).firebase = firebase
 
 // FirebaseUI
@@ -26,6 +27,7 @@ export default defineNuxtPlugin(() => {
     }
     return {
         provide: {
+            firebase,
             storageBucket: firebaseConfig.storageBucket
         }
     }
