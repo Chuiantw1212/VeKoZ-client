@@ -117,10 +117,15 @@ const calendarOptions = reactive({
     ],
     locale: 'zh-tw',
     headerToolbar: {
-        left: 'today,prev,next',
+        left: 'today prev,next',
         center: 'title',
-        right: 'dayGridMonth,dayGridWeek' // user can switch between the two
+        right: 'dayGridMonth,dayGridWeek'
     },
+    // headerToolbar: {
+    //     left: 'today,prev,next',
+    //     center: 'title',
+    //     right: 'dayGridMonth,dayGridWeek' // user can switch between the two
+    // },
     // allLocales
     dateClick: function (info: any) {
         /**
