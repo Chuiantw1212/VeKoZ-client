@@ -30,6 +30,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
     "element-plus": "^2.9.0",
+    "firebase": "^11.2.0",
     "unocss": "^65.4.2"
   },
   "devDependencies": {
