@@ -21,7 +21,7 @@ function initializeFirebaseUI() {
             nuxtAppFirebase.auth.GoogleAuthProvider.PROVIDER_ID,
             nuxtAppFirebase.auth.EmailAuthProvider.PROVIDER_ID,
         ],
-        signInFlow: 'popup',
+        // signInFlow: 'popup',
         // Terms of service url.
         tosUrl: 'https://storage.googleapis.com/public.econ-sense.com/Terms%20of%20Use.pdf',
         // Privacy policy url.
