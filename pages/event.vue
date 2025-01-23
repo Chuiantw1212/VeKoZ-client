@@ -1,6 +1,12 @@
 <template>
-    <h1>登入後的月曆，可能會有別的功能</h1>
-    <VotionCalendar></VotionCalendar>
+    <div class="event">
+        <div class="event__header">
+            <h1>事件管理</h1>
+            <el-button>樣板編輯</el-button>
+        </div>
+        <br />
+        <VotionCalendar></VotionCalendar>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -10,3 +16,12 @@ definePageMeta({
 
 import VotionCalendar from '~/components/Atom/VotionCalendar.vue';
 </script>
+
+<style lang="scss" scoped>
+.event {
+    .event__header {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+</style>
