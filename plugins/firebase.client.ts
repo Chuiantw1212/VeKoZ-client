@@ -1,6 +1,8 @@
 // Firebase
 import firebase from 'firebase/compat/app'
 import "firebase/compat/performance";
+(window as any).firebase = firebase
+
 // FirebaseUI
 await import(`@/assets/firebase/firebase-ui-auth__zh_tw.js`)
 await import(`@/assets/firebase/firebase-ui-auth.css`)

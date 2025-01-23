@@ -30,6 +30,7 @@ function initializeFirebaseUI() {
     };
 
     const firebaseui = (window as any).firebaseui
+
     try {
         if (firebaseui.auth.AuthUI.getInstance()) {
             const ui = firebaseui.auth.AuthUI.getInstance()
