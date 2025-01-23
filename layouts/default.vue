@@ -12,11 +12,11 @@
           <el-main>
             <slot></slot>
           </el-main>
-          <el-footer>
-            <VotionFooter></VotionFooter>
-          </el-footer>
         </el-container>
       </el-container>
+      <el-footer>
+        <VotionFooter></VotionFooter>
+      </el-footer>
     </el-container>
   </div>
 </template>

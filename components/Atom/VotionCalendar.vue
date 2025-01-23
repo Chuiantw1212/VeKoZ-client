@@ -17,6 +17,9 @@
                     <el-input v-model="eventForm.actor" />
                 </el-form-item>
                 <!-- 那些很重要，但是學生不需要知道的幕後 -->
+                <el-divider>
+                    待辦事項
+                </el-divider>
                 <template v-for="(item, index) in todoList">
                     <el-form-item :label="item.name">
                         <el-date-picker v-if="item.type === 'date'" v-model="item.value" type="date" />
