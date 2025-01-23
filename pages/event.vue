@@ -2,19 +2,22 @@
     <div class="event">
         <div class="event__header">
             <h1>事件管理</h1>
-            <el-button>樣板選擇</el-button>
+            <el-button @click="dialogVisible = true">樣板設定</el-button>
         </div>
         <br />
         <VotionCalendar></VotionCalendar>
+
+        <el-dialog v-model="dialogVisible">
+            
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-    layout: 'default',
-})
-
 import VotionCalendar from '~/components/Atom/VotionCalendar.vue';
+
+const dialogVisible = ref(false)
+
 </script>
 
 <style lang="scss" scoped>

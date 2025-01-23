@@ -43,6 +43,9 @@
                         </el-col>
                     </el-row>
                 </template>
+
+                <el-mention v-model="value" type="textarea" :options="options" style="width: 320px"
+                    placeholder="Please input" />
             </el-form>
         </el-dialog>
     </div>
@@ -84,6 +87,7 @@ const eventForm = reactive({
     locationName: '',
     locationAddress: '',
     virtualLocationUrl: '',
+    // description: '', // html
 })
 
 const todoList = reactive([
