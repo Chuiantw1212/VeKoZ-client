@@ -112,11 +112,15 @@ const todoCheckList = ref([
  */
 const calendarOptions = reactive({
     plugins: [dayGridPlugin, interactionPlugin],
-    initialView: 'dayGridMonth',
     events: [
         { title: 'Meeting', start: new Date() }
     ],
     locale: 'zh-tw',
+    headerToolbar: {
+        left: 'today,prev,next',
+        center: 'title',
+        right: 'dayGridMonth,dayGridWeek' // user can switch between the two
+    },
     // allLocales
     dateClick: function (info: any) {
         /**
