@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div id="firebaseui-auth-container"></div>
+        <el-card>
+            <div id="firebaseui-auth-container"></div>
+        </el-card>
     </div>
 </template>
 <script setup lang="ts">

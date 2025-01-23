@@ -14,29 +14,45 @@
     <el-menu-item>
       <el-avatar class="mr-3" :size="32" :src="avatar" />
     </el-menu-item>
-    <!-- <el-sub-menu index="2">
-        <template #title>Workspace</template>
-<el-menu-item index="2-1">item one</el-menu-item>
-<el-menu-item index="2-2">item two</el-menu-item>
-<el-menu-item index="2-3">item three</el-menu-item>
-<el-sub-menu index="2-4">
-  <template #title>item four</template>
-  <el-menu-item index="2-4-1">item one</el-menu-item>
-  <el-menu-item index="2-4-2">item two</el-menu-item>
-  <el-menu-item index="2-4-3">item three</el-menu-item>
-</el-sub-menu>
-</el-sub-menu> -->
   </el-menu>
 </template>
 
 <script lang="ts" setup>
+import { getAuth, onAuthStateChanged } from "firebase/auth"
 import avatar from '@/assets/mock/user.jpg'
 import { ref } from 'vue'
-
+const router = useRouter()
 const activeIndex = ref('1')
 const handleSelect = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
+
+function addFirebaseListener() {
+  try {
+    // window.firebase = firebase as any
+    const auth = getAuth()
+    onAuthStateChanged(auth, async (firebaseUser) => {
+      // loadingDialogVisible.value = true
+      if (!firebaseUser) {
+        // await setIdToken(false)
+        // await getUserFromServer(false)
+        return
+      }
+      const { displayName, email, photoURL, uid } = firebaseUser
+      if (firebaseUser) {
+        router.push({
+          name: 'index',
+        })
+      }
+    })
+  } catch (error: any) {
+    console.log(error.message || error)
+  }
+}
+
+onMounted(() => {
+  addFirebaseListener()
+})
 </script>
 
 <style>
