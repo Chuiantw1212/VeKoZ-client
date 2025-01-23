@@ -4,8 +4,17 @@
 
         <el-dialog v-model="dialogTableVisible">
             <el-form :model="eventForm" label-width="auto">
-                <el-form-item label="事件名稱">
-                    <el-input v-model="eventForm.name" size="large" />
+                <el-form-item label="活動名稱">
+                    <el-input v-model="eventForm.name" />
+                </el-form-item>
+                <el-form-item label="講師">
+                    <el-input v-model="eventForm.actor" />
+                </el-form-item>
+                <el-form-item label="線下地址">
+                    <el-input v-model="eventForm.location" />
+                </el-form-item>
+                <el-form-item label="線上連結">
+                    <el-input v-model="eventForm.actor" />
                 </el-form-item>
                 <!-- 那些很重要，但是學生不需要知道的幕後 -->
                 <template v-for="(item, index) in todoList">
@@ -24,15 +33,21 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 const dialogTableVisible = ref(false)
 
+/**
+ * 參考網址
+ * https://schema.org/Event
+ */
 const eventForm = reactive({
-    name: '',
+    name: '活動名稱',
+    actor: 'EN Chu',
+    location: '台北車站南陽街32號',
 })
 
 const todoList = reactive([
     {
         name: '海報製作截止日',
         type: 'date',
-        value: ''
+        value: '2015-01-15'
     },
     {
 
