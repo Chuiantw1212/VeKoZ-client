@@ -10,26 +10,38 @@
                 <el-form-item label="講師">
                     <el-input v-model="eventForm.actor" />
                 </el-form-item>
-                <el-form-item label="線下空間">
+                <el-form-item label="線下地址">
                     <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
-                    <el-select v-model="eventForm.locationName" @change="setLocationAddress($event)">
+                    <el-select v-model="eventForm.locationName" @change="setLocationAddress($event)" placeholder="請選擇">
                         <el-option v-for="item in tableData" :key="item.uid" :label="item.name" :value="item.name" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="實體地址">
-                    <el-input :model-value="eventForm.locationAddress" :disabled="true" />
+                <el-form-item label=" ">
+                    <el-input :model-value="eventForm.locationAddress" placeholder="請選擇線下地址" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="線上連結">
-                    <el-input v-model="eventForm.actor" />
+                    <el-input v-model="eventForm.virtualLocationUrl" />
                 </el-form-item>
                 <!-- 那些很重要，但是學生不需要知道的幕後 -->
                 <el-divider>
                     待辦事項
                 </el-divider>
+
                 <template v-for="(item, index) in todoList">
-                    <el-form-item :label="item.name">
-                        <el-date-picker v-if="item.type === 'date'" v-model="item.value" type="date" />
-                    </el-form-item>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item :label="item.name">
+                                <el-date-picker v-model="item.value" type="date" />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item :label="`已完成`">
+                                <el-checkbox-group v-model="todoCheckList[index]" @change="setIsDone($event, index)">
+                                    <el-checkbox :value="true" />
+                                </el-checkbox-group>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </template>
             </el-form>
         </el-dialog>
@@ -68,17 +80,27 @@ const eventForm = reactive({
     actor: 'EN Chu',
     locationName: '',
     locationAddress: '',
+    virtualLocationUrl: '',
 })
 
 const todoList = reactive([
     {
-        name: '海報製作截止日',
-        type: 'date',
-        value: '2015-01-15'
+        name: '海報製作',
+        // type: 'date',
+        value: '2015-01-15',
+        isDone: false,
     },
     {
+        name: '文宣',
+        type: 'date',
+        value: '2015-01-15',
+        isDone: false,
+    },
+])
 
-    }
+const todoCheckList = ref([
+    [],
+    []
 ])
 
 /**
@@ -105,6 +127,16 @@ const calendarOptions = reactive({
 })
 
 // Methods
+function setIsDone(result: string[], index: number) {
+    if (todoList[index]) {
+        if (result[0]) {
+            todoList[index].isDone = true
+            return
+        }
+        todoList[index].isDone = false
+    }
+}
+
 function setLocationAddress(locationName: string) {
     if (locationName) {
         const selectedItem = tableData.find(item => {
