@@ -1,45 +1,53 @@
 <template>
     <div>
-        <!-- The surrounding HTML is left untouched by FirebaseUI.
-         Your app may use that space for branding, controls and other customizations.-->
-        <h1>Welcome to My Awesome App</h1>
         <div id="firebaseui-auth-container"></div>
     </div>
 </template>
 <script setup lang="ts">
 import firebase from 'firebase/compat/app'
-// import { getAuth, onAuthStateChanged } from "firebase/auth"
+import "firebase/compat/auth";
+
 function initializeFirebaseUI() {
-    // FirebaseUI config.
-    var uiConfig = {
-        signInSuccessUrl: '<url-to-redirect-to-on-success>',
+    console.log({
+        firebase
+    })
+    // https://firebase.google.com/docs/auth/web/firebaseui
+    const uiConfig = {
+        callbacks: {
+            signInSuccessWithAuthResult: function (authResult: any, redirectUrl: string) {
+                return false;
+            },
+        },
         signInOptions: [
-            // Leave the lines as is for the providers you want to offer your users.
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-            firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-            firebase.auth.GithubAuthProvider.PROVIDER_ID,
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
         ],
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        tosUrl: '<your-tos-url>',
-        // Privacy policy url/callback.
-        privacyPolicyUrl: function () {
-            window.location.assign('<your-privacy-policy-url>');
-        }
+        signInFlow: 'popup',
+        // Terms of service url.
+        tosUrl: 'https://storage.googleapis.com/public.econ-sense.com/Terms%20of%20Use.pdf',
+        // Privacy policy url.
+        privacyPolicyUrl: 'https://storage.googleapis.com/public.econ-sense.com/Privacy%20Policy%20for%20Econ-Sense.com.pdf'
     };
 
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
+    const firebaseui = (window as any).firebaseui
+    try {
+        if (firebaseui.auth.AuthUI.getInstance()) {
+            const ui = firebaseui.auth.AuthUI.getInstance()
+            ui?.start('#firebaseui-auth-container', uiConfig)
+        } else {
+            const ui = new firebaseui.auth.AuthUI(firebase.auth())
+            ui?.start('#firebaseui-auth-container', uiConfig)
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+    return
 }
 
 onMounted(() => {
-    initializeFirebaseUI()
+    if (import.meta.client) {
+        initializeFirebaseUI()
+    }
 })
 </script>
