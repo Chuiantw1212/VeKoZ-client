@@ -5,7 +5,7 @@
         <HeaderMenu></HeaderMenu>
       </el-header>
       <el-container>
-        <el-aside v-if="isActor">
+        <el-aside>
           <SideMenu></SideMenu>
         </el-aside>
         <el-container>

@@ -5,7 +5,7 @@
         <el-dialog v-model="dialogTableVisible" title="活動編輯">
             <el-form :model="eventForm" label-width="auto">
                 <el-form-item label="名稱">
-                    <el-input v-model="eventForm.name" placeholder="請輸入" />
+                    <el-input v-model="eventForm.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
                 </el-form-item>
                 <!-- 從組織管理中選人 -->
                 <el-form-item label="主辦/講者">
@@ -255,6 +255,8 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 :deep(.votionCalendar__calendar) {
+    max-width: 100%;
+
     .fc-daygrid-day-top {
         display: flex;
         flex-direction: row-reverse;

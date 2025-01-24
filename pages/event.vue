@@ -7,8 +7,21 @@
         <br />
         <VotionCalendar></VotionCalendar>
 
-        <el-dialog v-model="dialogVisible">
-            
+        <el-dialog v-model="dialogVisible" title="樣板設定" class="event__template">
+            <el-divider>
+                活動描述
+            </el-divider>
+            <ClientOnly>
+                <AtomVotionEditor v-model="template.description">
+
+                </AtomVotionEditor>
+            </ClientOnly>
+            <template #footer>
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">
+                    確認
+                </el-button>
+            </template>
         </el-dialog>
     </div>
 </template>
@@ -17,6 +30,10 @@
 import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 
 const dialogVisible = ref(false)
+
+const template = reactive({
+    description: '',
+})
 
 </script>
 

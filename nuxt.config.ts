@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   app: {
     // head
     head: {
-      title: 'Votion 開課通',
+      title: 'Venonia 開課通',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
@@ -26,6 +26,13 @@ export default defineNuxtConfig({
         },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    }
+  },
+
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:8080',
+      siteUrl: 'http://localhost:3000',
     }
   },
 

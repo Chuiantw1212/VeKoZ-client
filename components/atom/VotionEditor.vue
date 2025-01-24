@@ -81,7 +81,7 @@ async function initializeCKEditor() {
     }
 
     // Create CKEditor
-    const siteUrl = 'http://localhost:3000'
+    const siteUrl = useRuntimeConfig().siteUrl
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || window.CKEDITOR
     const editor = await ClassicEditor.create(editorRef.value, editorConfig)
