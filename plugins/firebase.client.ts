@@ -5,8 +5,8 @@ import "firebase/compat/auth";
 (window as any).firebase = firebase
 
 // FirebaseUI
-await import(`@/assets/firebase/firebase-ui-auth__zh_tw.js`)
-await import(`@/assets/firebase/firebase-ui-auth.css`)
+await import(`@/public/firebase/firebase-ui-auth__zh_tw.js`)
+await import(`@/public/firebase/firebase-ui-auth.css`)
 
 export default defineNuxtPlugin(() => {
     // Create App

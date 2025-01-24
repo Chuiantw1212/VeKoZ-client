@@ -1,11 +1,8 @@
 <template>
-    <!-- <ClientOnly> -->
-    CKEditor測試
-
-    <div :id="`editor`" ref="editorRef">
-
-    </div>
-    <!-- </ClientOnly> -->
+    <ClientOnly>
+        <div :id="`editor`" ref="editorRef">
+        </div>
+    </ClientOnly>
 </template>
 
 <script setup>
@@ -55,6 +52,7 @@ const data = ref('<p>Hello world!</p>');
 async function initializeCKEditor() {
     // 使用CDN
     const editorConfig = {
+        licenseKey: 'GPL',
         // initialData: localValue.value || '<p></p>',
         toolbar: props.toolbar,
         placeholder: props.placeholder,
@@ -71,13 +69,22 @@ async function initializeCKEditor() {
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     console.log('importedEditor', importedEditor)
     console.log('CKEDITOR', window.CKEDITOR)
-    const ClassicEditor = importedEditor?.ClassicEditor || window.CKEDITOR.ClassicEditor
-    console.log(window)
+    const ClassicEditor = importedEditor || window.CKEDITOR
+    // console.log(window)
     // const element = document.querySelector(`#editor`)
     const editor = await ClassicEditor.create(editorRef.value, editorConfig)
 }
 
+function waitForCkeditorReady(timestamp) {
+    // if(){
+
+    // }
+    requestAnimationFrame(step);
+}
+
 onMounted(async () => {
+    // const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
+    // window.CKEDITOR = importedEditor
     // state.id = $uuid4()
     initializeCKEditor()
 })

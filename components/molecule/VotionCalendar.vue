@@ -22,7 +22,14 @@
                 <el-form-item label="線上連結">
                     <el-input v-model="eventForm.virtualLocationUrl" />
                 </el-form-item>
-                <!-- 那些很重要，但是學生不需要知道的幕後 -->
+
+                <ClientOnly>
+                    <AtomVotionEditor>
+
+                    </AtomVotionEditor>
+                </ClientOnly>
+
+                <!-- 那些很重要，但是參加者不需要知道的幕後 -->
                 <el-divider>
                     待辦事項
                 </el-divider>
@@ -43,14 +50,6 @@
                         </el-col>
                     </el-row>
                 </template>
-
-                <ClientOnly>
-                    <AtomVotionEditor>
-
-                    </AtomVotionEditor>
-                </ClientOnly>
-                <!-- <el-mention v-model="value" type="textarea" :options="options" style="width: 320px"
-                    placeholder="Please input" /> -->
             </el-form>
         </el-dialog>
     </div>
@@ -60,7 +59,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
-const dialogTableVisible = ref(false)
+const dialogTableVisible = ref(true)
 
 // Mock Data
 const tableData = [
