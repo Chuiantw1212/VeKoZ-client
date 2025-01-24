@@ -68,16 +68,15 @@ async function initializeCKEditor() {
     // 使用CDN
     const editorConfig = {
         licenseKey: 'GPL',
-        // initialData: localValue.value || '<p></p>',
         toolbar: props.toolbar,
         placeholder: props.placeholder,
         // https://ckeditor.com/docs/ckeditor5/latest/support/licensing/managing-ckeditor-logo.html
-        ui: {
-            poweredBy: {
-                position: 'border',
-                label: 'Votion'
-            }
-        }
+        // ui: {
+        //     poweredBy: {
+        //         position: 'border',
+        //         label: 'Votion'
+        //     }
+        // }
     }
 
     // Create CKEditor
