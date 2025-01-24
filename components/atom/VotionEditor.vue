@@ -9,6 +9,8 @@
 import { markRaw } from 'vue'
 const { $ckeditorConfig } = useNuxtApp()
 const editorRef = ref()
+const editorInstance = ref()
+const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
     modelValue: {
@@ -47,6 +49,19 @@ const props = defineProps({
     },
 })
 
+const localValue = computed({
+    get() {
+        const value = props.modelValue ?? ''
+        if (value && editorInstance.value) {
+            editorInstance, value.setData(newValue)
+        }
+        return value  // important
+    },
+    set(newValue) {
+        emit('update:modelValue', newValue)
+    }
+})
+
 const data = ref('<p>Hello world!</p>');
 
 async function initializeCKEditor() {
@@ -65,27 +80,23 @@ async function initializeCKEditor() {
         }
     }
 
+    // Create CKEditor
     const siteUrl = 'http://localhost:3000'
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
-    console.log('importedEditor', importedEditor)
-    console.log('CKEDITOR', window.CKEDITOR)
     const ClassicEditor = importedEditor || window.CKEDITOR
-    // console.log(window)
-    // const element = document.querySelector(`#editor`)
     const editor = await ClassicEditor.create(editorRef.value, editorConfig)
-}
 
-function waitForCkeditorReady(timestamp) {
-    // if(){
+    // 附加監聽器
+    editor.model?.document?.on('change:data', () => {
+        let newValue = editor.getData()
+        localValue.value = newValue
+    })
 
-    // }
-    requestAnimationFrame(step);
+    // 紀錄instance
+    editorInstance.value = markRaw(editor)
 }
 
 onMounted(async () => {
-    // const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
-    // window.CKEDITOR = importedEditor
-    // state.id = $uuid4()
     initializeCKEditor()
 })
 </script>

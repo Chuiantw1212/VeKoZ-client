@@ -20,11 +20,12 @@
                     <el-input :model-value="eventForm.locationAddress" placeholder="請選擇線下地址" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="線上連結">
-                    <el-input v-model="eventForm.virtualLocationUrl" />
+                    <el-input v-model="eventForm.virtualLocationUrl" placeholder="請輸入" />
                 </el-form-item>
 
+                eventForm.description:{{eventForm.description}}
                 <ClientOnly>
-                    <AtomVotionEditor>
+                    <AtomVotionEditor v-model="eventForm.description">
 
                     </AtomVotionEditor>
                 </ClientOnly>
@@ -88,7 +89,7 @@ const eventForm = reactive({
     locationName: '',
     locationAddress: '',
     virtualLocationUrl: '',
-    // description: '', // html
+    description: '', // html
 })
 
 const todoList = reactive([
