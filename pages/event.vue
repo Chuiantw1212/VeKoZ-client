@@ -18,7 +18,7 @@
             </ClientOnly>
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">
+                <el-button type="primary" @click="putEventTemplate">
                     確認
                 </el-button>
             </template>
@@ -31,11 +31,15 @@ import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 import useRepoEvent from '~/composables/useRepoEvent';
 const repoEvent = useRepoEvent()
 
-const dialogVisible = ref(false)
+const dialogVisible = ref(true)
 
 const template = reactive({
-    description: '',
+    description: '樣板測試',
 })
+
+async function putEventTemplate() {
+    const res = await repoEvent.putEventTemplate(template)
+}
 
 </script>
 

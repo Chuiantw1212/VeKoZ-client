@@ -1,7 +1,6 @@
 // import axios from 'axios'
 import { getAuth, } from "firebase/auth"
 import type { Auth } from "firebase/auth"
-const config = useRuntimeConfig()
 
 export default defineStore('api', {
     state: () => {
@@ -25,7 +24,7 @@ export default defineStore('api', {
                     step()
                 })
             }
-            const { method, data, params = {}, headers, timeout = config.public.axiosTimeout, responseType = 'json' } = options
+            const { method, data, params = {}, headers, responseType = 'json' } = options
             const baseHeaders: {
                 [key: string]: string
             } = {
@@ -44,7 +43,7 @@ export default defineStore('api', {
                 method,
                 params,
                 headers: headersFinale,
-                timeout,
+                // timeout,
                 responseType,
             }
             if (data) {
@@ -53,7 +52,10 @@ export default defineStore('api', {
 
             let axiosResponse = null
             try {
-                const apiBase = useRuntimeConfig().apiBase
+                const apiBase = useRuntimeConfig().public.apiBase
+                console.log({
+                    test: useRuntimeConfig()
+                })
                 axiosResponse = await fetch(`${apiBase}${url}`, axiosConfig)
             } catch (error) {
 

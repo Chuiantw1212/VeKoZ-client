@@ -66,7 +66,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
-const dialogTableVisible = ref(true)
+const dialogTableVisible = ref(false)
 
 // Mock Data
 const actorOptions = [

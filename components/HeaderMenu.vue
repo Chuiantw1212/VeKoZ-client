@@ -42,9 +42,9 @@ function addFirebaseListener() {
       const { displayName, email, photoURL, uid } = firebaseUser
       if (firebaseUser) {
         isSignedIn.value = true
-        router.push({
-          name: 'index',
-        })
+        // router.push({
+        //   name: 'index',
+        // })
       }
     })
   } catch (error: any) {

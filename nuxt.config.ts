@@ -29,10 +29,16 @@ export default defineNuxtConfig({
     }
   },
 
+  // runtimeConfig: {
+  //   apiBase: 'http://localhost:8080',
+  //   siteUrl: 'http://localhost:3000',
+  // },
   runtimeConfig: {
+    // The private keys which are only available within server-side
+    apiSecret: '123',
+    // Keys within public, will be also exposed to the client-side
     public: {
-      apiBase: 'http://localhost:8080',
-      siteUrl: 'http://localhost:3000',
+      apiBase: 'http://localhost:8080'
     }
   },
 
