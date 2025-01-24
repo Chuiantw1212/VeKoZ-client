@@ -2,13 +2,17 @@
     <div class="votionCalendar">
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
-        <el-dialog v-model="dialogTableVisible">
+        <el-dialog v-model="dialogTableVisible" title="活動編輯">
             <el-form :model="eventForm" label-width="auto">
-                <el-form-item label="活動名稱">
-                    <el-input v-model="eventForm.name" />
+                <el-form-item label="名稱">
+                    <el-input v-model="eventForm.name" placeholder="請輸入" />
                 </el-form-item>
-                <el-form-item label="講師">
-                    <el-input v-model="eventForm.actor" />
+                <!-- 從組織管理中選人 -->
+                <el-form-item label="主辦/講者">
+                    <el-select v-model="eventActors" multiple placeholder="請選擇">
+                        <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
+                            :value="item.name" />
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="線下地址">
                     <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
@@ -23,13 +27,15 @@
                     <el-input v-model="eventForm.virtualLocationUrl" placeholder="請輸入" />
                 </el-form-item>
 
-                eventForm.description:{{eventForm.description}}
+                <el-divider>
+                    活動描述
+                </el-divider>
+                eventForm.description:{{ eventForm.description }}
                 <ClientOnly>
                     <AtomVotionEditor v-model="eventForm.description">
 
                     </AtomVotionEditor>
                 </ClientOnly>
-
                 <!-- 那些很重要，但是參加者不需要知道的幕後 -->
                 <el-divider>
                     待辦事項
@@ -63,6 +69,12 @@ import interactionPlugin from '@fullcalendar/interaction';
 const dialogTableVisible = ref(true)
 
 // Mock Data
+const actorOptions = [
+    { name: 'EN Chu' },
+    { name: '.38' },
+    { name: 'NaNa' }
+]
+
 const tableData = [
     {
         uid: '1',
@@ -85,12 +97,13 @@ const tableData = [
  */
 const eventForm = reactive({
     name: '活動名稱',
-    actor: 'EN Chu',
     locationName: '',
     locationAddress: '',
     virtualLocationUrl: '',
     description: '', // html
 })
+
+const eventActors = ref(['EN Chu', '.38'])
 
 const todoList = reactive([
     {
