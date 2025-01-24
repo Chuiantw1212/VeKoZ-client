@@ -1,5 +1,11 @@
+<script setup lang="ts">
+import VenoniaUploader from '~/components/atom/VenoniaUploader.vue';
+
+</script>
+
 <template>
     <h1>權限&組織管理</h1>
+    <VenoniaUploader></VenoniaUploader>
     <table>
         <thead>
             <tr>

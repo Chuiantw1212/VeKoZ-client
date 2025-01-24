@@ -10,7 +10,7 @@
         空間管理
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/auth">
+    <NuxtLink to="/organization">
       <el-menu-item>
         權限&組織管理
       </el-menu-item>
