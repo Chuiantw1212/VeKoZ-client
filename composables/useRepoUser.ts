@@ -1,78 +1,70 @@
 import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
+import useVenoniaApi from './useVenoniaApi'
 export default defineStore('user', () => {
-    const jobPairApi = useJobPairApi()
+    const defaultApi = useVenoniaApi()
     async function deleteUser() {
         const auth = getAuth()
         if (!auth.currentUser) {
             return
         }
-        const response = await jobPairApi.request({
+        const response = await defaultApi.request('/user', {
             method: 'delete',
-            url: `/user`,
         })
         return response
     }
-    async function postUser(data) {
-        const response = await jobPairApi.request({
+    async function postUser(data: any) {
+        const response = await defaultApi.request('/user', {
             method: 'post',
-            url: `/user`,
             data,
         })
         return response
     }
-    async function patchUserProfile(data) {
-        const response = await jobPairApi.request({
+    async function patchUserProfile(data: any) {
+        const response = await defaultApi.request(`/user`, {
             method: 'patch',
-            url: `/user`,
             data
         })
         return response
     }
-    async function getUserCertificate(data) {
-        const response = await jobPairApi.request({
+    async function getUserCertificate(data: any) {
+        const response = await defaultApi.request(`/user/certificate/${data.fileName}`, {
             method: 'get',
-            url: `/user/certificate/${data.fileName}`,
             responseType: 'blob',
         })
         return response
     }
-    async function getUserResume(data) {
-        const response = await jobPairApi.request({
+    async function getUserResume(data: any) {
+        const response = await defaultApi.request(`/user/resume/${data.fileName}`, {
             method: 'get',
-            url: `/user/resume/${data.fileName}`,
             responseType: 'blob',
         })
         return response
     }
-    async function putUserResumes(data) {
-        const response = await jobPairApi.request({
+    async function putUserResumes(data: any) {
+        const response = await defaultApi.request(`/user/resumes`, {
             method: 'put',
-            url: `/user/resumes`,
             data,
         })
         return response
     }
-    async function putUserCertificates(data) {
-        const response = await jobPairApi.request({
+    async function putUserCertificates(data: any) {
+        const response = await defaultApi.request(`/user/certificates`, {
             method: 'put',
-            url: `/user/certificates`,
             data,
         })
         return response
     }
-    async function putUserPhoto(data) {
-        const response = await jobPairApi.request({
+    async function putUserPhoto(data: any) {
+        const response = await defaultApi.request(`/user/photo`, {
             method: 'put',
-            url: `/user/photo`,
             data,
         })
-        return response.data
+        return response?.data
     }
-    async function patchUserPreference(data) {
-        const response = await jobPairApi.request({
+    async function patchUserPreference(data: any) {
+        const response = await defaultApi.request(`/user/preference`, {
             method: 'patch',
-            url: `/user/preference`,
             data
         })
         return response

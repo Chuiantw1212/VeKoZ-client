@@ -28,6 +28,8 @@
 
 <script setup lang="ts">
 import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
+import useRepoEvent from '~/composables/useRepoEvent';
+const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(false)
 
