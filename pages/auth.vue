@@ -1,5 +1,5 @@
 <template>
-    <h1>權限管理</h1>
+    <h1>權限&組織管理</h1>
     <table>
         <thead>
             <tr>

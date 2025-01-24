@@ -12,7 +12,7 @@
     </NuxtLink>
     <NuxtLink to="/auth">
       <el-menu-item>
-        權限管理
+        權限&組織管理
       </el-menu-item>
     </NuxtLink>
   </el-menu>
