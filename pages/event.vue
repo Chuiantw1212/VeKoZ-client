@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import VotionCalendar from '~/components/Atom/VotionCalendar.vue';
+import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 
 const dialogVisible = ref(false)
 

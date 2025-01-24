@@ -24,11 +24,13 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^7.3.0",
     "@element-plus/icons-vue": "^2.3.1",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
+    "ckeditor5": "^44.1.0",
     "element-plus": "^2.9.0",
     "firebase": "^11.2.0",
     "unocss": "^65.4.2"
