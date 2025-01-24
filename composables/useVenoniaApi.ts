@@ -30,12 +30,12 @@ export default defineStore('api', {
             } = {
                 'Content-Type': 'application/json',
             }
-            if (auth && auth.currentUser) {
-                this.token = await auth.currentUser.getIdToken()
-            }
-            if (this.token) {
-                baseHeaders.Authorization = `Bearer ${this.token}`
-            }
+            // if (auth && auth.currentUser) {
+            //     this.token = await auth.currentUser.getIdToken()
+            // }
+            // if (this.token) {
+            //     baseHeaders.Authorization = `Bearer ${this.token}`
+            // }
             const headersFinale = Object.assign(baseHeaders, headers)
             // Complete config
             const axiosConfig: { [key: string]: string } = {

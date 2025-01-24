@@ -2,7 +2,7 @@
     <div class="organization">
         <div class="organization__header">
             <h1>權限&組織管理</h1>
-            <ElButton>新增</ElButton>
+            <ElButton @click="dialogVisible = true">新增</ElButton>
         </div>
 
         <table class="table">
@@ -41,25 +41,23 @@
             </tbody>
         </table>
 
-        <el-dialog v-model="dialogVisible" title="樣板設定" class="event__template">
-            <el-divider>
-                活動描述
-            </el-divider>
-            <ClientOnly>
-                <el-form>
-
-                    <ElInput v-model="organization.name"></ElInput>
-
-                    <VenoniaUploader></VenoniaUploader>
-
-                    <AtomVotionEditor v-model="organization.description">
-
-                    </AtomVotionEditor>
-                </el-form>
-            </ClientOnly>
+        <el-dialog v-model="dialogVisible" title="組織設定" class="event__template">
+            <el-form>
+                {{ organization }}
+                <el-form-item label="單位名稱">
+                    <ElInput v-model="organization.name" placeholder="請輸入"></ElInput>
+                </el-form-item>
+                <el-form-item label="Logo">
+                    <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
+                </el-form-item>
+                <el-divider>
+                    成員管理
+                </el-divider>
+                <p>先案右下確認後，再於主畫面新增/管理成員。</p>
+            </el-form>
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary">
+                <el-button type="primary" @click="postOrganization()">
                     確認
                 </el-button>
             </template>
@@ -68,12 +66,20 @@
 </template>
 <script setup lang="ts">
 import VenoniaUploader from '~/components/atom/VenoniaUploader.vue';
-const dialogVisible = ref(false)
+import useRepoOrganization from '~/composables/useRepoOrganization'
+
+const repoOrganization = useRepoOrganization()
+const dialogVisible = ref(true)
 
 const organization = reactive({
-    name: '',
+    name: '學校學不到的事',
     description: '',
+    logo: '',
 })
+
+async function postOrganization() {
+    const response = await repoOrganization.postOrganization(organization)
+}
 
 </script>
 <style lang="scss" scoped>
