@@ -10,15 +10,24 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="">
-                    <el-input v-model="organization.organizer" placeholder="或直接輸入單位名稱"></el-input>
-                </el-form-item>
+                <!-- <el-space fill> -->
+                <el-alert :closable="false">
+                    請先用組織管理新增主辦單位
+                </el-alert>
+                <!-- </el-space> -->
             </el-col>
         </el-row>
-
-        <el-form-item label="描述">
-            <AtomVenoniaEditor class="form__item" v-model="organization.descrption"></AtomVenoniaEditor>
+        <el-divider>
+            活動描述
+        </el-divider>
+        <el-form-item>
+            <AtomVenoniaEditor v-model="organization.descrption"></AtomVenoniaEditor>
         </el-form-item>
+        <!-- 那些很重要，但是參加者不需要知道的幕後 -->
+        <el-divider>
+            待辦事項
+        </el-divider>
+        <p>TODO: 未來會用更複雜的介面，讓樣板的欄位可以自選。</p>
     </el-form>
 </template>
 <script setup lang="ts">

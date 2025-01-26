@@ -30,12 +30,9 @@
                 <el-divider>
                     活動描述
                 </el-divider>
-                eventForm.description:{{ eventForm.description }}
-                <ClientOnly>
                     <AtomVenoniaEditor v-model="eventForm.description">
 
                     </AtomVenoniaEditor>
-                </ClientOnly>
                 <!-- 那些很重要，但是參加者不需要知道的幕後 -->
                 <el-divider>
                     待辦事項

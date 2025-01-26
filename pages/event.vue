@@ -2,12 +2,12 @@
     <div class="event">
         <div class="event__header">
             <h1>事件管理</h1>
-            <el-button @click="dialogVisible = true">樣板設定</el-button>
+            <el-button @click="dialogVisible = true">事件樣板</el-button>
         </div>
         <br />
         <VotionCalendar></VotionCalendar>
 
-        <el-dialog v-model="dialogVisible" title="樣板設定" class="event__template">
+        <el-dialog v-model="dialogVisible" title="事件樣板" class="event__template">
             <FormEventTemplate v-model="organizationTemplate">
 
             </FormEventTemplate>
