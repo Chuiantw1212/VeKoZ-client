@@ -34,9 +34,6 @@ export default defineStore('api', {
             if (this.token) {
                 baseHeaders.Authorization = `Bearer ${this.token}`
             }
-            console.log({
-                baseHeaders
-            })
             const headersFinale = Object.assign(baseHeaders, headers)
             // Complete config
             const axiosConfig: { [key: string]: string } = {
@@ -50,11 +47,6 @@ export default defineStore('api', {
             if (body) {
                 axiosConfig.body = JSON.stringify(body)
             }
-            
-            console.log({
-                axiosConfig
-            })
-
             let axiosResponse = null
             try {
                 const apiBase = useRuntimeConfig().public.apiBase
