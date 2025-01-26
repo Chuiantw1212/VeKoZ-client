@@ -12,7 +12,7 @@
                         </el-select>
                     </el-form-item>
                 </template>
-                <template v-slot:default>
+                <template v-slot:eventTodos>
                     <el-divider>
                         待辦事項
                     </el-divider>
