@@ -4,30 +4,36 @@
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯">
             <FormEvent v-model="eventForm">
-                <el-form-item label="講者/主演">
-                    <el-select v-model="eventActors" multiple placeholder="請選擇">
-                        <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
-                            :value="item.name" />
-                    </el-select>
-                </el-form-item>
-                <el-divider>
-                    待辦事項
-                </el-divider>
-                <template v-for="(item, index) in todoList">
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item :label="item.name">
-                                <el-date-picker v-model="item.value" type="date" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item :label="`已完成`">
-                                <el-checkbox-group v-model="todoCheckList[index]" @change="setIsDone($event, index)">
-                                    <el-checkbox :value="true" />
-                                </el-checkbox-group>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                <template v-slot:eventActor>
+                    <el-form-item label="講者/主演">
+                        <el-select v-model="eventActors" multiple placeholder="請選擇">
+                            <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
+                                :value="item.name" />
+                        </el-select>
+                    </el-form-item>
+                </template>
+                <template v-slot:default>
+                    <el-divider>
+                        待辦事項
+                    </el-divider>
+                    <template v-for="(item, index) in todoList">
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item :label="item.name">
+                                    <el-date-picker v-model="item.value" type="date" />
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="`已完成`">
+                                    <el-checkbox-group v-model="todoCheckList[index]"
+                                        @change="setIsDone($event, index)">
+                                        <el-checkbox :value="true" />
+                                    </el-checkbox-group>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </template>
+
                 </template>
             </FormEvent>
             <template #footer>
@@ -193,7 +199,8 @@ function toggleEventAddingBtn(event: Event) {
     <path fill="currentColor"
         d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path>
 </svg></i>`
-    button.onclick = () => {
+    button.onclick = async () => {
+        await getEventTemplate()
         dialogTableVisible.value = true;
     }
 

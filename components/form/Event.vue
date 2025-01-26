@@ -3,6 +3,12 @@
         <el-form-item label="名稱">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
+        <el-form-item label="主辦單位">
+            <el-select v-model="form.organizer" placeholder="請選擇現有組織">
+                <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
+            </el-select>
+        </el-form-item>
+        <slot name="eventActor"></slot>
         <el-row>
             <el-col :span="12">
                 <el-form-item label="開始時間">
@@ -27,16 +33,14 @@
         <el-form-item label="線上連結">
             <el-input v-model="form.virtualLocationUrl" placeholder="請輸入" />
         </el-form-item>
-        <el-form-item label="活動描述">
+        <el-divider>
+            活動描述
+        </el-divider>
+        <el-form-item label="">
             <AtomVenoniaEditor v-model="form.description">
             </AtomVenoniaEditor>
         </el-form-item>
-        <el-form-item label="主辦單位">
-            <el-select v-model="form.organizer" placeholder="請選擇現有組織">
-                <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
-            </el-select>
-        </el-form-item>
-        <slot></slot>
+        <slot name="eventTodos"></slot>
     </el-form>
 </template>
 <script setup lang="ts">
