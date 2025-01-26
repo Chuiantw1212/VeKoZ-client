@@ -51,11 +51,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus'
+import type { IOrganization } from '~/types/organization'
+import { ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 const repoOrganization = useRepoOrganization()
 
-const organizationList = ref([])
+const organizationList = ref<IOrganization[]>([])
 
 const organizationDialog = reactive({
     visibility: false,
@@ -101,13 +102,13 @@ function openNewDialog() {
     organizationDialog.mode = 'ADD'
 }
 
-function editOrganizationDialog(item: any) {
+function editOrganizationDialog(item: IOrganization) {
     Object.assign(organization, item)
     organizationDialog.visibility = true
     organizationDialog.mode = 'EDIT'
 }
 
-function editOrganizationMemberDialog(item: any) {
+function editOrganizationMemberDialog(item: IOrganization) {
     // Object.assign(organization, item)
     organizationMemberDialog.visibility = true
     // organizationDialog.mode = 'EDIT'
