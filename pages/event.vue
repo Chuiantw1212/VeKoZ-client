@@ -8,14 +8,17 @@
         <VotionCalendar></VotionCalendar>
 
         <el-dialog v-model="dialogVisible" title="樣板設定" class="event__template">
-            <el-divider>
-                活動描述
-            </el-divider>
-            <ClientOnly>
-                <AtomVotionEditor v-model="template.description">
+            <FormEventTemplate v-model="organizationTemplate">
 
-                </AtomVotionEditor>
-            </ClientOnly>
+            </FormEventTemplate>
+            <!-- <el-divider>
+                活動描述
+            </el-divider> -->
+            <!-- <ClientOnly>
+                <AtomVenoniaEditor v-model="template.description">
+
+                </AtomVenoniaEditor>
+            </ClientOnly> -->
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
                 <el-button type="primary" @click="putEventTemplate">
@@ -33,12 +36,12 @@ const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(true)
 
-const template = reactive({
+const organizationTemplate = reactive({
     description: '樣板測試',
 })
 
 async function putEventTemplate() {
-    const res = await repoEvent.putEventTemplate(template)
+    const res = await repoEvent.putEventTemplate(organizationTemplate)
 }
 
 </script>

@@ -32,9 +32,9 @@
                 </el-divider>
                 eventForm.description:{{ eventForm.description }}
                 <ClientOnly>
-                    <AtomVotionEditor v-model="eventForm.description">
+                    <AtomVenoniaEditor v-model="eventForm.description">
 
-                    </AtomVotionEditor>
+                    </AtomVenoniaEditor>
                 </ClientOnly>
                 <!-- 那些很重要，但是參加者不需要知道的幕後 -->
                 <el-divider>

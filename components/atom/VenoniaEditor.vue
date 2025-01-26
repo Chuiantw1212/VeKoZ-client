@@ -1,13 +1,16 @@
 <template>
     <ClientOnly>
-        <div :id="`editor`" ref="editorRef">
+        <div class="ckeditor">
+
+            <div :id="`editor`" ref="editorRef">
+            </div>
         </div>
     </ClientOnly>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { markRaw } from 'vue'
-const { $ckeditorConfig } = useNuxtApp()
+import type { EditorConfig, } from 'ckeditor5';
 const editorRef = ref()
 const editorInstance = ref()
 const emit = defineEmits(['update:modelValue'])
@@ -53,7 +56,7 @@ const localValue = computed({
     get() {
         const value = props.modelValue ?? ''
         if (value && editorInstance.value) {
-            editorInstance, value.setData(newValue)
+            editorInstance.value.setData(value)
         }
         return value  // important
     },
@@ -62,27 +65,18 @@ const localValue = computed({
     }
 })
 
-const data = ref('<p>Hello world!</p>');
-
 async function initializeCKEditor() {
     // 使用CDN
-    const editorConfig = {
+    const editorConfig: EditorConfig = {
         licenseKey: 'GPL',
-        toolbar: props.toolbar,
+        toolbar: props.toolbar as string[],
         placeholder: props.placeholder,
-        // https://ckeditor.com/docs/ckeditor5/latest/support/licensing/managing-ckeditor-logo.html
-        // ui: {
-        //     poweredBy: {
-        //         position: 'border',
-        //         label: 'Votion'
-        //     }
-        // }
     }
 
     // Create CKEditor
     const siteUrl = useRuntimeConfig().public.siteUrl
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
-    const ClassicEditor = importedEditor || window.CKEDITOR
+    const ClassicEditor = importedEditor || (window as any).CKEDITOR
     const editor = await ClassicEditor.create(editorRef.value, editorConfig)
 
     // 附加監聽器
@@ -99,3 +93,9 @@ onMounted(async () => {
     initializeCKEditor()
 })
 </script>
+
+<style lang="scss" scoped>
+.ckeditor {
+    width: 100%;
+}
+</style>
