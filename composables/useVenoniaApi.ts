@@ -24,18 +24,19 @@ export default defineStore('api', {
                     step()
                 })
             }
-            const { method, data, params = {}, headers, responseType = 'json' } = options
-            const baseHeaders: {
-                [key: string]: string
-            } = {
-                'Content-Type': 'application/json',
+            const { method, body, params = {}, headers, responseType = 'json' } = options
+            const baseHeaders: any = {
+                'Content-Type': 'application/json'
             }
-            // if (auth && auth.currentUser) {
-            //     this.token = await auth.currentUser.getIdToken()
-            // }
-            // if (this.token) {
-            //     baseHeaders.Authorization = `Bearer ${this.token}`
-            // }
+            if (auth && auth.currentUser) {
+                this.token = await auth.currentUser.getIdToken()
+            }
+            if (this.token) {
+                baseHeaders.Authorization = `Bearer ${this.token}`
+            }
+            console.log({
+                baseHeaders
+            })
             const headersFinale = Object.assign(baseHeaders, headers)
             // Complete config
             const axiosConfig: { [key: string]: string } = {
@@ -46,16 +47,17 @@ export default defineStore('api', {
                 // timeout,
                 responseType,
             }
-            if (data) {
-                axiosConfig.body = JSON.stringify(data)
+            if (body) {
+                axiosConfig.body = JSON.stringify(body)
             }
+            
+            console.log({
+                axiosConfig
+            })
 
             let axiosResponse = null
             try {
                 const apiBase = useRuntimeConfig().public.apiBase
-                console.log({
-                    test: useRuntimeConfig()
-                })
                 axiosResponse = await fetch(`${apiBase}${url}`, axiosConfig)
             } catch (error) {
 

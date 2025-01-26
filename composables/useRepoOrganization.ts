@@ -4,17 +4,17 @@ import useVenoniaApi from './useVenoniaApi'
 export default defineStore('organization', () => {
     const defaultApi = useVenoniaApi()
 
-    async function postOrganization(data: any) {
+    async function postOrganization(body: any) {
         const response = await defaultApi.request(`/organization`, {
             method: 'post',
-            data,
+            body,
         })
         return response
     }
-    async function putOrganizationLogo(data: any) {
+    async function putOrganizationLogo(body: any) {
         const response = await defaultApi.request(`/organization/logo`, {
             method: 'put',
-            data,
+            body,
         })
         return response
     }
