@@ -15,7 +15,10 @@
                 </el-alert>
             </el-col>
         </el-row>
-        <el-form-item label="活動描述">
+        <el-divider>
+            活動描述
+        </el-divider>
+        <el-form-item>
             <AtomVenoniaEditor v-model="eventTemplate.description"></AtomVenoniaEditor>
         </el-form-item>
         <!-- 那些很重要，但是參加者不需要知道的幕後 -->
