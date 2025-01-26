@@ -3,41 +3,16 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯">
-            <el-form :model="eventForm" label-width="auto">
-                <el-form-item label="名稱">
-                    <el-input v-model="eventForm.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
-                </el-form-item>
-                <!-- 從組織管理中選人 -->
-                <el-form-item label="主辦/講者">
+            <FormEvent v-model="eventForm">
+                <el-form-item label="講者/主演">
                     <el-select v-model="eventActors" multiple placeholder="請選擇">
                         <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
                             :value="item.name" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="線下地址">
-                    <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
-                    <el-select v-model="eventForm.locationName" @change="setLocationAddress($event)" placeholder="請選擇">
-                        <el-option v-for="item in tableData" :key="item.uid" :label="item.name" :value="item.name" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label=" ">
-                    <el-input :model-value="eventForm.locationAddress" placeholder="請選擇線下地址" :disabled="true" />
-                </el-form-item>
-                <el-form-item label="線上連結">
-                    <el-input v-model="eventForm.virtualLocationUrl" placeholder="請輸入" />
-                </el-form-item>
-
-                <el-divider>
-                    活動描述
-                </el-divider>
-                    <AtomVenoniaEditor v-model="eventForm.description">
-
-                    </AtomVenoniaEditor>
-                <!-- 那些很重要，但是參加者不需要知道的幕後 -->
                 <el-divider>
                     待辦事項
                 </el-divider>
-
                 <template v-for="(item, index) in todoList">
                     <el-row>
                         <el-col :span="12">
@@ -54,7 +29,7 @@
                         </el-col>
                     </el-row>
                 </template>
-            </el-form>
+            </FormEvent>
         </el-dialog>
     </div>
 </template>
@@ -70,21 +45,6 @@ const actorOptions = [
     { name: 'EN Chu' },
     { name: '.38' },
     { name: 'NaNa' }
-]
-
-const tableData = [
-    {
-        uid: '1',
-        name: '齊文藝 2F-Q 安靜區大桌座位',
-        address: '台北車站南陽街32號',
-        description: '預定須知',
-    },
-    {
-        uid: '2',
-        name: 'TCCC台灣文創訓練中心',
-        address: '台灣台北市中山區長安東路一段27號2樓',
-        description: '預定須知',
-    },
 ]
 
 /**
@@ -164,17 +124,6 @@ function setIsDone(result: string[], index: number) {
             return
         }
         todoList[index].isDone = false
-    }
-}
-
-function setLocationAddress(locationName: string) {
-    if (locationName) {
-        const selectedItem = tableData.find(item => {
-            return item.name === locationName
-        })
-        if (selectedItem) {
-            eventForm.locationAddress = selectedItem.address
-        }
     }
 }
 
