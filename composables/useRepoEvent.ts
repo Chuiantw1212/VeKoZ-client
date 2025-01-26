@@ -4,13 +4,13 @@ import useVenoniaApi from './useVenoniaApi'
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
     async function getEventTemplate() {
-        const response = await defaultApi.request(`/event/template`, {
+        const response = await defaultApi.authRequest(`/event/template`, {
             method: 'get',
         })
         return response.json()
     }
     async function putEventTemplate(body: any) {
-        const response = await defaultApi.request(`/event/template`, {
+        const response = await defaultApi.authRequest(`/event/template`, {
             method: 'put',
             body,
         })

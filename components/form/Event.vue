@@ -3,6 +3,18 @@
         <el-form-item label="名稱">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
+        <el-row>
+            <el-col :span="12">
+                <el-form-item label="開始時間">
+                    <el-date-picker v-model="form.startDate" type="datetime" placeholder="請選擇日期與時間" />
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="結束時間">
+                    <el-date-picker v-model="form.endDate" type="datetime" placeholder="請選擇日期與時間" />
+                </el-form-item>
+            </el-col>
+        </el-row>
         <el-form-item label="線下地址">
             <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
             <el-select v-model="form.locationName" @change="setLocationAddress($event)" placeholder="請選擇">

@@ -9,39 +9,49 @@ export default defineStore('api', {
         }
     },
     actions: {
-        async request(url: string, options: any) {
+        async setToken() {
             let auth: Auth = null as any
             if (import.meta.client) {
                 auth = await new Promise((resolve) => {
                     const step = function () {
                         try {
                             const auth = getAuth()
-                            resolve(auth)
-                        } catch (error) {
+                            if (auth && auth.currentUser) {
+                                resolve(auth)
+                            } else {
+                                window.requestAnimationFrame(step)
+                            }
+                        } catch (error: any) {
+                            alert(error.message)
+                            console.log(error)
                             window.requestAnimationFrame(step)
                         }
                     }
                     step()
                 })
+                if (auth && auth.currentUser) {
+                    this.token = await auth.currentUser.getIdToken()
+                }
             }
+        },
+        async authRequest(url: string, options: any) {
             const { method, body, params = {}, headers, responseType = 'json' } = options
-            const baseHeaders: any = {
-                'Content-Type': 'application/json'
+            // Retrieve token
+            await this.setToken()
+
+            // Build Headers
+            const headersFinale: any = {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${this.token}`,
+                ...headers
             }
-            if (auth && auth.currentUser) {
-                this.token = await auth.currentUser.getIdToken()
-            }
-            if (this.token) {
-                baseHeaders.Authorization = `Bearer ${this.token}`
-            }
-            const headersFinale = Object.assign(baseHeaders, headers)
+
             // Complete config
             const axiosConfig: { [key: string]: string } = {
                 url,
                 method,
                 params,
                 headers: headersFinale,
-                // timeout,
                 responseType,
             }
             if (body) {
@@ -50,14 +60,10 @@ export default defineStore('api', {
             let axiosResponse = null
             try {
                 const apiBase = useRuntimeConfig().public.apiBase
-                console.log({
-                    axiosConfig
-                })
                 axiosResponse = await fetch(`${apiBase}${url}`, axiosConfig)
-            } catch (error) {
-
+            } catch (error: any) {
+                alert(error.message)
             } finally {
-                console.log(axiosResponse)
                 return axiosResponse as any
             }
         },

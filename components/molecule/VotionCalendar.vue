@@ -44,6 +44,15 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
+const repoEvent = useRepoEvent()
+
+const props = defineProps({
+    modelValue: {
+        type: Object,
+        default: () => { }
+    }
+})
+
 const dialogTableVisible = ref(false)
 
 // Mock Data
@@ -192,7 +201,13 @@ function toggleEventAddingBtn(event: Event) {
     dayTop.append(button)
 }
 
+async function getEventTemplate() {
+    const result = await repoEvent.getEventTemplate()
+    Object.assign(eventForm, result)
+}
+
 onMounted(() => {
+    getEventTemplate()
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
