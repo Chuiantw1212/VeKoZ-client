@@ -23,10 +23,9 @@ export default defineStore('organization', () => {
         })
         return response
     }
-    async function deleteOrganization(body: any) {
+    async function deleteOrganization() {
         const response = await defaultApi.request(`/organization`, {
             method: 'delete',
-            body,
         })
         return response
     }

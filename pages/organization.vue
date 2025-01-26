@@ -2,7 +2,7 @@
     <div class="organization">
         <div class="organization__header">
             <h1>權限&組織管理</h1>
-            <ElButton @click="openNewDialog()">新增</ElButton>
+            <ElButton @click="openNewDialog()">新增組織</ElButton>
         </div>
 
         <el-table :data="organizationList">
@@ -15,7 +15,7 @@
             <el-table-column prop="description" label="描述" />
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯</el-button>
+                    <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯組織</el-button>
                     <el-button link type="danger" size="small" @click="deleteOrganization()">
                         刪除
                     </el-button>
@@ -35,6 +35,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { ElMessage, ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 const repoOrganization = useRepoOrganization()
 
@@ -83,7 +84,19 @@ function openEditDialog(item: any) {
 }
 
 async function deleteOrganization() {
-
+    const result = await ElMessageBox.confirm(
+        '是否永久刪除資料？刪除後無法還原。',
+        {
+            title: '警告',
+            confirmButtonText: '確認',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+    if (result === 'confirm') {
+        await repoOrganization.deleteOrganization()
+        getOrganizationList()
+    }
 }
 
 async function getOrganizationList() {
