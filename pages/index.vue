@@ -37,7 +37,7 @@ import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 </script>
 
 <style lang="scss" scoped>
-.votion {
+.Venonia{
   .votion__header {
     display: flex;
     justify-content: space-between;

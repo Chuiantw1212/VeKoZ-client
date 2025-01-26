@@ -30,6 +30,12 @@
                     </el-row>
                 </template>
             </FormEvent>
+            <template #footer>
+                <el-button @click="dialogTableVisible = false">取消</el-button>
+                <el-button type="primary">
+                    確認
+                </el-button>
+            </template>
         </el-dialog>
     </div>
 </template>

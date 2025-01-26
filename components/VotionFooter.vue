@@ -1,11 +1,11 @@
 <template>
     <div class="footer">
-        Votion 開課通 由 EN Chu製作
+        Venonia 薇諾智匯 - 串聯活動與空間 由 EN Chu製作
     </div>
 </template>
 <style lang=scss scoped>
 .footer {
-    display:flex;
-    justify-content:center;
+    display: flex;
+    justify-content: center;
 }
 </style>
