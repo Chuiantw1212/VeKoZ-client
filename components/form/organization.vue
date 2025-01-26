@@ -9,10 +9,12 @@
         <el-form-item label="描述">
             <ElInput v-model="organization.description" placeholder="請輸入"></ElInput>
         </el-form-item>
-        <el-divider>
-            成員管理
-        </el-divider>
-        <p>先案右下確認後，再於主畫面新增/管理成員。</p>
+        <template v-if="mode === 'ADD'">
+            <el-divider>
+                成員管理
+            </el-divider>
+            <p>先新增後，再於組織列表"編輯成員"。</p>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -28,6 +30,10 @@ const props = defineProps({
             }
         },
         required: true,
+    },
+    mode: {
+        type: String,
+        default: ''
     }
 })
 

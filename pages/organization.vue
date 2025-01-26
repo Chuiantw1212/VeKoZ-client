@@ -24,10 +24,12 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog v-model="dialogVisible" title="組織設定" class="event__template">
-            <FormOrganization v-if="dialogVisible" v-model="organization"></FormOrganization>
+        <el-dialog v-model="organizationDialog.visibility" title="組織設定" class="event__template">
+            <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
+                :mode="organizationDialog.mode">
+            </FormOrganization>
             <template #footer>
-                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button @click="organizationDialog.visibility = false">取消</el-button>
                 <el-button type="primary" @click="hanelDialogConfirm()">
                     確認
                 </el-button>
@@ -40,8 +42,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 const repoOrganization = useRepoOrganization()
 
-const dialogVisible = ref(false)
-const dialogMode = ref()
+const organizationDialog = reactive({
+    visibility: false,
+    mode: ''
+})
 
 const organization = reactive({
     name: '',
@@ -53,10 +57,10 @@ const organizationList = ref([])
 
 // Methods
 async function hanelDialogConfirm() {
-    if (dialogMode.value === 'ADD') {
+    if (organizationDialog.mode === 'ADD') {
         postOrganization()
     }
-    if (dialogMode.value === 'EDIT') {
+    if (organizationDialog.mode === 'EDIT') {
         putOrganization()
     }
 }
@@ -64,24 +68,24 @@ async function hanelDialogConfirm() {
 async function postOrganization() {
     await repoOrganization.postOrganization(organization)
     getOrganizationList()
-    dialogVisible.value = false
+    organizationDialog.visibility = false
 }
 
 async function putOrganization() {
     await repoOrganization.putOrganization(organization)
     getOrganizationList()
-    dialogVisible.value = false
+    organizationDialog.visibility = false
 }
 
 function openNewDialog() {
-    dialogVisible.value = true
-    dialogMode.value = 'ADD'
+    organizationDialog.visibility = true
+    organizationDialog.mode = 'ADD'
 }
 
 function openEditDialog(item: any) {
     Object.assign(organization, item)
-    dialogVisible.value = true
-    dialogMode.value = 'EDIT'
+    organizationDialog.visibility = true
+    organizationDialog.mode = 'EDIT'
 }
 
 async function deleteOrganization() {
