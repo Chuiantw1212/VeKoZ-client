@@ -6,6 +6,9 @@
         <el-form-item label="Logo">
             <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
         </el-form-item>
+        <el-form-item label="描述">
+            <ElInput v-model="organization.description" placeholder="請輸入"></ElInput>
+        </el-form-item>
         <el-divider>
             成員管理
         </el-divider>
@@ -20,7 +23,8 @@ const props = defineProps({
         default: () => {
             return {
                 name: '',
-                logo: ''
+                logo: '',
+                description: ''
             }
         },
         required: true,

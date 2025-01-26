@@ -16,6 +16,7 @@
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
                     <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯組織</el-button>
+                    <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯成員</el-button>
                     <el-button link type="danger" size="small" @click="deleteOrganization()">
                         刪除
                     </el-button>
