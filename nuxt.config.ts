@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   app: {
     // head
     head: {
-      title: 'Venonia 開課通',
+      title: 'Venonia 薇諾智匯 - 串聯活動與空間',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
