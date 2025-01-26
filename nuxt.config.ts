@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@vueuse/nuxt',
-    '@unocss/nuxt',
+    // '@unocss/nuxt',
     '@pinia/nuxt',
     '@element-plus/nuxt',
     '@nuxtjs/color-mode'
@@ -44,7 +44,6 @@ export default defineNuxtConfig({
 
   // css
   css: [
-    '@unocss/reset/tailwind.css',
     '~/assets/scss/index.scss'
   ],
 

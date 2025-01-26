@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { markRaw } from 'vue'
 import type { EditorConfig, } from 'ckeditor5';
+
 const editorRef = ref()
 const editorInstance = ref()
 const emit = defineEmits(['update:modelValue'])
@@ -106,6 +107,16 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .ckeditor {
-    width: 100%;
+    width: 100%; 
+
+    // :deep(ol){
+    //     margin-left: 2.666em;
+    //     margin-bottom: .8em;
+    // }
+
+    // :deep(ul){
+    //     margin-left: 2.666em;
+    //     margin-bottom: .8em;
+    // }
 }
 </style>

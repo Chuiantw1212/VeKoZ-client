@@ -1,5 +1,5 @@
 <template>
-  <h1 class="el-header">空間管理</h1>
+  <h1>空間管理</h1>
   <p>這邊只是簡單的，設定地址方便帶入，很久後的未來才會延展成空間管理系統。</p>
   <br/>
   <el-table :data="tableData" style="width: 100%">
