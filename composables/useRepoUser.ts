@@ -5,10 +5,10 @@ import useVenoniaApi from './useVenoniaApi'
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
 
-    async function postUser(data: any) {
+    async function postUser(body: any) {
         const response = await defaultApi.request(`/user`, {
             method: 'post',
-            data,
+            body,
         })
         return response
     }
@@ -22,19 +22,19 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function patchUserProfile(data: any) {
+    async function patchUserProfile(body: any) {
         const response = await defaultApi.request(`/user`, {
             method: 'patch',
-            data
+            body
         })
         return response
     }
-    async function putUserPhoto(data: any) {
+    async function putUserPhoto(body: any) {
         const response = await defaultApi.request(`/user/photo`, {
             method: 'put',
-            data,
+            body,
         })
-        return response.data
+        return response.body
     }
     return {
         deleteUser,

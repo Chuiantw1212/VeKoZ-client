@@ -50,6 +50,9 @@ export default defineStore('api', {
             let axiosResponse = null
             try {
                 const apiBase = useRuntimeConfig().public.apiBase
+                console.log({
+                    axiosConfig
+                })
                 axiosResponse = await fetch(`${apiBase}${url}`, axiosConfig)
             } catch (error) {
 

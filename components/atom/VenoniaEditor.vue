@@ -1,7 +1,6 @@
 <template>
     <ClientOnly>
         <div class="ckeditor">
-
             <div :id="`editor`" ref="editorRef">
             </div>
         </div>
@@ -55,15 +54,21 @@ const props = defineProps({
 const localValue = computed({
     get() {
         const value = props.modelValue ?? ''
-        if (value && editorInstance.value) {
-            editorInstance.value.setData(value)
-        }
-        return value  // important
+        return value
     },
     set(newValue) {
         emit('update:modelValue', newValue)
     }
 })
+
+// watch(
+//     () => localValue.value,
+//     (newValue) => {
+//         if (newValue && editorInstance.value) {
+//             editorInstance.value.setData(newValue)
+//         }
+//     }, { immediate: true }
+// )
 
 async function initializeCKEditor() {
     // 使用CDN
@@ -78,6 +83,11 @@ async function initializeCKEditor() {
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || (window as any).CKEDITOR
     const editor = await ClassicEditor.create(editorRef.value, editorConfig)
+
+    // 附加初始值
+    if (localValue.value) {
+        editor.setData(localValue.value)
+    }
 
     // 附加監聽器
     editor.model?.document?.on('change:data', () => {
