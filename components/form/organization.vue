@@ -15,15 +15,21 @@
 <script setup lang="ts">
 const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
-    modelVlaue: {
+    modelValue: {
         type: Object,
-        default: () => { }
+        default: () => {
+            return {
+                name: '',
+                logo: ''
+            }
+        },
+        required: true,
     }
 })
 
 const organization = computed({
     get() {
-        return props.modelVlaue
+        return props.modelValue
     },
     set(newValue) {
         emits('update:modelValue', newValue)
