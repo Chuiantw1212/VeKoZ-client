@@ -13,7 +13,7 @@
             <el-divider>
                 成員管理
             </el-divider>
-            <p>先新增後，再於組織列表"編輯成員"。</p>
+            <p>先確認後，再於組織列表"編輯成員"。</p>
         </template>
     </el-form>
 </template>
