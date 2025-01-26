@@ -15,8 +15,9 @@
             <el-table-column prop="description" label="描述" />
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯組織</el-button>
-                    <el-button link type="primary" size="small" @click="openEditDialog(row)">編輯成員</el-button>
+                    <el-button link type="primary" size="small" @click="editOrganizationDialog(row)">編輯組織</el-button>
+                    <el-button link type="primary" size="small"
+                        @click="editOrganizationMemberDialog(row)">編輯成員</el-button>
                     <el-button link type="danger" size="small" @click="deleteOrganization()">
                         刪除
                     </el-button>
@@ -35,12 +36,26 @@
                 </el-button>
             </template>
         </el-dialog>
+
+        <el-dialog v-model="organizationMemberDialog.visibility" title="成員設定" class="event__template">
+            <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="organization"
+                :mode="organizationMemberDialog.mode">
+            </FormOrganizationMember>
+            <template #footer>
+                <el-button @click="organizationMemberDialog.visibility = false">取消</el-button>
+                <el-button type="primary" @click="hanelDialogConfirm()">
+                    確認
+                </el-button>
+            </template>
+        </el-dialog>
     </div>
 </template>
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 const repoOrganization = useRepoOrganization()
+
+const organizationList = ref([])
 
 const organizationDialog = reactive({
     visibility: false,
@@ -53,7 +68,11 @@ const organization = reactive({
     logo: '',
 })
 
-const organizationList = ref([])
+const organizationMemberDialog = reactive({
+    visibility: false,
+    mode: ''
+})
+
 
 // Methods
 async function hanelDialogConfirm() {
@@ -82,10 +101,16 @@ function openNewDialog() {
     organizationDialog.mode = 'ADD'
 }
 
-function openEditDialog(item: any) {
+function editOrganizationDialog(item: any) {
     Object.assign(organization, item)
     organizationDialog.visibility = true
     organizationDialog.mode = 'EDIT'
+}
+
+function editOrganizationMemberDialog(item: any) {
+    // Object.assign(organization, item)
+    organizationMemberDialog.visibility = true
+    // organizationDialog.mode = 'EDIT'
 }
 
 async function deleteOrganization() {

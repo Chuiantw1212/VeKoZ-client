@@ -1,7 +1,5 @@
 <template>
     <el-form label="成員管理">
-        <el-form-item >
-
-        </el-form-item>
+        功能尚在開發
     </el-form>
 </template>
