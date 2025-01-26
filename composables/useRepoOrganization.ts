@@ -16,16 +16,24 @@ export default defineStore('organization', () => {
         })
         return response
     }
-    async function putOrganizationLogo(body: any) {
-        const response = await defaultApi.request(`/organization/logo`, {
+    async function putOrganization(body: any) {
+        const response = await defaultApi.request(`/organization`, {
             method: 'put',
+            body,
+        })
+        return response
+    }
+    async function deleteOrganization(body: any) {
+        const response = await defaultApi.request(`/organization`, {
+            method: 'delete',
             body,
         })
         return response
     }
     return {
         getOrganizationList,
-        putOrganizationLogo,
         postOrganization,
+        putOrganization,
+        deleteOrganization,
     }
 })
