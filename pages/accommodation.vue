@@ -11,7 +11,7 @@
     <el-table-column fixed="right" label="功能">
       <template #default="{ row }">
         <el-button link type="primary" size="small" @click="editAccommodationDialog(row)">編輯空間</el-button>
-        <el-button link type="danger" size="small" @click="deleteAccommodation()">
+        <el-button link type="danger" size="small" @click="deleteAccommodation(row)">
           刪除
         </el-button>
       </template>
@@ -35,11 +35,17 @@ import type { IAccommodation } from '~/types/accommodation'
 
 // Data
 const repoAccommodation = useRepoAccommodation()
+
 const tableItems = ref([])
-const form = reactive<IAccommodation[]>([])
+
+const form = reactive<IAccommodation>({
+  name: '',
+  description: '',
+})
+
 const accommodationDialog = reactive({
   visibility: false,
-  mode: ''
+  mode: '',
 })
 
 // Hooks

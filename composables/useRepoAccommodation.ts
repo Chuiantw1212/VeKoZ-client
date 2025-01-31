@@ -17,7 +17,7 @@ export default defineStore('accommodation', () => {
         return response
     }
     async function putAccommodation(body: any) {
-        const response = await defaultApi.authRequest(`/accommodation`, {
+        const response = await defaultApi.authRequest(`/accommodation/${body.id}`, {
             method: 'put',
             body,
         })
