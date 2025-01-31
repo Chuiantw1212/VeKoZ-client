@@ -9,3 +9,10 @@ a {
   font-weight: 400;
   color: var(--el-color-primary);
 }
+
+// Venonia Custom Style
+
+.venonia-header {
+  display: flex;
+  justify-content: space-between;
+}
