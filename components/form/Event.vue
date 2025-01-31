@@ -12,9 +12,13 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="時間">
+                    {{eventDates}}
                     <el-date-picker v-model="eventDates" type="datetimerange" placeholder="請選擇日期與時間"
                         start-placeholder="先選日期再選時間" end-placeholder="先選日期再選時間" @change="setEventDate()" />
                 </el-form-item>
+                <!-- <el-form-item label="日期">
+                    <el-date-picker v-model="eventDates" label="日期" type="daterange" />
+                </el-form-item> -->
             </el-col>
         </el-row>
         <el-form-item label="線下地址">

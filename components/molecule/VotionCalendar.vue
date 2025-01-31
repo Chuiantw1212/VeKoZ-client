@@ -2,10 +2,10 @@
     <div class="votionCalendar">
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
-        <el-dialog v-model="dialogTableVisible" title="活動編輯">
+        <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false">
             <FormEvent v-model="eventForm">
                 <template v-slot:eventActor>
-                    <el-form-item label="講者/主演">
+                    <el-form-item label="講者">
                         <el-select v-model="eventActors" multiple placeholder="請選擇">
                             <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
                                 :value="item.name" />
@@ -122,7 +122,7 @@ const calendarOptions = reactive({
 
 // Methods
 function createEvent() {
-    
+
 }
 
 function setIsDone(result: string[], index: number) {
@@ -168,7 +168,26 @@ function resetDateCellListener() {
 
 function toggleEventAddingBtn(event: Event) {
     const dayFrame = event.target as any
+    // fc-daygrid-day-top aria-label
     const dayTop = dayFrame.querySelector('.fc-daygrid-day-top')
+    const dateNumber = dayTop.querySelector('.fc-daygrid-day-number')
+    const dateLabelInChinese: string = dateNumber.ariaLabel
+    let formatLabel = dateLabelInChinese.replace('年', '-')
+    formatLabel = formatLabel.replace('月', '-')
+    formatLabel = formatLabel.replace('日', '-')
+    console.log({
+        formatLabel
+    })
+    const dateInstance = new Date(formatLabel)
+    console.log({
+        dateInstance
+    })
+    const isoDateString = dateInstance.toISOString()
+
+    console.log({
+        isoDateString
+    })
+    // const 2025年2月3日
 
     // 移除所有的事件增加按鈕
     const items = document.querySelectorAll('.addEventBtn')
