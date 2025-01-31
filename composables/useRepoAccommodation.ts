@@ -1,39 +1,38 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
 
-export default defineStore('accomodation', () => {
+export default defineStore('accommodation', () => {
     const defaultApi = useVenoniaApi()
-    async function getAccomodationList() {
-        const response = await defaultApi.authRequest(`/accomodation/list`, {
+    async function getAccommodationList() {
+        const response = await defaultApi.authRequest(`/accommodation/list`, {
             method: 'get',
         })
         return response.json()
     }
-    async function postAccomodation(body: any) {
-        const response = await defaultApi.authRequest(`/accomodation`, {
+    async function postAccommodation(body: any) {
+        const response = await defaultApi.authRequest(`/accommodation`, {
             method: 'post',
             body,
         })
         return response
     }
-    async function putAccomodation(body: any) {
-        const response = await defaultApi.authRequest(`/accomodation`, {
+    async function putAccommodation(body: any) {
+        const response = await defaultApi.authRequest(`/accommodation`, {
             method: 'put',
             body,
         })
         return response
     }
-    async function deleteAccomodation(body: any) {
-        const response = await defaultApi.authRequest(`/accomodation`, {
+    async function deleteAccommodation(id: string) {
+        const response = await defaultApi.authRequest(`/accommodation/${id}`, {
             method: 'delete',
-            body,
         })
         return response
     }
     return {
-        getAccomodationList,
-        postAccomodation,
-        putAccomodation,
-        deleteAccomodation,
+        getAccommodationList,
+        postAccommodation,
+        putAccommodation,
+        deleteAccommodation,
     }
 })

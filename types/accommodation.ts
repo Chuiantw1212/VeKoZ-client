@@ -1,5 +1,5 @@
 export type IAccommodation = {
-    id: string,
+    id?: string,
     name: string,
     description: string,
 }
