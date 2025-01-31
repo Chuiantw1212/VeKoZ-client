@@ -107,16 +107,11 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .ckeditor {
-    width: 100%; 
+    width: 100%;
 
-    // :deep(ol){
-    //     margin-left: 2.666em;
-    //     margin-bottom: .8em;
-    // }
-
-    // :deep(ul){
-    //     margin-left: 2.666em;
-    //     margin-bottom: .8em;
-    // }
+    // 移除scroll貼頂效果
+    :deep(.ck.ck-sticky-panel.ck-sticky-panel__content_sticky) {
+        top: 0;
+    }
 }
 </style>
