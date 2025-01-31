@@ -10,14 +10,10 @@
         </el-form-item>
         <slot name="eventActor"></slot>
         <el-row>
-            <el-col :span="12">
-                <el-form-item label="開始時間">
-                    <el-date-picker v-model="form.startDate" type="datetime" placeholder="請選擇日期與時間" />
-                </el-form-item>
-            </el-col>
-            <el-col :span="12">
-                <el-form-item label="結束時間">
-                    <el-date-picker v-model="form.endDate" type="datetime" placeholder="請選擇日期與時間" />
+            <el-col :span="24">
+                <el-form-item label="時間">
+                    <el-date-picker v-model="eventDates" type="datetimerange" placeholder="請選擇日期與時間"
+                        start-placeholder="先選日期再選時間" end-placeholder="先選日期再選時間" @change="setEventDate()" />
                 </el-form-item>
             </el-col>
         </el-row>
@@ -67,6 +63,8 @@ const form = computed({
 const accommodationList = ref<IAccommodation[]>([])
 const organizationList = ref<IOrganization[]>([])
 
+const eventDates = ref<string[]>([])
+
 // Hooks
 onMounted(() => {
     getOrganizationList()
@@ -74,6 +72,11 @@ onMounted(() => {
 })
 
 // methods
+function setEventDate() {
+    form.value.startDate = eventDates.value[0]
+    form.value.endDate = eventDates.value[1]
+}
+
 function setLocationAddress(locationName: string) {
     if (locationName) {
         const selectedItem = accommodationList.value.find(item => {
@@ -84,7 +87,6 @@ function setLocationAddress(locationName: string) {
         }
     }
 }
-
 
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()

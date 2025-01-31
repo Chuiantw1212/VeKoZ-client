@@ -38,7 +38,7 @@
             </FormEvent>
             <template #footer>
                 <el-button @click="dialogTableVisible = false">取消</el-button>
-                <el-button type="primary">
+                <el-button type="primary" @click="createEvent()">
                     確認
                 </el-button>
             </template>
@@ -118,26 +118,13 @@ const calendarOptions = reactive({
         center: 'title',
         right: 'dayGridMonth,dayGridWeek'
     },
-    // headerToolbar: {
-    //     left: 'today,prev,next',
-    //     center: 'title',
-    //     right: 'dayGridMonth,dayGridWeek' // user can switch between the two
-    // },
-    // allLocales
-    dateClick: function (info: any) {
-        /**
-         * 選取日期
-         * https://fullcalendar.io/docs/dateClick
-         */
-        // alert('Clicked on: ' + info.dateStr);
-        // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-        // alert('Current view: ' + info.view.type);
-        // change the day's background color just for fun
-        // info.dayEl.style.backgroundColor = 'red';
-    },
 })
 
 // Methods
+function createEvent() {
+    
+}
+
 function setIsDone(result: string[], index: number) {
     if (todoList[index]) {
         if (result[0]) {
