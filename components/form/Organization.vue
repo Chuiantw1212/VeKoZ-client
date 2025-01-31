@@ -4,7 +4,9 @@
             <ElInput v-model="organization.name" placeholder="請輸入"></ElInput>
         </el-form-item>
         <el-form-item label="Logo">
-            <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
+            <ClientOnly>
+                <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
+            </ClientOnly>
         </el-form-item>
         <el-form-item label="描述">
             <ElInput v-model="organization.description" placeholder="請輸入"></ElInput>
