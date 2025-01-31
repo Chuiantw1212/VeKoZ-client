@@ -24,7 +24,7 @@
         <el-form-item label="線下地址">
             <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
             <el-select v-model="form.locationName" @change="setLocationAddress($event)" placeholder="請選擇">
-                <el-option v-for="item in tableData" :key="item.uid" :label="item.name" :value="item.name" />
+                <el-option v-for="item in accommodationList" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
         </el-form-item>
         <el-form-item label=" ">
@@ -45,8 +45,10 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
+import type { IAccommodation } from '~/types/accommodation'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
+const repoAccommodation = useRepoAccommodation()
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -62,27 +64,19 @@ const form = computed({
     }
 })
 
-const tableData = [
-    {
-        uid: '1',
-        name: '齊文藝 2F-Q 安靜區大桌座位',
-        address: '台北車站南陽街32號',
-        description: '預定須知',
-    },
-    {
-        uid: '2',
-        name: 'TCCC台灣文創訓練中心',
-        address: '台灣台北市中山區長安東路一段27號2樓',
-        description: '預定須知',
-    },
-]
-
+const accommodationList = ref<IAccommodation[]>([])
 const organizationList = ref<IOrganization[]>([])
+
+// Hooks
+onMounted(() => {
+    getOrganizationList()
+    getAccommodationList()
+})
 
 // methods
 function setLocationAddress(locationName: string) {
     if (locationName) {
-        const selectedItem = tableData.find(item => {
+        const selectedItem = accommodationList.value.find(item => {
             return item.name === locationName
         })
         if (selectedItem) {
@@ -97,7 +91,8 @@ async function getOrganizationList() {
     organizationList.value = result
 }
 
-onMounted(() => {
-    getOrganizationList()
-})
+async function getAccommodationList() {
+    const result = await repoAccommodation.getAccommodationList()
+    accommodationList.value = result
+}
 </script>
