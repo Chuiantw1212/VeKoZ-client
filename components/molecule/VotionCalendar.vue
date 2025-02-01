@@ -3,7 +3,7 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false">
-            <FormEvent v-model="eventForm">
+            <FormEvent v-if="dialogTableVisible" v-model="eventForm">
                 <template v-slot:eventActor>
                     <el-form-item label="講者">
                         <el-select v-model="eventActors" multiple placeholder="請選擇">
@@ -122,6 +122,20 @@ const calendarOptions = reactive({
     },
 })
 
+// Hooks
+onMounted(() => {
+    getEventTemplate()
+    nextTick(() => {
+        listenToDateCell(true)
+        listenToFcButton(true)
+    })
+})
+
+onBeforeUnmount(() => {
+    listenToDateCell(false)
+    listenToFcButton(false)
+})
+
 // Methods
 function createEvent() {
 
@@ -139,38 +153,34 @@ function setIsDone(result: string[], index: number) {
 
 function listenToDateCell(isOn: boolean) {
     const frames = document.querySelectorAll('.fc-daygrid-day-frame')
+    frames.forEach(item => {
+        item.removeEventListener('mouseenter', toggleEventAddingBtn)
+    })
     if (isOn) {
         frames.forEach(item => {
             item.addEventListener('mouseenter', toggleEventAddingBtn)
-        })
-    } else {
-        frames.forEach(item => {
-            item.removeEventListener('mouseenter', toggleEventAddingBtn)
         })
     }
 }
 
 function listenToFcButton(isOn: boolean) {
     const fcButtons = document.querySelectorAll('.fc-button')
+    fcButtons.forEach(item => {
+        item.removeEventListener('click', resetDateCellListener)
+    })
     if (isOn) {
         fcButtons.forEach(item => {
             item.addEventListener('click', resetDateCellListener)
-        })
-    } else {
-        fcButtons.forEach(item => {
-            item.removeEventListener('click', resetDateCellListener)
         })
     }
 }
 
 function resetDateCellListener() {
-    listenToDateCell(false)
     listenToDateCell(true)
 }
 
 function toggleEventAddingBtn(event: Event) {
     const dayFrame = event.target as any
-    // fc-daygrid-day-top aria-label
     const dayTop = dayFrame.querySelector('.fc-daygrid-day-top')
     const dateNumber = dayTop.querySelector('.fc-daygrid-day-number')
     const dateLabelInChinese: string = dateNumber.ariaLabel
@@ -211,19 +221,6 @@ async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
     Object.assign(eventForm, result)
 }
-
-onMounted(() => {
-    getEventTemplate()
-    nextTick(() => {
-        listenToDateCell(true)
-        listenToFcButton(true)
-    })
-})
-
-onBeforeUnmount(() => {
-    listenToDateCell(false)
-    listenToFcButton(false)
-})
 </script>
 
 <style lang="scss" scoped>
