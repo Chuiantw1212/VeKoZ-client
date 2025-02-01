@@ -50,6 +50,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 const emit = defineEmits(['update:modelValue'])
+const repoOrganization = useRepoOrganization()
 
 const props = defineProps({
     modelValue: {
@@ -61,11 +62,11 @@ const props = defineProps({
 const dialogTableVisible = ref(false)
 
 // Mock Data
-const actorOptions = [
+const actorOptions = ref([
     { name: 'EN Chu' },
     { name: '.38' },
     { name: 'NaNa' }
-]
+])
 
 /**
  * 這邊資料要使用SQL格式，避免物件，未來方便轉換資料用
@@ -132,6 +133,7 @@ const calendarOptions = reactive({
 
 // Hooks
 onMounted(() => {
+    getOrganizationMembers()
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
@@ -144,6 +146,11 @@ onBeforeUnmount(() => {
 })
 
 // Methods
+async function getOrganizationMembers() {
+    const result = await repoOrganization.getOrganizationMemberList()
+    actorOptions.value = result
+}
+
 function createEvent() {
 
 }
