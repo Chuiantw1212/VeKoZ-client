@@ -4,3 +4,9 @@ export type IOrganization = {
     description: string,
     logo: string | Buffer,
 }
+
+export type IOrganizationMember = {
+    id?: string,
+    name: string,
+    email: string,
+}
