@@ -3,7 +3,8 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false">
-            <FormEvent v-if="dialogTableVisible" v-model="eventForm">
+            <FormEvent v-if="dialogTableVisible" v-model="form">
+                <slot></slot>
                 <template v-slot:eventActor>
                     <el-form-item label="講者">
                         <el-select v-model="eventActors" multiple placeholder="請選擇">
@@ -33,7 +34,6 @@
                             </el-col>
                         </el-row>
                     </template>
-
                 </template>
             </FormEvent>
             <template #footer>
@@ -49,8 +49,7 @@
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
-
-const repoEvent = useRepoEvent()
+const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({
     modelValue: {
@@ -73,15 +72,24 @@ const actorOptions = [
  * Event參考網址
  * https://schema.org/Event
  */
-const eventForm = reactive({
-    name: '活動名稱',
-    locationName: '',
-    locationAddress: '',
-    virtualLocationUrl: '',
-    description: '', // html
-    startDate: '',
-    endDate: '',
+const form = computed({
+    get() {
+        return props.modelValue
+    },
+    set(newValue) {
+        emit('update:modelValue', newValue)
+    }
 })
+
+// const eventForm = reactive({
+//     name: '活動名稱',
+//     locationName: '',
+//     locationAddress: '',
+//     virtualLocationUrl: '',
+//     description: '', // html
+//     startDate: '',
+//     endDate: '',
+// })
 
 const eventActors = ref(['EN Chu', '.38'])
 
@@ -208,8 +216,8 @@ function toggleEventAddingBtn(event: Event) {
 </svg></i>`
     button.onclick = async () => {
         await getEventTemplate()
-        eventForm.startDate = isoDateString
-        eventForm.endDate = isoDateString
+        form.value.startDate = isoDateString
+        form.value.endDate = isoDateString
         dialogTableVisible.value = true;
     }
 
@@ -218,8 +226,8 @@ function toggleEventAddingBtn(event: Event) {
 }
 
 async function getEventTemplate() {
-    const result = await repoEvent.getEventTemplate()
-    Object.assign(eventForm, result)
+    // const result = await repoEvent.getEventTemplate()
+    // Object.assign(form.value, result)
 }
 </script>
 

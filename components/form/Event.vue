@@ -15,9 +15,6 @@
                     <el-date-picker v-model="eventDates" type="datetimerange" placeholder="請選擇日期與時間"
                         start-placeholder="先選日期再選時間" end-placeholder="先選日期再選時間" @change="setEventDate()" />
                 </el-form-item>
-                <!-- <el-form-item label="日期">
-                    <el-date-picker v-model="eventDates" label="日期" type="daterange" />
-                </el-form-item> -->
             </el-col>
         </el-row>
         <el-form-item label="線下地址">
@@ -48,6 +45,7 @@ import type { IAccommodation } from '~/types/accommodation'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
 const repoAccommodation = useRepoAccommodation()
+
 const props = defineProps({
     modelValue: {
         type: Object,

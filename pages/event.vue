@@ -5,7 +5,8 @@
             <el-button @click="editEventTemplate">事件樣板</el-button>
         </div>
         <br />
-        <VotionCalendar></VotionCalendar>
+        <VotionCalendar v-model="form">
+        </VotionCalendar>
 
         <el-dialog v-model="dialogVisible" title="事件樣板" class="event__template">
             <FormEventTemplate v-if="dialogVisible" v-model="organizationTemplate"></FormEventTemplate>
@@ -30,6 +31,17 @@ const organizationTemplate = reactive({
     description: '',
 })
 
+const form = reactive({
+    name: '',
+    locationName: '',
+    locationAddress: '',
+    virtualLocationUrl: '',
+    description: '', // html
+    startDate: '',
+    endDate: '',
+})
+
+// methods
 async function putEventTemplate() {
     await repoEvent.putEventTemplate(organizationTemplate)
     dialogVisible.value = false
