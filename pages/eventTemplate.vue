@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="eventTemplate">
         <h1>活動套版管理</h1>
         <el-row :gutter="20">
             <el-col :span="16">
@@ -16,7 +16,7 @@
                     </template>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="純文字">
                                     <el-input :model-value="'請輸入文字'" :readonly="true"></el-input>
                                 </el-form-item>
@@ -25,7 +25,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="數字">
                                     <el-input-number v-model="demo.number"></el-input-number>
                                 </el-form-item>
@@ -34,7 +34,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="單選">
                                     <el-select v-model="demo.singleSelect">
                                         <el-option v-for="item in options" :key="item.value" :label="item.label"
@@ -46,7 +46,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="多選">
                                     <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
                                         :allow-create="true">
@@ -59,7 +59,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="時間日期">
                                     <el-date-picker v-model="demo.datetimerange" type="datetimerange" />
                                 </el-form-item>
@@ -68,7 +68,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="超連結">
                                     <el-input :model-value="'請輸入連結'" :readonly="true"></el-input>
                                 </el-form-item>
@@ -77,7 +77,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="核取方塊">
                                     <el-checkbox v-model="demo.checkbox" label="Option 1" />
                                 </el-form-item>
@@ -86,7 +86,7 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true">
                                 <el-form-item label="分隔線">
                                     <el-divider></el-divider>
                                 </el-form-item>
@@ -111,8 +111,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import useRepoEvent from '~/composables/useRepoEvent';
-import { Plus } from '@element-plus/icons-vue'
+import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(false)
@@ -184,3 +183,12 @@ onMounted(() => {
     // getEventTemplate()
 })
 </script>
+<style lang="scss" scoped>
+.eventTemplate {
+    .eventTemplate__draggable {
+        &:hover {
+            outline: 1px dashed red;
+        }
+    }
+}
+</style>
