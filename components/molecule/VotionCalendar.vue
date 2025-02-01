@@ -79,6 +79,8 @@ const eventForm = reactive({
     locationAddress: '',
     virtualLocationUrl: '',
     description: '', // html
+    startDate: '',
+    endDate: '',
 })
 
 const eventActors = ref(['EN Chu', '.38'])
@@ -174,20 +176,9 @@ function toggleEventAddingBtn(event: Event) {
     const dateLabelInChinese: string = dateNumber.ariaLabel
     let formatLabel = dateLabelInChinese.replace('年', '-')
     formatLabel = formatLabel.replace('月', '-')
-    formatLabel = formatLabel.replace('日', '-')
-    console.log({
-        formatLabel
-    })
+    formatLabel = formatLabel.replace('日', '')
     const dateInstance = new Date(formatLabel)
-    console.log({
-        dateInstance
-    })
     const isoDateString = dateInstance.toISOString()
-
-    console.log({
-        isoDateString
-    })
-    // const 2025年2月3日
 
     // 移除所有的事件增加按鈕
     const items = document.querySelectorAll('.addEventBtn')
@@ -207,6 +198,8 @@ function toggleEventAddingBtn(event: Event) {
 </svg></i>`
     button.onclick = async () => {
         await getEventTemplate()
+        eventForm.startDate = isoDateString
+        eventForm.endDate = isoDateString
         dialogTableVisible.value = true;
     }
 

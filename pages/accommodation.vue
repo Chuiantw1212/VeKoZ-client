@@ -40,6 +40,7 @@ const tableItems = ref([])
 
 const form = reactive<IAccommodation>({
   name: '',
+  address: '',
   description: '',
 })
 
