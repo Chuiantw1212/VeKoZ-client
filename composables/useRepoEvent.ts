@@ -3,6 +3,8 @@ import useVenoniaApi from './useVenoniaApi'
 
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
+
+
     async function postEvent() {
         const response = await defaultApi.authRequest(`/event`, {
             method: 'post',
@@ -23,6 +25,9 @@ export default defineStore('event', () => {
         return response
     }
     return {
+        state: {
+            test: '1'
+        },
         postEvent,
         getEventTemplate,
         putEventTemplate,

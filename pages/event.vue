@@ -53,6 +53,15 @@ async function editEventTemplate() {
     dialogVisible.value = true
 }
 
+async function getEventTemplate() {
+    const result = await repoEvent.getEventTemplate()
+    Object.assign(form, result)
+}
+
+onMounted(() => {
+    getEventTemplate()
+})
+
 </script>
 
 <style lang="scss" scoped>
