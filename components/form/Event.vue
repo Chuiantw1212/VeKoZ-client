@@ -29,9 +29,11 @@
         <el-form-item label="線上連結">
             <el-input v-model="form.virtualLocationUrl" placeholder="請輸入" />
         </el-form-item>
-        <el-divider>
-            活動描述
-        </el-divider>
+        <!-- HwTbFvnOK6IYv1w8RmKl -->
+        <!-- <el-form-item label="收費">
+            <el-input v-model="form.virtualLocationUrl" placeholder="請輸入" />
+        </el-form-item> -->
+        <el-divider>活動描述</el-divider>
         <el-form-item label="">
             <AtomVenoniaEditor v-model="form.description">
             </AtomVenoniaEditor>

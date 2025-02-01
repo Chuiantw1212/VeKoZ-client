@@ -1,13 +1,18 @@
 <template>
-  <el-menu default-active="2" class="el-menu-vertical-demo">
+  <el-menu>
     <NuxtLink to="/event">
       <el-menu-item>
-        事件管理
+        活動管理
+      </el-menu-item>
+    </NuxtLink>
+    <NuxtLink to="/eventTemplate">
+      <el-menu-item>
+        活動套版管理
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/accommodation">
       <el-menu-item>
-        空間管理
+        空間&地點管理
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/organization">

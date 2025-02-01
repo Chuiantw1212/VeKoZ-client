@@ -1,6 +1,6 @@
 <template>
   <div class="venonia-header">
-    <h1>空間管理</h1>
+    <h1>空間&地點管理</h1>
     <ElButton @click="openNewDialog()">新增空間</ElButton>
   </div>
   <br />

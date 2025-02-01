@@ -1,14 +1,14 @@
 <template>
     <div class="event">
         <div class="event__header">
-            <h1>事件管理</h1>
-            <el-button @click="editEventTemplate">事件樣板</el-button>
+            <h1>活動管理</h1>
+            <el-button @click="editEventTemplate">活動套板</el-button>
         </div>
         <br />
         <VotionCalendar v-model="form">
         </VotionCalendar>
 
-        <el-dialog v-model="dialogVisible" title="事件樣板" class="event__template">
+        <!-- <el-dialog v-model="dialogVisible" title="活動套板" class="event__template" width="100%">
             <FormEventTemplate v-if="dialogVisible" v-model="organizationTemplate"></FormEventTemplate>
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
@@ -16,7 +16,7 @@
                     確認
                 </el-button>
             </template>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 

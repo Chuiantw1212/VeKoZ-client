@@ -1,37 +1,41 @@
 <template>
     <el-form class="form">
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="24">
+                <el-form-item label="活動名稱">
+                    <el-input v-model="eventTemplate.name" placeholder="請輸入"></el-input>
+                </el-form-item>
                 <el-form-item label="主辦單位">
                     <el-select v-model="eventTemplate.organizer" placeholder="請選擇現有組織">
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="item.id" />
                     </el-select>
                 </el-form-item>
-            </el-col>
-            <el-col :span="12">
-                <el-alert :closable="false">
-                    請先用組織管理新增主辦單位
-                </el-alert>
+                <el-form-item label="時間日期">
+                    <el-date-picker v-model="eventTemplate.dates" type="datetimerange"
+                        placeholder="請輸入"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="線下地址">
+                    <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
+                    <el-select placeholder="請選擇">
+                        <el-option v-for="item in accommodationList" :key="item.id" :label="item.name"
+                            :value="item.name" />
+                    </el-select>
+                </el-form-item>
             </el-col>
         </el-row>
-        <el-divider>
-            活動描述
-        </el-divider>
-        <el-form-item>
+        <el-divider>活動描述</el-divider>
+        <el-form-item label="">
             <AtomVenoniaEditor v-model="eventTemplate.description"></AtomVenoniaEditor>
         </el-form-item>
-        <!-- 那些很重要，但是參加者不需要知道的幕後 -->
-        <el-divider>
-            待辦事項
-        </el-divider>
-        <p>TODO: 未來會用更複雜的介面，讓樣板的欄位可以自選。</p>
     </el-form>
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
+import type { IAccommodation } from '~/types/accommodation'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
+const repoAccommodation = useRepoAccommodation()
 
 const props = defineProps({
     modelValue: {
@@ -52,6 +56,7 @@ const eventTemplate = computed({
 })
 
 const organizationList = ref<IOrganization[]>([])
+const accommodationList = ref<IAccommodation[]>([])
 
 // methods
 async function getOrganizationList() {
@@ -59,7 +64,13 @@ async function getOrganizationList() {
     organizationList.value = result
 }
 
+async function getAccommodationList() {
+    const result = await repoAccommodation.getAccommodationList()
+    accommodationList.value = result
+}
+
 onMounted(() => {
+    getAccommodationList()
     getOrganizationList()
 })
 </script>

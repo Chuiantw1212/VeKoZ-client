@@ -33,7 +33,7 @@ export default defineStore('organization', () => {
         const response = await defaultApi.authRequest(`/organization/member/list`, {
             method: 'get',
         })
-        return response
+        return response.json()
     }
     return {
         getOrganizationList,

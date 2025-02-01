@@ -2,14 +2,16 @@
     <div class="votionCalendar">
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
-        <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false">
+        <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false" :lock-scroll="true">
             <FormEvent v-if="dialogTableVisible" v-model="form">
                 <slot></slot>
                 <template v-slot:eventActor>
+                    <!-- Q9iDU9CGpWxA5DgYeaNq -->
                     <el-form-item label="講者">
-                        <el-select v-model="eventActors" multiple placeholder="請選擇">
+                        <el-select v-model="eventActors" filterable multiple allow-create
+                            :placeholder="`輸入後，篩選選項 或 新增`">
                             <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
-                                :value="item.name" />
+                                :value="String(item.id)" />
                         </el-select>
                     </el-form-item>
                 </template>
@@ -49,6 +51,7 @@
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
+import type { IOrganizationMember } from '~/types/organization';
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
 
@@ -61,11 +64,19 @@ const props = defineProps({
 
 const dialogTableVisible = ref(false)
 
-// Mock Data
-const actorOptions = ref([
-    { name: 'EN Chu' },
-    { name: '.38' },
-    { name: 'NaNa' }
+const actorOptions = ref<IOrganizationMember[]>([])
+
+const organizationTemplateOptions = ref([
+    {
+        label: 'EN Chu',
+        value: 'EN Chu',
+        color: 'blue',
+    },
+    {
+        label: '.38',
+        value: '.38',
+        color: 'yellow',
+    }
 ])
 
 /**
