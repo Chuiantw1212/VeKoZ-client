@@ -19,6 +19,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import HeaderMenu from '@/components/HeaderMenu.vue'
-import SideMenu from '@/components/SideMenu.vue';
+import HeaderMenu from '~/components/organism/HeaderMenu.vue'
+import SideMenu from '~/components/organism/SideMenu.vue';
 </script>

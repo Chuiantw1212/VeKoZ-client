@@ -22,9 +22,9 @@
 </template>
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged, } from "firebase/auth"
-import HeaderMenu from '@/components/HeaderMenu.vue'
-import SideMenu from '@/components/SideMenu.vue';
-import VotionFooter from '@/components/VotionFooter.vue'
+import HeaderMenu from '~/components/organism/HeaderMenu.vue'
+import SideMenu from '~/components/organism/SideMenu.vue';
+import VotionFooter from '~/components/organism/VotionFooter.vue'
 
 const isActor = ref(false)
 // const isOrganization = ref(false) // 至少一個負責人
@@ -37,7 +37,7 @@ function addFirebaseListener() {
         return
       }
       const { displayName, email, photoURL, uid } = firebaseUser
-      if(firebaseUser?.email==='chuiantw1212@gmail.com'){
+      if (firebaseUser?.email === 'chuiantw1212@gmail.com') {
         isActor.value = true
       }
     })
