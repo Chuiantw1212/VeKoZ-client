@@ -10,24 +10,25 @@
         <template v-else-if="customDesign.controllable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
+                <el-divider>
+                    {{ customDesign.controllable.label }}
+                </el-divider>
                 <div class="design__item">
                     <label class="item__label">
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織成員"
-                        :disabled="isDesigning">
-                        <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
-                            :value="String(item.id)" />
-                    </el-select>
+                    <div class="item__input">
+                        <AtomVenoniaEditor v-model="customDesign.controllable.value" :placeholder="placeholder">
+                        </AtomVenoniaEditor>
+                    </div>
                 </div>
             </MoleculeCustomToolbar>
         </template>
     </div>
 </template>
 <script setup lang="ts">
-import type { IOrganizationMember } from '~/types/organization'
 import { computed, watch } from 'vue';
-const repoOrganizationMember = useRepoOrganization()
+
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
@@ -35,9 +36,9 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'organizationMember',
+                name: 'editor',
                 controllable: {
-                    label: '組織成員'
+                    label: ''
                 }
             }
         }
@@ -50,14 +51,6 @@ const props = defineProps({
         type: String,
         default: '請輸入'
     }
-})
-
-
-const organizationList = ref<IOrganizationMember[]>([])
-
-// Hooks
-onMounted(() => {
-    getOrganizationMemberList()
 })
 
 const customDesign = computed({
@@ -73,7 +66,7 @@ watch(() => customDesign.value, (newValue) => {
         return
     }
     const defaultValue = {
-        name: 'input',
+        name: 'editor',
         controllable: {
             label: '',
         }
@@ -82,13 +75,6 @@ watch(() => customDesign.value, (newValue) => {
     customDesign.value = mergedItem
 
 }, { immediate: true })
-
-// Methods
-async function getOrganizationMemberList() {
-    const result = await repoOrganizationMember.getOrganizationMemberList()
-    organizationList.value = result
-}
-
 </script>
 <style lang="scss" scoped>
 .design {
@@ -102,6 +88,10 @@ async function getOrganizationMemberList() {
             .label__input {
                 outline: none;
             }
+        }
+
+        .item__input {
+            width: 100%;
         }
     }
 }

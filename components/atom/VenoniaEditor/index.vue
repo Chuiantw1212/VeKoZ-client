@@ -1,7 +1,7 @@
 <template>
     <ClientOnly>
         <div class="ckeditor">
-            <div :id="`editor`" ref="editorRef">
+            <div :id="`editor`" ref="editorRef" :disabled="disabled">
             </div>
         </div>
     </ClientOnly>
@@ -50,6 +50,10 @@ const props = defineProps({
         type: String,
         default: '請輸入'
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 const localValue = computed({
@@ -61,6 +65,12 @@ const localValue = computed({
         emit('update:modelValue', newValue)
     }
 })
+
+watch(() => props.disabled, (newValue) => {
+    if (editorInstance.value) {
+        editorInstance.value.enableReadOnlyMode()
+    }
+}, { immediate: true })
 
 // watch(
 //     () => localValue.value,
@@ -96,9 +106,15 @@ async function initializeCKEditor() {
         localValue.value = newValue
     })
 
+    // 更新狀態
+    if (props.disabled) {
+        editor.enableReadOnlyMode('docs-snippet')
+    }
+
     // 紀錄instance
     editorInstance.value = markRaw(editor)
 }
+
 
 onMounted(async () => {
     initializeCKEditor()

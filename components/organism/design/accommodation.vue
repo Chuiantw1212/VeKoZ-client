@@ -14,8 +14,7 @@
                     <label class="item__label">
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織成員"
-                        :disabled="isDesigning">
+                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇空間地點" :clearable="true">
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="String(item.id)" />
                     </el-select>
@@ -25,9 +24,9 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { IOrganizationMember } from '~/types/organization'
+import type { IAccommodation } from '~/types/accommodation'
 import { computed, watch } from 'vue';
-const repoOrganizationMember = useRepoOrganization()
+const repoAccommodation = useRepoAccommodation()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
@@ -35,9 +34,9 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'organizationMember',
+                name: 'organization',
                 controllable: {
-                    label: '組織成員'
+                    label: '組織名稱'
                 }
             }
         }
@@ -53,11 +52,11 @@ const props = defineProps({
 })
 
 
-const organizationList = ref<IOrganizationMember[]>([])
+const organizationList = ref<IAccommodation[]>([])
 
 // Hooks
 onMounted(() => {
-    getOrganizationMemberList()
+    getAccommodationList()
 })
 
 const customDesign = computed({
@@ -84,8 +83,8 @@ watch(() => customDesign.value, (newValue) => {
 }, { immediate: true })
 
 // Methods
-async function getOrganizationMemberList() {
-    const result = await repoOrganizationMember.getOrganizationMemberList()
+async function getAccommodationList() {
+    const result = await repoAccommodation.getAccommodationList()
     organizationList.value = result
 }
 

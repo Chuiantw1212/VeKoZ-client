@@ -2,7 +2,7 @@
     <div class="event">
         <div class="event__header">
             <h1>活動管理</h1>
-            <NuxtLink to="/eventTemplate">前往活動套板</NuxtLink>
+            <NuxtLink to="/eventTemplate">點此設計活動套板</NuxtLink>
         </div>
         <br />
         <VotionCalendar v-model="form">

@@ -22,10 +22,26 @@
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organizationMember' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganizationMember>
-            <OrganismDesignDateTimeRange v-if="item.name === 'datetimerange'" v-model="localValue[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'datetimerange' })"
+            <OrganismDesignDateTimeRange v-if="item.name === 'dateTimeRange'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'dateTimeRange' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDateTimeRange>
+            <OrganismDesignAccommodation v-if="item.name === 'accommodation'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'accommodation' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignAccommodation>
+            <OrganismDesignUrl v-if="item.name === 'url'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, name: 'url' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignUrl>
+            <OrganismDesignDivider v-if="item.name === 'divider'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, name: 'divider' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignDivider>
+            <OrganismDesignEditor v-if="item.name === 'editor'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, name: 'editor' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignEditor>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

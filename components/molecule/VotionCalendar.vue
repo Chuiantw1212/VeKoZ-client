@@ -3,9 +3,8 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false" :lock-scroll="true">
-            <FormEventTemplate v-if="dialogTableVisible" v-model="form"></FormEventTemplate>
-            <!-- <FormEvent v-if="dialogTableVisible" v-model="form">
-            </FormEvent> -->
+            <!-- <FormEventTemplate v-if="dialogTableVisible" v-model="form"></FormEventTemplate> -->
+            <FormTemplateDesign v-model="eventTemplate.designs"></FormTemplateDesign>
             <template #footer>
                 <el-button @click="dialogTableVisible = false">取消</el-button>
                 <el-button type="primary" @click="createEvent()">
@@ -20,6 +19,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IOrganizationMember } from '~/types/organization';
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
 
@@ -31,6 +31,11 @@ const props = defineProps({
 })
 
 const dialogTableVisible = ref(false)
+
+const eventTemplate = reactive({
+    id: '',
+    designs: [] as ITemplateDesign[]
+})
 
 const actorOptions = ref<IOrganizationMember[]>([])
 
@@ -126,8 +131,8 @@ onBeforeUnmount(() => {
 
 // Methods
 async function getOrganizationMembers() {
-    const result = await repoOrganization.getOrganizationMemberList()
-    actorOptions.value = result
+    // const result = await repoOrganization.getOrganizationMemberList()
+    // actorOptions.value = result
 }
 
 function createEvent() {

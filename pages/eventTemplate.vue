@@ -62,7 +62,7 @@
                             </el-select>
                         </el-form-item>
                     </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-name="datetimerange"
+                    <div class="eventTemplate__draggable" draggable="true" data-name="dateTimeRange"
                         @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="時間日期">
                             <el-date-picker v-model="demo.datetimerange" type="datetimerange" />
@@ -86,11 +86,18 @@
                             <el-divider></el-divider>
                         </el-form-item>
                     </div>
+                    <div class="eventTemplate__draggable" draggable="true" data-name="editor"
+                        @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
+                        <el-form-item label="">
+                            <el-divider>編輯器</el-divider>
+                            <AtomVenoniaEditor></AtomVenoniaEditor>
+                        </el-form-item>
+                    </div>
                     <el-divider>高階欄位</el-divider>
                     <div class="eventTemplate__draggable" draggable="true" data-name="organization"
                         @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="組織">
-                            <el-select v-model="demo.organizationId" placeholder="請選擇現有組織"
+                            <el-select v-model="demo.organizationId" placeholder="請選擇組織"
                                 @change="getOrganizationMemberList()">
                                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                                     :value="item.id" />
@@ -106,6 +113,15 @@
                             </el-select>
                         </el-form-item>
                     </div>
+                    <div class="eventTemplate__draggable" draggable="true" data-name="accommodation"
+                        @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
+                        <el-form-item label="空間地點">
+                            <el-select v-model="demo.members" placeholder="請選擇空間地點" :disabled="!demo.organizationId">
+                                <el-option v-for="(item, index) in organizationMemberList" :key="index"
+                                    :label="item.name" :value="String(item.id)" />
+                            </el-select>
+                        </el-form-item>
+                    </div>
                 </el-card>
             </el-col>
         </el-row>
@@ -113,18 +129,13 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
+import type { IAccommodation } from '~/types/accommodation'
+import type { ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
+const repoAccommodation = useRepoAccommodation()
 const dialogVisible = ref(false)
-
-interface ITemplateDesign {
-    name: string,
-    controllable: {
-        label: string
-    }
-}
-
 const isLoading = ref(false)
 
 // 拖曳中的模板資料
@@ -134,7 +145,6 @@ const templateTemp = reactive({
     sourceIndex: -1,
 })
 
-// 
 const eventTemplate = reactive({
     id: '',
     designs: [] as ITemplateDesign[]
@@ -175,15 +185,20 @@ const mockOptions = [
 
 const organizationList = ref<IOrganization[]>([])
 const organizationMemberList = ref<IOrganizationMember[]>([])
+const accommodationList = ref<IAccommodation[]>([])
 
 // Hooks
 onMounted(async () => {
-    // getAccommodationList()
+    await getAccommodationList()
     await getOrganizationList()
     getEventTemplate()
 })
 
 // methods
+async function getAccommodationList() {
+    const result = await repoAccommodation.getAccommodationList()
+    accommodationList.value = result
+}
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
@@ -193,10 +208,6 @@ async function getOrganizationMemberList() {
     organizationMemberList.value = result
 }
 
-interface ITemplateDragSouce {
-    index: number,
-    name: string,
-}
 function setTemplateTemp(data: ITemplateDragSouce) {
     templateTemp.isDragging = true
     templateTemp.sourceIndex = data.index
@@ -251,12 +262,6 @@ async function putEventTemplate() {
     isLoading.value = false
 }
 
-// async function editEventTemplate() {
-//     const result = await repoEvent.getEventTemplate()
-//     Object.assign(templateForm, result)
-//     dialogVisible.value = true
-// }
-
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
     Object.assign(eventTemplate, result)
@@ -276,17 +281,11 @@ async function getEventTemplate() {
 
     .eventTemplate__designItem {
         border: dashed 2px black;
-        // background-color: rgba(94, 168, 142, 0.1);
         max-width: 100%;
         min-height: 4px;
         line-height: 44px;
         font-size: 20px;
         text-align: center;
-        // margin-bottom: 18px;
-
-        // &:not(:first) {
-        //     margin-top: 18px;
-        // }
     }
 
     .eventTemplate__designItem--outline {

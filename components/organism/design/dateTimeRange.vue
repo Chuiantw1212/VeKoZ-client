@@ -15,7 +15,7 @@
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
                     <el-date-picker :placeholder="placeholder" v-model="customDesign.controllable.value"
-                        type="datetimerange"></el-date-picker>
+                        type="datetimerange" :disabled="isDesigning"></el-date-picker>
                 </div>
             </MoleculeCustomToolbar>
         </template>
@@ -31,7 +31,7 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'input',
+                name: 'datetimerange',
                 controllable: {
                     label: ''
                 }
