@@ -33,7 +33,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="input"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="純文字">
-                                    <el-input :model-value="'請輸入文字'" :readonly="true"></el-input>
+                                    <el-input :model-value="'請輸入文字'" :disabled="true"></el-input>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -43,7 +43,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="number"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="數字">
-                                    <el-input-number v-model="demo.number" :readonly="true"></el-input-number>
+                                    <el-input-number v-model="demo.number" :disabled="true"></el-input-number>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -53,9 +53,9 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="singleSelect"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="單選">
-                                    <el-select v-model="demo.singleSelect">
+                                    <el-select v-model="demo.singleSelect" :disabled="true">
                                         <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                            :value="item.value" :readonly="true" />
+                                            :value="item.value" />
                                     </el-select>
                                 </el-form-item>
                             </div>
@@ -67,7 +67,7 @@
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="多選">
                                     <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
-                                        :allow-create="true" :readonly="true">
+                                        :allow-create="true" :disabled="true">
                                         <el-option v-for="item in options" :key="item.value" :label="item.label"
                                             :value="item.value" />
                                     </el-select>
@@ -81,7 +81,7 @@
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="時間日期">
                                     <el-date-picker v-model="demo.datetimerange" type="datetimerange"
-                                        :readonly="true" />
+                                        :disabled="true" />
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -91,7 +91,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="url"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="超連結">
-                                    <el-input :model-value="'請輸入連結'" :readonly="true"></el-input>
+                                    <el-input :model-value="'請輸入連結'" :disabled="true"></el-input>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -101,7 +101,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="checkbox"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="核取方塊">
-                                    <el-checkbox v-model="demo.checkbox" label="Option 1" :readonly="true" />
+                                    <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -138,6 +138,13 @@ import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(false)
+
+interface ITemplateDesign {
+    name: string,
+    controllable: {
+        label: string
+    }
+}
 
 // 拖曳中的模板資料
 const templateTemp = reactive({
@@ -254,6 +261,10 @@ onMounted(() => {
 <style lang="scss" scoped>
 .eventTemplate {
     .eventTemplate__draggable {
+        * {
+            cursor: grab !important;
+        }
+
         &:hover {
             outline: 1px dashed red;
         }

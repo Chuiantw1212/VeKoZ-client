@@ -16,8 +16,7 @@
                         placeholder="請輸入"></el-date-picker>
                 </el-form-item>
                 <el-form-item label="線下地址">
-                    <!-- 這邊只是選擇，送出資料時並不會連結原本的資料 -->
-                    <el-select placeholder="請選擇">
+                    <el-select placeholder="請選擇現有空間">
                         <el-option v-for="item in accommodationList" :key="item.id" :label="item.name"
                             :value="item.name" />
                     </el-select>
