@@ -86,14 +86,13 @@
                     </div>
                     <div class="eventTemplate__draggable" draggable="true" data-type="divider"
                         @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="分隔線">
-                            <el-divider></el-divider>
+                        <el-form-item label="">
+                            <el-divider>分隔線</el-divider>
                         </el-form-item>
                     </div>
                     <div class="eventTemplate__draggable" draggable="true" data-type="editor"
                         @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="">
-                            <el-divider>編輯器</el-divider>
                             <AtomVenoniaEditor></AtomVenoniaEditor>
                         </el-form-item>
                     </div>
