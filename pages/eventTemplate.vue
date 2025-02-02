@@ -7,6 +7,14 @@
                     <template #header>
                         自定義欄位
                     </template>
+                    <el-form>
+                        <div class="preview__template"
+                            :class="{ 'preview__template--outline': template.isDragging }">
+                            <el-form-item label="請拖曳至此">
+
+                            </el-form-item>
+                        </div>
+                    </el-form>
                 </el-card>
             </el-col>
             <el-col :span="8">
@@ -16,7 +24,8 @@
                     </template>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="input"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="純文字">
                                     <el-input :model-value="'請輸入文字'" :readonly="true"></el-input>
                                 </el-form-item>
@@ -25,7 +34,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="number"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="數字">
                                     <el-input-number v-model="demo.number"></el-input-number>
                                 </el-form-item>
@@ -34,7 +44,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="singleSelect"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="單選">
                                     <el-select v-model="demo.singleSelect">
                                         <el-option v-for="item in options" :key="item.value" :label="item.label"
@@ -46,7 +57,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="multiSelect"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="多選">
                                     <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
                                         :allow-create="true">
@@ -59,7 +71,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="datetimerange"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="時間日期">
                                     <el-date-picker v-model="demo.datetimerange" type="datetimerange" />
                                 </el-form-item>
@@ -68,7 +81,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="url"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="超連結">
                                     <el-input :model-value="'請輸入連結'" :readonly="true"></el-input>
                                 </el-form-item>
@@ -77,7 +91,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="checkbox"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="核取方塊">
                                     <el-checkbox v-model="demo.checkbox" label="Option 1" />
                                 </el-form-item>
@@ -86,7 +101,8 @@
                     </el-row>
                     <el-row>
                         <el-col>
-                            <div class="eventTemplate__draggable" draggable="true">
+                            <div class="eventTemplate__draggable" draggable="true" data-name="divider"
+                                @mouseenter="setTemplateName($event)">
                                 <el-form-item label="分隔線">
                                     <el-divider></el-divider>
                                 </el-form-item>
@@ -104,7 +120,7 @@
                     <template #header>
                         已存必填寫欄位
                     </template>
-                    <FormEventTemplate v-model="organizationTemplate"></FormEventTemplate>
+                    <FormEventTemplate v-model="templateForm"></FormEventTemplate>
                 </el-card>
             </el-col>
         </el-row>
@@ -116,7 +132,16 @@ const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(false)
 
-const organizationTemplate = reactive({
+// 拖曳中的模板資料
+const template = reactive({
+    name: '',
+    isDragging: false,
+})
+
+// const isDragging = ref<boolean>(false)
+// const template = ref<string>('')
+
+const templateForm = reactive({
     description: '',
 })
 
@@ -163,14 +188,19 @@ const form = reactive({
 })
 
 // methods
+function setTemplateName(ev: any) {
+    template.isDragging = true
+    template.name = ev.target.dataset.name
+}
+
 async function putEventTemplate() {
-    await repoEvent.putEventTemplate(organizationTemplate)
+    await repoEvent.putEventTemplate(templateForm)
     dialogVisible.value = false
 }
 
 async function editEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    Object.assign(organizationTemplate, result)
+    Object.assign(templateForm, result)
     dialogVisible.value = true
 }
 
