@@ -1,12 +1,12 @@
 <template>
     <div>
         <template v-for="(item, index) in localValue" :key="index">
+            <OrganismDesignInput v-if="item.name === 'input'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignInput>
             <slot :index="Number(index)">
 
             </slot>
-            <OrganismDesignInput v-if="item.name === 'input'" v-model="localValue[index]" :readonly="readonly"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
-            </OrganismDesignInput>
         </template>
     </div>
 </template>
@@ -19,7 +19,7 @@ const props = defineProps({
             return {}
         }
     },
-    readonly: {
+    isDesigning: {
         type: Boolean,
         default: false
     }

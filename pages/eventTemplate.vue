@@ -7,20 +7,19 @@
                     <template #header>
                         自定義欄位
                     </template>
+                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true">
+                        <template #default="defaultProps">
+                            <div class="eventTemplate__designItem"
+                                :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
+                                @drop="insertTemplate($event, defaultProps.index)" @dragover="allowDrop($event)">
+                            </div>
+                        </template>
+                    </FormTemplateDesign>
                     <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
                     </div>
-                    <FormTemplateDesign v-model="eventTemplate.designs" :readonly="true">
-                        <template #default="defaultProps">
-                            <div class="eventTemplate__designItem"
-                                :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
-                                @drop="insertTemplate($event, defaultProps.index)" @dragover="allowDrop($event)">
-                                請拖曳布局至此
-                            </div>
-                        </template>
-                    </FormTemplateDesign>
                 </el-card>
             </el-col>
             <el-col :span="8">
@@ -258,10 +257,15 @@ onMounted(() => {
         border: dashed 2px black;
         // background-color: rgba(94, 168, 142, 0.1);
         max-width: 100%;
-        height: 44px;
+        min-height: 4px;
         line-height: 44px;
         font-size: 20px;
         text-align: center;
+        // margin-bottom: 18px;
+
+        // &:not(:first) {
+        //     margin-top: 18px;
+        // }
     }
 
     .eventTemplate__designItem--outline {

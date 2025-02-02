@@ -1,7 +1,9 @@
 <template>
     <div class="backgroud" :class="{ 'backgroud--editing': state.isEditing }" @mouseenter="startEditing()"
         @mouseleave="completeEditing($event)">
+        <slot></slot>
         <div class="img__toolbar">
+            <!-- <input> -->
             <button class="toolbar__btn" @click="emit('remove')">
                 <el-icon>
                     <Delete />
@@ -18,7 +20,6 @@
                 </el-icon>
             </button>
         </div>
-        <slot></slot>
     </div>
 </template>
 <script setup>
@@ -76,8 +77,11 @@ function completeEditing() {
     .img__toolbar {
         position: absolute;
         top: 0;
-        left: 50%;
-        transform: translate(-50%, calc(-100%));
+        left: 0;
+        transform: translate(0, -100%);
+        background-color: white;
+        // left: 50%;
+        // transform: translate(-50%, calc(-100%));
         padding: 10px;
         display: none;
         gap: 10px;
