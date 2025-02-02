@@ -9,14 +9,12 @@
         <!-- 編輯用 -->
         <template v-else>
             <MoleculeCustomToolbar @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-                <!-- <el-form-item :label="customDesign.controllable?.label"> -->
                 <div class="design__item">
                     <label class="item__label">
                         <input class="label__input" placeholder="請輸入欄位名稱">
                     </label>
                     <el-input :placeholder="placeholder" :disabled="true"></el-input>
                 </div>
-                <!-- </el-form-item> -->
             </MoleculeCustomToolbar>
         </template>
     </div>

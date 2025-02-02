@@ -1,14 +1,17 @@
 <template>
-    <div class="backgroud" :class="{ 'backgroud--editing': state.isEditing }" @mouseenter="startEditing()"
-        @mouseleave="completeEditing($event)">
-        <slot></slot>
-        <div class="img__toolbar">
-            <!-- <input> -->
-            <button class="toolbar__btn" @click="emit('remove')">
-                <el-icon>
-                    <Delete />
-                </el-icon>
-            </button>
+    <div class="customToolbar" draggable="true">
+        <el-icon class="customToolbar__move">
+            <More />
+        </el-icon>
+        <div class="customToolbar__slot">
+            <slot></slot>
+        </div>
+        <el-button class="toolbar__btn" @click="emit('remove')">
+            <el-icon>
+                <Delete />
+            </el-icon>
+        </el-button>
+        <!-- <div class="img__toolbar">
             <button class="toolbar__btn" @click="emit('moveUp')">
                 <el-icon>
                     <ArrowUp />
@@ -19,11 +22,12 @@
                     <ArrowDown />
                 </el-icon>
             </button>
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup>
 import {
+    More,
     Delete,
     ArrowUp,
     ArrowDown,
@@ -66,66 +70,18 @@ function completeEditing() {
 }
 </script>
 <style lang="scss" scoped>
-.backgroud {
-    position: relative;
-    background-position: center;
+.customToolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
 
-    &:hover {
-        outline: solid 1px #252f3d;
+    .customToolbar__move {
+        transform: rotate(90deg);
+        cursor: grab;
     }
 
-    .img__toolbar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(0, -100%);
-        background-color: white;
-        // left: 50%;
-        // transform: translate(-50%, calc(-100%));
-        padding: 10px;
-        display: none;
-        gap: 10px;
-        border-radius: 10px;
-        // background-color: #252f3d;
-        color: white;
-        z-index: 1030;
-        border: 1px solid black;
-
-        .toolbar__btn {
-            background-color: inherit;
-            border: none;
-            padding: 0px;
-            left: unset;
-            cursor: pointer;
-        }
-
-        .toolbar__btnGroup {
-            position: relative;
-
-            .btnGroup__layer {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-        }
-
-    }
-
-    .img__toolbar--left {
-        left: 0;
-    }
-
-    .img__toolbar--right {
-        right: 0;
-
-    }
-}
-
-.backgroud--editing {
-    outline: solid 1px #252f3d;
-
-    .img__toolbar {
-        display: flex;
+    .customToolbar__slot {
+        width: 100%;
     }
 }
 </style>
