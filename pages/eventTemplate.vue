@@ -32,7 +32,7 @@
                         請拖曳以下選項 到 自定義欄位
                     </template>
                     <div class="eventTemplate__draggable" draggable="true" data-name="input"
-                        @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
+                        @upenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="純文字">
                             <el-input :model-value="'請輸入文字'"></el-input>
                         </el-form-item>
@@ -189,12 +189,28 @@ const accommodationList = ref<IAccommodation[]>([])
 
 // Hooks
 onMounted(async () => {
+    addOnDropListener(true)
     await getAccommodationList()
     await getOrganizationList()
     getEventTemplate()
+
+})
+onBeforeUnmount(() => {
+    addOnDropListener(false)
 })
 
 // methods
+async function addOnDropListener(isOn: boolean) {
+    if (isOn) {
+        document.addEventListener('dragend', clearOnDrop)
+    } else {
+        document.removeEventListener('dragend', clearOnDrop)
+    }
+}
+async function clearOnDrop() {
+    templateTemp.isDragging = false
+}
+
 async function getAccommodationList() {
     const result = await repoAccommodation.getAccommodationList()
     accommodationList.value = result
