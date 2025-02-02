@@ -125,7 +125,7 @@
             <el-col :span="16">
                 <el-card>
                     <template #header>
-                        已存欄位
+                        預設欄位
                     </template>
                     <FormEventTemplate v-model="eventTemplate"></FormEventTemplate>
                 </el-card>
@@ -205,6 +205,9 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
     eventTemplate.designs.splice(destinationIndex, 0, {
         name: templateTemp.name,
+        controllable: {
+            label: ''
+        }
     })
     // Reset flags
     templateTemp.isDragging = false
@@ -227,16 +230,16 @@ function setTemplateName(ev: any) {
 function cancelDragging() {
     templateTemp.isDragging = false
 }
-function setDefaultTemplates() {
-    if (!eventTemplate.designs.length) {
-        const defaultTemplates = [
-            {
-                name: 'input',
-            },
-        ]
-        eventTemplate.designs.push(...defaultTemplates)
-    }
-}
+// function setDefaultTemplates() {
+//     if (!eventTemplate.designs.length) {
+//         const defaultTemplates = [
+//             {
+//                 name: 'input',
+//             },
+//         ]
+//         eventTemplate.designs.push(...defaultTemplates)
+//     }
+// }
 // async function putEventTemplate() {
 //     await repoEvent.putEventTemplate(templateForm)
 //     dialogVisible.value = false

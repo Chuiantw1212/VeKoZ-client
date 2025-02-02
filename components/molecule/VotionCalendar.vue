@@ -5,8 +5,7 @@
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false" :lock-scroll="true">
             <FormEvent v-if="dialogTableVisible" v-model="form">
                 <slot></slot>
-                <template v-slot:eventActor>
-                    <!-- Q9iDU9CGpWxA5DgYeaNq -->
+                <!-- <template v-slot:eventActor>
                     <el-form-item label="講者">
                         <el-select v-model="eventActors" filterable multiple allow-create
                             :placeholder="`輸入後，篩選選項 或 新增`">
@@ -14,7 +13,7 @@
                                 :value="String(item.id)" />
                         </el-select>
                     </el-form-item>
-                </template>
+                </template> -->
                 <template v-slot:eventTodos>
                     <el-divider>
                         待辦事項
