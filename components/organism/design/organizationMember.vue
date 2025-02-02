@@ -14,7 +14,8 @@
                     <label class="item__label">
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織成員">
+                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織成員"
+                        :disabled="isDesigning">
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="String(item.id)" />
                     </el-select>

@@ -18,7 +18,6 @@
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="item.id" />
                     </el-select>
-                    <!-- <el-input :placeholder="placeholder" v-model="customDesign.controllable.value"></el-input> -->
                 </div>
             </MoleculeCustomToolbar>
         </template>

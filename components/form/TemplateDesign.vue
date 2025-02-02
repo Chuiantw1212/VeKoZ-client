@@ -18,6 +18,14 @@
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organization' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganization>
+            <OrganismDesignOrganizationMember v-if="item.name === 'organizationMember'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organizationMember' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignOrganizationMember>
+            <OrganismDesignDateTimeRange v-if="item.name === 'datetimerange'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'datetimerange' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignDateTimeRange>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

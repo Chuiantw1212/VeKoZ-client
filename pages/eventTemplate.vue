@@ -97,7 +97,7 @@
                             </el-select>
                         </el-form-item>
                     </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-name="organization"
+                    <div class="eventTemplate__draggable" draggable="true" data-name="organizationMember"
                         @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="組織成員">
                             <el-select v-model="demo.members" placeholder="請選擇對應組織的成員" :disabled="!demo.organizationId">
