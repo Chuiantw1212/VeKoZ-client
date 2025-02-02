@@ -10,15 +10,18 @@
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
-                <div class="design__item">
-                    <label class="item__label">
-                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                    </label>
-                    <el-select v-model="customDesign.mutable.value" :placeholder="placeholder" :clearable="true">
-                        <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
-                            :value="String(item.id)" />
+                <template v-slot:label>
+                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                </template>
+                <template v-slot:default>
+                    <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
+                        @change="setLocationAddress($event)">
+                        <el-option v-for="(item, index) in accommodationList" :key="index" :label="item.name"
+                            :value="String(item.name)" />
                     </el-select>
-                </div>
+                    <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
+                        :disabled="true"></el-input>
+                </template>
             </MoleculeCustomToolbar>
         </template>
     </div>
@@ -36,7 +39,9 @@ const props = defineProps({
             return {
                 type: 'accommodation',
                 mutable: {
-                    label: ''
+                    label: '',
+                    locationName: '',
+                    locationAddress: '',
                 }
             }
         }
@@ -52,7 +57,7 @@ const props = defineProps({
 })
 
 
-const organizationList = ref<IAccommodation[]>([])
+const accommodationList = ref<IAccommodation[]>([])
 
 // Hooks
 onMounted(() => {
@@ -79,29 +84,32 @@ watch(() => customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-
-}, { immediate: true })
+}, { immediate: true, deep: true })
 
 // Methods
+function setLocationAddress(locationName: string) {
+    if (locationName) {
+        const selectedItem = accommodationList.value.find(item => {
+            return item.name === locationName
+        })
+        console.log({
+            selectedItem
+        })
+        if (selectedItem) {
+            customDesign.value.mutable.locationAddress = selectedItem.address
+        }
+    }
+}
+
 async function getAccommodationList() {
     const result = await repoAccommodation.getAccommodationList()
-    organizationList.value = result
+    accommodationList.value = result
 }
 
 </script>
+
 <style lang="scss" scoped>
-.design {
-    .design__item {
-        display: flex;
-
-        .item__label {
-            display: flex;
-            padding-right: 12px;
-
-            .label__input {
-                outline: none;
-            }
-        }
-    }
+.design__mt {
+    margin-top: 12px;
 }
 </style>

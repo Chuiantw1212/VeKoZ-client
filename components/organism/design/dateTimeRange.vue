@@ -10,13 +10,14 @@
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
-                <div class="design__item">
-                    <label class="item__label">
-                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                    </label>
-                    <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value"
-                        type="datetimerange" :disabled="isDesigning"></el-date-picker>
-                </div>
+                <template v-slot:label>
+                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                </template>
+                <template v-slot:default>
+                    <el-date-picker :placeholder="placeholder"
+                        v-model="customDesign.mutable.value" type="datetimerange"
+                        :disabled="isDesigning"></el-date-picker>
+                </template>
             </MoleculeCustomToolbar>
         </template>
     </div>

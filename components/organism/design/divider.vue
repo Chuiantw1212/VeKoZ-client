@@ -10,14 +10,11 @@
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
-                <div class="design__item">
-                    <label class="item__label">
+                <template v-slot:default>
+                    <el-divider>
                         <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                    </label>
-                    <el-divider :placeholder="placeholder" v-model="customDesign.mutable.value">
-                        {{ customDesign.mutable.label }}
                     </el-divider>
-                </div>
+                </template>
             </MoleculeCustomToolbar>
         </template>
     </div>

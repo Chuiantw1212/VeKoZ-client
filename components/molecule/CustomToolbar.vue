@@ -1,11 +1,15 @@
 <template>
-    <div class="customToolbar" draggable="true">
-        <el-icon class="customToolbar__move" @dragstart="emit('dragstart')">
-            <More />
-        </el-icon>
-        <div class="customToolbar__slot">
-            <slot></slot>
+    <div class="customToolbar">
+        <div class="customToolbar__draggable" draggable="true">
+            <el-icon class="customToolbar__move" @dragstart="emit('dragstart')">
+                <More />
+            </el-icon>
+            <slot name="label"></slot>
         </div>
+        <div name="default" class="customToolbar__default">
+            <slot name="default"></slot>
+        </div>
+        <slot name="noStyle"></slot>
         <el-button class="toolbar__btn" @click="emit('remove')">
             <el-icon>
                 <Delete />
@@ -26,12 +30,22 @@ const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown'])
     gap: 12px;
     align-items: center;
 
+    .customToolbar__draggable {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        >* {
+            height: 24px;
+        }
+    }
+
     .customToolbar__move {
         transform: rotate(90deg);
         cursor: grab;
     }
 
-    .customToolbar__slot {
+    .customToolbar__default {
         width: 100%;
     }
 }

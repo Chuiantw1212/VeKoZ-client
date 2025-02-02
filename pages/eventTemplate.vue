@@ -3,7 +3,10 @@
         <!-- <h1>活動套版管理</h1> -->
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="eventTemplate__card" body-class="card__body">
+                <el-card class="eventTemplate__card" body-class="card__body card__body--270">
+                    <template #header>
+                        活動套版管理
+                    </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
@@ -27,7 +30,7 @@
                 </el-card>
             </el-col>
             <el-col :span="8">
-                <el-card class="eventTemplate__card" body-class="card__body">
+                <el-card class="eventTemplate__card" body-class="card__body card__body--200">
                     <template #header>
                         請拖曳以下選項 到 自定義欄位
                     </template>
@@ -311,10 +314,19 @@ async function getEventTemplate() {
 
     .eventTemplate__card {
         :deep(.card__body) {
-            max-height: calc(100vh - 200px);
+            // max-height: calc(100vh - 270px);
             overflow-y: auto;
         }
+
+        :deep(.card__body--270) {
+            max-height: calc(100vh - 270px);
+        }
+
+        :deep(.card__body--200) {
+            max-height: calc(100vh - 200px);
+        }
     }
+
 }
 
 .footer {

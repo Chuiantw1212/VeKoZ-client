@@ -10,16 +10,16 @@
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
-                <div class="design__item">
-                    <label class="item__label">
-                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                    </label>
+                <template v-slot:label>
+                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                </template>
+                <template v-slot:default>
                     <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :multiple="true"
                         :allow-create="true" :disabled="isDesigning">
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="String(item.id)" />
                     </el-select>
-                </div>
+                </template>
             </MoleculeCustomToolbar>
         </template>
     </div>

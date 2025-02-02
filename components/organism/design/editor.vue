@@ -10,18 +10,16 @@
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
-                <el-divider>
-                    {{ customDesign.mutable.label }}
-                </el-divider>
-                <div class="design__item">
-                    <label class="item__label">
-                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                    </label>
-                    <div class="item__input">
-                        <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
-                        </AtomVenoniaEditor>
-                    </div>
-                </div>
+                <template v-slot:label>
+                    <!-- <input v-model="customDesign.mutable.label" class="label__input" placeholder="欄位名稱可空白"> -->
+                </template>
+                <template v-slot:default>
+                    <!-- <el-divider>
+                        {{ customDesign.mutable.label }}
+                    </el-divider> -->
+                    <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
+                    </AtomVenoniaEditor>
+                </template>
             </MoleculeCustomToolbar>
         </template>
     </div>
