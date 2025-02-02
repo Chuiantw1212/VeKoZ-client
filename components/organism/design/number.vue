@@ -7,12 +7,12 @@
             </el-form-item>
         </template>
         <!-- 編輯用 -->
-        <template v-else>
+        <template v-else-if="customDesign.controllable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
                 <div class="design__item">
                     <label class="item__label">
-                        <input class="label__input" placeholder="請輸入欄位名稱">
+                        <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
                     <el-input-number :placeholder="placeholder" :disabled="true"></el-input-number>
                 </div>
@@ -59,7 +59,7 @@ watch(() => customDesign.value, (newValue) => {
     const defaultValue = {
         name: 'number',
         controllable: {
-            label: '欄位名稱',
+            label: '',
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)

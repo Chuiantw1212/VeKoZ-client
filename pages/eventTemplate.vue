@@ -125,7 +125,7 @@
             <el-col :span="16">
                 <el-card>
                     <template #header>
-                        已存必填寫欄位
+                        已存欄位
                     </template>
                     <FormEventTemplate v-model="eventTemplate"></FormEventTemplate>
                 </el-card>
@@ -156,7 +156,7 @@ const templateTemp = reactive({
 const eventTemplate = reactive({
     organizationId: '',
     id: '',
-    designs: [] as any[]
+    designs: [] as ITemplateDesign[]
 })
 
 const demo = reactive({
