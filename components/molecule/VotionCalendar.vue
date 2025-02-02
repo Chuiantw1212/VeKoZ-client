@@ -3,7 +3,6 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false" :lock-scroll="true">
-            <!-- <FormEventTemplate v-if="dialogTableVisible" v-model="form"></FormEventTemplate> -->
             <FormTemplateDesign v-model="eventTemplate.designs"></FormTemplateDesign>
             <template #footer>
                 <el-button @click="dialogTableVisible = false">取消</el-button>

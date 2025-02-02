@@ -14,9 +14,9 @@
           </el-main>
         </el-container>
       </el-container>
-      <el-footer>
+      <!-- <el-footer>
         <VotionFooter></VotionFooter>
-      </el-footer>
+      </el-footer> -->
     </el-container>
   </div>
 </template>

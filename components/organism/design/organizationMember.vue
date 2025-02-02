@@ -2,19 +2,19 @@
     <div class="design">
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
-            <el-form-item :label="customDesign.controllable?.label">
+            <el-form-item :label="customDesign.mutable?.label">
                 <el-input :placeholder="placeholder"></el-input>
             </el-form-item>
         </template>
         <!-- 編輯用 -->
-        <template v-else-if="customDesign.controllable">
+        <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
                 <div class="design__item">
                     <label class="item__label">
-                        <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
+                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織成員" :multiple="true"
+                    <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :multiple="true"
                         :allow-create="true" :disabled="isDesigning">
                         <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                             :value="String(item.id)" />
@@ -35,8 +35,8 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'organizationMember',
-                controllable: {
+                type: 'organizationMember',
+                mutable: {
                     label: '組織成員'
                 }
             }
@@ -69,12 +69,12 @@ const customDesign = computed({
     }
 })
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.controllable) {
+    if (newValue.mutable) {
         return
     }
     const defaultValue = {
-        name: 'input',
-        controllable: {
+        type: 'organizationMember',
+        mutable: {
             label: '',
         }
     }

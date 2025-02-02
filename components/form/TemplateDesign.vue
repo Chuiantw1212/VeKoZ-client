@@ -6,42 +6,46 @@
             </slot>
         </div>
         <template v-for="(item, index) in localValue" :key="index">
-            <OrganismDesignInput v-if="item.name === 'input'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="emit('dragstart', { index, name: 'input' })" @remove="handleRemove(index)"
+            <OrganismDesignInput v-if="item.type === 'input'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, type: 'input' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignInput>
-            <OrganismDesignNumber v-if="item.name === 'number'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="emit('dragstart', { index, name: 'number' })" @remove="handleRemove(index)"
+            <OrganismDesignNumber v-if="item.type === 'number'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, type: 'number' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignNumber>
-            <OrganismDesignOrganization v-if="item.name === 'organization'" v-model="localValue[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organization' })"
+            <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'organization' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganization>
-            <OrganismDesignOrganizationMember v-if="item.name === 'organizationMember'" v-model="localValue[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organizationMember' })"
+            <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'organizationMember' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganizationMember>
-            <OrganismDesignDateTimeRange v-if="item.name === 'dateTimeRange'" v-model="localValue[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'dateTimeRange' })"
+            <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDateTimeRange>
-            <OrganismDesignAccommodation v-if="item.name === 'accommodation'" v-model="localValue[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'accommodation' })"
+            <OrganismDesignAccommodation v-if="item.type === 'accommodation'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'accommodation' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignAccommodation>
-            <OrganismDesignUrl v-if="item.name === 'url'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="emit('dragstart', { index, name: 'url' })" @remove="handleRemove(index)"
+            <OrganismDesignUrl v-if="item.type === 'url'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, type: 'url' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignUrl>
-            <OrganismDesignDivider v-if="item.name === 'divider'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="emit('dragstart', { index, name: 'divider' })" @remove="handleRemove(index)"
+            <OrganismDesignDivider v-if="item.type === 'divider'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, type: 'divider' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDivider>
-            <OrganismDesignEditor v-if="item.name === 'editor'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="emit('dragstart', { index, name: 'editor' })" @remove="handleRemove(index)"
+            <OrganismDesignEditor v-if="item.type === 'editor'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, type: 'editor' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignEditor>
+            <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'singleSelect' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignSingleSelect>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

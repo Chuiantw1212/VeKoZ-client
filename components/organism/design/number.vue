@@ -2,20 +2,20 @@
     <div class="design">
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
-            <el-form-item :label="customDesign.controllable?.label">
+            <el-form-item :label="customDesign.mutable?.label">
                 <el-input-number :placeholder="placeholder"></el-input-number>
             </el-form-item>
         </template>
         <!-- 編輯用 -->
-        <template v-else-if="customDesign.controllable">
+        <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
                 @moveDown="emit('moveDown')">
                 <div class="design__item">
                     <label class="item__label">
-                        <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
+                        <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
                     <el-input-number :placeholder="placeholder"
-                        v-model="customDesign.controllable.value"></el-input-number>
+                        v-model="customDesign.mutable.value"></el-input-number>
                 </div>
             </MoleculeCustomToolbar>
         </template>
@@ -31,7 +31,7 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'number',
+                type: 'number',
             }
         }
     },
@@ -54,12 +54,12 @@ const customDesign = computed({
     }
 })
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.controllable) {
+    if (newValue.mutable) {
         return
     }
     const defaultValue = {
-        name: 'number',
-        controllable: {
+        type: 'number',
+        mutable: {
             label: '',
         }
     }

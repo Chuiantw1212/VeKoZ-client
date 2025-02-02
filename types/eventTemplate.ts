@@ -1,11 +1,11 @@
 export interface ITemplateDesign {
-    name: string,
-    controllable: {
+    type: string,
+    mutable: {
         label: string
     }
 }
 
 export interface ITemplateDragSouce {
     index: number,
-    name: string,
+    type: string,
 }
