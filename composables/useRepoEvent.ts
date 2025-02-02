@@ -9,7 +9,7 @@ export default defineStore('event', () => {
         const response = await defaultApi.authRequest(`/event`, {
             method: 'post',
         })
-        template.value = await response.json()
+        template.value = await response.text()
         return template.value
     }
     async function getEventTemplate() {
@@ -24,7 +24,7 @@ export default defineStore('event', () => {
             method: 'put',
             body,
         })
-        template.value = await response.json()
+        template.value = await response.text()
         return template.value
     }
     return {

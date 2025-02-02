@@ -14,6 +14,10 @@
                 @dragstart="emit('dragstart', { index, name: 'number' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignNumber>
+            <OrganismDesignOrganization v-if="item.name === 'organization'" v-model="localValue[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, name: 'organization' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignOrganization>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

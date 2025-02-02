@@ -14,15 +14,20 @@
                     <label class="item__label">
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-input :placeholder="placeholder" v-model="customDesign.controllable.value"></el-input>
+                    <el-select v-model="customDesign.controllable.value" placeholder="請選擇現有組織">
+                        <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                            :value="item.id" />
+                    </el-select>
+                    <!-- <el-input :placeholder="placeholder" v-model="customDesign.controllable.value"></el-input> -->
                 </div>
             </MoleculeCustomToolbar>
         </template>
     </div>
 </template>
 <script setup lang="ts">
+import type { IOrganization, IOrganizationMember } from '~/types/organization'
 import { computed, watch } from 'vue';
-
+const repoOrganization = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
@@ -30,9 +35,9 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                name: 'input',
+                name: 'organization',
                 controllable: {
-                    label: ''
+                    label: '組織名稱'
                 }
             }
         }
@@ -45,6 +50,14 @@ const props = defineProps({
         type: String,
         default: '請輸入'
     }
+})
+
+
+const organizationList = ref<IOrganization[]>([])
+
+// Hooks
+onMounted(() => {
+    getOrganizationList()
 })
 
 const customDesign = computed({
@@ -69,6 +82,13 @@ watch(() => customDesign.value, (newValue) => {
     customDesign.value = mergedItem
 
 }, { immediate: true })
+
+// Methods
+async function getOrganizationList() {
+    const result = await repoOrganization.getOrganizationList()
+    organizationList.value = result
+}
+
 </script>
 <style lang="scss" scoped>
 .design {

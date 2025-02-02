@@ -1,5 +1,4 @@
 <template>
-    <!-- <el-form label="成員管理"> -->
     <el-table :data="tableList" style="width: 100%">
         <el-table-column prop="name" label="名稱" />
         <el-table-column prop="email" label="電子信箱" />
@@ -12,7 +11,6 @@
             </template>
         </el-table-column>
     </el-table>
-    <!-- </el-form> -->
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'
@@ -21,6 +19,13 @@ import {
 } from '@element-plus/icons-vue'
 const repoOrganization = useRepoOrganization()
 
+const props = defineProps({
+    modelValue: {
+        type: Object,
+        default: () => { }
+    }
+})
+
 const tableList = ref([])
 
 async function deleteOrganizationMember(item: IOrganizationMember) {
@@ -28,7 +33,7 @@ async function deleteOrganizationMember(item: IOrganizationMember) {
 }
 
 async function getOrganizationMemberList() {
-    const result = await repoOrganization.getOrganizationMemberList()
+    const result = await repoOrganization.getOrganizationMemberList(props.modelValue.id)
     tableList.value = result
 }
 

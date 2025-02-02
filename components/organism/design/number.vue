@@ -14,7 +14,8 @@
                     <label class="item__label">
                         <input v-model="customDesign.controllable.label" class="label__input" placeholder="請輸入欄位名稱">
                     </label>
-                    <el-input-number :placeholder="placeholder" :disabled="true"></el-input-number>
+                    <el-input-number :placeholder="placeholder"
+                        v-model="customDesign.controllable.value"></el-input-number>
                 </div>
             </MoleculeCustomToolbar>
         </template>

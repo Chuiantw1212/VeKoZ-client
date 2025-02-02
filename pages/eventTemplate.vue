@@ -4,9 +4,6 @@
         <el-row :gutter="20">
             <el-col :span="16">
                 <el-card>
-                    <template #header>
-                        自定義欄位
-                    </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
@@ -21,6 +18,12 @@
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
                     </div>
+
+                    <template #footer>
+                        <div class="footer">
+                            <el-button v-loading="isLoading" @click="putEventTemplate">保存</el-button>
+                        </div>
+                    </template>
                 </el-card>
             </el-col>
             <el-col :span="8">
@@ -33,7 +36,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="input"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="純文字">
-                                    <el-input :model-value="'請輸入文字'" :disabled="true"></el-input>
+                                    <el-input :model-value="'請輸入文字'"></el-input>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -43,7 +46,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="number"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="數字">
-                                    <el-input-number v-model="demo.number" :disabled="true"></el-input-number>
+                                    <el-input-number v-model="demo.number"></el-input-number>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -53,8 +56,8 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="singleSelect"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="單選">
-                                    <el-select v-model="demo.singleSelect" :disabled="true">
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                    <el-select v-model="demo.singleSelect">
+                                        <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
                                             :value="item.value" />
                                     </el-select>
                                 </el-form-item>
@@ -67,8 +70,8 @@
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="多選">
                                     <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
-                                        :allow-create="true" :disabled="true">
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                        :allow-create="true">
+                                        <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
                                             :value="item.value" />
                                     </el-select>
                                 </el-form-item>
@@ -80,8 +83,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="datetimerange"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="時間日期">
-                                    <el-date-picker v-model="demo.datetimerange" type="datetimerange"
-                                        :disabled="true" />
+                                    <el-date-picker v-model="demo.datetimerange" type="datetimerange" />
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -91,7 +93,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="url"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="超連結">
-                                    <el-input :model-value="'請輸入連結'" :disabled="true"></el-input>
+                                    <el-input :model-value="'請輸入連結'"></el-input>
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -101,7 +103,7 @@
                             <div class="eventTemplate__draggable" draggable="true" data-name="checkbox"
                                 @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
                                 <el-form-item label="核取方塊">
-                                    <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
+                                    <el-checkbox v-model="demo.checkbox" label="Option 1" />
                                 </el-form-item>
                             </div>
                         </el-col>
@@ -116,27 +118,42 @@
                             </div>
                         </el-col>
                     </el-row>
-                </el-card>
-            </el-col>
-        </el-row>
-
-        <br />
-        <el-row>
-            <el-col :span="16">
-                <el-card>
-                    <template #header>
-                        預設欄位
-                    </template>
-                    <FormEventTemplate v-model="eventTemplate"></FormEventTemplate>
+                    <el-row>
+                        <el-col>
+                            <div class="eventTemplate__draggable" draggable="true" data-name="organization"
+                                @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
+                                <el-form-item label="組織">
+                                    <el-select v-model="demo.organizationId" placeholder="請選擇現有組織">
+                                        <el-option v-for="(item, index) in organizationList" :key="index"
+                                            :label="item.name" :value="item.id" />
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col>
+                            <div class="eventTemplate__draggable" draggable="true" data-name="organization"
+                                @mouseenter="setTemplateName($event)" @mouseleave="cancelDragging()">
+                                <el-form-item label="組織成員">
+                                    <el-select v-model="demo.organizationId" placeholder="請選擇對應組織的成員">
+                                        <el-option v-for="(item, index) in organizationList" :key="index"
+                                            :label="item.name" :value="item.id" />
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </el-card>
             </el-col>
         </el-row>
     </div>
 </template>
 <script setup lang="ts">
+import type { IOrganization, IOrganizationMember } from '~/types/organization'
 import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
-
+const repoOrganization = useRepoOrganization()
 const dialogVisible = ref(false)
 
 interface ITemplateDesign {
@@ -146,6 +163,8 @@ interface ITemplateDesign {
     }
 }
 
+const isLoading = ref(false)
+
 // 拖曳中的模板資料
 const templateTemp = reactive({
     name: '',
@@ -153,8 +172,8 @@ const templateTemp = reactive({
     sourceIndex: -1,
 })
 
+// 
 const eventTemplate = reactive({
-    organizationId: '',
     id: '',
     designs: [] as ITemplateDesign[]
 })
@@ -166,9 +185,9 @@ const demo = reactive({
     multiSelect: ['Option1', 'Option2'],
     datetimerange: [new Date().toISOString(), new Date().toISOString()],
     checkbox: false,
+    organizationId: '',
 })
-
-const options = [
+const mockOptions = [
     {
         value: 'Option1',
         label: 'Option1',
@@ -191,7 +210,27 @@ const options = [
     },
 ]
 
+const organizationList = ref<IOrganization[]>([])
+const organizationMemberList = ref<IOrganizationMember[]>([])
+
+// Hooks
+onMounted(async () => {
+    // getAccommodationList()
+    await getOrganizationList()
+    getEventTemplate()
+    getOrganizationMemberList()
+})
+
 // methods
+async function getOrganizationList() {
+    const result = await repoOrganization.getOrganizationList()
+    organizationList.value = result
+}
+async function getOrganizationMemberList() {
+    const result = await repoOrganization.getOrganizationMemberList()
+    organizationMemberList.value = result
+}
+
 interface ITemplateDragSouce {
     index: number,
     name: string,
@@ -240,10 +279,15 @@ function cancelDragging() {
 //         eventTemplate.designs.push(...defaultTemplates)
 //     }
 // }
-// async function putEventTemplate() {
-//     await repoEvent.putEventTemplate(templateForm)
-//     dialogVisible.value = false
-// }
+
+// <h2>📚 活動內容?：</h2><p>&nbsp;</p><p>&nbsp;</p><h2>📝 本次您將會學習到：</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol><p>&nbsp;</p><p>&nbsp;</p><h2>🙋🏻 誰適合參與？</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol>
+
+async function putEventTemplate() {
+    isLoading.value = true
+    await repoEvent.putEventTemplate(eventTemplate)
+    dialogVisible.value = false
+    isLoading.value = false
+}
 
 // async function editEventTemplate() {
 //     const result = await repoEvent.getEventTemplate()
@@ -251,15 +295,10 @@ function cancelDragging() {
 //     dialogVisible.value = true
 // }
 
-// async function getEventTemplate() {
-//     const result = await repoEvent.getEventTemplate()
-//     Object.assign(form, result)
-// }
-
-onMounted(() => {
-    // getEventTemplate()
-    // setDefaultTemplates()
-})
+async function getEventTemplate() {
+    const result = await repoEvent.getEventTemplate()
+    Object.assign(eventTemplate, result)
+}
 </script>
 <style lang="scss" scoped>
 .eventTemplate {
@@ -291,5 +330,10 @@ onMounted(() => {
     .eventTemplate__designItem--outline {
         border-color: #d60b00;
     }
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>

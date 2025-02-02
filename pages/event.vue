@@ -2,21 +2,11 @@
     <div class="event">
         <div class="event__header">
             <h1>活動管理</h1>
-            <el-button @click="editEventTemplate">活動套板</el-button>
+            <NuxtLink to="/eventTemplate">前往活動套板</NuxtLink>
         </div>
         <br />
         <VotionCalendar v-model="form">
         </VotionCalendar>
-
-        <!-- <el-dialog v-model="dialogVisible" title="活動套板" class="event__template" width="100%">
-            <FormEventTemplate v-if="dialogVisible" v-model="organizationTemplate"></FormEventTemplate>
-            <template #footer>
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="putEventTemplate">
-                    確認
-                </el-button>
-            </template>
-        </el-dialog> -->
     </div>
 </template>
 

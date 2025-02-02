@@ -29,8 +29,8 @@ export default defineStore('organization', () => {
         })
         return response
     }
-    async function getOrganizationMemberList() {
-        const response = await defaultApi.authRequest(`/organization/member/list`, {
+    async function getOrganizationMemberList(organizationId: string) {
+        const response = await defaultApi.authRequest(`/organization/${organizationId}/member/list`, {
             method: 'get',
         })
         return response.json()

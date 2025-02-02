@@ -63,15 +63,16 @@ const organizationDialog = reactive({
     mode: ''
 })
 
-const organization = reactive({
+const organization = reactive<IOrganization>({
     name: '',
     description: '',
     logo: '',
+    id: '',
 })
 
 const organizationMemberDialog = reactive({
     visibility: false,
-    mode: ''
+    mode: '',
 })
 
 
@@ -109,9 +110,8 @@ function editOrganizationDialog(item: IOrganization) {
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {
-    // Object.assign(organization, item)
+    Object.assign(organization, item)
     organizationMemberDialog.visibility = true
-    // organizationDialog.mode = 'EDIT'
 }
 
 async function deleteOrganization() {

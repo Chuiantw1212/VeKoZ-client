@@ -3,40 +3,9 @@
         <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
 
         <el-dialog v-model="dialogTableVisible" title="活動編輯" @close="dialogTableVisible = false" :lock-scroll="true">
-            <FormEvent v-if="dialogTableVisible" v-model="form">
-                <slot></slot>
-                <!-- <template v-slot:eventActor>
-                    <el-form-item label="講者">
-                        <el-select v-model="eventActors" filterable multiple allow-create
-                            :placeholder="`輸入後，篩選選項 或 新增`">
-                            <el-option v-for="(item, index) in actorOptions" :key="index" :label="item.name"
-                                :value="String(item.id)" />
-                        </el-select>
-                    </el-form-item>
-                </template> -->
-                <template v-slot:eventTodos>
-                    <el-divider>
-                        待辦事項
-                    </el-divider>
-                    <template v-for="(item, index) in todoList">
-                        <el-row>
-                            <el-col :span="12">
-                                <el-form-item :label="item.name">
-                                    <el-date-picker v-model="item.value" type="date" />
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item :label="`已完成`">
-                                    <el-checkbox-group v-model="todoCheckList[index]"
-                                        @change="setIsDone($event, index)">
-                                        <el-checkbox :value="true" />
-                                    </el-checkbox-group>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </template>
-                </template>
-            </FormEvent>
+            <FormEventTemplate v-if="dialogTableVisible" v-model="form"></FormEventTemplate>
+            <!-- <FormEvent v-if="dialogTableVisible" v-model="form">
+            </FormEvent> -->
             <template #footer>
                 <el-button @click="dialogTableVisible = false">取消</el-button>
                 <el-button type="primary" @click="createEvent()">
