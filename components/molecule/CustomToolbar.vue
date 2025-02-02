@@ -3,7 +3,9 @@
         @mouseleave="completeEditing($event)">
         <div class="img__toolbar">
             <button class="toolbar__btn" @click="emit('remove')">
-                <Delete />
+                <el-icon>
+                    <Delete />
+                </el-icon>
             </button>
             <button class="toolbar__btn" @click="emit('moveUp')">
                 <el-icon>
@@ -11,7 +13,9 @@
                 </el-icon>
             </button>
             <button class="toolbar__btn" @click="emit('moveDown')">
-                <ArrowDown />
+                <el-icon>
+                    <ArrowDown />
+                </el-icon>
             </button>
         </div>
         <slot></slot>
@@ -51,11 +55,6 @@ const localValue = computed({
         emit('update:modelValue', newValue)
     }
 })
-watch(() => localValue.value.position, (position) => {
-    if (position) {
-        state.positionIndex = state.positions.findIndex(item => item === position)
-    }
-}, { immediate: true })
 
 // methods
 function startEditing() {
@@ -71,7 +70,7 @@ function completeEditing() {
     background-position: center;
 
     &:hover {
-        outline: solid 5px #252f3d;
+        outline: solid 1px #252f3d;
     }
 
     .img__toolbar {
@@ -83,9 +82,10 @@ function completeEditing() {
         display: none;
         gap: 10px;
         border-radius: 10px;
-        background-color: #252f3d;
+        // background-color: #252f3d;
         color: white;
         z-index: 1030;
+        border: 1px solid black;
 
         .toolbar__btn {
             background-color: inherit;
@@ -118,7 +118,7 @@ function completeEditing() {
 }
 
 .backgroud--editing {
-    outline: solid 5px #252f3d;
+    outline: solid 1px #252f3d;
 
     .img__toolbar {
         display: flex;
