@@ -1,19 +1,28 @@
 <template>
     <div>
+        <div v-if="localValue.length">
+            <slot :index="0">
+
+            </slot>
+        </div>
         <template v-for="(item, index) in localValue" :key="index">
             <OrganismDesignInput v-if="item.name === 'input'" v-model="localValue[index]" :isDesigning="isDesigning"
-                @dragstart="setDragSouce(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @dragstart="emit('dragstart', { index, name: 'input' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignInput>
+            <OrganismDesignNumber v-if="item.name === 'number'" v-model="localValue[index]" :isDesigning="isDesigning"
+                @dragstart="emit('dragstart', { index, name: 'number' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignNumber>
             <!-- 拖曳釋放區域 -->
-            <slot :index="Number(index)">
+            <slot :index="Number(index + 1)">
 
             </slot>
         </template>
     </div>
 </template>
 <script setup lang="ts">
-const emit = defineEmits(['update:modelValue', 'focus'])
+const emit = defineEmits(['update:modelValue', 'focus', 'dragstart'])
 const props = defineProps({
     modelValue: {
         type: Array,
@@ -35,13 +44,7 @@ const localValue = computed({
     }
 })
 
-const movingSouce = ref(0)
-
 // methods
-function setDragSouce(index: number) {
-    movingSouce.value = index
-}
-
 function handleRemove(index: number) {
     localValue.value.splice(index, 1)
 }

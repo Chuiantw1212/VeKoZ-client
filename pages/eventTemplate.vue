@@ -7,7 +7,8 @@
                     <template #header>
                         自定義欄位
                     </template>
-                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true">
+                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
+                        @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
@@ -142,13 +143,10 @@ const dialogVisible = ref(false)
 const templateTemp = reactive({
     name: '',
     isDragging: false,
+    sourceIndex: -1,
 })
 
-// const isDragging = ref<boolean>(false)
-// const template = ref<string>('')
-
 const eventTemplate = reactive({
-    // description: '',
     organizationId: '',
     id: '',
     designs: [] as any[]
@@ -186,23 +184,31 @@ const options = [
     },
 ]
 
-// const form = reactive({
-//     name: '',
-//     locationName: '',
-//     locationAddress: '',
-//     virtualLocationUrl: '',
-//     description: '', // html
-//     startDate: '',
-//     endDate: '',
-// })
-
 // methods
-function insertTemplate(ev: Event, index = 0) {
+interface ITemplateDragSouce {
+    index: number,
+    name: string,
+}
+function setTemplateTemp(data: ITemplateDragSouce) {
+    templateTemp.isDragging = true
+    templateTemp.sourceIndex = data.index
+    templateTemp.name = data.name
+}
+function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
-    eventTemplate.designs.splice(index, 0, {
+    eventTemplate.designs.splice(destinationIndex, 0, {
         name: templateTemp.name,
     })
+    // Reset flags
     templateTemp.isDragging = false
+    if (templateTemp.sourceIndex >= 0) {
+        if (destinationIndex <= templateTemp.sourceIndex) {
+            eventTemplate.designs.splice(templateTemp.sourceIndex + 1, 1)
+        } else {
+            eventTemplate.designs.splice(templateTemp.sourceIndex, 1)
+        }
+    }
+    templateTemp.sourceIndex = -1
 }
 function allowDrop(ev: any) {
     ev.preventDefault();
