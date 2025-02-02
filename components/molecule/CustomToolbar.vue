@@ -1,6 +1,6 @@
 <template>
     <div class="customToolbar" draggable="true">
-        <el-icon class="customToolbar__move">
+        <el-icon class="customToolbar__move" @dragstart="emit('dragstart')">
             <More />
         </el-icon>
         <div class="customToolbar__slot">

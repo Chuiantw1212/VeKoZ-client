@@ -8,7 +8,8 @@
         </template>
         <!-- 編輯用 -->
         <template v-else>
-            <MoleculeCustomToolbar @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+            <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
+                @moveDown="emit('moveDown')">
                 <div class="design__item">
                     <label class="item__label">
                         <input class="label__input" placeholder="請輸入欄位名稱">
@@ -22,7 +23,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
     modelValue: {
