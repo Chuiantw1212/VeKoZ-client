@@ -21,6 +21,7 @@ import type { IOrganizationMember } from '~/types/organization';
 import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
+const repoEvent = useRepoEvent()
 
 const props = defineProps({
     modelValue: {
@@ -116,6 +117,7 @@ const calendarOptions = reactive({
 
 // Hooks
 onMounted(() => {
+    getEventTemplate()
     getOrganizationMembers()
     nextTick(() => {
         listenToDateCell(true)
@@ -129,6 +131,11 @@ onBeforeUnmount(() => {
 })
 
 // Methods
+async function getEventTemplate() {
+    const result = await repoEvent.getEventTemplate()
+    return result
+}
+
 async function getOrganizationMembers() {
     // const result = await repoOrganization.getOrganizationMemberList()
     // actorOptions.value = result
