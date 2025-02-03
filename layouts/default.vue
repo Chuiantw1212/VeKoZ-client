@@ -1,11 +1,11 @@
 <template>
-  <div class="common-layout">
+  <div class="defaultLayout">
     <el-container>
       <el-header>
         <HeaderMenu></HeaderMenu>
       </el-header>
       <el-container>
-        <el-aside>
+        <el-aside class="defaultLayout__aside">
           <SideMenu></SideMenu>
         </el-aside>
         <el-container>
@@ -50,3 +50,11 @@ onMounted(() => {
   addFirebaseListener()
 })
 </script>
+<style lang="scss" scoped>
+.defaultLayout {
+  .defaultLayout__aside {
+    width: fit-content;
+    transition: all 0.3s;
+  }
+}
+</style>
