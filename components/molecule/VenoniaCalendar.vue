@@ -1,16 +1,16 @@
 <template>
-    <div class="votionCalendar">
-        <FullCalendar ref="calendarRef" class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
-    </div>
+    <div class="votionCalendar__calendar" ref="calendarRef"></div>
 </template>
 <script setup lang="ts">
-import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
+import { Calendar } from '@fullcalendar/core';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
-import type { EventApi } from '@fullcalendar/core/index.js';
+import type { IFullCalendarEvent, IChangeInfo } from '~/types/fullCalendar';
 
-const emit = defineEmits(['update:modelValue', 'create'])
+const emit = defineEmits(['update:modelValue', 'create', 'eventChange'])
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -18,30 +18,12 @@ const props = defineProps({
     }
 })
 
-watch(() => props.modelValue, () => {
-
-})
-
 const calendarRef = ref()
-/**
- * Vue3範例
- * https://github.com/fullcalendar/fullcalendar-examples/blob/main/vue3/src/DemoApp.vue
- */
-const calendarOptions = reactive({
-    plugins: [dayGridPlugin, interactionPlugin],
-    events: [],
-    eventClick: handleEventClick,
-    eventChange: handleEventChange,
-    locale: 'zh-tw',
-    headerToolbar: {
-        left: 'today prev,next',
-        center: 'title',
-        right: 'dayGridMonth,dayGridWeek'
-    },
-})
+const calendarInstance = ref()
 
 // Hooks
 onMounted(() => {
+    initializeCalendar()
     toggleResize(true)
     nextTick(() => {
         listenToDateCell(true)
@@ -56,6 +38,31 @@ onBeforeUnmount(() => {
 })
 
 // Methods
+function initializeCalendar() {
+    const calendarEl = calendarRef.value
+    if (!calendarEl) {
+        return
+    }
+
+    // 設定Calendar
+    const calendar = new Calendar(calendarEl, {
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+        initialView: 'dayGridMonth',
+        events: [],
+        eventClick: handleEventClick,
+        eventChange: handleEventChange,
+        locale: 'zh-tw',
+        headerToolbar: {
+            left: 'today prev,next',
+            center: 'title',
+            right: 'dayGridMonth,dayGridWeek'
+        },
+    });
+    calendar.render();
+
+    // 紀錄instance
+    calendarInstance.value = markRaw(calendar)
+}
 /**
  * https://fullcalendar.io/docs/eventClick
  */
@@ -72,18 +79,12 @@ function handleEventClick(info: any) {
  * https://fullcalendar.io/docs/eventChange
  * @param changeInfo 
  */
-function handleEventChange(changeInfo: any) {
-
+function handleEventChange(changeInfo: IChangeInfo) {
+    emit('eventChange', changeInfo)
 }
 
-function addEvent(event: EventApi) {
-    const calendar = calendarRef.value.getApi()
-    calendar.addEvent(event)
-    // calendar.render()
-    // const testEvents = calendar.getEvents()
-    // console.log({
-    //     testEvents
-    // })
+function addEvent(event: IFullCalendarEvent) {
+    calendarInstance.value.addEvent(event)
 }
 
 function toggleResize(isOn: boolean) {
@@ -96,8 +97,7 @@ function toggleResize(isOn: boolean) {
 
 function resizeCalendar() {
     setTimeout(() => {
-        const calendar = calendarRef.value.getApi()
-        calendar.render()
+        calendarInstance.value.render()
     }, 350)
 }
 
@@ -175,10 +175,6 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.votionCalendar {
-    // max-width: 100vh;
-}
-
 :deep(.votionCalendar__calendar) {
     max-width: 100%;
 

@@ -42,9 +42,17 @@ export default defineStore('api', {
             }
         },
         async authRequest(url: string, options: requestOptions) {
-            const { method, body, params = {}, headers, responseType = 'json' } = options
+            const { method, body, headers, responseType = 'json' } = options
             // Retrieve token
             await this.setToken()
+
+            let urlSearchParams: URLSearchParams = null as any
+            if (options.params) {
+                urlSearchParams = new URLSearchParams({
+                    ...options.params
+                })
+                url += `?${urlSearchParams}`
+            }
 
             // Build Headers
             const headersFinale: any = {
@@ -55,9 +63,7 @@ export default defineStore('api', {
 
             // Complete config
             const fetchConfig: { [key: string]: any } = {
-                url,
                 method,
-                params,
                 headers: headersFinale,
                 responseType,
             }

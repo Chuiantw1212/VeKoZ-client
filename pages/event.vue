@@ -2,7 +2,8 @@
     <el-row :gutter="20">
         <el-col :span="18">
             <el-card>
-                <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)">
+                <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
+                    @eventChange="handleEventChange($event)">
                 </MoleculeVenoniaCalendar>
             </el-card>
         </el-col>
@@ -41,7 +42,7 @@ import type { IOrganizationMember } from '~/types/organization';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { IEventMember } from '~/types/eventMember';
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
-import type { IFullCalendarEvent } from '~/types/fullCalendar';
+import type { IChangeInfo, IFullCalendarEvent } from '~/types/fullCalendar';
 
 const repoEvent = useRepoEvent()
 const venoniaCalendarRef = ref<CalendarApi>()
@@ -71,8 +72,10 @@ async function getEventList() {
         return {
             id: String(event.id),
             title: String(event.name),
-            start: new Date(event.startDate ?? ''),
-            end: new Date(event.endDate ?? ''),
+            start: String(event.startDate),
+            end: String(event.endDate),
+            startEditable: true,
+            durationEditable: false,
         }
     })
 
@@ -81,14 +84,16 @@ async function getEventList() {
     })
 }
 
+async function handleEventChange(changeInfo: IChangeInfo) {
+    
+}
+
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
     Object.assign(eventTemplate.value, result)
 }
 
 async function openNewEventDialog(data: IEventCreation) {
-
-
     const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })
@@ -98,7 +103,6 @@ async function openNewEventDialog(data: IEventCreation) {
             seoDateTimeRange.mutable.value = [date, date]
         }
     }
-
     dialogVisible.value = true
 }
 

@@ -1,19 +1,22 @@
+/**
+ * https://fullcalendar.io/docs/eventChange
+ */
 export interface IChangeInfo {
     event: any,
     relatedEvents: any[],
     oldEvent: any,
-    revert: any,
+    revert: Function,
 }
 
 /**
- * https://fullcalendar.io/docs/event-object
+ * https://fullcalendar.io/docs/event-parsing
  */
 export interface IFullCalendarEvent {
     id: string,
     groupId?: string,
     allDay?: boolean,
-    start: Date,
-    end: Date,
+    start: Date | string,
+    end: Date | string,
     startStr?: string,
     endStr?: string,
     title: string,

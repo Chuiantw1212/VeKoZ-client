@@ -12,13 +12,17 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function getEventList(query: IEvent) {
-        const params = new URLSearchParams({
-            ...query
+    async function patchEvent(body: IEventTemplate) {
+        const response = await defaultApi.authRequest(`/event`, {
+            method: 'patch',
+            body,
         })
-
-        const response = await defaultApi.authRequest(`/event/list?${params}`, {
+        return response.json()
+    }
+    async function getEventList(params: IEvent) {
+        const response = await defaultApi.authRequest(`/event/list`, {
             method: 'get',
+            params,
         })
         return response.json()
     }
@@ -36,8 +40,11 @@ export default defineStore('event', () => {
         return response.text()
     }
     return {
+        // Event
         getEventList,
         postEvent,
+        patchEvent,
+        // Template
         getEventTemplate,
         putEventTemplate,
     }
