@@ -1,11 +1,11 @@
 <template>
-  <el-menu mode="horizontal" :ellipsis="false">
-    <el-menu-item>
-      <NuxtLink to="/">
+  <el-menu class="headerMenu" mode="horizontal" :ellipsis="false">
+    <NuxtLink to="/">
+      <el-menu-item class="headerMenu__logo">
         <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
-      </NuxtLink>
-    </el-menu-item>
-    <el-menu-item>
+      </el-menu-item>
+    </NuxtLink>
+    <el-menu-item class="headerMenu__firstItem">
       <NuxtLink v-if="isSignedIn" @click="handleSignOut()">
         登出
       </NuxtLink>
@@ -65,8 +65,14 @@ onMounted(() => {
 })
 </script>
 
-<style>
-.el-menu--horizontal>.el-menu-item:nth-child(1) {
-  margin-right: auto;
+<style lang="scss" scoped>
+.headerMenu {
+  .headerMenu__logo {
+    margin: 0px;
+  }
+
+  .headerMenu__firstItem {
+    margin-left: auto;
+  }
 }
 </style>

@@ -7,7 +7,7 @@
       <el-icon v-else>
         <Fold />
       </el-icon>
-      <template #title>收合側邊欄</template>
+      <template #title>側邊欄開關</template>
     </el-menu-item>
     <NuxtLink to="/event">
       <el-menu-item>
@@ -45,7 +45,7 @@
 </template>
 <script setup lang="ts">
 import { Expand, Fold, Calendar, Document, Location, OfficeBuilding } from '@element-plus/icons-vue'
-const isCollapse = ref<boolean>(false)
+const isCollapse = ref<boolean>(true)
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
