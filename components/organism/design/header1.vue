@@ -2,7 +2,7 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
-            <el-input :placeholder="placeholder" size="large"></el-input>
+            <el-input :placeholder="placeholder" :maxlength="30" :show-word-limit="true" size="large"></el-input>
         </el-form-item>
     </template>
     <!-- 編輯用 -->
@@ -13,7 +13,8 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" size="large"></el-input>
+                <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" :maxlength="30"
+                    :show-word-limit="true" size="large"></el-input>
             </template>
         </MoleculeCustomToolbar>
     </template>

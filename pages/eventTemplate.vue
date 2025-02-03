@@ -88,16 +88,16 @@
                                 <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
                             </el-form-item>
                         </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="divider"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="">
-                                <el-divider>分隔線</el-divider>
-                            </el-form-item>
-                        </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="textarea"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                             <el-form-item label="多行文字">
                                 <el-mention type="textarea" :disabled="true" />
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="divider"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="">
+                                <el-divider>分隔線</el-divider>
                             </el-form-item>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="editor"
