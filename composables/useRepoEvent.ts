@@ -22,7 +22,7 @@ export default defineStore('event', () => {
             method: 'put',
             body,
         })
-        return response.json()
+        return response.text()
     }
     return {
         postEvent,

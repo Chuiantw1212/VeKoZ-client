@@ -14,41 +14,12 @@
           </el-main>
         </el-container>
       </el-container>
-      <!-- <el-footer>
-        <VotionFooter></VotionFooter>
-      </el-footer> -->
     </el-container>
   </div>
 </template>
 <script setup lang="ts">
-import { getAuth, onAuthStateChanged, } from "firebase/auth"
 import HeaderMenu from '~/components/organism/HeaderMenu.vue'
 import SideMenu from '~/components/organism/SideMenu.vue';
-import VotionFooter from '~/components/organism/VotionFooter.vue'
-
-const isActor = ref(false)
-// const isOrganization = ref(false) // 至少一個負責人
-
-function addFirebaseListener() {
-  try {
-    const auth = getAuth()
-    onAuthStateChanged(auth, async (firebaseUser) => {
-      if (!firebaseUser) {
-        return
-      }
-      const { displayName, email, photoURL, uid } = firebaseUser
-      if (firebaseUser?.email === 'chuiantw1212@gmail.com') {
-        isActor.value = true
-      }
-    })
-  } catch (error: any) {
-    console.log(error.message || error)
-  }
-}
-
-onMounted(() => {
-  addFirebaseListener()
-})
 </script>
 <style lang="scss" scoped>
 .defaultLayout {

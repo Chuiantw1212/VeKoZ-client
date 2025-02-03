@@ -36,7 +36,7 @@ const props = defineProps({
             return {
                 type: 'organization',
                 mutable: {
-                    label: '組織名稱'
+                    label: ''
                 }
             }
         }
@@ -78,7 +78,7 @@ watch(() => customDesign.value, (newValue) => {
     const defaultValue = {
         type: 'organization',
         mutable: {
-            label: '',
+            label: '組織',
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)

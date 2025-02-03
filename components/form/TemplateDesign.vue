@@ -60,6 +60,10 @@
                     :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'singleSelect' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignSingleSelect>
+                <OrganismDesignOffer v-if="item.type === 'offer'" v-model="templateDesigns[index]"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'offer' })"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                </OrganismDesignOffer>
                 <!-- 拖曳釋放區域 -->
                 <slot :index="Number(index + 1)">
 

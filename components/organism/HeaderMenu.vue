@@ -30,21 +30,15 @@ const router = useRouter()
 
 function addFirebaseListener() {
   try {
-    // window.firebase = firebase as any
     const auth = getAuth()
     onAuthStateChanged(auth, async (firebaseUser) => {
-      // loadingDialogVisible.value = true
       if (!firebaseUser) {
-        // await setIdToken(false)
-        // await getUserFromServer(false)
+        router.push('/')
         return
       }
       const { displayName, email, photoURL, uid } = firebaseUser
       if (firebaseUser) {
         isSignedIn.value = true
-        // router.push({
-        //   name: 'index',
-        // })
       }
     })
   } catch (error: any) {

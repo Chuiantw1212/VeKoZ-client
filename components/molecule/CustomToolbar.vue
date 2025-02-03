@@ -47,7 +47,7 @@ const props = defineProps({
         align-items: center;
         gap: 12px;
 
-        >* {
+        > * {
             height: 24px;
         }
     }

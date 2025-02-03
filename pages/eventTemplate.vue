@@ -117,6 +117,13 @@
                                 </el-select>
                             </el-form-item>
                         </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="offer"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="票券">
+                                <OrganismDesignOffer :disabled="true" :isDesigning="false">
+                                </OrganismDesignOffer>
+                            </el-form-item>
+                        </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                             <el-form-item label="組織成員">
@@ -249,10 +256,6 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
     eventTemplate.designs.splice(destinationIndex, 0, {
         type: templateTemp.type,
-        mutable: {
-            label: '',
-            value: null,
-        }
     })
     // Reset flags
     templateTemp.isDragging = false

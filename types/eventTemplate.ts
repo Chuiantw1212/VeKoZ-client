@@ -6,7 +6,7 @@ export interface IEventTemplate {
 
 export interface ITemplateDesign {
     type: string,
-    mutable: {
+    mutable?: {
         label: string,
         value: any,
         name?: string,

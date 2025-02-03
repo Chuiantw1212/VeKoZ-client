@@ -83,7 +83,7 @@ watch(() => customDesign.value, (newValue) => {
     const defaultValue = {
         type: 'place',
         mutable: {
-            label: '',
+            label: '空間地點',
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)
@@ -95,9 +95,6 @@ function setLocationAddress(locationName: string) {
     if (locationName) {
         const selectedItem = placeList.value.find(item => {
             return item.name === locationName
-        })
-        console.log({
-            selectedItem
         })
         if (selectedItem) {
             customDesign.value.mutable.locationAddress = selectedItem.address
