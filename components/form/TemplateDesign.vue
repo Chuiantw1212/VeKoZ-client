@@ -20,11 +20,13 @@
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignNumber>
                 <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'organization' })"
-                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                    :isDesigning="isDesigning" :allow-delete="getFirstItem('organization') < index"
+                    @dragstart="emit('dragstart', { index, type: 'organization' })" @remove="handleRemove(index)"
+                    @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignOrganization>
                 <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'"
-                    v-model="templateDesigns[index]" :isDesigning="isDesigning" :organization-id="getOrganizationId()"
+                    v-model="templateDesigns[index]" :isDesigning="isDesigning"
+                    :allow-delete="getFirstItem('organizationMember') < index" :organization-id="getOrganizationId()"
                     @dragstart="emit('dragstart', { index, type: 'organizationMember' })" @remove="handleRemove(index)"
                     @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignOrganizationMember>

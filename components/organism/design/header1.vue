@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-input v-model="customDesign.mutable.value" :placeholder="placeholder" :maxlength="30"
                 :show-word-limit="true" size="large"></el-input>
         </el-form-item>

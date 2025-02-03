@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
                 :placeholder="placeholder" />
         </el-form-item>

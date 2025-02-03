@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-date-picker v-model="customDesign.mutable.value" :placeholder="placeholder" type="datetimerange"
                 :disabled="disabled"></el-date-picker>
         </el-form-item>

@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
                 :allow-create="true" :reserve-keyword="false" :clearable="true">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
@@ -50,7 +50,7 @@ const props = defineProps({
     },
     allowDelete: {
         type: Boolean,
-        default: false
+        default: true
     },
     placeholder: {
         type: String,
