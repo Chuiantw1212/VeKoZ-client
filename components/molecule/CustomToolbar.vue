@@ -9,8 +9,7 @@
         <div name="default" class="customToolbar__default">
             <slot name="default"></slot>
         </div>
-        <slot name="noStyle"></slot>
-        <el-button class="toolbar__btn" @click="emit('remove')">
+        <el-button class="toolbar__btn" :disabled="!allowDelete" @click="emit('remove')">
             <el-icon>
                 <Delete />
             </el-icon>
@@ -23,6 +22,12 @@ import {
     Delete,
 } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown'])
+const props = defineProps({
+    allowDelete: {
+        type: Boolean,
+        default: true
+    }
+})
 </script>
 <style lang="scss" scoped>
 .customToolbar {

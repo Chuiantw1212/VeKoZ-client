@@ -24,8 +24,9 @@
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganizationMember>
             <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                :isDesigning="isDesigning" :allow-delete="getDateTimeRangeCount() > 1"
+                @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDateTimeRange>
             <OrganismDesignAccommodation v-if="item.type === 'accommodation'" v-model="templateDesigns[index]"
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'accommodation' })"
@@ -79,6 +80,14 @@ const templateDesigns = computed({
 })
 
 // methods
+function getDateTimeRangeCount(): number {
+    console.log('getDateTimeRangeCount')
+    const dateTimeRangeItems = templateDesigns.value.filter((design: ITemplateDesign) => {
+        return design.type === 'dateTimeRange'
+    })
+    console.log('dateTimeRangeItems', dateTimeRangeItems.length)
+    return dateTimeRangeItems.length
+}
 function getOrganizationId() {
     const organization = templateDesigns.value.find((design: ITemplateDesign) => {
         return design.type === 'organization'
