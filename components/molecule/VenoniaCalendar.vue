@@ -1,6 +1,6 @@
 <template>
     <div class="votionCalendar">
-        <FullCalendar class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
+        <FullCalendar ref="calendarRef" class="votionCalendar__calendar" :options='calendarOptions'></FullCalendar>
     </div>
 </template>
 <script setup lang="ts">
@@ -8,17 +8,30 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
-const emit = defineEmits(['update:modelValue', 'create'])
+import type { EventApi } from '@fullcalendar/core/index.js';
 
+const emit = defineEmits(['update:modelValue', 'create'])
+const props = defineProps({
+    modelValue: {
+        type: Object,
+        default: () => { }
+    }
+})
+
+watch(() => props.modelValue, () => {
+
+})
+
+const calendarRef = ref()
 /**
  * Vue3範例
  * https://github.com/fullcalendar/fullcalendar-examples/blob/main/vue3/src/DemoApp.vue
  */
 const calendarOptions = reactive({
     plugins: [dayGridPlugin, interactionPlugin],
-    events: [
-        { title: 'Meeting', start: new Date() }
-    ],
+    events: [],
+    eventClick: handleEventClick,
+    eventChange: handleEventChange,
     locale: 'zh-tw',
     headerToolbar: {
         left: 'today prev,next',
@@ -29,6 +42,7 @@ const calendarOptions = reactive({
 
 // Hooks
 onMounted(() => {
+    toggleResize(true)
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
@@ -36,9 +50,56 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+    toggleResize(false)
     listenToDateCell(false)
     listenToFcButton(false)
 })
+
+// Methods
+/**
+ * https://fullcalendar.io/docs/eventClick
+ */
+function handleEventClick(info: any) {
+    // alert('Event: ' + info.event.title);
+    // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+    // alert('View: ' + info.view.type);
+
+    // change the border color just for fun
+    // info.el.style.borderColor = 'red';
+}
+
+/**
+ * https://fullcalendar.io/docs/eventChange
+ * @param changeInfo 
+ */
+function handleEventChange(changeInfo: any) {
+
+}
+
+function addEvent(event: EventApi) {
+    const calendar = calendarRef.value.getApi()
+    calendar.addEvent(event)
+    // calendar.render()
+    // const testEvents = calendar.getEvents()
+    // console.log({
+    //     testEvents
+    // })
+}
+
+function toggleResize(isOn: boolean) {
+    if (isOn) {
+        window.addEventListener('resize', resizeCalendar)
+    } else {
+        window.removeEventListener('resize', resizeCalendar)
+    }
+}
+
+function resizeCalendar() {
+    setTimeout(() => {
+        const calendar = calendarRef.value.getApi()
+        calendar.render()
+    }, 350)
+}
 
 function listenToDateCell(isOn: boolean) {
     const frames = document.querySelectorAll('.fc-daygrid-day-frame')
@@ -107,9 +168,17 @@ function toggleEventAddingBtn(event: Event) {
     // 顯示新增按鈕上去
     dayTop.append(button)
 }
+
+defineExpose({
+    addEvent
+})
 </script>
 
 <style lang="scss" scoped>
+.votionCalendar {
+    // max-width: 100vh;
+}
+
 :deep(.votionCalendar__calendar) {
     max-width: 100%;
 

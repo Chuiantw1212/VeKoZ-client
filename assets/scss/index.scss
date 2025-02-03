@@ -23,6 +23,8 @@ a {
 }
 
 .venonia-card {
+  // width: fit-content;
+
   .card__body {
     overflow-y: auto;
   }
@@ -34,4 +36,8 @@ a {
   .card__body--200 {
     max-height: calc(100vh - 200px);
   }
+}
+
+.venonia-card--768 {
+  max-width: 768px;
 }

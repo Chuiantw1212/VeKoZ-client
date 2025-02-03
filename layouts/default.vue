@@ -9,7 +9,7 @@
           <SideMenu></SideMenu>
         </el-aside>
         <el-container>
-          <el-main>
+          <el-main class="defaultLayout__main">
             <slot></slot>
           </el-main>
         </el-container>
@@ -25,7 +25,17 @@ import SideMenu from '~/components/organism/SideMenu.vue';
 .defaultLayout {
   .defaultLayout__aside {
     width: fit-content;
-    transition: all 0.3s;
+    // transition: all 0.3s;
   }
+}
+
+.defaultLayout__main {
+  // >* {
+  //   margin: auto;
+  //   display: flex;
+  //   // justify-content: center;
+  //   flex-direction: column;
+  //   align-items: center;
+  // }
 }
 </style>

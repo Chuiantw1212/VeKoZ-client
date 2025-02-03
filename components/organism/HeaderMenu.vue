@@ -1,5 +1,10 @@
 <template>
   <el-menu class="headerMenu" mode="horizontal" :ellipsis="false">
+    <el-menu-item @click="repoUI.toggleMenu()">
+      <el-icon >
+        <More />
+      </el-icon>
+    </el-menu-item>
     <NuxtLink to="/">
       <el-menu-item class="headerMenu__logo">
         <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
@@ -20,9 +25,11 @@
 </template>
 
 <script lang="ts" setup>
+import { More, Fold, Menu } from '@element-plus/icons-vue'
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import avatar from '@/assets/mock/user.jpg'
 import { ref } from 'vue'
+const repoUI = useRepoUI()
 
 const isSignedIn = ref(false)
 

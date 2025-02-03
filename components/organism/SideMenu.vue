@@ -1,14 +1,5 @@
 <template>
-  <el-menu :collapse="isCollapse" @open="handleOpen" @close="handleClose">
-    <el-menu-item @click="isCollapse = !isCollapse">
-      <el-icon v-if="isCollapse" >
-        <Expand />
-      </el-icon>
-      <el-icon v-else>
-        <Fold />
-      </el-icon>
-      <template #title>側邊欄開關</template>
-    </el-menu-item>
+  <el-menu :collapse="repoUI.isMenuCollapse">
     <NuxtLink to="/event">
       <el-menu-item>
         <el-icon>
@@ -41,22 +32,52 @@
         <template #title>權限&組織管理</template>
       </el-menu-item>
     </NuxtLink>
+    <NuxtLink to="/offer">
+      <el-menu-item>
+        <el-icon>
+          <Ticket />
+        </el-icon>
+        <template #title>票券管理</template>
+      </el-menu-item>
+    </NuxtLink>
   </el-menu>
 </template>
 <script setup lang="ts">
-import { Expand, Fold, Calendar, Document, Location, OfficeBuilding } from '@element-plus/icons-vue'
-const isCollapse = ref<boolean>(true)
+import { Ticket, Calendar, Document, Location, OfficeBuilding } from '@element-plus/icons-vue'
+const repoUI = useRepoUI()
 
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+// Hooks
+onMounted(() => {
+  if (import.meta.client) {
+    setMenuCollapse()
+    toggleResize(true)
+  }
+})
+
+onBeforeUnmount(() => {
+  toggleResize(false)
+})
+
+function toggleResize(isOn: boolean) {
+  if (isOn) {
+    window.addEventListener('resize', setMenuCollapse)
+  } else {
+    window.removeEventListener('resize', setMenuCollapse)
+  }
 }
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+
+// Methods
+function setMenuCollapse() {
+  if (window.innerWidth > 992) {
+    repoUI.setMenuCollapse(false)
+  } else {
+    repoUI.setMenuCollapse(true)
+  }
 }
+
 </script>
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
   min-height: 400px;
 }
 </style>
