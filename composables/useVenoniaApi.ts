@@ -1,6 +1,13 @@
 // import axios from 'axios'
 import { getAuth, } from "firebase/auth"
 import type { Auth } from "firebase/auth"
+interface requestOptions {
+    method: 'get' | 'put' | 'post' | 'delete' | 'patch',
+    body?: any,
+    params?: object,
+    headers?: object,
+    responseType?: string,
+}
 
 export default defineStore('api', {
     state: () => {
@@ -34,7 +41,7 @@ export default defineStore('api', {
                 }
             }
         },
-        async authRequest(url: string, options: any) {
+        async authRequest(url: string, options: requestOptions) {
             const { method, body, params = {}, headers, responseType = 'json' } = options
             // Retrieve token
             await this.setToken()
@@ -47,7 +54,7 @@ export default defineStore('api', {
             }
 
             // Complete config
-            const axiosConfig: { [key: string]: string } = {
+            const axiosConfig: { [key: string]: any } = {
                 url,
                 method,
                 params,

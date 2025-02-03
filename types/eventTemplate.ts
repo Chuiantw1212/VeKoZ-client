@@ -9,6 +9,9 @@ export interface ITemplateDesign {
     mutable: {
         label: string,
         value: any,
+        name?: string,
+        address?: string,
+        url?: string,
     }
 }
 

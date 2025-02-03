@@ -5,14 +5,14 @@
             <NuxtLink to="/eventTemplate">點此設計活動套板</NuxtLink>
         </div>
 
-        <VotionCalendar @create="createNewEvent($event)">
+        <VotionCalendar @create="openNewEventDialog($event)">
         </VotionCalendar>
 
         <el-dialog v-model="dialogVisible" title="活動編輯" @close="dialogVisible = false" :lock-scroll="true">
             <FormTemplateDesign v-if="dialogVisible" v-model="eventTemplate.designs"></FormTemplateDesign>
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary">
+                <el-button type="primary" @click="submitNewEvent()">
                     確認
                 </el-button>
             </template>
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 import useRepoEvent from '~/composables/useRepoEvent';
-import type { IEventCreation } from '~/types/event';
+import type { IEvent, IEventCreation } from '~/types/event';
 import type { IOrganizationMember } from '~/types/organization';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
@@ -35,15 +35,6 @@ const eventTemplate = ref<IEventTemplate>({
     designs: []
 })
 
-const form = reactive({
-    name: '',
-    locationName: '',
-    locationAddress: '',
-    virtualLocationUrl: '',
-    description: '', // html
-    startDate: '',
-    endDate: '',
-})
 // Hooks
 onMounted(() => {
     getEventTemplate()
@@ -55,7 +46,7 @@ async function getEventTemplate() {
     Object.assign(eventTemplate.value, result)
 }
 
-async function createNewEvent(data: IEventCreation) {
+async function openNewEventDialog(data: IEventCreation) {
 
 
     const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
@@ -67,6 +58,10 @@ async function createNewEvent(data: IEventCreation) {
     }
 
     dialogVisible.value = true
+}
+
+async function submitNewEvent() {
+    await repoEvent.postEvent(eventTemplate.value)
 }
 </script>
 

@@ -56,6 +56,7 @@ onMounted(() => {
 
 // methods
 function openNewDialog() {
+  form.value = {}
   placeDialog.visibility = true
   placeDialog.mode = 'ADD'
 }

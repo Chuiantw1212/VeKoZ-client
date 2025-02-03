@@ -9,17 +9,20 @@ export interface IEventCreation {
 export interface IEvent {
     id?: string,
     name: string,
-    locationAddress: string,
-    locationName: string,
-    virtualLocationName: string,
-    virtualLocationUrl: string,
+    locationAddress?: string,
+    locationName?: string,
+    virtualLocationName?: string,
+    virtualLocationUrl?: string,
+    startDate: string,
+    endDate: string,
+    description: string,
 }
 
 /**
  * 純參考用，原則上不外部引用
  * https://schema.org/Place
  */
-export interface IPlace {
+interface IPlace {
     name: string,
     address: string,
 }
@@ -28,7 +31,7 @@ export interface IPlace {
  * 純參考用，原則上不外部引用
  * https://schema.org/VirtualLocation
  */
-export interface IVirtualLocation {
+interface IVirtualLocation {
     name: string,
     description: string,
     url: string,
