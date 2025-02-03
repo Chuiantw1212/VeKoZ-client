@@ -1,23 +1,21 @@
 <template>
-    <div class="design">
-        <!-- 檢視用 -->
-        <template v-if="!props.isDesigning">
-            <el-form-item :label="customDesign.mutable?.label">
+    <!-- 檢視用 -->
+    <template v-if="!props.isDesigning">
+        <el-form-item :label="customDesign.mutable?.label">
+            <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
+            </AtomVenoniaEditor>
+        </el-form-item>
+    </template>
+    <!-- 編輯用 -->
+    <template v-else-if="customDesign.mutable">
+        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
+            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+            <template v-slot:default>
                 <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
                 </AtomVenoniaEditor>
-            </el-form-item>
-        </template>
-        <!-- 編輯用 -->
-        <template v-else-if="customDesign.mutable">
-            <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
-                @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-                <template v-slot:default>
-                    <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
-                    </AtomVenoniaEditor>
-                </template>
-            </MoleculeCustomToolbar>
-        </template>
-    </div>
+            </template>
+        </MoleculeCustomToolbar>
+    </template>
 </template>
 <script setup lang="ts">
 import { computed, watch } from 'vue';
@@ -73,23 +71,3 @@ watch(() => customDesign.value, (newValue) => {
 
 }, { immediate: true })
 </script>
-<style lang="scss" scoped>
-.design {
-    .design__item {
-        display: flex;
-
-        .item__label {
-            display: flex;
-            padding-right: 12px;
-
-            .label__input {
-                outline: none;
-            }
-        }
-
-        .item__input {
-            width: 100%;
-        }
-    }
-}
-</style>

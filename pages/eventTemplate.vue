@@ -38,102 +38,106 @@
                     <template #header>
                         請拖曳以下選項 到 自定義欄位
                     </template>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="input"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="純文字">
-                            <el-input :model-value="'請輸入文字'" :disabled="true"></el-input>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="number"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="數字">
-                            <el-input-number v-model="demo.number" :disabled="true"></el-input-number>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="singleSelect"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="單選">
-                            <el-select v-model="demo.singleSelect" :disabled="true">
-                                <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
-                                    :value="item.value" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="multiSelect"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="多選">
-                            <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
-                                :allow-create="true" :disabled="true">
-                                <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
-                                    :value="item.value" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="dateTimeRange"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="時間日期">
-                            <el-date-picker v-model="demo.datetimerange" type="datetimerange" :disabled="true" />
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="url"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="超連結">
-                            <el-input :model-value="'請輸入連結'" :disabled="true"></el-input>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="checkbox"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="核取方塊">
-                            <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="divider"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="">
-                            <el-divider>分隔線</el-divider>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="textarea"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="多行文字輸入">
-                            <el-mention type="textarea" :disabled="true" />
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="editor"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="">
-                            <AtomVenoniaEditor :disabled="true"></AtomVenoniaEditor>
-                        </el-form-item>
-                    </div>
-                    <el-divider content-position="left">高階欄位</el-divider>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="organization"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="組織">
-                            <el-select v-model="demo.organizationId" :disabled="true" placeholder="請選擇組織"
-                                @change="getOrganizationMemberList()">
-                                <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
-                                    :value="item.id" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="組織成員">
-                            <el-select v-model="demo.members" placeholder="請選擇對應組織的成員" :disabled="!demo.organizationId">
-                                <el-option v-for="(item, index) in organizationMemberList" :key="index"
-                                    :label="item.name" :value="String(item.id)" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
-                    <div class="eventTemplate__draggable" draggable="true" data-type="accommodation"
-                        @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                        <el-form-item label="空間地點">
-                            <el-select v-model="demo.members" placeholder="請選擇空間地點" :disabled="!demo.organizationId">
-                                <el-option v-for="(item, index) in organizationMemberList" :key="index"
-                                    :label="item.name" :value="String(item.id)" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
+                    <el-form label-width="auto">
+                        <div class="eventTemplate__draggable" draggable="true" data-type="input"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="純文字">
+                                <el-input :model-value="'請輸入文字'" :disabled="true"></el-input>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="number"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="數字">
+                                <el-input-number v-model="demo.number" :disabled="true"></el-input-number>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="singleSelect"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="單選">
+                                <el-select v-model="demo.singleSelect" :disabled="true">
+                                    <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
+                                        :value="item.value" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="multiSelect"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="多選">
+                                <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
+                                    :allow-create="true" :disabled="true">
+                                    <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
+                                        :value="item.value" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="dateTimeRange"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="時間日期">
+                                <el-date-picker v-model="demo.datetimerange" type="datetimerange" :disabled="true" />
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="url"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="超連結">
+                                <el-input :model-value="'請輸入連結'" :disabled="true"></el-input>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="checkbox"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="核取方塊">
+                                <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="divider"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="">
+                                <el-divider>分隔線</el-divider>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="textarea"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="多行文字">
+                                <el-mention type="textarea" :disabled="true" />
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="editor"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="">
+                                <AtomVenoniaEditor :disabled="true"></AtomVenoniaEditor>
+                            </el-form-item>
+                        </div>
+                        <el-divider content-position="left">高階欄位</el-divider>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="organization"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="組織">
+                                <el-select v-model="demo.organizationId" :disabled="true" placeholder="請選擇組織"
+                                    @change="getOrganizationMemberList()">
+                                    <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                                        :value="item.id" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="組織成員">
+                                <el-select v-model="demo.members" placeholder="請選擇對應組織的成員"
+                                    :disabled="!demo.organizationId">
+                                    <el-option v-for="(item, index) in organizationMemberList" :key="index"
+                                        :label="item.name" :value="String(item.id)" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="accommodation"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <el-form-item label="空間地點">
+                                <el-select v-model="demo.members" placeholder="請選擇空間地點"
+                                    :disabled="!demo.organizationId">
+                                    <el-option v-for="(item, index) in organizationMemberList" :key="index"
+                                        :label="item.name" :value="String(item.id)" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                    </el-form>
                 </el-card>
             </el-col>
         </el-row>

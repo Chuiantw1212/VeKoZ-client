@@ -1,24 +1,22 @@
 <template>
-    <div class="design">
-        <!-- 檢視用 -->
-        <template v-if="!props.isDesigning">
-            <el-form-item :label="customDesign.mutable?.label">
+    <!-- 檢視用 -->
+    <template v-if="!props.isDesigning">
+        <el-form-item :label="customDesign.mutable?.label">
+            <el-mention v-model="customDesign.mutable.value" type="textarea" :placeholder="placeholder" />
+        </el-form-item>
+    </template>
+    <!-- 編輯用 -->
+    <template v-else-if="customDesign.mutable">
+        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
+            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+            <template v-slot:label>
+                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+            </template>
+            <template v-slot:default>
                 <el-mention v-model="customDesign.mutable.value" type="textarea" :placeholder="placeholder" />
-            </el-form-item>
-        </template>
-        <!-- 編輯用 -->
-        <template v-else-if="customDesign.mutable">
-            <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
-                @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-                <template v-slot:label>
-                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-                </template>
-                <template v-slot:default>
-                    <el-mention v-model="customDesign.mutable.value" type="textarea" :placeholder="placeholder" />
-                </template>
-            </MoleculeCustomToolbar>
-        </template>
-    </div>
+            </template>
+        </MoleculeCustomToolbar>
+    </template>
 </template>
 <script setup lang="ts">
 import { computed, watch } from 'vue';
