@@ -4,7 +4,7 @@
         <el-form-item :label="customDesign.mutable?.label">
             <div class="offer">
                 <el-input class="offer__name" placeholder="名稱" v-model="customDesign.mutable.offerName"
-                    :disabled="disabled"></el-input>
+                    :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
                 <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.offerCount"
                     :disabled="disabled"></el-input-number>
                 <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.offerPrice"
@@ -27,7 +27,7 @@
             <template v-slot:default>
                 <div class="offer">
                     <el-input class="offer__name" placeholder="名稱" v-model="customDesign.mutable.offerName"
-                        :disabled="disabled"></el-input>
+                        :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.offerCount"
                         :disabled="disabled"></el-input-number>
                     <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.offerPrice"
