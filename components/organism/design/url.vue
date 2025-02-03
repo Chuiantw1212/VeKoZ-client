@@ -13,7 +13,9 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <el-input :placeholder="placeholder" v-model="customDesign.mutable.value"></el-input>
+                <el-input v-model="customDesign.mutable.name" placeholder="微課室"></el-input>
+                <el-input class="design__mt" v-model="customDesign.mutable.url"
+                    placeholder="https://venonia.com"></el-input>
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -68,3 +70,8 @@ watch(() => customDesign.value, (newValue) => {
 
 }, { immediate: true })
 </script>
+<style lang="scss" scoped>
+.design__mt {
+    margin-top: 12px;
+}
+</style>

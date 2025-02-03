@@ -1,6 +1,7 @@
-export type IPlace = {
-    id?: string,
+/**
+ * https://schema.org/Place
+ */
+export interface IPlace {
     name: string,
-    description: string,
     address: string,
 }
