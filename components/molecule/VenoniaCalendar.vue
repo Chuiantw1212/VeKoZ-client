@@ -1,5 +1,8 @@
 <template>
-    <div class="votionCalendar__calendar" ref="calendarRef"></div>
+    <!-- root必須是div，不然deep樣式會跑掉 -->
+    <div class="votionCalendar">
+        <div class="votionCalendar__calendar" ref="calendarRef"></div>
+    </div>
 </template>
 <script setup lang="ts">
 import { Calendar } from '@fullcalendar/core';
