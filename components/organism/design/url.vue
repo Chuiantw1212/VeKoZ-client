@@ -2,7 +2,9 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
-            <el-input v-model="customDesign.mutable.value" :placeholder="placeholder"></el-input>
+            <el-input v-model="customDesign.mutable.name" placeholder="微課室"></el-input>
+            <el-input class="design__mt" v-model="customDesign.mutable.url"
+                placeholder="https://venonia.com"></el-input>
         </el-form-item>
     </template>
     <!-- 編輯用 -->
