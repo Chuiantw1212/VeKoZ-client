@@ -2,19 +2,34 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
-            <div class="offer">
-                <el-input class="offer__name" placeholder="名稱" v-model="customDesign.mutable.offerName"
-                    :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
-                <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.offerCount"
-                    :disabled="disabled"></el-input-number>
-                <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.offerPrice"
-                    :disabled="disabled"></el-input-number>
-                <el-button class="offer__btn" :disabled="disabled">
-                    <el-icon>
-                        <Plus />
-                    </el-icon>
-                </el-button>
-            </div>
+            <div class="offerList">
+                <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
+                    <el-input class="offer__name" placeholder="名稱" v-model="offer.offerName" :disabled="disabled"
+                        :maxlength="30" :show-word-limit="true"></el-input>
+                    <el-input-number class="offer__count" placeholder="數量" v-model="offer.offerCount"
+                        :disabled="disabled">
+                        <template #suffix>
+                            <span>張</span>
+                        </template>
+                    </el-input-number>
+                    <el-input-number class="offer__price" placeholder="票價" v-model="offer.offerPrice"
+                        :disabled="disabled">
+                        <template #suffix>
+                            <span>元</span>
+                        </template>
+                    </el-input-number>
+                    <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
+                    </el-button>
+                    <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
+                        <el-icon>
+                            <Minus />
+                        </el-icon>
+                    </el-button>
+                </div>
+            </div class="offers">
         </el-form-item>
     </template>
     <!-- 編輯用 -->
@@ -26,16 +41,29 @@
             </template>
             <template v-slot:default>
                 <div class="offerList">
-                    <div v-for="(offer) in customDesign.mutable.offers" class="offer">
+                    <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                         <el-input class="offer__name" placeholder="名稱" v-model="offer.offerName" :disabled="disabled"
                             :maxlength="30" :show-word-limit="true"></el-input>
                         <el-input-number class="offer__count" placeholder="數量" v-model="offer.offerCount"
-                            :disabled="disabled"></el-input-number>
+                            :disabled="disabled">
+                            <template #suffix>
+                                <span>張</span>
+                            </template>
+                        </el-input-number>
                         <el-input-number class="offer__price" placeholder="票價" v-model="offer.offerPrice"
-                            :disabled="disabled"></el-input-number>
-                        <el-button class="offer__btn" :disabled="disabled" @click="createOffer()">
+                            :disabled="disabled">
+                            <template #suffix>
+                                <span>元</span>
+                            </template>
+                        </el-input-number>
+                        <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                             <el-icon>
                                 <Plus />
+                            </el-icon>
+                        </el-button>
+                        <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
+                            <el-icon>
+                                <Minus />
                             </el-icon>
                         </el-button>
                     </div>
@@ -46,7 +74,7 @@
 </template>
 <script setup lang="ts">
 import { computed, watch } from 'vue';
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Minus } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
@@ -115,6 +143,9 @@ watch(() => customDesign.value, (newValue) => {
 // Methods
 function createOffer() {
     customDesign.value.mutable.offers.push(newOffer)
+}
+function removeOffer(index: number) {
+    customDesign.value.mutable.offers.splice(index, 1)
 }
 </script>
 <style lang="scss" scoped>
