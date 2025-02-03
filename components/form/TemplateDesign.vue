@@ -6,6 +6,10 @@
             </slot>
         </div>
         <template v-for="(item, index) in templateDesigns" :key="index">
+            <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]"
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'header1' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignHeader1>
             <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]"
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'input' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
@@ -24,7 +28,7 @@
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOrganizationMember>
             <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
-                :isDesigning="isDesigning" :allow-delete="getDateTimeRangeCount() > 1"
+                :isDesigning="isDesigning" :allow-delete="getFirstItem('dateTimeRange') < index"
                 @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDateTimeRange>
@@ -41,8 +45,9 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDivider>
             <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]"
-                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'editor' })"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                :isDesigning="isDesigning" :allow-delete="getFirstItem('editor') < index"
+                @dragstart="emit('dragstart', { index, type: 'editor' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignEditor>
             <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="templateDesigns[index]"
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'singleSelect' })"
@@ -80,13 +85,11 @@ const templateDesigns = computed({
 })
 
 // methods
-function getDateTimeRangeCount(): number {
-    console.log('getDateTimeRangeCount')
-    const dateTimeRangeItems = templateDesigns.value.filter((design: ITemplateDesign) => {
-        return design.type === 'dateTimeRange'
+function getFirstItem(type: string): number {
+    const index = templateDesigns.value.findIndex((design: ITemplateDesign) => {
+        return design.type === type
     })
-    console.log('dateTimeRangeItems', dateTimeRangeItems.length)
-    return dateTimeRangeItems.length
+    return index
 }
 function getOrganizationId() {
     const organization = templateDesigns.value.find((design: ITemplateDesign) => {

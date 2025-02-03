@@ -24,6 +24,10 @@
 
                     <template #footer>
                         <div class="footer">
+                            <div>
+                                <!-- <el-button type="info" size="small" :disabled="true">SEO</el-button>
+                                用於SEO的基本欄位 -->
+                            </div>
                             <el-button v-loading="isLoading" @click="putEventTemplate">保存</el-button>
                         </div>
                     </template>
@@ -34,7 +38,6 @@
                     <template #header>
                         請拖曳以下選項 到 自定義欄位
                     </template>
-
                     <div class="eventTemplate__draggable" draggable="true" data-type="input"
                         @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                         <el-form-item label="純文字">
@@ -330,6 +333,7 @@ async function getEventTemplate() {
 
 .footer {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
 }
 </style>

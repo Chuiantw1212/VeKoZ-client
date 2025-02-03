@@ -9,11 +9,18 @@
         <div name="default" class="customToolbar__default">
             <slot name="default"></slot>
         </div>
-        <el-button class="toolbar__btn" :disabled="!allowDelete" @click="emit('remove')">
-            <el-icon>
-                <Delete />
-            </el-icon>
-        </el-button>
+        <template v-if="allowDelete">
+            <el-button class="toolbar__btn" @click="emit('remove')">
+                <el-icon>
+                    <Delete />
+                </el-icon>
+            </el-button>
+        </template>
+        <template v-else>
+            <el-button class="toolbar__btn" type="info" size="small" :disabled="true" @click="emit('remove')">
+                SEO
+            </el-button>
+        </template>
     </div>
 </template>
 <script setup>
@@ -52,6 +59,10 @@ const props = defineProps({
 
     .customToolbar__default {
         width: 100%;
+    }
+
+    .toolbar__btn {
+        min-width: 50px;
     }
 }
 </style>

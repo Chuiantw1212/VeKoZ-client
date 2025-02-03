@@ -3,16 +3,18 @@
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
             <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
+                <el-input :placeholder="placeholder" size="large"></el-input>
             </el-form-item>
         </template>
         <!-- 編輯用 -->
         <template v-else-if="customDesign.mutable">
             <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
                 @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+                <template v-slot:label>
+                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                </template>
                 <template v-slot:default>
-                    <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
-                    </AtomVenoniaEditor>
+                    <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" size="large"></el-input>
                 </template>
             </MoleculeCustomToolbar>
         </template>
@@ -28,7 +30,7 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                type: 'editor',
+                type: 'header1',
                 mutable: {
                     label: ''
                 }
@@ -41,11 +43,11 @@ const props = defineProps({
     },
     allowDelete: {
         type: Boolean,
-        default: true
+        default: false
     },
     placeholder: {
         type: String,
-        default: '請輸入'
+        default: '請輸入主標題'
     }
 })
 
@@ -62,7 +64,7 @@ watch(() => customDesign.value, (newValue) => {
         return
     }
     const defaultValue = {
-        type: 'editor',
+        type: 'header1',
         mutable: {
             label: '',
         }
@@ -72,23 +74,3 @@ watch(() => customDesign.value, (newValue) => {
 
 }, { immediate: true })
 </script>
-<style lang="scss" scoped>
-.design {
-    .design__item {
-        display: flex;
-
-        .item__label {
-            display: flex;
-            padding-right: 12px;
-
-            .label__input {
-                outline: none;
-            }
-        }
-
-        .item__input {
-            width: 100%;
-        }
-    }
-}
-</style>
