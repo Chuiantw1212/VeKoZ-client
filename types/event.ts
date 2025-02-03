@@ -8,14 +8,14 @@ export interface IEventCreation {
  */
 export interface IEvent {
     id?: string,
-    name: string,
+    name?: string,
     locationAddress?: string,
     locationName?: string,
     virtualLocationName?: string,
     virtualLocationUrl?: string,
-    startDate: string,
-    endDate: string,
-    description: string,
+    startDate?: string,
+    endDate?: string,
+    description?: string,
 }
 
 /**

@@ -54,7 +54,7 @@ export default defineStore('api', {
             }
 
             // Complete config
-            const axiosConfig: { [key: string]: any } = {
+            const fetchConfig: { [key: string]: any } = {
                 url,
                 method,
                 params,
@@ -62,12 +62,12 @@ export default defineStore('api', {
                 responseType,
             }
             if (body) {
-                axiosConfig.body = JSON.stringify(body)
+                fetchConfig.body = JSON.stringify(body)
             }
             let axiosResponse = null
             try {
                 const apiBase = useRuntimeConfig().public.apiBase
-                axiosResponse = await fetch(`${apiBase}${url}`, axiosConfig)
+                axiosResponse = await fetch(`${apiBase}${url}`, fetchConfig)
             } catch (error: any) {
                 alert(error.message)
             } finally {

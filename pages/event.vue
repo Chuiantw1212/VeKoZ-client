@@ -36,12 +36,22 @@ const eventTemplate = ref<IEventTemplate>({
     designs: []
 })
 
+const eventList = ref<IEvent[]>([])
+
 // Hooks
 onMounted(() => {
+    getEventList()
     getEventTemplate()
 })
 
 // methods
+async function getEventList() {
+    const result = await repoEvent.getEventList({
+        startDate: new Date().toISOString(),
+    })
+    eventList.value = result
+}
+
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
     Object.assign(eventTemplate.value, result)
