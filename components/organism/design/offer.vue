@@ -25,21 +25,21 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <template v-for="(offer) in customDesign.mutable.offers">
-                    <div class="offer">
+                <div class="offerList">
+                    <div v-for="(offer) in customDesign.mutable.offers" class="offer">
                         <el-input class="offer__name" placeholder="名稱" v-model="offer.offerName" :disabled="disabled"
                             :maxlength="30" :show-word-limit="true"></el-input>
                         <el-input-number class="offer__count" placeholder="數量" v-model="offer.offerCount"
                             :disabled="disabled"></el-input-number>
                         <el-input-number class="offer__price" placeholder="票價" v-model="offer.offerPrice"
                             :disabled="disabled"></el-input-number>
-                        <el-button class="offer__btn" :disabled="disabled">
+                        <el-button class="offer__btn" :disabled="disabled" @click="createOffer()">
                             <el-icon>
                                 <Plus />
                             </el-icon>
                         </el-button>
                     </div>
-                </template>
+                </div class="offers">
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -87,6 +87,14 @@ const customDesign = computed({
         emit('update:modelValue', newValue)
     }
 })
+
+// Hooks
+const newOffer = reactive({
+    name: '',
+    count: null,
+    price: null,
+})
+
 watch(() => customDesign.value, (newValue) => {
     if (newValue.mutable) {
         return
@@ -96,20 +104,26 @@ watch(() => customDesign.value, (newValue) => {
         mutable: {
             label: '票券',
             offers: [
-                {
-                    name: '',
-                    count: null,
-                    price: null,
-                }
+                newOffer,
             ],
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-
 }, { immediate: true })
+
+// Methods
+function createOffer() {
+    customDesign.value.mutable.offers.push(newOffer)
+}
 </script>
 <style lang="scss" scoped>
+.offerList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .offer {
     display: flex;
     justify-content: space-between;
