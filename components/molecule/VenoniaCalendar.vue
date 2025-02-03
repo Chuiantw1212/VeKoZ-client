@@ -6,6 +6,7 @@
 </template>
 <script setup lang="ts">
 import { Calendar } from '@fullcalendar/core';
+import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -55,6 +56,7 @@ function initializeCalendar() {
         events: [],
         eventClick: handleEventClick,
         eventChange: handleEventChange,
+        locales: [zhTwLocale],
         locale: 'zh-tw',
         headerToolbar: {
             left: 'today prev,next',
