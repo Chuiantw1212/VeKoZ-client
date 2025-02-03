@@ -2,9 +2,9 @@
     <div class="design">
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
-            <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
-            </el-form-item>
+            <el-divider>
+                {{ customDesign.mutable.label }}
+            </el-divider>
         </template>
         <!-- 編輯用 -->
         <template v-else-if="customDesign.mutable">

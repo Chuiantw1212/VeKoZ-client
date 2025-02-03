@@ -20,3 +20,17 @@ a {
   display: flex;
   justify-content: space-between;
 }
+
+.venonia-card {
+  .card__body {
+    overflow-y: auto;
+  }
+
+  .card__body--270 {
+    max-height: calc(100vh - 270px);
+  }
+
+  .card__body--200 {
+    max-height: calc(100vh - 200px);
+  }
+}

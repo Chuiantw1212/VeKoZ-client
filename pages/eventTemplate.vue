@@ -3,7 +3,7 @@
         <!-- <h1>活動套版管理</h1> -->
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="eventTemplate__card" body-class="card__body card__body--270">
+                <el-card class="venonia-card" body-class="card__body card__body--270">
                     <template #header>
                         活動套版管理
                     </template>
@@ -34,7 +34,7 @@
                 </el-card>
             </el-col>
             <el-col :span="8">
-                <el-card class="eventTemplate__card" body-class="card__body card__body--200">
+                <el-card class="venonia-card" body-class="card__body card__body--200">
                     <template #header>
                         請拖曳以下選項 到 自定義欄位
                     </template>
@@ -270,16 +270,6 @@ function setTemplateType(ev: any) {
 function cancelDragging() {
     templateTemp.isDragging = false
 }
-// function setDefaultTemplates() {
-//     if (!eventTemplate.designs.length) {
-//         const defaultTemplates = [
-//             {
-//                 name: 'input',
-//             },
-//         ]
-//         eventTemplate.designs.push(...defaultTemplates)
-//     }
-// }
 
 // <h2>📚 活動內容?：</h2><p>&nbsp;</p><p>&nbsp;</p><h2>📝 本次您將會學習到：</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol><p>&nbsp;</p><p>&nbsp;</p><h2>🙋🏻 誰適合參與？</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol>
 
@@ -319,22 +309,6 @@ async function getEventTemplate() {
     .eventTemplate__designItem--outline {
         outline: 1px dashed red;
     }
-
-    .eventTemplate__card {
-        :deep(.card__body) {
-            // max-height: calc(100vh - 270px);
-            overflow-y: auto;
-        }
-
-        :deep(.card__body--270) {
-            max-height: calc(100vh - 270px);
-        }
-
-        :deep(.card__body--200) {
-            max-height: calc(100vh - 200px);
-        }
-    }
-
 }
 
 .footer {
