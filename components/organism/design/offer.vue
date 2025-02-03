@@ -25,19 +25,21 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <div class="offer">
-                    <el-input class="offer__name" placeholder="名稱" v-model="customDesign.mutable.offerName"
-                        :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.offerCount"
-                        :disabled="disabled"></el-input-number>
-                    <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.offerPrice"
-                        :disabled="disabled"></el-input-number>
-                    <el-button class="offer__btn" :disabled="disabled">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                    </el-button>
-                </div>
+                <template v-for="(offer) in customDesign.mutable.offers">
+                    <div class="offer">
+                        <el-input class="offer__name" placeholder="名稱" v-model="offer.offerName" :disabled="disabled"
+                            :maxlength="30" :show-word-limit="true"></el-input>
+                        <el-input-number class="offer__count" placeholder="數量" v-model="offer.offerCount"
+                            :disabled="disabled"></el-input-number>
+                        <el-input-number class="offer__price" placeholder="票價" v-model="offer.offerPrice"
+                            :disabled="disabled"></el-input-number>
+                        <el-button class="offer__btn" :disabled="disabled">
+                            <el-icon>
+                                <Plus />
+                            </el-icon>
+                        </el-button>
+                    </div>
+                </template>
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -93,6 +95,13 @@ watch(() => customDesign.value, (newValue) => {
         type: 'offer',
         mutable: {
             label: '票券',
+            offers: [
+                {
+                    name: '',
+                    count: null,
+                    price: null,
+                }
+            ],
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)
