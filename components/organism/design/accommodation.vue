@@ -3,7 +3,13 @@
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
             <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
+                <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
+                    @change="setLocationAddress($event)">
+                    <el-option v-for="(item, index) in accommodationList" :key="index" :label="item.name"
+                        :value="String(item.name)" />
+                </el-select>
+                <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
+                    :disabled="true"></el-input>
             </el-form-item>
         </template>
         <!-- 編輯用 -->

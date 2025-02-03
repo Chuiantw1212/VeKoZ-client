@@ -3,7 +3,8 @@
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
             <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
+                <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
+                    :disabled="disabled"></el-date-picker>
             </el-form-item>
         </template>
         <!-- 編輯用 -->
@@ -14,8 +15,7 @@
                     <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
                 </template>
                 <template v-slot:default>
-                    <el-date-picker :placeholder="placeholder"
-                        v-model="customDesign.mutable.value" type="datetimerange"
+                    <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
                         :disabled="isDesigning"></el-date-picker>
                 </template>
             </MoleculeCustomToolbar>
@@ -40,6 +40,10 @@ const props = defineProps({
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },
