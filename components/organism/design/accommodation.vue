@@ -4,7 +4,7 @@
         <el-form-item :label="customDesign.mutable?.label">
             <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
                 @change="setLocationAddress($event)">
-                <el-option v-for="(item, index) in accommodationList" :key="index" :label="item.name"
+                <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                     :value="String(item.name)" />
             </el-select>
             <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
@@ -21,7 +21,7 @@
             <template v-slot:default>
                 <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
                     @change="setLocationAddress($event)">
-                    <el-option v-for="(item, index) in accommodationList" :key="index" :label="item.name"
+                    <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                         :value="String(item.name)" />
                 </el-select>
                 <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
@@ -31,9 +31,9 @@
     </template>
 </template>
 <script setup lang="ts">
-import type { IAccommodation } from '~/types/accommodation'
+import type { IPlace } from '~/types/place'
 import { computed, watch } from 'vue';
-const repoAccommodation = useRepoAccommodation()
+const repoPlace = useRepoPlace()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
@@ -41,7 +41,7 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                type: 'accommodation',
+                type: 'place',
                 mutable: {
                     label: '',
                     locationName: '',
@@ -61,11 +61,11 @@ const props = defineProps({
 })
 
 
-const accommodationList = ref<IAccommodation[]>([])
+const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(() => {
-    getAccommodationList()
+    getPlaceList()
 })
 
 const customDesign = computed({
@@ -81,7 +81,7 @@ watch(() => customDesign.value, (newValue) => {
         return
     }
     const defaultValue = {
-        type: 'accommodation',
+        type: 'place',
         mutable: {
             label: '',
         }
@@ -93,7 +93,7 @@ watch(() => customDesign.value, (newValue) => {
 // Methods
 function setLocationAddress(locationName: string) {
     if (locationName) {
-        const selectedItem = accommodationList.value.find(item => {
+        const selectedItem = placeList.value.find(item => {
             return item.name === locationName
         })
         console.log({
@@ -105,9 +105,9 @@ function setLocationAddress(locationName: string) {
     }
 }
 
-async function getAccommodationList() {
-    const result = await repoAccommodation.getAccommodationList()
-    accommodationList.value = result
+async function getPlaceList() {
+    const result = await repoPlace.getPlaceList()
+    placeList.value = result
 }
 
 </script>

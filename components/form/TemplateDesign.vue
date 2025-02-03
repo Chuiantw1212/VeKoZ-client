@@ -33,10 +33,10 @@
                     @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })" @remove="handleRemove(index)"
                     @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignDateTimeRange>
-                <OrganismDesignAccommodation v-if="item.type === 'accommodation'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'accommodation' })"
+                <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'place' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
-                </OrganismDesignAccommodation>
+                </OrganismDesignPlace>
                 <OrganismDesignUrl v-if="item.type === 'url'" v-model="templateDesigns[index]"
                     :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'url' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">

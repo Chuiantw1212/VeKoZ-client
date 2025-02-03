@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item label="線下地址">
             <el-select placeholder="請選擇現有空間或地點">
-                <el-option v-for="item in accommodationList" :key="item.id" :label="item.name" :value="item.name" />
+                <el-option v-for="item in placeList" :key="item.id" :label="item.name" :value="item.name" />
             </el-select>
         </el-form-item>
         <el-form-item label="線上連結">
@@ -33,10 +33,10 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
-import type { IAccommodation } from '~/types/accommodation'
+import type { IPlace } from '~/types/place'
 const emit = defineEmits(['update:modelValue'])
 const repoOrganization = useRepoOrganization()
-const repoAccommodation = useRepoAccommodation()
+const repoPlace = useRepoPlace()
 
 const props = defineProps({
     modelValue: {
@@ -57,7 +57,7 @@ const eventTemplate = computed({
 })
 
 const organizationList = ref<IOrganization[]>([])
-const accommodationList = ref<IAccommodation[]>([])
+const placeList = ref<IPlace[]>([])
 const organizationMemberList = ref<IOrganizationMember[]>([])
 
 // methods
@@ -66,9 +66,9 @@ async function getOrganizationList() {
     organizationList.value = result
 }
 
-async function getAccommodationList() {
-    const result = await repoAccommodation.getAccommodationList()
-    accommodationList.value = result
+async function getPlaceList() {
+    const result = await repoPlace.getPlaceList()
+    placeList.value = result
 }
 
 
@@ -78,7 +78,7 @@ async function getOrganizationMemberList() {
 }
 
 onMounted(() => {
-    getAccommodationList()
+    getPlaceList()
     getOrganizationList()
     getOrganizationMemberList()
 })

@@ -1,4 +1,4 @@
-export type IAccommodation = {
+export type IPlace = {
     id?: string,
     name: string,
     description: string,

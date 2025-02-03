@@ -7,7 +7,8 @@ export interface IEventTemplate {
 export interface ITemplateDesign {
     type: string,
     mutable: {
-        label: string
+        label: string,
+        value: any,
     }
 }
 

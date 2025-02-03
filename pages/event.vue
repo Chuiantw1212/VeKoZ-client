@@ -4,15 +4,15 @@
             <h1>活動管理</h1>
             <NuxtLink to="/eventTemplate">點此設計活動套板</NuxtLink>
         </div>
-        <br />
-        <VotionCalendar v-model="form" @create="createNewEvent($event)">
+
+        <VotionCalendar @create="createNewEvent($event)">
         </VotionCalendar>
 
         <el-dialog v-model="dialogVisible" title="活動編輯" @close="dialogVisible = false" :lock-scroll="true">
-            <FormTemplateDesign v-model="eventTemplate.designs"></FormTemplateDesign>
+            <FormTemplateDesign v-if="dialogVisible" v-model="eventTemplate.designs"></FormTemplateDesign>
             <template #footer>
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="createEvent()">
+                <el-button type="primary">
                     確認
                 </el-button>
             </template>
@@ -23,13 +23,13 @@
 <script setup lang="ts">
 import VotionCalendar from '~/components/molecule/VotionCalendar.vue';
 import useRepoEvent from '~/composables/useRepoEvent';
+import type { IEventCreation } from '~/types/event';
 import type { IOrganizationMember } from '~/types/organization';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 const repoEvent = useRepoEvent()
 
 const dialogVisible = ref(false)
-// const dialogTableVisible = ref(false)
 
 const eventTemplate = ref<IEventTemplate>({
     designs: []
@@ -44,26 +44,30 @@ const form = reactive({
     startDate: '',
     endDate: '',
 })
-
-// methods
-async function getEventTemplate() {
-    const result = await repoEvent.getEventTemplate()
-    Object.assign(eventTemplate, result)
-}
-
-async function createNewEvent(data: any) {
-    const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
-        return design.type === 'dateTimeRange'
-    })
-    if (seoDateTimeRange) {
-        // seoDateTimeRange = []
-    }
-}
-
+// Hooks
 onMounted(() => {
     getEventTemplate()
 })
 
+// methods
+async function getEventTemplate() {
+    const result = await repoEvent.getEventTemplate()
+    Object.assign(eventTemplate.value, result)
+}
+
+async function createNewEvent(data: IEventCreation) {
+
+
+    const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
+        return design.type === 'dateTimeRange'
+    })
+    if (seoDateTimeRange) {
+        const { date } = data
+        seoDateTimeRange.mutable.value = [date, date]
+    }
+
+    dialogVisible.value = true
+}
 </script>
 
 <style lang="scss" scoped>

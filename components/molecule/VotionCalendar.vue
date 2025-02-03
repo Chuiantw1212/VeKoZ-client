@@ -7,6 +7,7 @@
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction';
+import type { IEventCreation } from '~/types/event';
 const emit = defineEmits(['update:modelValue', 'create'])
 
 /**
@@ -96,10 +97,11 @@ function toggleEventAddingBtn(event: Event) {
     formatLabel = formatLabel.replace('日', '')
     const dateInstance = new Date(formatLabel)
     const isoDateString = dateInstance.toISOString()
+    const eventCreation: IEventCreation = {
+        date: isoDateString
+    }
     button.onclick = async () => {
-        emit('create', {
-            date: isoDateString
-        })
+        emit('create', eventCreation)
     }
 
     // 顯示新增按鈕上去

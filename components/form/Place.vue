@@ -12,9 +12,9 @@
     </el-form>
 </template>
 <script setup lang="ts">
-import type { IAccommodation } from '~/types/accommodation'
+import type { IPlace } from '~/types/place'
 const emit = defineEmits(['update:modelValue'])
-const repoAccommodation = useRepoAccommodation()
+const repoPlace = useRepoPlace()
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -30,15 +30,15 @@ const form = computed({
     }
 })
 
-const accommodationList = ref<IAccommodation[]>([])
+const placeList = ref<IPlace[]>([])
 
 // methods
-async function getAccommodationList() {
-    const result = await repoAccommodation.getAccommodationList()
-    accommodationList.value = result
+async function getPlaceList() {
+    const result = await repoPlace.getPlaceList()
+    placeList.value = result
 }
 
 onMounted(() => {
-    getAccommodationList()
+    getPlaceList()
 })
 </script>

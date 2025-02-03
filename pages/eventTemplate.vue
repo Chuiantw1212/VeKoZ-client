@@ -127,7 +127,7 @@
                                 </el-select>
                             </el-form-item>
                         </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="accommodation"
+                        <div class="eventTemplate__draggable" draggable="true" data-type="place"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                             <el-form-item label="空間地點">
                                 <el-select v-model="demo.members" placeholder="請選擇空間地點"
@@ -145,12 +145,12 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
-import type { IAccommodation } from '~/types/accommodation'
+import type { IPlace } from '~/types/place'
 import type { ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
-const repoAccommodation = useRepoAccommodation()
+const repoPlace = useRepoPlace()
 const dialogVisible = ref(false)
 const isLoading = ref(false)
 
@@ -201,12 +201,12 @@ const mockOptions = [
 
 const organizationList = ref<IOrganization[]>([])
 const organizationMemberList = ref<IOrganizationMember[]>([])
-const accommodationList = ref<IAccommodation[]>([])
+const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(async () => {
     addOnDropListener(true)
-    await getAccommodationList()
+    await getPlaceList()
     await getOrganizationList()
     getEventTemplate()
 
@@ -227,9 +227,9 @@ async function clearOnDrop() {
     templateTemp.isDragging = false
 }
 
-async function getAccommodationList() {
-    const result = await repoAccommodation.getAccommodationList()
-    accommodationList.value = result
+async function getPlaceList() {
+    const result = await repoPlace.getPlaceList()
+    placeList.value = result
 }
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
@@ -250,7 +250,8 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
     eventTemplate.designs.splice(destinationIndex, 0, {
         type: templateTemp.type,
         mutable: {
-            label: ''
+            label: '',
+            value: null,
         }
     })
     // Reset flags

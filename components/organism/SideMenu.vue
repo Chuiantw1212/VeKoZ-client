@@ -25,7 +25,7 @@
         <template #title>活動套版管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/accommodation">
+    <NuxtLink to="/place">
       <el-menu-item>
         <el-icon>
           <Location />
