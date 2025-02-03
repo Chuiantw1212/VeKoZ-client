@@ -9,6 +9,7 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import multiMonthPlugin from '@fullcalendar/multimonth'
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
 import type { IFullCalendarEvent, IChangeInfo } from '~/types/fullCalendar';
@@ -49,7 +50,7 @@ function initializeCalendar() {
 
     // 設定Calendar
     const calendar = new Calendar(calendarEl, {
-        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
         initialView: 'dayGridMonth',
         events: [],
         eventClick: handleEventClick,
@@ -58,8 +59,9 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGridMonth,dayGridWeek'
+            right: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay,listWeek'
         },
+        multiMonthMaxColumns: 1 // force a single column
     });
     calendar.render();
 
