@@ -11,8 +11,8 @@
     </template>
     <!-- 編輯用 -->
     <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')">
+        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
+            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
             <template v-slot:label>
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
@@ -45,6 +45,10 @@ const props = defineProps({
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    allowDelete: {
         type: Boolean,
         default: false
     },

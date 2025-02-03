@@ -26,6 +26,7 @@ import useRepoEvent from '~/composables/useRepoEvent';
 import type { IEvent, IEventCreation } from '~/types/event';
 import type { IOrganizationMember } from '~/types/organization';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
+import type { IEventMember } from '~/types/eventMember';
 
 const repoEvent = useRepoEvent()
 
@@ -60,8 +61,35 @@ async function openNewEventDialog(data: IEventCreation) {
     dialogVisible.value = true
 }
 
+/**
+ * 存到Firestore的資料要可以篩選，所以這邊就要把資料格式整理好
+ */
 async function submitNewEvent() {
-    await repoEvent.postEvent(eventTemplate.value)
+    const event: IEvent = {
+        name: '',
+        startDate: '',
+        endDate: '',
+        description: '',
+    }
+
+    const eventMembers: IEventMember[] = []
+    // 標題
+    const header1 = eventTemplate.value.designs.find((design) => {
+        return design.type === 'header1'
+    })
+    if (header1) {
+        event.name = header1.mutable.value
+    }
+
+    // 時間
+    const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
+        return design.type === 'dateTimeRange'
+    })
+
+    // 地點
+
+    // 描述
+    await repoEvent.postEvent(event)
 }
 </script>
 
