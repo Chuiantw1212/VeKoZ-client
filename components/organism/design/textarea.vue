@@ -3,7 +3,7 @@
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
             <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
+                <el-mention v-model="customDesign.mutable.value" type="textarea" :placeholder="placeholder" />
             </el-form-item>
         </template>
         <!-- 編輯用 -->
@@ -14,7 +14,7 @@
                     <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
                 </template>
                 <template v-slot:default>
-                    <el-input :placeholder="placeholder" v-model="customDesign.mutable.value"></el-input>
+                    <el-mention v-model="customDesign.mutable.value" type="textarea" :placeholder="placeholder" />
                 </template>
             </MoleculeCustomToolbar>
         </template>
@@ -30,7 +30,7 @@ const props = defineProps({
         type: Object,
         default: function () {
             return {
-                type: 'input',
+                type: 'textarea',
                 mutable: {
                     label: ''
                 }
@@ -64,7 +64,7 @@ watch(() => customDesign.value, (newValue) => {
         return
     }
     const defaultValue = {
-        type: 'input',
+        type: 'textarea',
         mutable: {
             label: '',
         }

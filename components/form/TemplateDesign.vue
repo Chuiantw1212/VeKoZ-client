@@ -45,10 +45,14 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignDivider>
             <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]"
-                :isDesigning="isDesigning" :allow-delete="getFirstItem('editor') < index"
-                @dragstart="emit('dragstart', { index, type: 'editor' })" @remove="handleRemove(index)"
-                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'editor' })"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignEditor>
+            <OrganismDesignTextarea v-if="item.type === 'textarea'" v-model="templateDesigns[index]"
+                :isDesigning="isDesigning" :allow-delete="getFirstItem('textarea') < index"
+                @dragstart="emit('dragstart', { index, type: 'textarea' })" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignTextarea>
             <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="templateDesigns[index]"
                 :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'singleSelect' })"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
