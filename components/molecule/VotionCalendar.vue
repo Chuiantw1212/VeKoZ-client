@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
 // Methods
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    return result
+    Object.assign(eventTemplate, result)
 }
 
 async function getOrganizationMembers() {

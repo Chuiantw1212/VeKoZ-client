@@ -3,7 +3,10 @@
         <!-- 檢視用 -->
         <template v-if="!props.isDesigning">
             <el-form-item :label="customDesign.mutable?.label">
-                <el-input :placeholder="placeholder"></el-input>
+                <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true">
+                    <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                        :value="item.id" />
+                </el-select>
             </el-form-item>
         </template>
         <!-- 編輯用 -->
