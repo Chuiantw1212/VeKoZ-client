@@ -76,5 +76,5 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 
-}, { immediate: true })
+})
 </script>

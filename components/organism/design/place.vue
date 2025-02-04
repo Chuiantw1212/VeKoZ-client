@@ -84,7 +84,7 @@ watch(() => customDesign.value, (newValue: any) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-}, { immediate: true, deep: true })
+}, { deep: true })
 
 // Methods
 function setLocationAddress(locationName: string) {
