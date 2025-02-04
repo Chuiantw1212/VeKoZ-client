@@ -45,6 +45,13 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
+    async function postEventTemplate(body: IEventTemplate) {
+        const response = await defaultApi.authRequest(`/event/template`, {
+            method: 'post',
+            body,
+        })
+        return response.text()
+    }
     async function putEventTemplate(body: any) {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'put',
@@ -67,6 +74,7 @@ export default defineStore('event', () => {
         patchEvent,
         deleteEvent,
         // Template
+        postEventTemplate,
         getEventTemplate,
         putEventTemplate,
         postEventTemplateDesign,

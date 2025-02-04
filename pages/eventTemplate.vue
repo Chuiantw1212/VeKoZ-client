@@ -2,7 +2,7 @@
     <div class="eventTemplate">
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="venonia-card" body-class="card__body card__body--200">
+                <el-card class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
                             活動套版
@@ -30,7 +30,7 @@
                 </el-card>
             </el-col>
             <el-col :span="8">
-                <el-card class="venonia-card" body-class="card__body card__body--200">
+                <el-card class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
                             請拖曳以下選項 到 自定義欄位
@@ -124,11 +124,14 @@ const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(async () => {
-    setDefaultTemplate()
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
     // getEventTemplate()
+    if (!eventTemplate.value.id) {
+        setDefaultTemplate()
+        postEventTemplate()
+    }
 })
 onBeforeUnmount(() => {
     addOnDropListener(false)
@@ -205,6 +208,10 @@ async function setDefaultTemplate() {
             },
         ]
     }
+}
+
+async function postEventTemplate() {
+    await repoEvent.postEventTemplate(eventTemplate.value)
 }
 
 async function addOnDropListener(isOn: boolean) {
