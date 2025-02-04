@@ -2,7 +2,8 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
-            <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true">
+            <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true"
+                :disabled="disabled">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
         </el-form-item>
@@ -15,7 +16,8 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true">
+                <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true"
+                    :disabled="disabled">
                     <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                         :value="item.id" />
                 </el-select>
@@ -44,6 +46,10 @@ const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
+    },
+    disabled: {
+        type: Boolean,
+        default: true
     },
     allowDelete: {
         type: Boolean,

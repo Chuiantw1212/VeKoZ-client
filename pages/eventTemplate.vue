@@ -107,13 +107,9 @@
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organization"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="組織">
-                                <el-select v-model="demo.organizationId" :disabled="true" placeholder="請選擇組織"
-                                    @change="getOrganizationMemberList()">
-                                    <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
-                                        :value="item.id" />
-                                </el-select>
-                            </el-form-item>
+                            <OrganismDesignOrganization v-model="designOrganization" :disabled="true"
+                                :isDesigning="false">
+                            </OrganismDesignOrganization>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="offer"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
@@ -171,6 +167,15 @@ const eventTemplate = reactive({
     designs: [] as ITemplateDesign[]
 })
 
+const designOrganization = ref<ITemplateDesign>({
+    type: 'organization',
+    mutable: {
+        label: '組織',
+        value: ''
+    }
+})
+
+// deprecated
 const demo = reactive({
     input: '',
     number: 1000,
@@ -181,6 +186,7 @@ const demo = reactive({
     organizationId: '',
     members: [],
 })
+
 const mockOptions = [
     {
         value: 'Option1',
@@ -213,7 +219,7 @@ onMounted(async () => {
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
-    getEventTemplate()
+    // getEventTemplate()
 
 })
 onBeforeUnmount(() => {
@@ -276,8 +282,6 @@ function setTemplateType(ev: any) {
 function cancelDragging() {
     templateTemp.isDragging = false
 }
-
-// <h2>📚 活動內容?：</h2><p>&nbsp;</p><p>&nbsp;</p><h2>📝 本次您將會學習到：</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol><p>&nbsp;</p><p>&nbsp;</p><h2>🙋🏻 誰適合參與？</h2><ol><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ol>
 
 async function putEventTemplate() {
     isLoading.value = true

@@ -1,6 +1,9 @@
 // import axios from 'axios'
 import { getAuth, } from "firebase/auth"
 import type { Auth } from "firebase/auth"
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { Action } from 'element-plus'
+
 interface requestOptions {
     method: 'get' | 'put' | 'post' | 'delete' | 'patch',
     body?: any,
@@ -75,8 +78,17 @@ export default defineStore('api', {
                 const apiBase = useRuntimeConfig().public.apiBase
                 axiosResponse = await fetch(`${apiBase}${url}`, fetchConfig)
             } catch (error: any) {
-                alert(error.message)
+                // console.log('???', error)
+                // alert(error.message)
             } finally {
+                if (axiosResponse?.status === 500) {
+                    const statusErrorMessage = axiosResponse.statusText
+                    const serverThrowMessage = await axiosResponse.text()
+                    ElMessageBox.alert(serverThrowMessage, `${statusErrorMessage}`, {
+                        confirmButtonText: '確認',
+                    })
+                }
+                // console.log('axiosResponse', axiosResponse)
                 return axiosResponse as any
             }
         },
