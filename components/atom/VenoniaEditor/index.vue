@@ -87,6 +87,12 @@ async function initializeCKEditor() {
         licenseKey: 'GPL',
         toolbar: props.toolbar as string[],
         placeholder: props.placeholder,
+        ui: {
+            poweredBy: {
+                position: 'border',
+                label: 'Venonia'
+            }
+        },
     }
 
     // Create CKEditor

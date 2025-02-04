@@ -2,7 +2,7 @@
     <div class="eventTemplate">
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="venonia-card" body-class="card__body card__body--205">
+                <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
                             活動套版
@@ -104,8 +104,8 @@ import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
-const dialogVisible = ref(false)
-const isLoading = ref(false)
+const dialogVisible = ref<boolean>(false)
+const isLoading = ref<boolean>(false)
 
 // 拖曳中的模板資料
 const templateTemp = reactive<ITemplateDesign>({
@@ -124,14 +124,16 @@ const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(async () => {
+    isLoading.value = true
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
-    // getEventTemplate()
+    await getEventTemplate()
     if (!eventTemplate.value.id) {
         setDefaultTemplate()
-        postEventTemplate()
+        await postEventTemplate()
     }
+    isLoading.value = false
 })
 onBeforeUnmount(() => {
     addOnDropListener(false)

@@ -15,7 +15,7 @@
             </template>
             <template v-slot:default>
                 <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
-                    :disabled="disabled"></el-date-picker>
+                    :disabled="true"></el-date-picker>
             </template>
         </MoleculeCustomToolbar>
     </template>
