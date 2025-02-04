@@ -5,33 +5,33 @@ export default defineStore('organization', () => {
     const defaultApi = useVenoniaApi()
     async function getOrganizationList() {
         const response = await defaultApi.authRequest(`/organization/list`, {
-            method: 'get',
+            method: 'GET',
         })
         return response.json()
     }
     async function postOrganization(body: any) {
         const response = await defaultApi.authRequest(`/organization`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response
     }
     async function putOrganization(body: any) {
         const response = await defaultApi.authRequest(`/organization`, {
-            method: 'put',
+            method: 'PUT',
             body,
         })
         return response
     }
     async function deleteOrganization() {
         const response = await defaultApi.authRequest(`/organization`, {
-            method: 'delete',
+            method: 'DELETE',
         })
         return response
     }
     async function getOrganizationMemberList(organizationId: string) {
         const response = await defaultApi.authRequest(`/organization/${organizationId}/member/list`, {
-            method: 'get',
+            method: 'GET',
         })
         return response.json()
     }

@@ -7,7 +7,7 @@ export default defineStore('user', () => {
 
     async function postUser(body: any) {
         const response = await defaultApi.authRequest(`/user`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response
@@ -18,20 +18,20 @@ export default defineStore('user', () => {
             return
         }
         const response = await defaultApi.authRequest(`/user`, {
-            method: 'delete',
+            method: 'DELETE',
         })
         return response
     }
     async function patchUserProfile(body: any) {
         const response = await defaultApi.authRequest(`/user`, {
-            method: 'patch',
+            method: 'PATCH',
             body
         })
         return response
     }
     async function putUserPhoto(body: any) {
         const response = await defaultApi.authRequest(`/user/photo`, {
-            method: 'put',
+            method: 'PUT',
             body,
         })
         return response.body

@@ -258,21 +258,23 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
     }
-    // 屬於原有模板拖曳
-    // 屬於原有的模板設計
-    // if () {
-
-    // }
-    // 屬於新增的模板設計
-    repoEvent.postEventTemplateDesign({
-        type: templateTemp.value.type,
-        destination: destinationIndex,
-        source: sourceIndex,
-        // id: '用來精準更新使用'
-    })
+    // 屬於模板拖曳
+    if (templateTemp.value.index !== -1) {
+        const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
+        repoEvent.patchEventTemplate(templateDesignIds)
+    } else {
+        // 屬於新增的模板設計
+        repoEvent.postEventTemplateDesign({
+            type: templateTemp.value.type,
+            destination: destinationIndex,
+            source: sourceIndex,
+            templateId: eventTemplate.value.id
+        })
+    }
 
     // Reset flags
-    templateTemp.value.type = ''
+    templateTemp.value.id = '' // 用來判斷是否為新增的欄位
+    templateTemp.value.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
 }
 function allowDrop(ev: any) {
@@ -283,13 +285,6 @@ function setTemplateType(ev: any) {
 }
 function cancelDragging() {
     templateTemp.value.type = ''
-}
-
-async function putEventTemplate() {
-    isLoading.value = true
-    await repoEvent.putEventTemplate(eventTemplate.value)
-    dialogVisible.value = false
-    isLoading.value = false
 }
 
 async function getEventTemplate() {

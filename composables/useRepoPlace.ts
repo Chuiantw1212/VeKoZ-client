@@ -5,27 +5,27 @@ export default defineStore('place', () => {
     const defaultApi = useVenoniaApi()
     async function getPlaceList() {
         const response = await defaultApi.authRequest(`/place/list`, {
-            method: 'get',
+            method: 'GET',
         })
         return response.json()
     }
     async function postPlace(body: any) {
         const response = await defaultApi.authRequest(`/place`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response
     }
     async function putPlace(body: any) {
         const response = await defaultApi.authRequest(`/place/${body.id}`, {
-            method: 'put',
+            method: 'PUT',
             body,
         })
         return response
     }
     async function deletePlace(id: string) {
         const response = await defaultApi.authRequest(`/place/${id}`, {
-            method: 'delete',
+            method: 'DELETE',
         })
         return response
     }

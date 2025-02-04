@@ -5,7 +5,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 
 interface requestOptions {
-    method: 'get' | 'put' | 'post' | 'delete' | 'patch',
+    method: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH',
     body?: any,
     params?: object,
     headers?: object,

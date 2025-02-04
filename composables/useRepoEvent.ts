@@ -7,61 +7,61 @@ export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
     async function postEvent(body: IEventTemplate) {
         const response = await defaultApi.authRequest(`/event`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response.json()
     }
     async function patchEvent(body: IEventTemplate) {
         const response = await defaultApi.authRequest(`/event`, {
-            method: 'patch',
+            method: 'PATCH',
             body,
         })
         return response.json()
     }
     async function getEventList(params: IEvent) {
         const response = await defaultApi.authRequest(`/event/list`, {
-            method: 'get',
+            method: 'GET',
             params,
         })
         return response.json()
     }
     async function getEvent(eventId: string) {
         const response = await defaultApi.authRequest(`/event/${eventId}`, {
-            method: 'get',
+            method: 'GET',
         })
         return response.json()
     }
     async function deleteEvent(eventId: string) {
         const response = await defaultApi.authRequest(`/event/${eventId}`, {
-            method: 'delete',
+            method: 'DELETE',
         })
         return response.text()
     }
     // Template
     async function getEventTemplate() {
         const response = await defaultApi.authRequest(`/event/template`, {
-            method: 'get',
+            method: 'GET',
         })
         return response.json()
     }
     async function postEventTemplate(body: IEventTemplate) {
         const response = await defaultApi.authRequest(`/event/template`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response.text()
     }
-    async function putEventTemplate(body: any) {
+    async function patchEventTemplate(body: string[]) {
         const response = await defaultApi.authRequest(`/event/template`, {
-            method: 'put',
+            method: 'PATCH',
             body,
         })
         return response.text()
     }
     async function postEventTemplateDesign(body: any) {
         const response = await defaultApi.authRequest(`/event/template/design`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         return response.text()
@@ -76,7 +76,7 @@ export default defineStore('event', () => {
         // Template
         postEventTemplate,
         getEventTemplate,
-        putEventTemplate,
+        patchEventTemplate,
         postEventTemplateDesign,
     }
 })

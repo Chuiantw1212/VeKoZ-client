@@ -17,7 +17,7 @@ export default defineStore('auth', () => {
         }
         isSigningInProgress.value = true
         const response = await defaultApi.authRequest(`/auth/signIn`, {
-            method: 'post',
+            method: 'POST',
             body,
         })
         // state.isSigningInProgress = false
@@ -25,14 +25,14 @@ export default defineStore('auth', () => {
     }
     async function postVerificationEmail(body: any) {
         const response = await defaultApi.authRequest(`/auth/verificationEmail`, {
-            method: 'post',
+            method: 'POST',
             body
         })
         return response
     }
     async function getReauthResult(body: any) {
         const response = await defaultApi.authRequest(`/auth/password`, {
-            method: 'get',
+            method: 'GET',
             body
         })
         return response
