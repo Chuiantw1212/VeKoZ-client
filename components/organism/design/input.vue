@@ -25,17 +25,6 @@ import { computed, watch } from 'vue';
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'input',
-                mutable: {
-                    label: '任意文字'
-                }
-            }
-        }
-    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -54,26 +43,30 @@ const props = defineProps({
     }
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
-watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
-        return
-    }
-    const defaultValue = {
+const customDesign = defineModel('modelValue', {
+    type: Object,
+    default: {
         type: 'input',
         mutable: {
-            label: '',
+            label: '任意文字'
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
-    customDesign.value = mergedItem
+})
+
+watch(() => customDesign.value, (newValue) => {
+    console.log('watch', newValue)
+
+    // if (newValue.mutable) {
+    //     return
+    // }
+    // const defaultValue = {
+    //     type: 'input',
+    //     mutable: {
+    //         label: '',
+    //     }
+    // }
+    // const mergedItem = Object.assign(defaultValue, newValue)
+    // customDesign.value = mergedItem
 
 }, { immediate: true })
 </script>

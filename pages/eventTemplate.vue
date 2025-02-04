@@ -247,32 +247,32 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         mutable: templateTemp.value.mutable ?? {}
     }
 
-    eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
-
+    // 先更新資料庫再更新畫面
+    const hasSource = templateTemp.value.index !== -1
     const sourceIndex = Number(templateTemp.value.index)
-    if (sourceIndex >= 0) {
+    if (hasSource) {
+        // 屬於原有模板拖曳
+        eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
+        // 刪除原本位置的的模板
         if (destinationIndex <= sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
         } else {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
-    }
-
-    // 屬於模板拖曳
-    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
-    if (templateTemp.value.index !== -1) {
-        repoEvent.patchEventTemplate(templateDesignIds)
     } else {
         // 屬於新增的模板設計
         const designId = await repoEvent.postEventTemplateDesign({
             type: templateTemp.value.type,
             destination: destinationIndex,
             templateId: eventTemplate.value.id,
-            templateDesignIds,
         })
         templateDesign.id = designId
-        eventTemplate.value.designs.splice(destinationIndex, 1, templateDesign) // 重新覆蓋
+        eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
     }
+
+    // 更新模板順序
+    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
+    repoEvent.patchEventTemplate(templateDesignIds)
 
     // Reset flags
     templateTemp.value.id = '' // 用來判斷是否為新增的欄位
