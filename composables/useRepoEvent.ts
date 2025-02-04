@@ -32,6 +32,12 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
+    async function deleteEvent(eventId: string) {
+        const response = await defaultApi.authRequest(`/event/${eventId}`, {
+            method: 'delete',
+        })
+        return response.text()
+    }
     async function getEventTemplate() {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'get',
@@ -51,6 +57,7 @@ export default defineStore('event', () => {
         getEvent,
         postEvent,
         patchEvent,
+        deleteEvent,
         // Template
         getEventTemplate,
         putEventTemplate,

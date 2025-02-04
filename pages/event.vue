@@ -28,13 +28,13 @@
         </el-col>
     </el-row>
 
-    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false"  :lock-scroll="true">
+    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true">
         <template #header="{ titleId, title, titleClass }">
             <div class="venonia-dialog-header">
                 <span :id="titleId" :class="titleClass">活動編輯</span>
                 <div class="header__btnGroup">
                     <button class="btnGroup__btn">
-                        <el-icon @click="cancelEventEditing()">
+                        <el-icon @click="deleteEvent()">
                             <Delete />
                         </el-icon>
                     </button>
@@ -138,6 +138,10 @@ async function openNewEventDialog(data: IEventCreation) {
 
 async function cancelEventEditing() {
     dialogVisible.value = false
+}
+
+async function deleteEvent() {
+    await repoEvent.deleteEvent(String(dialogTemplate.value.eventId))
 }
 
 /**
