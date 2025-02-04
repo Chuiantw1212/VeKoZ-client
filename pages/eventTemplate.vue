@@ -107,7 +107,7 @@
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organization"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOrganization v-model="designOrganization" :disabled="true"
+                            <OrganismDesignOrganization :disabled="true"
                                 :isDesigning="false">
                             </OrganismDesignOrganization>
                         </div>
@@ -169,10 +169,10 @@ const eventTemplate = reactive({
 
 const designOrganization = ref<ITemplateDesign>({
     type: 'organization',
-    mutable: {
-        label: '組織',
-        value: ''
-    }
+    // mutable: {
+    //     label: '',
+    //     value: ''
+    // }
 })
 
 // deprecated

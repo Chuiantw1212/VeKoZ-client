@@ -8,8 +8,8 @@ export interface IEventTemplate {
 export interface ITemplateDesign {
     type: string,
     mutable?: {
-        label: string,
-        value: any,
+        label?: string,
+        value?: any,
         name?: string,
         address?: string,
         url?: string,

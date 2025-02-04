@@ -26,11 +26,10 @@
     </template>
 </template>
 <script setup lang="ts">
-import type { IOrganization, IOrganizationMember } from '~/types/organization'
+import type { IOrganization } from '~/types/organization'
 import { computed, watch } from 'vue';
 const repoOrganization = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -38,7 +37,8 @@ const props = defineProps({
             return {
                 type: 'organization',
                 mutable: {
-                    label: ''
+                    label: '組織', // 純瀏覽時使用
+                    value: ''
                 }
             }
         }
@@ -81,15 +81,17 @@ watch(() => customDesign.value, (newValue) => {
     if (newValue.mutable) {
         return
     }
-    const defaultValue = {
+
+    // 新增時添加預設值
+    const test = {
         type: 'organization',
         mutable: {
             label: '組織',
+            value: '',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign({}, test, newValue)
     customDesign.value = mergedItem
-
 }, { immediate: true })
 
 // Methods
