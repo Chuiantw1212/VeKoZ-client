@@ -48,12 +48,12 @@
             </div>
         </template>
         <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
-        <template #footer>
+        <!-- <template #footer>
             <el-button @click="cancelEventEditing()">取消</el-button>
             <el-button type="primary" @click="submitNewEvent()">
                 確認
             </el-button>
-        </template>
+        </template> -->
     </el-dialog>
 </template>
 
@@ -140,6 +140,8 @@ async function openNewEventDialog(data: IEventCreation) {
             seoDateTimeRange.mutable.value = [date, date]
         }
     }
+    await repoEvent.postEvent(dialogTemplate.value)
+    await getEventList()
     dialogVisible.value = true
 }
 

@@ -3,9 +3,9 @@
         <!-- <h1>活動套版管理</h1> -->
         <el-row :gutter="20">
             <el-col :span="16">
-                <el-card class="venonia-card" body-class="card__body card__body--270">
+                <el-card class="venonia-card" body-class="card__body card__body--200">
                     <template #header>
-                        活動套版管理
+                        活動套版
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
                         @dragstart="setTemplateTemp($event)">
@@ -22,15 +22,11 @@
                         請拖曳欄位至此
                     </div>
 
-                    <template #footer>
+                    <!-- <template #footer>
                         <div class="footer">
-                            <div>
-                                <!-- <el-button type="info" size="small" :disabled="true">SEO</el-button>
-                                用於SEO的基本欄位 -->
-                            </div>
                             <el-button v-loading="isLoading" @click="putEventTemplate">保存</el-button>
                         </div>
-                    </template>
+                    </template> -->
                 </el-card>
             </el-col>
             <el-col :span="8">
