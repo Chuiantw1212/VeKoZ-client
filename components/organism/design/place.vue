@@ -43,7 +43,6 @@ interface IModel {
     }
 }
 const customDesign = defineModel<IModel>('modelValue', {
-    required: true,
     default: {
         type: 'place',
         mutable: {

@@ -54,7 +54,8 @@ const props = defineProps({
     }
 })
 
-watch(() => customDesign.value, (newValue) => {
+watch(customDesign.value, (newValue) => {
+    emit('update:modelValue', newValue)
     if (newValue?.mutable) {
         return
     }
@@ -66,5 +67,5 @@ watch(() => customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-}, { immediate: true })
+}, { immediate: true, })
 </script>
