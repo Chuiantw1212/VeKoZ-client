@@ -114,71 +114,36 @@ const templateTemp = reactive({
     sourceIndex: -1,
 })
 
-const eventTemplate = reactive({
-    id: '',
+const eventTemplate = ref({
     designs: [] as ITemplateDesign[]
 })
 
-const designOrganization = ref<ITemplateDesign>({
-    type: 'organization',
-    // mutable: {
-    //     label: '',
-    //     value: ''
-    // }
-})
-
-// deprecated
-const demo = reactive({
-    input: '',
-    number: 1000,
-    singleSelect: 'Option1',
-    multiSelect: ['Option1', 'Option2'],
-    datetimerange: [new Date().toISOString(), new Date().toISOString()],
-    checkbox: false,
-    organizationId: '',
-    members: [],
-})
-
-const mockOptions = [
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-]
-
 const organizationList = ref<IOrganization[]>([])
-const organizationMemberList = ref<IOrganizationMember[]>([])
 const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(async () => {
+    setDefaultTemplate()
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
     // getEventTemplate()
-
 })
 onBeforeUnmount(() => {
     addOnDropListener(false)
 })
 
 // methods
+async function setDefaultTemplate() {
+    eventTemplate.value = {
+        designs: [
+            {
+                type: 'header1'
+            }
+        ]
+    }
+}
+
 async function addOnDropListener(isOn: boolean) {
     if (isOn) {
         document.addEventListener('dragend', clearOnDrop)
@@ -198,11 +163,6 @@ async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
 }
-async function getOrganizationMemberList() {
-    const result = await repoOrganization.getOrganizationMemberList(demo.organizationId)
-    organizationMemberList.value = result
-}
-
 function setTemplateTemp(data: ITemplateDragSouce) {
     templateTemp.isDragging = true
     templateTemp.sourceIndex = data.index
@@ -210,16 +170,16 @@ function setTemplateTemp(data: ITemplateDragSouce) {
 }
 function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
-    eventTemplate.designs.splice(destinationIndex, 0, {
+    eventTemplate.value.designs.splice(destinationIndex, 0, {
         type: templateTemp.type,
     })
     // Reset flags
     templateTemp.isDragging = false
     if (templateTemp.sourceIndex >= 0) {
         if (destinationIndex <= templateTemp.sourceIndex) {
-            eventTemplate.designs.splice(templateTemp.sourceIndex + 1, 1)
+            eventTemplate.value.designs.splice(templateTemp.sourceIndex + 1, 1)
         } else {
-            eventTemplate.designs.splice(templateTemp.sourceIndex, 1)
+            eventTemplate.value.designs.splice(templateTemp.sourceIndex, 1)
         }
     }
     templateTemp.sourceIndex = -1
@@ -237,14 +197,14 @@ function cancelDragging() {
 
 async function putEventTemplate() {
     isLoading.value = true
-    await repoEvent.putEventTemplate(eventTemplate)
+    await repoEvent.putEventTemplate(eventTemplate.value)
     dialogVisible.value = false
     isLoading.value = false
 }
 
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    Object.assign(eventTemplate, result)
+    Object.assign(eventTemplate.value, result)
 }
 </script>
 <style lang="scss" scoped>
