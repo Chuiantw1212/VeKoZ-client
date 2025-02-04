@@ -27,22 +27,26 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
-import { computed, watch } from 'vue';
 const repoOrganization = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'organization',
-                mutable: {
-                    label: '組織', // 純瀏覽時使用
-                    value: ''
-                }
-            }
+interface IModel {
+    type: 'organization',
+    mutable: {
+        label: string,
+        value: string,
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'organization',
+        mutable: {
+            label: '組織', // 純瀏覽時使用
+            value: ''
         }
-    },
+    }
+})
+const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
@@ -60,37 +64,26 @@ const props = defineProps({
         default: '請選擇現有組織'
     }
 })
-
-
 const organizationList = ref<IOrganization[]>([])
 
 // Hooks
 onMounted(() => {
     getOrganizationList()
 })
-
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+    if (newValue?.mutable) {
         return
     }
 
     // 新增時添加預設值
-    const test = {
+    const defaultValue = {
         type: 'organization',
         mutable: {
             label: '組織',
             value: '',
         }
     }
-    const mergedItem = Object.assign({}, test, newValue)
+    const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 }, { immediate: true })
 
@@ -99,5 +92,4 @@ async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
 }
-
 </script>

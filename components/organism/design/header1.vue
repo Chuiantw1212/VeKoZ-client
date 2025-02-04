@@ -21,22 +21,25 @@
     </template>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+interface IModel {
+    type: 'header1',
+    mutable: {
+        label: string,
+        value: string,
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'header1',
+        mutable: {
+            label: ''
+        }
+    }
+})
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'header1',
-                mutable: {
-                    label: ''
-                }
-            }
-        }
-    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -51,10 +54,8 @@ const props = defineProps({
     }
 })
 
-const customDesign = defineModel('modelValue')
-
-watch(() => customDesign.value, (newValue:any) => {
-    if (newValue.mutable) {
+watch(() => customDesign.value, (newValue) => {
+    if (newValue?.mutable) {
         return
     }
     const defaultValue = {

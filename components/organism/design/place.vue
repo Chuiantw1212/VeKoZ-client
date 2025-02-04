@@ -35,16 +35,22 @@ import type { IPlace } from '~/types/place'
 const repoPlace = useRepoPlace()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 interface IModel {
-    type:'place',
+    type: 'place',
     mutable: {
-        label:string,
+        label: string,
         locationName: string,
         locationAddress: string,
     }
 }
-const customDesign = defineModel<IModel>('modelValue',{
-    required:true,
-},)
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'place',
+        mutable: {
+            label: '空間地點',
+        }
+    }
+})
 const props = defineProps({
     isDesigning: {
         type: Boolean,
@@ -67,7 +73,7 @@ onMounted(() => {
 })
 
 
-watch(() => customDesign.value, (newValue:any) => {
+watch(() => customDesign.value, (newValue: any) => {
     if (newValue?.mutable) {
         return
     }
@@ -88,7 +94,7 @@ function setLocationAddress(locationName: string) {
             return item.name === locationName
         })
         if (selectedItem) {
-            if(customDesign.value){
+            if (customDesign.value) {
                 customDesign.value.mutable.locationAddress = selectedItem.address
             }
         }

@@ -73,29 +73,32 @@
     </template>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
 import { Plus, Minus } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'offer',
-                mutable: {
-                    label: '', // 此為必要欄位，且必須為空白
-                    offers: [
-                        {
-                            name: '',
-                            count: null,
-                            price: null,
-                        }
-                    ]
+interface IModel {
+    type: 'offer',
+    mutable: {
+        label: string,
+        offers: any[]
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'offer',
+        mutable: {
+            label: '', // 此為必要欄位，且必須為空白
+            offers: [
+                {
+                    name: '',
+                    count: null,
+                    price: null,
                 }
-            }
+            ]
         }
-    },
+    }
+})
+const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
@@ -114,24 +117,15 @@ const props = defineProps({
     }
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
-
 // Hooks
-const newOffer = reactive({
+const newOffer = ref({
     name: '',
     count: null,
     price: null,
 })
 
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+    if (newValue?.mutable) {
         return
     }
     const defaultValue = {
@@ -139,7 +133,7 @@ watch(() => customDesign.value, (newValue) => {
         mutable: {
             label: '',
             offers: [
-                newOffer,
+                newOffer.value,
             ],
         }
     }
@@ -149,7 +143,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // Methods
 function createOffer() {
-    customDesign.value.mutable.offers.push(newOffer)
+    customDesign.value.mutable.offers.push(newOffer.value)
 }
 function removeOffer(index: number) {
     customDesign.value.mutable.offers.splice(index, 1)

@@ -20,10 +20,23 @@
     </template>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
+interface IModel {
+    type: 'input',
+    mutable: {
+        label: string,
+        value: string,
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'input',
+        mutable: {
+            label: '任意文字'
+        }
+    }
+})
 const props = defineProps({
     isDesigning: {
         type: Boolean,
@@ -42,31 +55,17 @@ const props = defineProps({
         default: '請輸入'
     }
 })
-
-const customDesign = defineModel('modelValue', {
-    type: Object,
-    default: {
+watch(() => customDesign.value, (newValue) => {
+    if (newValue?.mutable) {
+        return
+    }
+    const defaultValue = {
         type: 'input',
         mutable: {
-            label: '任意文字'
+            label: '',
         }
     }
-})
-
-watch(() => customDesign.value, (newValue) => {
-    console.log('watch', newValue)
-
-    // if (newValue.mutable) {
-    //     return
-    // }
-    // const defaultValue = {
-    //     type: 'input',
-    //     mutable: {
-    //         label: '',
-    //     }
-    // }
-    // const mergedItem = Object.assign(defaultValue, newValue)
-    // customDesign.value = mergedItem
-
+    const mergedItem = Object.assign(defaultValue, newValue)
+    customDesign.value = mergedItem
 }, { immediate: true })
 </script>

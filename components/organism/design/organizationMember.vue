@@ -30,22 +30,26 @@
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'
-import { computed, watch } from 'vue';
 const repoOrganizationMember = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'organizationMember',
-                mutable: {
-                    label: '組織成員'
-                }
-            }
+interface IModel {
+    type: 'organizationMember',
+    mutable: {
+        label: string,
+        value: string,
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'organizationMember',
+        mutable: {
+            label: '組織', // 純瀏覽時使用
+            value: ''
         }
-    },
+    }
+})
+const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
@@ -72,14 +76,6 @@ const props = defineProps({
 const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
 watch(() => customDesign.value, (newValue) => {
     if (newValue.mutable) {
         return
@@ -93,7 +89,6 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 }, { immediate: true })
-
 watch(() => props.organizationId, (newValue) => {
     getOrganizationMemberList(newValue)
 }, { immediate: true })
