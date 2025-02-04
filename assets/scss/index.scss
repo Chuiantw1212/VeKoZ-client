@@ -1,29 +1,32 @@
-h1 {
-  font-size: 2em;
-  margin-top: 0px;
-}
-
-html,
-body,
-#app {
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  font-weight: 400;
-  color: var(--el-color-primary);
-}
-
 // Venonia Custom Style
-
 .venonia-header {
   display: flex;
   justify-content: space-between;
 }
 
+.venonia-dialog-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  .header__btnGroup {
+    display: flex;
+    align-items: center;
+
+    .btnGroup__btn {
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: var(--el-message-close-size, 16px);
+    }
+  }
+}
+
 .venonia-card {
-  // width: fit-content;
 
   .card__body {
     overflow-y: auto;
@@ -40,4 +43,22 @@ a {
 
 .venonia-card--768 {
   max-width: 768px;
+}
+
+// Global reset
+h1 {
+  font-size: 2em;
+  margin-top: 0px;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  font-weight: 400;
+  color: var(--el-color-primary);
 }

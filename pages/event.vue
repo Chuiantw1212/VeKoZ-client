@@ -10,21 +10,42 @@
         <el-col :span="8">
             <el-card>
                 <template #header>
-                    月曆切換
+                    月曆切換與訂閱
                 </template>
+                <el-input placeholder="請搜尋欲訂閱的月曆或輸入月曆ID"></el-input>
                 <ul>
                     <li>
-                        未來切換不同組織的行事曆使用
+                        歐洲多語言
                     </li>
                     <li>
-                        或許也可整合個人行事曆
+                        常識經濟學
+                    </li>
+                    <li>
+                        個人行事曆
                     </li>
                 </ul>
             </el-card>
         </el-col>
     </el-row>
 
-    <el-dialog v-model="dialogVisible" title="活動編輯" @close="cancelEventEditing()" :lock-scroll="true">
+    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false"  :lock-scroll="true">
+        <template #header="{ titleId, title, titleClass }">
+            <div class="venonia-dialog-header">
+                <span :id="titleId" :class="titleClass">活動編輯</span>
+                <div class="header__btnGroup">
+                    <button class="btnGroup__btn">
+                        <el-icon @click="cancelEventEditing()">
+                            <Delete />
+                        </el-icon>
+                    </button>
+                    <button class="btnGroup__btn">
+                        <el-icon @click="cancelEventEditing()">
+                            <Close />
+                        </el-icon>
+                    </button>
+                </div>
+            </div>
+        </template>
         <FormTemplateDesign v-if="dialogVisible" v-model="dialogTemplate.designs"></FormTemplateDesign>
         <template #footer>
             <el-button @click="cancelEventEditing()">取消</el-button>
@@ -37,6 +58,7 @@
 
 <script setup lang="ts">
 import useRepoEvent from '~/composables/useRepoEvent';
+import { Delete, Close } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, } from '~/types/eventTemplate'
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
