@@ -15,7 +15,7 @@
             </template>
             <template v-slot:default>
                 <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
-                    :disabled="isDesigning"></el-date-picker>
+                    :disabled="disabled"></el-date-picker>
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -32,7 +32,8 @@ const props = defineProps({
             return {
                 type: 'dateTimeRange',
                 mutable: {
-                    label: ''
+                    label: '時間日期',
+                    value: [new Date(), new Date()]
                 }
             }
         }

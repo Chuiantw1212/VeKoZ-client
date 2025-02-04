@@ -3,7 +3,7 @@
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
-                :placeholder="placeholder" />
+                :placeholder="placeholder" :disabled="disabled" />
         </el-form-item>
     </template>
     <!-- 編輯用 -->
@@ -15,7 +15,7 @@
             </template>
             <template v-slot:default>
                 <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150"
-                    :show-word-limit="true" :placeholder="placeholder" />
+                    :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -32,12 +32,16 @@ const props = defineProps({
             return {
                 type: 'textarea',
                 mutable: {
-                    label: ''
+                    label: '多行文字'
                 }
             }
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },

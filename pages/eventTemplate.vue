@@ -39,58 +39,26 @@
                     <el-form label-width="auto">
                         <div class="eventTemplate__draggable" draggable="true" data-type="input"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="純文字">
-                                <el-input :model-value="'請輸入文字'" :disabled="true"></el-input>
-                            </el-form-item>
+                            <OrganismDesignInput :disabled="true" :isDesigning="false"></OrganismDesignInput>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="number"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="數字">
-                                <el-input-number v-model="demo.number" :disabled="true"></el-input-number>
-                            </el-form-item>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="singleSelect"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="單選">
-                                <el-select v-model="demo.singleSelect" :disabled="true">
-                                    <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
-                            </el-form-item>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="multiSelect"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="多選">
-                                <el-select v-model="demo.multiSelect" :filterable="true" :multiple="true"
-                                    :allow-create="true" :disabled="true">
-                                    <el-option v-for="item in mockOptions" :key="item.value" :label="item.label"
-                                        :value="item.value" />
-                                </el-select>
-                            </el-form-item>
+                            <OrganismDesignNumber :disabled="true" :isDesigning="false"></OrganismDesignNumber>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="dateTimeRange"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="時間日期">
-                                <el-date-picker v-model="demo.datetimerange" type="datetimerange" :disabled="true" />
-                            </el-form-item>
+                            <OrganismDesignDateTimeRange :disabled="true" :isDesigning="false">
+                            </OrganismDesignDateTimeRange>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="url"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="超連結">
-                                <el-input :model-value="'請輸入連結'" :disabled="true"></el-input>
-                            </el-form-item>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="checkbox"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="核取方塊">
-                                <el-checkbox v-model="demo.checkbox" label="Option 1" :disabled="true" />
-                            </el-form-item>
+                            <OrganismDesignUrl :disabled="true" :isDesigning="false">
+                            </OrganismDesignUrl>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="textarea"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="多行文字">
-                                <el-mention type="textarea" :disabled="true" />
-                            </el-form-item>
+                            <OrganismDesignTextarea :disabled="true" :isDesigning="false">
+                            </OrganismDesignTextarea>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="divider"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
@@ -107,8 +75,7 @@
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organization"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOrganization :disabled="true"
-                                :isDesigning="false">
+                            <OrganismDesignOrganization :disabled="true" :isDesigning="false">
                             </OrganismDesignOrganization>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="offer"

@@ -29,6 +29,10 @@ const props = defineProps({
         default: function () {
             return {
                 type: 'number',
+                mutable: {
+                    label: '數字',
+                    value: 1000
+                }
             }
         }
     },

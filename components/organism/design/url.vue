@@ -2,9 +2,9 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
-            <el-input v-model="customDesign.mutable.name" placeholder="微課室"></el-input>
-            <el-input class="design__mt" v-model="customDesign.mutable.url"
-                placeholder="https://venonia.com"></el-input>
+            <el-input v-model="customDesign.mutable.name" placeholder="微課室" :disabled="disabled"></el-input>
+            <el-input class="design__mt" v-model="customDesign.mutable.url" placeholder="https://venonia.com"
+                :disabled="disabled"></el-input>
         </el-form-item>
     </template>
     <!-- 編輯用 -->
@@ -15,9 +15,9 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <el-input v-model="customDesign.mutable.name" placeholder="微課室"></el-input>
-                <el-input class="design__mt" v-model="customDesign.mutable.url"
-                    placeholder="https://venonia.com"></el-input>
+                <el-input v-model="customDesign.mutable.name" placeholder="微課室" :disabled="disabled"></el-input>
+                <el-input class="design__mt" v-model="customDesign.mutable.url" placeholder="https://venonia.com"
+                    :disabled="disabled"></el-input>
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -34,12 +34,16 @@ const props = defineProps({
             return {
                 name: 'url',
                 mutable: {
-                    label: ''
+                    label: '超連結'
                 }
             }
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },
