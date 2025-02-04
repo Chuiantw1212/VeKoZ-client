@@ -66,6 +66,13 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
+    async function deleteEventTemplateDesign(body: any) {
+        const response = await defaultApi.authRequest(`/event/template/design`, {
+            method: 'DELETE',
+            body,
+        })
+        return response.text()
+    }
     return {
         // Event
         getEventList,
@@ -78,5 +85,6 @@ export default defineStore('event', () => {
         getEventTemplate,
         patchEventTemplate,
         postEventTemplateDesign,
+        deleteEventTemplateDesign,
     }
 })

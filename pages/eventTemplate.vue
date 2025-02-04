@@ -14,7 +14,7 @@
                         </div>
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
-                        @dragstart="setTemplateTemp($event)">
+                        @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -97,14 +97,13 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { IOrganization, IOrganizationMember } from '~/types/organization'
+import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
-const dialogVisible = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 
 // 拖曳中的模板資料
@@ -238,14 +237,14 @@ async function getOrganizationList() {
 function setTemplateTemp(templateSource: ITemplateDragSouce) {
     templateTemp.value = templateSource
 }
-function insertTemplate(ev: Event, destinationIndex = 0) {
+async function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
 
     // 插入元素
     const templateDesign: ITemplateDesign = {
         id: templateTemp.value.id,
         type: templateTemp.value.type,
-        mutable: templateTemp.value.mutable
+        mutable: templateTemp.value.mutable ?? {}
     }
 
     eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
@@ -258,18 +257,21 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
     }
+
     // 屬於模板拖曳
+    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
     if (templateTemp.value.index !== -1) {
-        const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
         repoEvent.patchEventTemplate(templateDesignIds)
     } else {
         // 屬於新增的模板設計
-        repoEvent.postEventTemplateDesign({
+        const designId = await repoEvent.postEventTemplateDesign({
             type: templateTemp.value.type,
             destination: destinationIndex,
-            source: sourceIndex,
-            templateId: eventTemplate.value.id
+            templateId: eventTemplate.value.id,
+            templateDesignIds,
         })
+        templateDesign.id = designId
+        eventTemplate.value.designs.splice(destinationIndex, 1, templateDesign) // 重新覆蓋
     }
 
     // Reset flags
@@ -277,6 +279,16 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
     templateTemp.value.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
 }
+
+async function removeDesign(data: any) {
+    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
+    await repoEvent.deleteEventTemplateDesign({
+        templateId: eventTemplate.value.id,
+        templateDesignIds,
+        id: data.id,
+    })
+}
+
 function allowDrop(ev: any) {
     ev.preventDefault();
 }

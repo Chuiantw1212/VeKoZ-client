@@ -1,6 +1,6 @@
 <template>
   <div class="defaultLayout">
-    <el-config-provider :locale="zhTw">
+    <!-- <el-config-provider :locale="zhTw"> -->
       <el-container>
         <el-header>
           <HeaderMenu></HeaderMenu>
@@ -16,7 +16,7 @@
           </el-container>
         </el-container>
       </el-container>
-    </el-config-provider>
+    <!-- </el-config-provider> -->
   </div>
 </template>
 <script setup lang="ts">
