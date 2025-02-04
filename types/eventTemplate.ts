@@ -16,11 +16,8 @@ export interface ITemplateDesign {
         url?: string,
         offers?: any[]
     },
-    sourceIndex?: number,
 }
 
-export interface ITemplateDragSouce {
-    id: string,
+export interface ITemplateDragSouce extends ITemplateDesign {
     index: number,
-    type: string,
 }

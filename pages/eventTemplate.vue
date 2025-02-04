@@ -7,7 +7,7 @@
                         <div class="venonia-card-header">
                             活動套版
                             <div class="header__btnGroup">
-                                <el-button size="small">
+                                <el-button size="small" @click="setDefaultTemplate">
                                     套用預設模板
                                 </el-button>
                             </div>
@@ -108,10 +108,10 @@ const dialogVisible = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 
 // 拖曳中的模板資料
-const templateTemp = reactive<ITemplateDesign>({
+const templateTemp = ref<ITemplateDragSouce>({
     type: '',
     id: '',
-    sourceIndex: -1,
+    index: -1
 })
 
 const eventTemplate = ref<IEventTemplate>({
@@ -224,7 +224,7 @@ async function addOnDropListener(isOn: boolean) {
     }
 }
 async function clearOnDrop() {
-    templateTemp.type = ''
+    templateTemp.value.type = ''
 }
 
 async function getPlaceList() {
@@ -235,19 +235,22 @@ async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
 }
-function setTemplateTemp(data: ITemplateDragSouce) {
-    templateTemp.id = data.id
-    templateTemp.sourceIndex = data.index
-    templateTemp.type = data.type
+function setTemplateTemp(templateSource: ITemplateDragSouce) {
+    templateTemp.value = templateSource
 }
 function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
-    eventTemplate.value.designs.splice(destinationIndex, 0, {
-        type: templateTemp.type,
-    })
-    // Reset flags
-    templateTemp.type = ''
-    const sourceIndex = Number(templateTemp.sourceIndex)
+
+    // 插入元素
+    const templateDesign: ITemplateDesign = {
+        id: templateTemp.value.id,
+        type: templateTemp.value.type,
+        mutable: templateTemp.value.mutable
+    }
+
+    eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
+
+    const sourceIndex = Number(templateTemp.value.index)
     if (sourceIndex >= 0) {
         if (destinationIndex <= sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
@@ -255,32 +258,31 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
     }
-    if (!eventTemplate.value.id) {
-        // 全新模板
-    } else {
-        // 屬於原有模板拖曳
-        // 屬於原有的模板設計
-        // if () {
+    // 屬於原有模板拖曳
+    // 屬於原有的模板設計
+    // if () {
 
-        // }
-        // 屬於新增的模板設計
-        repoEvent.postEventTemplateDesign({
-            type: templateTemp.type,
-            destination: destinationIndex,
-            source: templateTemp.sourceIndex,
-            // id: '用來精準更新使用'
-        })
-    }
-    templateTemp.sourceIndex = -1
+    // }
+    // 屬於新增的模板設計
+    repoEvent.postEventTemplateDesign({
+        type: templateTemp.value.type,
+        destination: destinationIndex,
+        source: sourceIndex,
+        // id: '用來精準更新使用'
+    })
+
+    // Reset flags
+    templateTemp.value.type = ''
+    templateTemp.value.index = -1
 }
 function allowDrop(ev: any) {
     ev.preventDefault();
 }
 function setTemplateType(ev: any) {
-    templateTemp.type = ev.target.dataset.type
+    templateTemp.value.type = ev.target.dataset.type
 }
 function cancelDragging() {
-    templateTemp.type = ''
+    templateTemp.value.type = ''
 }
 
 async function putEventTemplate() {
