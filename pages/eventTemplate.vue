@@ -1,11 +1,17 @@
 <template>
     <div class="eventTemplate">
-        <!-- <h1>活動套版管理</h1> -->
         <el-row :gutter="20">
             <el-col :span="16">
                 <el-card class="venonia-card" body-class="card__body card__body--200">
                     <template #header>
-                        活動套版
+                        <div class="venonia-card-header">
+                            活動套版
+                            <div class="header__btnGroup">
+                                <el-button size="small">
+                                    套用預設模板
+                                </el-button>
+                            </div>
+                        </div>
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
                         @dragstart="setTemplateTemp($event)">
@@ -21,18 +27,14 @@
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
                     </div>
-
-                    <!-- <template #footer>
-                        <div class="footer">
-                            <el-button v-loading="isLoading" @click="putEventTemplate">保存</el-button>
-                        </div>
-                    </template> -->
                 </el-card>
             </el-col>
             <el-col :span="8">
                 <el-card class="venonia-card" body-class="card__body card__body--200">
                     <template #header>
-                        請拖曳以下選項 到 自定義欄位
+                        <div class="venonia-card-header">
+                            請拖曳以下選項 到 自定義欄位
+                        </div>
                     </template>
                     <el-form label-width="auto">
                         <div class="eventTemplate__draggable" draggable="true" data-type="input"

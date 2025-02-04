@@ -32,6 +32,14 @@
 }
 
 .venonia-card {
+  .venonia-card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+    .header__btnGroup {}
+  }
 
   .card__body {
     overflow-y: auto;
