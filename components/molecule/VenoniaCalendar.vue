@@ -5,7 +5,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Calendar } from '@fullcalendar/core';
+import { Calendar, type CalendarApi } from '@fullcalendar/core';
 import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -24,12 +24,12 @@ const props = defineProps({
 })
 
 const calendarRef = ref()
-const calendarInstance = ref()
+const calendarInstance = ref<CalendarApi>()
 
 // Hooks
 onMounted(() => {
     initializeCalendar()
-    toggleResize(true)
+    // toggleResize(true)
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
@@ -37,7 +37,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    toggleResize(false)
+    // toggleResize(false)
     listenToDateCell(false)
     listenToFcButton(false)
 })
@@ -74,6 +74,7 @@ function initializeCalendar() {
  * https://fullcalendar.io/docs/eventClick
  */
 function handleEventClick(eventClickInfo: IEventClickInfo) {
+    console.dir(calendarInstance.value)
     emit('eventClick', eventClickInfo)
 }
 
@@ -86,20 +87,26 @@ function handleEventChange(changeInfo: IChangeInfo) {
 }
 
 function addEvent(event: IFullCalendarEvent) {
-    calendarInstance.value.addEvent(event)
+    calendarInstance.value?.addEvent(event)
 }
 
-function toggleResize(isOn: boolean) {
-    if (isOn) {
-        window.addEventListener('resize', resizeCalendar)
-    } else {
-        window.removeEventListener('resize', resizeCalendar)
-    }
+function removeAllEvents() {
+    calendarInstance.value?.removeAllEvents()
+    // calendarInstance.value.getEvet
+    // calendarInstance.value?.removeEvent(eventId)
 }
+
+// function toggleResize(isOn: boolean) {
+//     if (isOn) {
+//         window.addEventListener('resize', resizeCalendar)
+//     } else {
+//         window.removeEventListener('resize', resizeCalendar)
+//     }
+// }
 
 function resizeCalendar() {
     setTimeout(() => {
-        calendarInstance.value.render()
+        calendarInstance.value?.updateSize()
     }, 350)
 }
 
@@ -172,7 +179,8 @@ function toggleEventAddingBtn(event: Event) {
 }
 
 defineExpose({
-    addEvent
+    addEvent,
+    removeAllEvents,
 })
 </script>
 

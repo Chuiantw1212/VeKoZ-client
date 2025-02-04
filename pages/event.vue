@@ -29,11 +29,11 @@
     </el-row>
 
     <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true">
-        <template #header="{ titleId, title, titleClass }">
+        <template #header="{ titleId, titleClass }">
             <div class="venonia-dialog-header">
                 <span :id="titleId" :class="titleClass">活動編輯</span>
                 <div class="header__btnGroup">
-                    <button class="btnGroup__btn">
+                    <button v-if="dialogTemplate.eventId" class="btnGroup__btn">
                         <el-icon @click="deleteEvent()">
                             <Delete />
                         </el-icon>
@@ -141,7 +141,12 @@ async function cancelEventEditing() {
 }
 
 async function deleteEvent() {
-    await repoEvent.deleteEvent(String(dialogTemplate.value.eventId))
+    if (dialogTemplate.value.eventId) {
+        await repoEvent.deleteEvent(dialogTemplate.value.eventId)
+        venoniaCalendarRef.value?.removeAllEvents()
+        await getEventList()
+        dialogVisible.value = false
+    }
 }
 
 /**
