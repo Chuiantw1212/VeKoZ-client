@@ -14,6 +14,7 @@ export interface ITemplateDesign {
         name?: string,
         address?: string,
         url?: string,
+        offers?: any[]
     },
     sourceIndex?: number,
 }
