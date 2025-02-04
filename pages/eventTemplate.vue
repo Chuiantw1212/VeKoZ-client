@@ -7,7 +7,7 @@
                         <div class="venonia-card-header">
                             活動套版
                             <div class="header__btnGroup">
-                                <el-button size="small" @click="setDefaultTemplate">
+                                <el-button size="small" @click="resetEventTemplate">
                                     套用預設模板
                                 </el-button>
                             </div>
@@ -209,11 +209,12 @@ async function setDefaultTemplate() {
             },
         ]
     })
-    // eventTemplate.value = {
+}
 
-    // }
-    // const eventTemplateId = await repoEvent.putEventTemplate(eventTemplate.value)
-    // eventTemplate.value.id = eventTemplateId
+async function resetEventTemplate() {
+    const oldTemplateId = eventTemplate.value.id
+    await repoEvent.delete
+    setDefaultTemplate()
 }
 
 async function postEventTemplate() {
