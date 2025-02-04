@@ -1,7 +1,20 @@
 <template>
     <!-- 檢視用 -->
-    <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+        <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
+            :disabled="disabled" @change="setLocationAddress($event)">
+            <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />
+        </el-select>
+        <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
+            :disabled="true"></el-input>
+    </el-form-item>
+    <!-- 編輯用 -->
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" @dragstart="emit('dragstart')" @remove="emit('remove')"
+        @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+        <template v-slot:label>
+            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+        </template>
+        <template v-slot:default>
             <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
                 :disabled="disabled" @change="setLocationAddress($event)">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
@@ -9,26 +22,8 @@
             </el-select>
             <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
                 :disabled="true"></el-input>
-        </el-form-item>
-    </template>
-    <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')">
-            <template v-slot:label>
-                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-            </template>
-            <template v-slot:default>
-                <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
-                    :disabled="disabled" @change="setLocationAddress($event)">
-                    <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
-                        :value="String(item.name)" />
-                </el-select>
-                <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
-                    :disabled="true"></el-input>
-            </template>
-        </MoleculeCustomToolbar>
-    </template>
+        </template>
+    </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
 import type { IPlace } from '~/types/place'

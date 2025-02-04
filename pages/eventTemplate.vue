@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
 
 // methods
 async function setDefaultTemplate() {
-    eventTemplate.value = {
+    Object.assign(eventTemplate.value, {
         designs: [
             {
                 type: 'header1',
@@ -208,11 +208,17 @@ async function setDefaultTemplate() {
                 }
             },
         ]
-    }
+    })
+    // eventTemplate.value = {
+
+    // }
+    // const eventTemplateId = await repoEvent.putEventTemplate(eventTemplate.value)
+    // eventTemplate.value.id = eventTemplateId
 }
 
 async function postEventTemplate() {
     await repoEvent.postEventTemplate(eventTemplate.value)
+    await getEventTemplate()
 }
 
 async function addOnDropListener(isOn: boolean) {
@@ -255,7 +261,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         // 屬於原有模板拖曳
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
         // 刪除原本位置的的模板
-        if (destinationIndex <= sourceIndex) {
+        if (destinationIndex < sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
         } else {
             eventTemplate.value.designs.splice(sourceIndex, 1)
@@ -266,6 +272,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
             type: templateTemp.value.type,
             destination: destinationIndex,
             templateId: eventTemplate.value.id,
+            mutable: templateTemp.value.mutable
         })
         templateDesign.id = designId
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
@@ -285,10 +292,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 async function removeDesign(data: any) {
     isLoading.value = true
     // 更新資料庫
-    await repoEvent.deleteEventTemplateDesign({
-        id: data.id,
-    })
-
+    await repoEvent.deleteEventTemplateDesign(data.id)
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
     const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))

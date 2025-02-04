@@ -1,21 +1,17 @@
 <template>
     <!-- 檢視用 -->
-    <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+        <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
+        </AtomVenoniaEditor>
+    </el-form-item>
+    <!-- 編輯用 -->
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
+        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+        <template v-slot:default>
             <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
             </AtomVenoniaEditor>
-        </el-form-item>
-    </template>
-    <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
-            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-            <template v-slot:default>
-                <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
-                </AtomVenoniaEditor>
-            </template>
-        </MoleculeCustomToolbar>
-    </template>
+        </template>
+    </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])

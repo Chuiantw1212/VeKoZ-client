@@ -1,23 +1,18 @@
 <template>
     <!-- 檢視用 -->
-    <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label">
-            <el-input v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled"></el-input>
-        </el-form-item>
-    </template>
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+        <el-input v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled"></el-input>
+    </el-form-item>
     <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
-            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-            <template v-slot:label>
-                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-            </template>
-            <template v-slot:default>
-                <el-input :placeholder="placeholder" v-model="customDesign.mutable.value"
-                    :disabled="disabled"></el-input>
-            </template>
-        </MoleculeCustomToolbar>
-    </template>
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
+        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+        <template v-slot:label>
+            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+        </template>
+        <template v-slot:default>
+            <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" :disabled="disabled"></el-input>
+        </template>
+    </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
@@ -51,7 +46,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入'
+        default: '請輸入任意文字'
     }
 })
 watch(() => customDesign.value, (newValue) => {

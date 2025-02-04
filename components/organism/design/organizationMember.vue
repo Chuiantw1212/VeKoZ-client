@@ -1,32 +1,27 @@
 <template>
     <!-- 檢視用 -->
-    <template v-if="!props.isDesigning">
-        <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
-        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
+    <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
+        <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
+            :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled">
+            <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                :value="String(item.id)" />
+        </el-select>
+    </el-form-item>
+    <!-- 編輯用 -->
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
+        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+        <template v-slot:label>
+            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+        </template>
+        <template v-slot:default>
             <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
                 :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                     :value="String(item.id)" />
             </el-select>
-        </el-form-item>
-    </template>
-    <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar :allowDelete="allowDelete" @dragstart="emit('dragstart')" @remove="emit('remove')"
-            @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-            <template v-slot:label>
-                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-            </template>
-            <template v-slot:default>
-                <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true"
-                    :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
-                    :disabled="disabled">
-                    <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
-                        :value="String(item.id)" />
-                </el-select>
-            </template>
-        </MoleculeCustomToolbar>
-    </template>
+        </template>
+    </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'

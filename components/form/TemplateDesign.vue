@@ -99,7 +99,7 @@ const templateDesigns = computed({
 
 // methods
 function handleChange(data:any){
-    console.log(data)
+    // console.log(data)
     emit('change', data)
 }
 function getFirstItem(type: string): number {

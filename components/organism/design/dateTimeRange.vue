@@ -1,24 +1,20 @@
 <template>
     <!-- 檢視用 -->
-    <template v-if="!props.isDesigning">
-        <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
-            <el-date-picker v-model="customDesign.mutable.value" :placeholder="placeholder" type="datetimerange"
-                :disabled="disabled"></el-date-picker>
-        </el-form-item>
-    </template>
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
+        <el-date-picker v-model="customDesign.mutable.value" :placeholder="placeholder" type="datetimerange"
+            :disabled="disabled"></el-date-picker>
+    </el-form-item>
     <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
-        <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            :allowDelete="allowDelete" @moveDown="emit('moveDown')">
-            <template v-slot:label>
-                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
-            </template>
-            <template v-slot:default>
-                <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
-                    :disabled="true"></el-date-picker>
-            </template>
-        </MoleculeCustomToolbar>
-    </template>
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" @dragstart="emit('dragstart')" @remove="emit('remove')"
+        @moveUp="emit('moveUp')" :allowDelete="allowDelete" @moveDown="emit('moveDown')">
+        <template v-slot:label>
+            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+        </template>
+        <template v-slot:default>
+            <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
+                :disabled="true"></el-date-picker>
+        </template>
+    </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
 import { computed, watch } from 'vue';

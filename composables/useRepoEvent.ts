@@ -52,6 +52,13 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
+    async function putEventTemplate(body: IEventTemplate) {
+        const response = await defaultApi.authRequest(`/event/template`, {
+            method: 'PUT',
+            body,
+        })
+        return response.text()
+    }
     async function patchEventTemplate(body: string[]) {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'PATCH',
@@ -66,10 +73,9 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
-    async function deleteEventTemplateDesign(body: any) {
-        const response = await defaultApi.authRequest(`/event/template/design`, {
+    async function deleteEventTemplateDesign(id: string) {
+        const response = await defaultApi.authRequest(`/event/template/design/${id}`, {
             method: 'DELETE',
-            body,
         })
         return response.text()
     }
@@ -83,6 +89,7 @@ export default defineStore('event', () => {
         // Template
         postEventTemplate,
         getEventTemplate,
+        putEventTemplate,
         patchEventTemplate,
         postEventTemplateDesign,
         deleteEventTemplateDesign,
