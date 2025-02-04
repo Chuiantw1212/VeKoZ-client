@@ -13,9 +13,9 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth'
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
-import type { IFullCalendarEvent, IChangeInfo } from '~/types/fullCalendar';
+import type { IFullCalendarEvent, IChangeInfo, IEventClickInfo } from '~/types/fullCalendar';
 
-const emit = defineEmits(['update:modelValue', 'create', 'eventChange'])
+const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventClick'])
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -73,13 +73,11 @@ function initializeCalendar() {
 /**
  * https://fullcalendar.io/docs/eventClick
  */
-function handleEventClick(info: any) {
-    // alert('Event: ' + info.event.title);
-    // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-    // alert('View: ' + info.view.type);
-
-    // change the border color just for fun
-    // info.el.style.borderColor = 'red';
+function handleEventClick(eventClickInfo: IEventClickInfo) {
+    console.log({
+        eventClickInfo
+    })
+    emit('eventClick', eventClickInfo)
 }
 
 /**

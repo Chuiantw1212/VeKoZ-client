@@ -1,3 +1,10 @@
+export interface IEventClickInfo {
+    event: any,
+    el: any,
+    jsEvent: any,
+    view: any,
+}
+
 /**
  * https://fullcalendar.io/docs/eventChange
  */

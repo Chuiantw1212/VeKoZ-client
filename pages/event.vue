@@ -1,13 +1,13 @@
 <template>
     <el-row :gutter="20">
-        <el-col :span="18">
+        <el-col :span="16">
             <el-card>
                 <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
-                    @eventChange="handleEventChange($event)">
+                    @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
                 </MoleculeVenoniaCalendar>
             </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
             <el-card>
                 <template #header>
                     月曆切換
@@ -24,10 +24,10 @@
         </el-col>
     </el-row>
 
-    <el-dialog v-model="dialogVisible" title="活動編輯" @close="dialogVisible = false" :lock-scroll="true">
-        <FormTemplateDesign v-if="dialogVisible" v-model="eventTemplate.designs"></FormTemplateDesign>
+    <el-dialog v-model="dialogVisible" title="活動編輯" @close="cancelEventEditing()" :lock-scroll="true">
+        <FormTemplateDesign v-if="dialogVisible" v-model="dialogTemplate.designs"></FormTemplateDesign>
         <template #footer>
-            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button @click="cancelEventEditing()">取消</el-button>
             <el-button type="primary" @click="submitNewEvent()">
                 確認
             </el-button>
@@ -38,18 +38,18 @@
 <script setup lang="ts">
 import useRepoEvent from '~/composables/useRepoEvent';
 import type { IEvent, IEventCreation, } from '~/types/event';
-import type { IOrganizationMember } from '~/types/organization';
-import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { IEventMember } from '~/types/eventMember';
+import type { IEventTemplate, } from '~/types/eventTemplate'
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
-import type { IChangeInfo, IFullCalendarEvent } from '~/types/fullCalendar';
+import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 
+// Data
 const repoEvent = useRepoEvent()
 const venoniaCalendarRef = ref<CalendarApi>()
-
+const defaultTemplate = ref<IEventTemplate>({
+    designs: []
+})
 const dialogVisible = ref(false)
-
-const eventTemplate = ref<IEventTemplate>({
+const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
 
@@ -59,7 +59,7 @@ onMounted(() => {
     getEventTemplate()
 })
 
-// methods
+// Methods
 async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
@@ -85,16 +85,24 @@ async function getEventList() {
 }
 
 async function handleEventChange(changeInfo: IChangeInfo) {
-    
+
+}
+
+async function handleEventClick(eventClickInfo: IEventClickInfo) {
+    const eventId = eventClickInfo.event.id
+    const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
+    Object.assign(dialogTemplate.value, eventTemplate)
+    dialogVisible.value = true
 }
 
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    Object.assign(eventTemplate.value, result)
+    Object.assign(defaultTemplate.value, result)
 }
 
 async function openNewEventDialog(data: IEventCreation) {
-    const seoDateTimeRange = eventTemplate.value.designs.find((design) => {
+    dialogTemplate.value = structuredClone(defaultTemplate.value)
+    const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })
     if (seoDateTimeRange) {
@@ -106,11 +114,15 @@ async function openNewEventDialog(data: IEventCreation) {
     dialogVisible.value = true
 }
 
+async function cancelEventEditing() {
+    dialogVisible.value = false
+}
+
 /**
  * 存到Firestore的資料要可以篩選，所以這邊就要把資料格式整理好
  */
 async function submitNewEvent() {
-    await repoEvent.postEvent(eventTemplate.value)
+    await repoEvent.postEvent(dialogTemplate.value)
 }
 </script>
 
