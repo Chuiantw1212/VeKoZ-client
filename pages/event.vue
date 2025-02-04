@@ -97,7 +97,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    Object.assign(defaultTemplate.value, result)
+    defaultTemplate.value = markRaw(result)
 }
 
 async function openNewEventDialog(data: IEventCreation) {
@@ -123,6 +123,8 @@ async function cancelEventEditing() {
  */
 async function submitNewEvent() {
     await repoEvent.postEvent(dialogTemplate.value)
+    await getEventList()
+    dialogVisible.value = false
 }
 </script>
 
