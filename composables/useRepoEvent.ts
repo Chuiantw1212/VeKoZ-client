@@ -38,6 +38,7 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
+    // Template
     async function getEventTemplate() {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'get',
@@ -47,6 +48,13 @@ export default defineStore('event', () => {
     async function putEventTemplate(body: any) {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'put',
+            body,
+        })
+        return response.text()
+    }
+    async function postEventTemplateDesign(body: any) {
+        const response = await defaultApi.authRequest(`/event/template/design`, {
+            method: 'post',
             body,
         })
         return response.text()
@@ -61,5 +69,6 @@ export default defineStore('event', () => {
         // Template
         getEventTemplate,
         putEventTemplate,
+        postEventTemplateDesign,
     }
 })

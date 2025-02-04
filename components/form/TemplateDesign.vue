@@ -8,60 +8,61 @@
         <el-form label-width="auto">
             <template v-for="(item, index) in templateDesigns" :key="index">
                 <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'header1' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'header1' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignHeader1>
                 <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'input' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'input' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignInput>
                 <OrganismDesignNumber v-if="item.type === 'number'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'number' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'number' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignNumber>
                 <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
                     :isDesigning="isDesigning" :allow-delete="getFirstItem('organization') < index"
-                    @dragstart="emit('dragstart', { index, type: 'organization' })" @remove="handleRemove(index)"
-                    @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                    @dragstart="emit('dragstart', { id: item.id, index, type: 'organization' })"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignOrganization>
                 <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'"
                     v-model="templateDesigns[index]" :isDesigning="isDesigning"
                     :allow-delete="getFirstItem('organizationMember') < index" :organization-id="getOrganizationId()"
-                    @dragstart="emit('dragstart', { index, type: 'organizationMember' })" @remove="handleRemove(index)"
-                    @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                    @dragstart="emit('dragstart', { id: item.id, index, type: 'organizationMember' })"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignOrganizationMember>
                 <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
                     :isDesigning="isDesigning" :allow-delete="getFirstItem('dateTimeRange') < index"
-                    @dragstart="emit('dragstart', { index, type: 'dateTimeRange' })" @remove="handleRemove(index)"
-                    @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                    @dragstart="emit('dragstart', { id: item.id, index, type: 'dateTimeRange' })"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignDateTimeRange>
                 <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'place' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'place' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignPlace>
                 <OrganismDesignUrl v-if="item.type === 'url'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'url' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'url' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignUrl>
                 <OrganismDesignDivider v-if="item.type === 'divider'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'divider' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'divider' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignDivider>
                 <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'editor' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'editor' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignEditor>
                 <OrganismDesignTextarea v-if="item.type === 'textarea'" v-model="templateDesigns[index]"
                     :isDesigning="isDesigning" :allow-delete="getFirstItem('textarea') < index"
-                    @dragstart="emit('dragstart', { index, type: 'textarea' })" @remove="handleRemove(index)"
-                    @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                    @dragstart="emit('dragstart', { id: item.id, index, type: 'textarea' })"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignTextarea>
                 <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'singleSelect' })"
+                    :isDesigning="isDesigning"
+                    @dragstart="emit('dragstart', { id: item.id, index, type: 'singleSelect' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignSingleSelect>
                 <OrganismDesignOffer v-if="item.type === 'offer'" v-model="templateDesigns[index]"
-                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { index, type: 'offer' })"
+                    :isDesigning="isDesigning" @dragstart="emit('dragstart', { id: item.id, index, type: 'offer' })"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
                 </OrganismDesignOffer>
                 <!-- 拖曳釋放區域 -->

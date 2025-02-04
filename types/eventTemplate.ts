@@ -6,6 +6,7 @@ export interface IEventTemplate {
 }
 
 export interface ITemplateDesign {
+    id?: string,
     type: string,
     mutable?: {
         label?: string,
@@ -13,10 +14,12 @@ export interface ITemplateDesign {
         name?: string,
         address?: string,
         url?: string,
-    }
+    },
+    sourceIndex?: number,
 }
 
 export interface ITemplateDragSouce {
+    id: string,
     index: number,
     type: string,
 }

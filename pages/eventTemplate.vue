@@ -17,13 +17,13 @@
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
-                                :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
+                                :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
                                 @drop="insertTemplate($event, defaultProps.index)" @dragover="allowDrop($event)">
                             </div>
                         </template>
                     </FormTemplateDesign>
                     <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
-                        :class="{ 'eventTemplate__designItem--outline': templateTemp.isDragging }"
+                        :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
                     </div>
@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
-import type { ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
+import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import useRepoEvent from '~/composables/useRepoEvent'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
@@ -108,13 +108,14 @@ const dialogVisible = ref(false)
 const isLoading = ref(false)
 
 // 拖曳中的模板資料
-const templateTemp = reactive({
+const templateTemp = reactive<ITemplateDesign>({
     type: '',
-    isDragging: false,
+    id: '',
     sourceIndex: -1,
 })
 
-const eventTemplate = ref({
+const eventTemplate = ref<IEventTemplate>({
+    id: '',
     designs: [] as ITemplateDesign[]
 })
 
@@ -138,7 +139,28 @@ async function setDefaultTemplate() {
     eventTemplate.value = {
         designs: [
             {
-                type: 'header1'
+                type: 'header1',
+                mutable: {
+                    label: '活動名稱'
+                }
+            },
+            {
+                type: 'dateTimeRange',
+                mutable: {
+                    label: '活動時間'
+                }
+            },
+            {
+                type: 'organization',
+                mutable: {
+                    label: '主辦單位'
+                }
+            },
+            {
+                type: 'organizationMember',
+                mutable: {
+                    label: '講者/主持'
+                }
             }
         ]
     }
@@ -152,7 +174,7 @@ async function addOnDropListener(isOn: boolean) {
     }
 }
 async function clearOnDrop() {
-    templateTemp.isDragging = false
+    templateTemp.type = ''
 }
 
 async function getPlaceList() {
@@ -164,7 +186,7 @@ async function getOrganizationList() {
     organizationList.value = result
 }
 function setTemplateTemp(data: ITemplateDragSouce) {
-    templateTemp.isDragging = true
+    templateTemp.id = data.id
     templateTemp.sourceIndex = data.index
     templateTemp.type = data.type
 }
@@ -174,13 +196,30 @@ function insertTemplate(ev: Event, destinationIndex = 0) {
         type: templateTemp.type,
     })
     // Reset flags
-    templateTemp.isDragging = false
-    if (templateTemp.sourceIndex >= 0) {
-        if (destinationIndex <= templateTemp.sourceIndex) {
-            eventTemplate.value.designs.splice(templateTemp.sourceIndex + 1, 1)
+    templateTemp.type = ''
+    const sourceIndex = Number(templateTemp.sourceIndex)
+    if (sourceIndex >= 0) {
+        if (destinationIndex <= sourceIndex) {
+            eventTemplate.value.designs.splice(sourceIndex + 1, 1)
         } else {
-            eventTemplate.value.designs.splice(templateTemp.sourceIndex, 1)
+            eventTemplate.value.designs.splice(sourceIndex, 1)
         }
+    }
+    if (!eventTemplate.value.id) {
+        // 全新模板
+    } else {
+        // 屬於原有模板拖曳
+        // 屬於原有的模板設計
+        // if () {
+
+        // }
+        // 屬於新增的模板設計
+        repoEvent.postEventTemplateDesign({
+            type: templateTemp.type,
+            destination: destinationIndex,
+            source: templateTemp.sourceIndex,
+            // id: '用來精準更新使用'
+        })
     }
     templateTemp.sourceIndex = -1
 }
@@ -188,11 +227,10 @@ function allowDrop(ev: any) {
     ev.preventDefault();
 }
 function setTemplateType(ev: any) {
-    templateTemp.isDragging = true
     templateTemp.type = ev.target.dataset.type
 }
 function cancelDragging() {
-    templateTemp.isDragging = false
+    templateTemp.type = ''
 }
 
 async function putEventTemplate() {

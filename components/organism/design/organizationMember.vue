@@ -72,10 +72,6 @@ const props = defineProps({
 const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
-onMounted(() => {
-    getOrganizationMemberList(props.organizationId)
-})
-
 const customDesign = computed({
     get() {
         return props.modelValue
@@ -96,13 +92,18 @@ watch(() => customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
+}, { immediate: true })
 
+watch(() => props.organizationId, (newValue) => {
+    getOrganizationMemberList(newValue)
 }, { immediate: true })
 
 // Methods
 async function getOrganizationMemberList(organizationId: string) {
-    const result = await repoOrganizationMember.getOrganizationMemberList(organizationId)
-    organizationList.value = result
+    if (organizationId) {
+        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId)
+        organizationList.value = result
+    }
 }
 
 </script>
