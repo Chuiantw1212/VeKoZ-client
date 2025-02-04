@@ -1,7 +1,7 @@
 <template>
     <el-row :gutter="20">
         <el-col :span="16">
-            <el-card>
+            <el-card v-loading.lock="isLoading">
                 <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
                     @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
                 </MoleculeVenoniaCalendar>
@@ -67,6 +67,8 @@ import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/f
 
 // Data
 const repoEvent = useRepoEvent()
+const repoUI = useRepoUI()
+const isLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
 const defaultTemplate = ref<IEventTemplate>({
     designs: []
@@ -77,9 +79,13 @@ const dialogTemplate = ref<IEventTemplate>({
 })
 
 // Hooks
-onMounted(() => {
-    getEventList()
-    getEventTemplate()
+onMounted(async () => {
+    isLoading.value = true
+    await Promise.all([
+        getEventList(),
+        getEventTemplate()
+    ])
+    isLoading.value = false
 })
 
 // Methods
