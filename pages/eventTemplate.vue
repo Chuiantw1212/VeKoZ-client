@@ -238,11 +238,8 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
     templateTemp.value = templateSource
 }
 async function insertTemplate(ev: Event, destinationIndex = 0) {
-    console.log({
-        destinationIndex
-    })
-
     ev.preventDefault();
+    isLoading.value = true
 
     // 插入元素
     const templateDesign: ITemplateDesign = {
@@ -282,9 +279,11 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     templateTemp.value.id = '' // 用來判斷是否為新增的欄位
     templateTemp.value.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
+    isLoading.value = false
 }
 
 async function removeDesign(data: any) {
+    isLoading.value = true
     // 更新資料庫
     await repoEvent.deleteEventTemplateDesign({
         id: data.id,
@@ -294,6 +293,7 @@ async function removeDesign(data: any) {
     eventTemplate.value.designs.splice(data.index, 1)
     const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
     await repoEvent.patchEventTemplate(templateDesignIds)
+    isLoading.value = false
 }
 
 function allowDrop(ev: any) {
