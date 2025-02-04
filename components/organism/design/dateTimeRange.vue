@@ -24,20 +24,24 @@
 import { computed, watch } from 'vue';
 
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'dateTimeRange',
-                mutable: {
-                    label: '時間日期',
-                    value: [new Date(), new Date()]
-                }
-            }
+interface IModel {
+    type: 'dateTimeRange',
+    mutable: {
+        label: string,
+        value: string[],
+    }
+}
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'dateTimeRange',
+        mutable: {
+            label: '時間日期',
+            value: [new Date(), new Date()]
         }
-    },
+    }
+},)
+const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
@@ -56,16 +60,8 @@ const props = defineProps({
     }
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+    if (newValue?.mutable) {
         return
     }
     const defaultValue = {
@@ -76,7 +72,6 @@ watch(() => customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-
 }, { immediate: true })
 </script>
 <style lang="scss" scoped>

@@ -19,9 +19,24 @@
     </template>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+interface IModel {
+    type: 'divider',
+    mutable: {
+        label: string,
+        value: string[],
+    }
+}
+
+const customDesign = defineModel<IModel>('modelValue', {
+    required: true,
+    default: {
+        type: 'divider',
+        mutable: {
+            label: '分隔線'
+        }
+    }
+})
 
 const props = defineProps({
     modelValue: {
@@ -49,16 +64,8 @@ const props = defineProps({
     }
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+    if (newValue?.mutable) {
         return
     }
     const defaultValue = {

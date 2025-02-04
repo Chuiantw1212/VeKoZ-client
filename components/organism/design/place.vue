@@ -34,7 +34,7 @@
 import type { IPlace } from '~/types/place'
 const repoPlace = useRepoPlace()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-interface IDesignPlace {
+interface IModel {
     type:'place',
     mutable: {
         label:string,
@@ -42,7 +42,7 @@ interface IDesignPlace {
         locationAddress: string,
     }
 }
-const customDesign = defineModel<IDesignPlace>('modelValue',{
+const customDesign = defineModel<IModel>('modelValue',{
     required:true,
 },)
 const props = defineProps({
