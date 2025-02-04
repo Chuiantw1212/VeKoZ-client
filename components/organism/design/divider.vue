@@ -11,7 +11,8 @@
             @moveDown="emit('moveDown')">
             <template v-slot:default>
                 <el-divider>
-                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"
+                        :disabled="disabled">
                 </el-divider>
             </template>
         </MoleculeCustomToolbar>
@@ -29,12 +30,16 @@ const props = defineProps({
             return {
                 type: 'divider',
                 mutable: {
-                    label: ''
+                    label: '分隔線'
                 }
             }
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },

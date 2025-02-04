@@ -4,7 +4,7 @@
         <el-form-item :label="customDesign.mutable?.label">
             <div class="offerList">
                 <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                    <el-input class="offer__name" placeholder="名稱" v-model="offer.name" :disabled="disabled"
+                    <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
                         :disabled="disabled">
@@ -42,7 +42,7 @@
             <template v-slot:default>
                 <div class="offerList">
                     <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                        <el-input class="offer__name" placeholder="名稱" v-model="offer.name" :disabled="disabled"
+                        <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
                             :maxlength="30" :show-word-limit="true"></el-input>
                         <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
                             :disabled="disabled">
@@ -84,7 +84,14 @@ const props = defineProps({
             return {
                 type: 'offer',
                 mutable: {
-                    label: '' // 此為必要欄位，且必須為空白
+                    label: '', // 此為必要欄位，且必須為空白
+                    offers: [
+                        {
+                            name: '',
+                            count: null,
+                            price: null,
+                        }
+                    ]
                 }
             }
         }
@@ -130,7 +137,7 @@ watch(() => customDesign.value, (newValue) => {
     const defaultValue = {
         type: 'offer',
         mutable: {
-            label: '票券',
+            label: '',
             offers: [
                 newOffer,
             ],

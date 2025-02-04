@@ -62,15 +62,12 @@
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="divider"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="">
-                                <el-divider>分隔線</el-divider>
-                            </el-form-item>
+                            <OrganismDesignDivider :disabled="true" :isDesigning="false">
+                            </OrganismDesignDivider>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="editor"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="">
-                                <AtomVenoniaEditor :disabled="true"></AtomVenoniaEditor>
-                            </el-form-item>
+                            <AtomVenoniaEditor isDesigning="false" :disabled="true"></AtomVenoniaEditor>
                         </div>
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organization"
@@ -80,10 +77,8 @@
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="offer"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <el-form-item label="票券">
-                                <OrganismDesignOffer :disabled="true" :isDesigning="false">
-                                </OrganismDesignOffer>
-                            </el-form-item>
+                            <OrganismDesignOffer :disabled="true" :isDesigning="false">
+                            </OrganismDesignOffer>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
