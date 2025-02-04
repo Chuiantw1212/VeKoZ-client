@@ -10,7 +10,7 @@
             <slot name="default"></slot>
         </div>
         <template v-if="allowDelete">
-            <el-button class="toolbar__btn" @click="emit('remove')">
+            <el-button class="toolbar__btn" size="small" @click="emit('remove')">
                 <el-icon>
                     <Delete />
                 </el-icon>

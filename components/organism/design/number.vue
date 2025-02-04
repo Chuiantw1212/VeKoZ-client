@@ -2,7 +2,8 @@
     <!-- 檢視用 -->
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
-            <el-input-number v-model="customDesign.mutable.value" :placeholder="placeholder"></el-input-number>
+            <el-input-number v-model="customDesign.mutable.value" :placeholder="placeholder"
+                :disabled="disabled"></el-input-number>
         </el-form-item>
     </template>
     <!-- 編輯用 -->
@@ -13,7 +14,8 @@
                 <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
             </template>
             <template v-slot:default>
-                <el-input-number :placeholder="placeholder" v-model="customDesign.mutable.value"></el-input-number>
+                <el-input-number :placeholder="placeholder" v-model="customDesign.mutable.value"
+                    :disabled="disabled"></el-input-number>
             </template>
         </MoleculeCustomToolbar>
     </template>
@@ -37,6 +39,10 @@ const props = defineProps({
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },

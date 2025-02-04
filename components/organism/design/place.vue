@@ -3,11 +3,11 @@
     <template v-if="!props.isDesigning">
         <el-form-item :label="customDesign.mutable?.label">
             <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
-                @change="setLocationAddress($event)">
+                :disabled="disabled" @change="setLocationAddress($event)">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                     :value="String(item.name)" />
             </el-select>
-            <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
+            <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
                 :disabled="true"></el-input>
         </el-form-item>
     </template>
@@ -20,11 +20,11 @@
             </template>
             <template v-slot:default>
                 <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
-                    @change="setLocationAddress($event)">
+                    :disabled="disabled" @change="setLocationAddress($event)">
                     <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                         :value="String(item.name)" />
                 </el-select>
-                <el-input class="design__mt" :model-value="customDesign.mutable.locationAddress"
+                <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
                     :disabled="true"></el-input>
             </template>
         </MoleculeCustomToolbar>
@@ -43,7 +43,7 @@ const props = defineProps({
             return {
                 type: 'place',
                 mutable: {
-                    label: '',
+                    label: '空間地點',
                     locationName: '',
                     locationAddress: '',
                 }
@@ -51,6 +51,10 @@ const props = defineProps({
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },

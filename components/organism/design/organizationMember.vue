@@ -4,7 +4,7 @@
         <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
         <el-form-item :label="customDesign.mutable?.label" :required="!allowDelete">
             <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
-                :allow-create="true" :reserve-keyword="false" :clearable="true">
+                :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                     :value="String(item.id)" />
             </el-select>
@@ -19,7 +19,8 @@
             </template>
             <template v-slot:default>
                 <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true"
-                    :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true">
+                    :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
+                    :disabled="disabled">
                     <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                         :value="String(item.id)" />
                 </el-select>
@@ -40,12 +41,16 @@ const props = defineProps({
             return {
                 type: 'organizationMember',
                 mutable: {
-                    label: ''
+                    label: '組織成員'
                 }
             }
         }
     },
     isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },
