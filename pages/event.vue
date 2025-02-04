@@ -28,7 +28,8 @@
         </el-col>
     </el-row>
 
-    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true">
+    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true" :align-center="true"
+        body-class="venonia-dialog-body">
         <template #header="{ titleId, titleClass }">
             <div class="venonia-dialog-header">
                 <span :id="titleId" :class="titleClass">活動編輯</span>
