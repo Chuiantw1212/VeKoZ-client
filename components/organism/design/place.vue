@@ -32,24 +32,20 @@
 </template>
 <script setup lang="ts">
 import type { IPlace } from '~/types/place'
-import { computed, watch } from 'vue';
 const repoPlace = useRepoPlace()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
+interface IDesignPlace {
+    type:'place',
+    mutable: {
+        label:string,
+        locationName: string,
+        locationAddress: string,
+    }
+}
+const customDesign = defineModel<IDesignPlace>('modelValue',{
+    required:true,
+},)
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'place',
-                mutable: {
-                    label: '空間地點',
-                    locationName: '',
-                    locationAddress: '',
-                }
-            }
-        }
-    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -63,8 +59,6 @@ const props = defineProps({
         default: '請選擇空間地點'
     }
 })
-
-
 const placeList = ref<IPlace[]>([])
 
 // Hooks
@@ -72,16 +66,9 @@ onMounted(() => {
     getPlaceList()
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
-watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+
+watch(() => customDesign.value, (newValue:any) => {
+    if (newValue?.mutable) {
         return
     }
     const defaultValue = {
@@ -101,7 +88,9 @@ function setLocationAddress(locationName: string) {
             return item.name === locationName
         })
         if (selectedItem) {
-            customDesign.value.mutable.locationAddress = selectedItem.address
+            if(customDesign.value){
+                customDesign.value.mutable.locationAddress = selectedItem.address
+            }
         }
     }
 }

@@ -53,18 +53,7 @@ const props = defineProps({
 
 const customDesign = defineModel('modelValue')
 
-// const customDesign = computed({
-//     get() {
-//         return props.modelValue
-//     },
-//     set(newValue) {
-//         console.log('set', newValue)
-//         emit('update:modelValue', newValue)
-//     }
-// })
-watch(() => customDesign.value, (newValue) => {
-    console.log('watch', newValue)
-    
+watch(() => customDesign.value, (newValue:any) => {
     if (newValue.mutable) {
         return
     }
@@ -76,6 +65,5 @@ watch(() => customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
-    console.log('set', newValue)
 }, { immediate: true })
 </script>
