@@ -238,6 +238,10 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
     templateTemp.value = templateSource
 }
 async function insertTemplate(ev: Event, destinationIndex = 0) {
+    console.log({
+        destinationIndex
+    })
+
     ev.preventDefault();
 
     // 插入元素
@@ -281,12 +285,15 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 }
 
 async function removeDesign(data: any) {
-    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
+    // 更新資料庫
     await repoEvent.deleteEventTemplateDesign({
-        templateId: eventTemplate.value.id,
-        templateDesignIds,
         id: data.id,
     })
+
+    // 更新模板順序
+    eventTemplate.value.designs.splice(data.index, 1)
+    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
+    await repoEvent.patchEventTemplate(templateDesignIds)
 }
 
 function allowDrop(ev: any) {
