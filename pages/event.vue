@@ -47,7 +47,7 @@
                 </div>
             </div>
         </template>
-        <FormTemplateDesign v-if="dialogVisible" v-model="dialogTemplate.designs"></FormTemplateDesign>
+        <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
         <template #footer>
             <el-button @click="cancelEventEditing()">取消</el-button>
             <el-button type="primary" @click="submitNewEvent()">
