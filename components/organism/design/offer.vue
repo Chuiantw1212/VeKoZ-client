@@ -182,15 +182,15 @@ const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: 
     gap: 12px;
 
     .offer__name {
-        width: 100%;
+        width: 25%;
     }
 
     .offer__count {
-        width: 100%;
+        width: 25%;
     }
 
     .offer__price {
-        width: 100%;
+        width: 25%;
     }
 
     .offer__btn {

@@ -1,14 +1,14 @@
 <template>
     <div class="event">
         <el-row :gutter="20">
-            <el-col :span="16">
+            <el-col :span="24">
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
                         @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
                     </MoleculeVenoniaCalendar>
                 </el-card>
             </el-col>
-            <el-col :span="8">
+            <!-- <el-col :span="8">
                 <el-card>
                     <template #header>
                         月曆切換與訂閱
@@ -26,10 +26,10 @@
                         </li>
                     </ul>
                 </el-card>
-            </el-col>
+            </el-col> -->
         </el-row>
 
-        <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true" :align-center="true"
+        <el-dialog v-model="dialogVisible" title="活動編輯" width="85%" :show-close="false" :lock-scroll="true" :align-center="true"
             body-class="venonia-dialog-body">
             <template #header="{ titleId, titleClass }">
                 <div class="venonia-dialog-header">
