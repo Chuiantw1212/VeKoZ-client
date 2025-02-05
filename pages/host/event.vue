@@ -34,13 +34,13 @@
                 <div class="venonia-dialog-header">
                     <span :id="titleId" :class="titleClass">活動編輯</span>
                     <div class="header__btnGroup">
-                        <el-button v-if="dialogTemplate.id" class="btnGroup__btn">
-                            <el-icon @click="deleteEvent()">
+                        <el-button v-if="dialogTemplate.id" class="btnGroup__btn" @click="deleteEvent()">
+                            <el-icon>
                                 <Delete />
                             </el-icon>
                         </el-button>
-                        <el-button class="btnGroup__btn">
-                            <el-icon @click="cancelEventEditing()">
+                        <el-button class="btnGroup__btn" @click="cancelEventEditing()">
+                            <el-icon>
                                 <Close />
                             </el-icon>
                         </el-button>

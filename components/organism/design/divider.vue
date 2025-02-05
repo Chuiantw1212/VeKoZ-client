@@ -75,7 +75,7 @@ watch(() => customDesign.value, (newValue) => {
 })
 
 // 觸發更新
-watch(customDesign.value, (newValue) => {
+watch(() => customDesign.value, (newValue) => {
     handleChange(newValue)
 }, { deep: true })
 
