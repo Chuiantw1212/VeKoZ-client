@@ -16,20 +16,13 @@ import type { IEventCreation } from '~/types/event';
 import type { IFullCalendarEvent, IChangeInfo, IEventClickInfo } from '~/types/fullCalendar';
 
 const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventClick'])
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: () => { }
-    }
-})
-
+const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
 
 // Hooks
 onMounted(() => {
     initializeCalendar()
-    // toggleResize(true)
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
@@ -37,9 +30,20 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    // toggleResize(false)
     listenToDateCell(false)
     listenToFcButton(false)
+})
+
+const debounceResize = repoUI.debounce(() => {
+    setTimeout(() => {
+        calendarInstance.value?.updateSize()
+    }, 50) // 不科學實驗結果的最佳數字
+})
+
+watch(() => repoUI.isResizing, (newValue: boolean, oldValue: boolean) => {
+    if (!newValue && oldValue) {
+        debounceResize('calendarResize')
+    }
 })
 
 // Methods
@@ -93,20 +97,6 @@ function removeAllEvents() {
     calendarInstance.value?.removeAllEvents()
     // calendarInstance.value.getEvet
     // calendarInstance.value?.removeEvent(eventId)
-}
-
-// function toggleResize(isOn: boolean) {
-//     if (isOn) {
-//         window.addEventListener('resize', resizeCalendar)
-//     } else {
-//         window.removeEventListener('resize', resizeCalendar)
-//     }
-// }
-
-function resizeCalendar() {
-    setTimeout(() => {
-        calendarInstance.value?.updateSize()
-    }, 350)
 }
 
 function listenToDateCell(isOn: boolean) {

@@ -3,7 +3,6 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading.lock="isLoading">
-                    {{ repoUI.isLarge }}
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
                         @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
                     </MoleculeVenoniaCalendar>

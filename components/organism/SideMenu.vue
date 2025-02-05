@@ -45,36 +45,6 @@
 <script setup lang="ts">
 import { Ticket, Calendar, Document, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
-
-// Hooks
-onMounted(() => {
-  if (import.meta.client) {
-    setMenuCollapse()
-    toggleResize(true)
-  }
-})
-
-onBeforeUnmount(() => {
-  toggleResize(false)
-})
-
-function toggleResize(isOn: boolean) {
-  if (isOn) {
-    window.addEventListener('resize', setMenuCollapse)
-  } else {
-    window.removeEventListener('resize', setMenuCollapse)
-  }
-}
-
-// Methods
-function setMenuCollapse() {
-  if (window.innerWidth > 992) {
-    repoUI.setMenuCollapse(false)
-  } else {
-    repoUI.setMenuCollapse(true)
-  }
-}
-
 </script>
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
