@@ -19,6 +19,12 @@ const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventCl
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
+const props = defineProps({
+    id: {
+        type: String,
+        default: crypto.randomUUID()
+    }
+})
 
 // Hooks
 onMounted(() => {
@@ -34,17 +40,15 @@ onBeforeUnmount(() => {
     listenToFcButton(false)
 })
 
-const debounceResize = repoUI.debounce(() => {
-    setTimeout(() => {
-        const idealHeight = window.innerHeight - 150
-        calendarInstance.value?.setOption('height', idealHeight);
-        calendarInstance.value?.updateSize()
-    }, 50) // 不科學實驗結果的最佳數字
-})
-
 watch(() => repoUI.isResizing, (newValue: boolean, oldValue: boolean) => {
     if (!newValue && oldValue) {
-        debounceResize('calendarResize')
+        repoUI.debounce(props.id, () => {
+            setTimeout(() => {
+                const idealHeight = window.innerHeight - 150
+                calendarInstance.value?.setOption('height', idealHeight);
+                calendarInstance.value?.updateSize()
+            }, 50) // 不科學實驗結果的最佳數字
+        })
     }
 })
 
