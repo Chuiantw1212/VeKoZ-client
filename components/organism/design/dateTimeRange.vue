@@ -17,9 +17,9 @@
     </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'dateTimeRange',
     mutable: {
@@ -27,6 +27,7 @@ interface IModel {
         value: string[],
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'dateTimeRange',
@@ -36,6 +37,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         }
     }
 },)
+
 const props = defineProps({
     isDesigning: {
         type: Boolean,

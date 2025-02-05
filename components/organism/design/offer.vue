@@ -71,6 +71,9 @@
 <script setup lang="ts">
 import { Plus, Minus } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
+
 interface IModel {
     type: 'offer',
     mutable: {
@@ -78,6 +81,7 @@ interface IModel {
         offers: any[]
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'offer',
@@ -93,6 +97,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         }
     }
 })
+
 const props = defineProps({
     isDesigning: {
         type: Boolean,

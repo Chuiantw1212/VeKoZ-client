@@ -15,7 +15,8 @@
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'editor',
     mutable: {

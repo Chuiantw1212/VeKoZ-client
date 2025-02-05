@@ -27,6 +27,7 @@ interface IModel {
         value: string,
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'header1',

@@ -25,8 +25,10 @@
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'
-const repoOrganizationMember = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const repoOrganizationMember = useRepoOrganization()
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'organizationMember',
     mutable: {
@@ -34,6 +36,7 @@ interface IModel {
         value: string,
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'organizationMember',
@@ -43,6 +46,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         }
     }
 })
+
 const props = defineProps({
     isDesigning: {
         type: Boolean,
@@ -65,7 +69,6 @@ const props = defineProps({
         default: ""
     }
 })
-
 
 const organizationList = ref<IOrganizationMember[]>([])
 

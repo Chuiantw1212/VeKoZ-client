@@ -18,6 +18,9 @@
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
+
 interface IModel {
     type: 'number',
     mutable: {
@@ -25,6 +28,7 @@ interface IModel {
         value: number,
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'number',
@@ -34,6 +38,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         }
     }
 })
+
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -60,6 +65,7 @@ const props = defineProps({
         default: '請輸入'
     }
 })
+
 watch(() => customDesign.value, (newValue) => {
     if (newValue?.mutable) {
         return

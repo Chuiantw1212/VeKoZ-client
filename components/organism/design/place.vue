@@ -27,8 +27,10 @@
 </template>
 <script setup lang="ts">
 import type { IPlace } from '~/types/place'
-const repoPlace = useRepoPlace()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const repoPlace = useRepoPlace()
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'place',
     mutable: {

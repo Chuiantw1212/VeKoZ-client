@@ -18,6 +18,8 @@
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'textarea',
     mutable: {
@@ -25,6 +27,7 @@ interface IModel {
         value: string,
     }
 }
+
 const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'textarea',
@@ -33,6 +36,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         }
     }
 })
+
 const props = defineProps({
     modelValue: {
         type: Object,
