@@ -74,6 +74,10 @@ onMounted(() => {
 
 
 watch(() => customDesign.value, (newValue: any) => {
+    // 觸發更新
+    handleChange(newValue)
+
+    // 附加預設值
     if (newValue?.mutable) {
         return
     }

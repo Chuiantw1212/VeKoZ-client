@@ -66,6 +66,10 @@ const props = defineProps({
 })
 
 watch(() => customDesign.value, (newValue) => {
+    // 觸發更新
+    handleChange(newValue)
+
+    // 附加預設值
     if (newValue?.mutable) {
         return
     }
