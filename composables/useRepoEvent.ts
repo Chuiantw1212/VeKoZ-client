@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
 import type { IEvent } from '~/types/event'
-import type { IEventTemplate } from '~/types/eventTemplate'
+import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
@@ -79,6 +79,13 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
+    async function patchEventTemplateDesign(body: ITemplateDesign) {
+        const response = await defaultApi.authRequest(`/event/template/design`, {
+            method: 'DELETE',
+            body,
+        })
+        return response.text()
+    }
     return {
         // Event
         getEventList,
@@ -91,7 +98,9 @@ export default defineStore('event', () => {
         getEventTemplate,
         patchEventTemplate,
         deleteEventTemplate,
+        // Design
         postEventTemplateDesign,
         deleteEventTemplateDesign,
+        patchEventTemplateDesign,
     }
 })

@@ -14,7 +14,8 @@
                         </div>
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
-                        @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
+                        @change="handleChange($event)" @remove="removeDesign($event)"
+                        @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -33,7 +34,7 @@
                 <el-card class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
-                            請拖曳以下選項 到 自定義欄位
+                            請拖曳以下選項到 指定位置
                         </div>
                     </template>
                     <el-form label-width="auto">
@@ -101,6 +102,7 @@ import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import useRepoEvent from '~/composables/useRepoEvent'
+import { mutable } from 'element-plus/es/utils/typescript.mjs'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
@@ -209,6 +211,13 @@ async function setDefaultTemplate() {
                 }
             },
         ]
+    })
+}
+
+async function handleChange(templateDesign: ITemplateDesign) {
+    await repoEvent.patchEventTemplateDesign({
+        id: templateDesign.id,
+        mutable: templateDesign.mutable
     })
 }
 

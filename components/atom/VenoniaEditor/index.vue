@@ -29,6 +29,7 @@ const props = defineProps({
                 '|',
                 'heading',
                 '|',
+                'fontFamily',
                 'fontSize',
                 '|',
                 'bold',
