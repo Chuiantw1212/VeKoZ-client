@@ -71,6 +71,18 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 })
+
+// Methods
+async function handleChange(templateDesign: any) {
+    isLoading.value = true // 增強體驗
+    const id = templateDesign.id ?? crypto.randomUUID()
+    debouncePatchEventTemplateDesign(id, templateDesign)
+}
+
+const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: any) => {
+    await props.onchange(templateDesign)
+    isLoading.value = false
+})
 </script>
 <style lang="scss" scoped>
 .design__mt {

@@ -79,4 +79,16 @@ watch(() => customDesign.value, (newValue) => {
     customDesign.value = mergedItem
 
 })
+
+// methods
+async function handleChange(templateDesign: any) {
+    isLoading.value = true // 增強體驗
+    const id = templateDesign.id ?? crypto.randomUUID()
+    debouncePatchEventTemplateDesign(id, templateDesign)
+}
+
+const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: any) => {
+    await props.onchange(templateDesign)
+    isLoading.value = false
+})
 </script>

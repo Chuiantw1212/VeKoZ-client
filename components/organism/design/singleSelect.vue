@@ -23,10 +23,10 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
-import { computed, watch } from 'vue';
-const repoOrganization = useRepoOrganization()
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-
+const repoOrganization = useRepoOrganization()
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -51,6 +51,10 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    onchange: {
+        type: Function,
+        default: async () => { }
+    }
 })
 
 
@@ -89,5 +93,14 @@ async function getSelectOptions() {
     // const result = await repoOrganization.getOrganizationList()
     // organizationList.value = result
 }
+async function handleChange(templateDesign: any) {
+    isLoading.value = true // 增強體驗
+    const id = templateDesign.id ?? crypto.randomUUID()
+    debouncePatchEventTemplateDesign(id, templateDesign)
+}
 
+const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: any) => {
+    await props.onchange(templateDesign)
+    isLoading.value = false
+})
 </script>
