@@ -26,7 +26,6 @@ interface IModel {
     }
 }
 const customDesign = defineModel<IModel>('modelValue', {
-    required: true,
     default: {
         type: 'header1',
         mutable: {
