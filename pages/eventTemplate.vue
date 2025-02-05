@@ -140,6 +140,7 @@ onBeforeUnmount(() => {
 
 // methods
 async function setDefaultTemplate() {
+    delete eventTemplate.value.designIds
     Object.assign(eventTemplate.value, {
         designs: [
             {

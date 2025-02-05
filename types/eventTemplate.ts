@@ -2,7 +2,8 @@ export interface IEventTemplate {
     uid?: string,
     id?: string,
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
-    designs: ITemplateDesign[]
+    designs: ITemplateDesign[],
+    designIds?: string[]
 }
 
 export interface ITemplateDesign {
