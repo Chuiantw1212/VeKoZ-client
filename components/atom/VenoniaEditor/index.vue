@@ -36,13 +36,12 @@ const props = defineProps({
                 'fontColor',
                 '|',
                 'link',
-                // 'imageUpload',
                 'mediaEmbed',
                 '|',
                 'bulletedList',
                 'numberedList',
                 '|',
-                'removeFormat'
+                'removeFormat',
             ]
         }
     },
@@ -99,7 +98,9 @@ async function initializeCKEditor() {
     const siteUrl = useRuntimeConfig().public.siteUrl
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || (window as any).CKEDITOR
-    const editor = await ClassicEditor.create(editorRef.value, editorConfig)
+
+    const element = document.getElementById('editor')
+    const editor = await ClassicEditor.create(element, editorConfig)
 
     // 附加初始值
     if (localValue.value) {
