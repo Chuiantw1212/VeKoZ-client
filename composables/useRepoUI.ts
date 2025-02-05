@@ -41,25 +41,27 @@ export default defineStore('ui', () => {
         setWidth()
         window.addEventListener('resize', () => {
             isResizing.value = true
-            debounceSetWidth('resize')
+            debounce('resize', () => {
+                setWidth()
+            })
         })
     }
 
     // Methods
-    const debounceSetWidth = debounce(setWidth)
-
     /**
      * https://www.freecodecamp.org/news/javascript-debounce-example/
      * @param isLoading
      */
-    function debounce(func: Function, timeout = 300) {
-        return (id: string, ...args: any) => {
-            const existedTimer = debounceTimeout.value[id]
+    function debounce(id: string, func: Function, timeout = 300) {
+        const existedTimer = debounceTimeout.value[id]
+        if (existedTimer) {
             clearTimeout(existedTimer);
-
-            const newTimer = setTimeout(() => { func.apply(args); }, timeout);
-            debounceTimeout.value[id] = newTimer
-        };
+        }
+        const newTimer = setTimeout(() => {
+            func();
+            delete debounceTimeout.value[id]
+        }, timeout);
+        debounceTimeout.value[id] = newTimer
     }
     function setLoading(isLoading: boolean) {
         if (isLoading) {

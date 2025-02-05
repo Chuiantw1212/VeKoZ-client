@@ -68,7 +68,8 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay,listWeek'
+            right: 'multiMonthYear,dayGridMonth,dayGridWeek,listWeek'
+            // right: ''
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
@@ -132,14 +133,17 @@ function resetDateCellListener() {
 }
 
 function toggleEventAddingBtn(event: Event) {
-    const dayFrame = event.target as any
-    const dayTop = dayFrame.querySelector('.fc-daygrid-day-top')
-
     // 移除所有的事件增加按鈕
     const items = document.querySelectorAll('.addEventBtn')
     items.forEach(item => {
         item.remove()
     })
+
+    const dayFrame = event.target as any
+    const dayTop = dayFrame.querySelector('.fc-daygrid-day-top')
+    if (!dayTop) {
+        return
+    }
 
     // 顯示新增按鈕上去
     const button = document.createElement("button")

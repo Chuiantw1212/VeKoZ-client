@@ -100,12 +100,9 @@
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
-import useRepoEvent from '~/composables/useRepoEvent'
-import { mutable } from 'element-plus/es/utils/typescript.mjs'
-const repoEvent = useRepoEvent()
+const repoEventTemplate = useRepoEventTemplate()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
-const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 
 // 拖曳中的模板資料
@@ -215,7 +212,11 @@ async function setDefaultTemplate() {
 }
 
 async function handleChange(templateDesign: ITemplateDesign) {
-    repoEvent.patchEventTemplateDesign({
+    console.log({
+        templateDesign
+    })
+
+    repoEventTemplate.patchEventTemplateDesign({
         id: templateDesign.id,
         mutable: templateDesign.mutable
     })
@@ -223,13 +224,13 @@ async function handleChange(templateDesign: ITemplateDesign) {
 
 async function resetEventTemplate() {
     const oldTemplateId = eventTemplate.value.id
-    await repoEvent.deleteEventTemplate(String(oldTemplateId))
+    await repoEventTemplate.deleteEventTemplate(String(oldTemplateId))
     setDefaultTemplate()
     postEventTemplate()
 }
 
 async function postEventTemplate() {
-    await repoEvent.postEventTemplate(eventTemplate.value)
+    await repoEventTemplate.postEventTemplate(eventTemplate.value)
     await getEventTemplate()
 }
 
@@ -280,7 +281,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         }
     } else {
         // 屬於新增的模板設計
-        const designId = await repoEvent.postEventTemplateDesign({
+        const designId = await repoEventTemplate.postEventTemplateDesign({
             type: templateTemp.value.type,
             destination: destinationIndex,
             templateId: eventTemplate.value.id,
@@ -292,7 +293,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 
     // 更新模板順序
     const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
-    repoEvent.patchEventTemplate(templateDesignIds)
+    repoEventTemplate.patchEventTemplate(templateDesignIds)
 
     // Reset flags
     templateTemp.value.id = '' // 用來判斷是否為新增的欄位
@@ -304,11 +305,11 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 async function removeDesign(data: any) {
     isLoading.value = true
     // 更新資料庫
-    await repoEvent.deleteEventTemplateDesign(data.id)
+    await repoEventTemplate.deleteEventTemplateDesign(data.id)
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
     const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
-    await repoEvent.patchEventTemplate(templateDesignIds)
+    await repoEventTemplate.patchEventTemplate(templateDesignIds)
     isLoading.value = false
 }
 
@@ -323,7 +324,7 @@ function cancelDragging() {
 }
 
 async function getEventTemplate() {
-    const result = await repoEvent.getEventTemplate()
+    const result = await repoEventTemplate.getEventTemplate()
     if (result) {
         Object.assign(eventTemplate.value, result)
     }

@@ -36,16 +36,9 @@ const customDesign = defineModel<IModel>('modelValue', {
 })
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'divider',
-                mutable: {
-                    label: '分隔線'
-                }
-            }
-        }
+    id: {
+        type: String,
+        default: crypto.randomUUID()
     },
     isDesigning: {
         type: Boolean,
@@ -82,19 +75,16 @@ watch(() => customDesign.value, (newValue) => {
 })
 
 // 觸發更新
-watch(() => customDesign.value, (newValue) => {
+watch(customDesign.value, (newValue) => {
     handleChange(newValue)
 }, { deep: true })
 
 // methods
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
-    const id = templateDesign.id ?? crypto.randomUUID()
-    debouncePatchEventTemplateDesign(id, templateDesign)
+    repoUI.debounce(props.id, async function () {
+        await props.onchange(templateDesign)
+        isLoading.value = false
+    })
 }
-
-const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: any) => {
-    await props.onchange(templateDesign)
-    isLoading.value = false
-})
 </script>

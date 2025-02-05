@@ -9,7 +9,7 @@ export interface IEventClickInfo {
  * https://fullcalendar.io/docs/eventChange
  */
 export interface IChangeInfo {
-    event: any,
+    event: IFullCalendarEvent,
     relatedEvents: any[],
     oldEvent: any,
     revert: Function,

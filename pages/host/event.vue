@@ -64,9 +64,11 @@ import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/f
 
 // Data
 const repoEvent = useRepoEvent()
+const repoEventTemplate = useRepoEventTemplate()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
+const calendarEventList = ref<IEvent[]>([])
 const currentEvent = ref<IEvent>()
 const dialogVisible = ref(false)
 const dialogTemplate = ref<IEventTemplate>({
@@ -88,11 +90,11 @@ async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
 
-    const result: IEvent[] = await repoEvent.getEventList({
+    calendarEventList.value = await repoEvent.getEventList({
         startDate: startOfTheMonth.toISOString(),
     })
 
-    const fullCalendarEventList: IFullCalendarEvent[] = result.map(event => {
+    const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
         return {
             id: String(event.id),
             title: String(event.name),
@@ -100,7 +102,7 @@ async function getEventList() {
             end: String(event.endDate),
             startStr: String(event.startDate),
             endStr: String(event.endDate),
-            startEditable: true,
+            editable: true,
         }
     })
 
@@ -110,14 +112,25 @@ async function getEventList() {
 }
 
 async function handleEventChange(changeInfo: IChangeInfo) {
-    if (!currentEvent.value) {
-        return
-    }
-    const originStarDate = currentEvent.value.startDate ?? new Date()
-    const originEndDate = currentEvent.value.endDate ?? new Date()
-    const duration = new Date(originEndDate).getTime() - new Date(originStarDate).getTime()
+    /**
+     * 疑似BUG，無法直接拿到endDateStr
+     */
+    const eventId = changeInfo.event.id
+    const changedEvent = calendarEventList.value.find(event => {
+        return event.id === eventId
+    })
+    const oldEndDate = String(changedEvent?.endDate)
+    const newStartDate: Date = changeInfo.event.start as Date
+    const newYear = newStartDate.getFullYear()
+    const newMonth = newStartDate.getMonth()
+    const newDate = newStartDate.getDate()
+    const newEndDate = new Date(oldEndDate)
+    newEndDate.setFullYear(newYear)
+    newEndDate.setMonth(newMonth)
+    newEndDate.setDate(newDate)
 
-    const newStartDate = changeInfo.event.start
+    // repoEvent
+
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
@@ -130,7 +143,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 }
 
 async function getEventTemplate() {
-    const result = await repoEvent.getEventTemplate()
+    const result = await repoEventTemplate.getEventTemplate()
     if (result) {
         dialogTemplate.value = result
     }
