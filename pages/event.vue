@@ -47,13 +47,9 @@
                 </div>
             </div>
         </template>
-        <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
-        <!-- <template #footer>
-            <el-button @click="cancelEventEditing()">取消</el-button>
-            <el-button type="primary" @click="submitNewEvent()">
-                確認
-            </el-button>
-        </template> -->
+        <el-container v-loading.lock="isLoading">
+            <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
+        </el-container>
     </el-dialog>
 </template>
 
@@ -130,6 +126,7 @@ async function getEventTemplate() {
 }
 
 async function openNewEventDialog(data: IEventCreation) {
+    isLoading.value = true
     const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })
@@ -143,6 +140,7 @@ async function openNewEventDialog(data: IEventCreation) {
     dialogTemplate.value.eventId = newEvent.eventId
     await getEventList()
     dialogVisible.value = true
+    isLoading.value = false
 }
 
 async function cancelEventEditing() {
@@ -150,21 +148,14 @@ async function cancelEventEditing() {
 }
 
 async function deleteEvent() {
+    isLoading.value = true
     if (dialogTemplate.value.eventId) {
         await repoEvent.deleteEvent(dialogTemplate.value.eventId)
         venoniaCalendarRef.value?.removeAllEvents()
         await getEventList()
         dialogVisible.value = false
+        isLoading.value = false
     }
-}
-
-/**
- * 存到Firestore的資料要可以篩選，所以這邊就要把資料格式整理好
- */
-async function submitNewEvent() {
-    await repoEvent.postEvent(dialogTemplate.value)
-    await getEventList()
-    dialogVisible.value = false
 }
 </script>
 
