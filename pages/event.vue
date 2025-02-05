@@ -70,12 +70,9 @@ const repoEvent = useRepoEvent()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
-const defaultTemplate = ref<IEventTemplate>({
-    designs: [] // 新增時使用的樣板
-})
 const dialogVisible = ref(false)
 const dialogTemplate = ref<IEventTemplate>({
-    designs: [] // 編輯時使用的樣板
+    designs: []
 })
 
 // Hooks
@@ -128,12 +125,11 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
     if (result) {
-        defaultTemplate.value = markRaw(result)
+        dialogTemplate.value = result
     }
 }
 
 async function openNewEventDialog(data: IEventCreation) {
-    dialogTemplate.value = structuredClone(defaultTemplate.value)
     const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })
@@ -143,7 +139,8 @@ async function openNewEventDialog(data: IEventCreation) {
             seoDateTimeRange.mutable.value = [date, date]
         }
     }
-    await repoEvent.postEvent(dialogTemplate.value)
+    const newEvent = await repoEvent.postEvent(dialogTemplate.value)
+    dialogTemplate.value.eventId = newEvent.eventId
     await getEventList()
     dialogVisible.value = true
 }
