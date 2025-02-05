@@ -1,6 +1,6 @@
 <template>
   <el-menu :collapse="repoUI.isMenuCollapse">
-    <NuxtLink to="/event">
+    <NuxtLink to="/host/event">
       <el-menu-item>
         <el-icon>
           <Calendar />
@@ -8,7 +8,7 @@
         <template #title>活動管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/eventTemplate">
+    <NuxtLink to="/host/eventTemplate">
       <el-menu-item>
         <el-icon>
           <Document />
@@ -16,7 +16,7 @@
         <template #title>活動套版管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/place">
+    <NuxtLink to="/host/place">
       <el-menu-item>
         <el-icon>
           <Location />
@@ -24,7 +24,7 @@
         <template #title>空間&地點管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/organization">
+    <NuxtLink to="/host/organization">
       <el-menu-item>
         <el-icon>
           <OfficeBuilding />
@@ -32,7 +32,7 @@
         <template #title>權限&組織管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/offer">
+    <NuxtLink to="/host/offer">
       <el-menu-item>
         <el-icon>
           <Ticket />

@@ -35,16 +35,16 @@
                 <div class="venonia-dialog-header">
                     <span :id="titleId" :class="titleClass">活動編輯</span>
                     <div class="header__btnGroup">
-                        <button v-if="dialogTemplate.id" class="btnGroup__btn">
+                        <el-button v-if="dialogTemplate.id" class="btnGroup__btn">
                             <el-icon @click="deleteEvent()">
                                 <Delete />
                             </el-icon>
-                        </button>
-                        <button class="btnGroup__btn">
+                        </el-button>
+                        <el-button class="btnGroup__btn">
                             <el-icon @click="cancelEventEditing()">
                                 <Close />
                             </el-icon>
-                        </button>
+                        </el-button>
                     </div>
                 </div>
             </template>
@@ -68,6 +68,7 @@ const repoEvent = useRepoEvent()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
+const currentEvent = ref<IEvent>()
 const dialogVisible = ref(false)
 const dialogTemplate = ref<IEventTemplate>({
     designs: []
@@ -98,8 +99,9 @@ async function getEventList() {
             title: String(event.name),
             start: String(event.startDate),
             end: String(event.endDate),
+            startStr: String(event.startDate),
+            endStr: String(event.endDate),
             startEditable: true,
-            durationEditable: false,
         }
     })
 
@@ -109,11 +111,19 @@ async function getEventList() {
 }
 
 async function handleEventChange(changeInfo: IChangeInfo) {
+    if (!currentEvent.value) {
+        return
+    }
+    const originStarDate = currentEvent.value.startDate ?? new Date()
+    const originEndDate = currentEvent.value.endDate ?? new Date()
+    const duration = new Date(originEndDate).getTime() - new Date(originStarDate).getTime()
 
+    const newStartDate = changeInfo.event.start
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
+    currentEvent.value = eventClickInfo.event
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     dialogTemplate.value.eventId = eventId // 用這行刪除
     Object.assign(dialogTemplate.value, eventTemplate)
@@ -139,6 +149,7 @@ async function openNewEventDialog(data: IEventCreation) {
         }
     }
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
+    currentEvent.value = newEvent
     dialogTemplate.value.eventId = newEvent.eventId
     await getEventList()
     dialogVisible.value = true

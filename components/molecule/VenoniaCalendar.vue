@@ -74,7 +74,6 @@ function initializeCalendar() {
  * https://fullcalendar.io/docs/eventClick
  */
 function handleEventClick(eventClickInfo: IEventClickInfo) {
-    console.dir(calendarInstance.value)
     emit('eventClick', eventClickInfo)
 }
 
