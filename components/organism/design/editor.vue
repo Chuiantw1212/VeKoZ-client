@@ -5,8 +5,8 @@
         </AtomVenoniaEditor>
     </el-form-item>
     <!-- 編輯用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
-        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:default>
             <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder">
             </AtomVenoniaEditor>

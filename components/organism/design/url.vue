@@ -6,8 +6,8 @@
             :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 編輯用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" @dragstart="emit('dragstart')" @remove="emit('remove')"
-        @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
         </template>
@@ -19,22 +19,27 @@
     </MoleculeCustomToolbar>
 </template>
 <script setup lang="ts">
-import { computed, watch } from 'vue';
-
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
+interface IModel {
+    type: 'organizationMember',
+    mutable: {
+        label: string,
+        name: string,
+        url: string,
+    }
+}
 
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                name: 'url',
-                mutable: {
-                    label: '超連結'
-                }
-            }
+const customDesign = defineModel<IModel>('modelValue', {
+    default: {
+        type: 'url',
+        mutable: {
+            label: '超連結'
         }
-    },
+    }
+})
+const props = defineProps({
     isDesigning: {
         type: Boolean,
         default: false
@@ -49,20 +54,12 @@ const props = defineProps({
     }
 })
 
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
 watch(() => customDesign.value, (newValue) => {
     if (newValue.mutable) {
         return
     }
     const defaultValue = {
-        name: 'url',
+        type: 'url',
         mutable: {
             label: '',
         }

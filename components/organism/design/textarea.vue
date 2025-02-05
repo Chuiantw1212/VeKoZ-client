@@ -5,8 +5,8 @@
             :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
     <!-- 編輯用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
-        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
         </template>

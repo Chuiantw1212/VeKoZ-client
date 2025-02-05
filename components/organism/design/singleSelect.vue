@@ -6,7 +6,7 @@
         </el-form-item>
     </template>
     <!-- 編輯用 -->
-    <template v-else-if="customDesign.mutable">
+    <template v-else-if="customDesign.mutable" :loading="isLoading">
         <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <div class="design__item">

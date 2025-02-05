@@ -5,8 +5,8 @@
             :disabled="disabled"></el-date-picker>
     </el-form-item>
     <!-- 編輯用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" @dragstart="emit('dragstart')" @remove="emit('remove')"
-        @moveUp="emit('moveUp')" :allowDelete="allowDelete" @moveDown="emit('moveDown')">
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+        @remove="emit('remove')" @moveUp="emit('moveUp')" :allowDelete="allowDelete" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
         </template>
