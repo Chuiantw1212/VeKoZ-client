@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="props.title" width="85%" :show-close="false" :lock-scroll="true"
+    <el-dialog v-model="dialogVisible" :title="props.title" :width="width" :show-close="false" :lock-scroll="true"
         :align-center="true" body-class="venonia-dialog-body">
         <template #header="{ titleId, titleClass }">
             <slot name="header" :titleId="titleId" :titleClass="titleClass"></slot>
@@ -16,6 +16,15 @@ const props = defineProps({
         type: String,
         default: ''
     }
+})
+const width = computed(() => {
+    /**
+     * Element plus 預設 50%
+     * 手機版本橫置85%比較適合
+     * 寬螢幕最大950px適合
+     */
+    const innerWidth = window.innerWidth * 0.85
+    return Math.min(950, innerWidth)
 })
 </script>
 <style lang="scss" scoped>
