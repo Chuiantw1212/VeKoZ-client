@@ -94,7 +94,7 @@ function handleEventClick(eventClickInfo: IEventClickInfo) {
  * https://fullcalendar.io/docs/eventChange
  * @param changeInfo 
  */
-function handleEventChange(changeInfo: IChangeInfo) {
+function handleEventChange(changeInfo: any) {
     emit('eventChange', changeInfo)
 }
 
