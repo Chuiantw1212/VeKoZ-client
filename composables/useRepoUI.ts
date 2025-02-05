@@ -14,15 +14,7 @@ export default defineStore('ui', () => {
     const loadingInstance = ref<any>(null)
     const debounceTimeout = ref<{ [key: string]: NodeJS.Timeout }>({})
 
-    if (import.meta.client) {
-        window.addEventListener('resize', () => {
-            isResizing.value = true
-            debounceSetWidth('resize')
-        })
-    }
-
-    // Methods
-    const debounceSetWidth = debounce(() => {
+    function setWidth() {
         const innerWidth = window.innerWidth
         isMobile.value = false
         isTablet.value = false
@@ -43,7 +35,18 @@ export default defineStore('ui', () => {
             isMenuCollapse.value = false
         }
         isResizing.value = false
-    })
+    }
+
+    if (import.meta.client) {
+        setWidth()
+        window.addEventListener('resize', () => {
+            isResizing.value = true
+            debounceSetWidth('resize')
+        })
+    }
+
+    // Methods
+    const debounceSetWidth = debounce(setWidth)
 
     /**
      * https://www.freecodecamp.org/news/javascript-debounce-example/
