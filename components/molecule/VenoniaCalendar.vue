@@ -36,6 +36,8 @@ onBeforeUnmount(() => {
 
 const debounceResize = repoUI.debounce(() => {
     setTimeout(() => {
+        const idealHeight = window.innerHeight - 150
+        calendarInstance.value?.setOption('height', idealHeight);
         calendarInstance.value?.updateSize()
     }, 50) // 不科學實驗結果的最佳數字
 })
@@ -54,6 +56,7 @@ function initializeCalendar() {
     }
 
     // 設定Calendar
+    const idealHeight = window.innerHeight - 150
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
         initialView: 'dayGridMonth',
@@ -67,7 +70,8 @@ function initializeCalendar() {
             center: 'title',
             right: 'multiMonthYear,dayGridMonth,dayGridWeek,dayGridDay,listWeek'
         },
-        multiMonthMaxColumns: 1 // force a single column
+        multiMonthMaxColumns: 1, // force a single column
+        height: idealHeight,
     });
     calendar.render();
 
