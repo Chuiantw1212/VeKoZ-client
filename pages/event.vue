@@ -126,7 +126,9 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    defaultTemplate.value = markRaw(result)
+    if (result) {
+        defaultTemplate.value = markRaw(result)
+    }
 }
 
 async function openNewEventDialog(data: IEventCreation) {

@@ -37,11 +37,18 @@ const props = defineProps({
                 '|',
                 'link',
                 'mediaEmbed',
-                '|',
-                'bulletedList',
-                'numberedList',
-                '|',
-                'removeFormat',
+                'htmlEmbed',
+                {
+                    label: '更多',
+                    items: [
+                        'alignment',
+                        'bulletedList',
+                        'numberedList',
+                        // 'todoList',
+                        '|',
+                        'removeFormat'
+                    ]
+                },
             ]
         }
     },
