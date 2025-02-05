@@ -59,6 +59,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '請選擇空間地點'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 const placeList = ref<IPlace[]>([])

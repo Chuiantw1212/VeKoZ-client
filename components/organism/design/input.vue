@@ -49,6 +49,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '請輸入任意文字'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 watch(() => customDesign.value, (newValue) => {

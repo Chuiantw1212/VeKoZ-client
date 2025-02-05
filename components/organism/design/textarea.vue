@@ -64,6 +64,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '請輸入'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 

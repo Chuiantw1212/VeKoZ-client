@@ -51,6 +51,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '連結與文字僅在編輯時類似，在參加者看來會有所不同'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 

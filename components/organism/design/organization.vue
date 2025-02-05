@@ -59,6 +59,10 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '請選擇現有組織'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 const organizationList = ref<IOrganization[]>([])
