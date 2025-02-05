@@ -29,8 +29,7 @@
             </el-col>
         </el-row>
 
-        <el-dialog v-model="dialogVisible" title="活動編輯" width="85%" :show-close="false" :lock-scroll="true"
-            :align-center="true" body-class="venonia-dialog-body">
+        <AtomVenoniaDialog v-model="dialogVisible">
             <template #header="{ titleId, titleClass }">
                 <div class="venonia-dialog-header">
                     <span :id="titleId" :class="titleClass">活動編輯</span>
@@ -51,7 +50,7 @@
             <el-container v-loading.lock="isLoading">
                 <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
             </el-container>
-        </el-dialog>
+        </AtomVenoniaDialog>
     </div>
 </template>
 
