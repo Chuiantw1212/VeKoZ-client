@@ -77,11 +77,8 @@ const props = defineProps({
 const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
+// 附加預設值
 watch(() => customDesign.value, (newValue) => {
-    // 觸發更新
-    handleChange(newValue)
-
-    // 附加預設值
     if (newValue.mutable) {
         return
     }
@@ -94,9 +91,15 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 })
+
 watch(() => props.organizationId, (newValue) => {
     getOrganizationMemberList(newValue)
 }, { immediate: true })
+
+// 觸發更新
+watch(() => customDesign.value, (newValue) => {
+    handleChange(newValue)
+}, { deep: true })
 
 // Methods
 async function getOrganizationMemberList(organizationId: string) {

@@ -73,11 +73,9 @@ const customDesign = computed({
         emit('update:modelValue', newValue)
     }
 })
-watch(() => customDesign.value, (newValue) => {
-    // 觸發更新
-    handleChange(newValue)
 
-    // 附加預設值
+// 附加預設值
+watch(() => customDesign.value, (newValue) => {
     if (newValue.mutable) {
         return
     }
@@ -90,7 +88,12 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 
-}, { immediate: true })
+})
+
+// 觸發更新
+watch(() => customDesign.value, (newValue) => {
+    handleChange(newValue)
+}, { deep: true })
 
 // Methods
 async function getSelectOptions() {

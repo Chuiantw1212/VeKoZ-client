@@ -61,11 +61,8 @@ const props = defineProps({
     }
 })
 
+// 附加預設值
 watch(() => customDesign.value, (newValue) => {
-    // 觸發更新
-    handleChange(newValue)
-
-    // 附加預設值
     if (newValue?.mutable) {
         return
     }
@@ -78,6 +75,11 @@ watch(() => customDesign.value, (newValue) => {
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
 })
+
+// 觸發更新
+watch(() => customDesign.value, (newValue) => {
+    handleChange(newValue)
+}, { deep: true })
 
 // methods
 async function handleChange(templateDesign: any) {
