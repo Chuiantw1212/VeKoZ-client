@@ -34,7 +34,7 @@
             <div class="venonia-dialog-header">
                 <span :id="titleId" :class="titleClass">活動編輯</span>
                 <div class="header__btnGroup">
-                    <button v-if="dialogTemplate.eventId" class="btnGroup__btn">
+                    <button v-if="dialogTemplate.id" class="btnGroup__btn">
                         <el-icon @click="deleteEvent()">
                             <Delete />
                         </el-icon>
@@ -71,11 +71,11 @@ const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
 const defaultTemplate = ref<IEventTemplate>({
-    designs: []
+    designs: [] // 新增時使用的樣板
 })
 const dialogVisible = ref(false)
 const dialogTemplate = ref<IEventTemplate>({
-    designs: []
+    designs: [] // 編輯時使用的樣板
 })
 
 // Hooks
@@ -120,6 +120,7 @@ async function handleEventChange(changeInfo: IChangeInfo) {
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
+    dialogTemplate.value.eventId = eventId // 用這行刪除
     Object.assign(dialogTemplate.value, eventTemplate)
     dialogVisible.value = true
 }
