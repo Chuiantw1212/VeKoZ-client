@@ -43,7 +43,8 @@ export default defineStore('event', () => {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'GET',
         })
-        return response.json()
+        const result: IEventTemplate | 0 = response.json()
+        return result
     }
     async function postEventTemplate(body: IEventTemplate) {
         const response = await defaultApi.authRequest(`/event/template`, {

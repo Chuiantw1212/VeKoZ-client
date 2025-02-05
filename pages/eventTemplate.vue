@@ -215,6 +215,7 @@ async function resetEventTemplate() {
     const oldTemplateId = eventTemplate.value.id
     await repoEvent.deleteEventTemplate(String(oldTemplateId))
     setDefaultTemplate()
+    postEventTemplate()
 }
 
 async function postEventTemplate() {
@@ -313,7 +314,9 @@ function cancelDragging() {
 
 async function getEventTemplate() {
     const result = await repoEvent.getEventTemplate()
-    Object.assign(eventTemplate.value, result)
+    if (result) {
+        Object.assign(eventTemplate.value, result)
+    }
 }
 </script>
 <style lang="scss" scoped>
