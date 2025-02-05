@@ -59,7 +59,7 @@ export default defineStore('event', () => {
         })
         return response.text()
     }
-    async function deleteEventTemplate(id: string[]) {
+    async function deleteEventTemplate(id: string) {
         const response = await defaultApi.authRequest(`/event/template/${id}`, {
             method: 'DELETE',
         })

@@ -213,7 +213,7 @@ async function setDefaultTemplate() {
 
 async function resetEventTemplate() {
     const oldTemplateId = eventTemplate.value.id
-    await repoEvent.delete
+    await repoEvent.deleteEventTemplate(String(oldTemplateId))
     setDefaultTemplate()
 }
 
