@@ -1,56 +1,58 @@
 <template>
-    <el-row :gutter="20">
-        <el-col :span="16">
-            <el-card v-loading.lock="isLoading">
-                <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
-                    @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
-                </MoleculeVenoniaCalendar>
-            </el-card>
-        </el-col>
-        <el-col :span="8">
-            <el-card>
-                <template #header>
-                    月曆切換與訂閱
-                </template>
-                <el-input placeholder="請搜尋欲訂閱的月曆或輸入月曆ID"></el-input>
-                <ul>
-                    <li>
-                        歐洲多語言
-                    </li>
-                    <li>
-                        常識經濟學
-                    </li>
-                    <li>
-                        個人行事曆
-                    </li>
-                </ul>
-            </el-card>
-        </el-col>
-    </el-row>
+    <div class="event">
+        <el-row :gutter="20">
+            <el-col :span="16">
+                <el-card v-loading.lock="isLoading">
+                    <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
+                        @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
+                    </MoleculeVenoniaCalendar>
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card>
+                    <template #header>
+                        月曆切換與訂閱
+                    </template>
+                    <el-input placeholder="請搜尋欲訂閱的月曆或輸入月曆ID"></el-input>
+                    <ul>
+                        <li>
+                            歐洲多語言
+                        </li>
+                        <li>
+                            常識經濟學
+                        </li>
+                        <li>
+                            個人行事曆
+                        </li>
+                    </ul>
+                </el-card>
+            </el-col>
+        </el-row>
 
-    <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true" :align-center="true"
-        body-class="venonia-dialog-body">
-        <template #header="{ titleId, titleClass }">
-            <div class="venonia-dialog-header">
-                <span :id="titleId" :class="titleClass">活動編輯</span>
-                <div class="header__btnGroup">
-                    <button v-if="dialogTemplate.id" class="btnGroup__btn">
-                        <el-icon @click="deleteEvent()">
-                            <Delete />
-                        </el-icon>
-                    </button>
-                    <button class="btnGroup__btn">
-                        <el-icon @click="cancelEventEditing()">
-                            <Close />
-                        </el-icon>
-                    </button>
+        <el-dialog v-model="dialogVisible" title="活動編輯" :show-close="false" :lock-scroll="true" :align-center="true"
+            body-class="venonia-dialog-body">
+            <template #header="{ titleId, titleClass }">
+                <div class="venonia-dialog-header">
+                    <span :id="titleId" :class="titleClass">活動編輯</span>
+                    <div class="header__btnGroup">
+                        <button v-if="dialogTemplate.id" class="btnGroup__btn">
+                            <el-icon @click="deleteEvent()">
+                                <Delete />
+                            </el-icon>
+                        </button>
+                        <button class="btnGroup__btn">
+                            <el-icon @click="cancelEventEditing()">
+                                <Close />
+                            </el-icon>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </template>
-        <el-container v-loading.lock="isLoading">
-            <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
-        </el-container>
-    </el-dialog>
+            </template>
+            <el-container v-loading.lock="isLoading">
+                <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
+            </el-container>
+        </el-dialog>
+    </div>
 </template>
 
 <script setup lang="ts">
