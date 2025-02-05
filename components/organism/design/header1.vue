@@ -5,8 +5,8 @@
             :show-word-limit="true" size="large"></el-input>
     </el-form-item>
     <!-- 編輯用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :allowDelete="allowDelete" @dragstart="emit('dragstart')"
-        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
         </template>
@@ -18,6 +18,8 @@
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 interface IModel {
     type: 'header1',
     mutable: {
@@ -31,7 +33,7 @@ const customDesign = defineModel<IModel>('modelValue', {
         mutable: {
             label: ''
         }
-    }
+    },
 })
 
 const props = defineProps({
@@ -46,11 +48,18 @@ const props = defineProps({
     placeholder: {
         type: String,
         default: '請輸入主標題'
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
     }
 })
 
-watch(customDesign.value, (newValue) => {
-    emit('update:modelValue', newValue)
+watch(customDesign.value, async (newValue) => {
+    // 觸發更新
+    handleChange(newValue)
+
+    // 附加預設值
     if (newValue?.mutable) {
         return
     }
@@ -62,5 +71,17 @@ watch(customDesign.value, (newValue) => {
     }
     const mergedItem = Object.assign(defaultValue, newValue)
     customDesign.value = mergedItem
+})
+
+// methods
+async function handleChange(templateDesign: any) {
+    isLoading.value = true // 增強體驗
+    const id = templateDesign.id ?? crypto.randomUUID()
+    debouncePatchEventTemplateDesign(id, templateDesign)
+}
+
+const debouncePatchEventTemplateDesign = repoUI.debounce(async (templateDesign: any) => {
+    await props.onchange(templateDesign)
+    isLoading.value = false
 })
 </script>

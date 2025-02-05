@@ -81,7 +81,7 @@ export default defineStore('event', () => {
     }
     async function patchEventTemplateDesign(body: ITemplateDesign) {
         const response = await defaultApi.authRequest(`/event/template/design`, {
-            method: 'DELETE',
+            method: 'PATCH',
             body,
         })
         return response.text()

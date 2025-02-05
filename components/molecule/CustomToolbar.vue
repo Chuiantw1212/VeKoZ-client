@@ -10,14 +10,15 @@
             <slot name="default"></slot>
         </div>
         <template v-if="allowDelete">
-            <el-button class="toolbar__btn" size="small" @click="emit('remove')">
+            <el-button v-loading="loading" class="toolbar__btn" size="small" @click="emit('remove')">
                 <el-icon>
                     <Delete />
                 </el-icon>
             </el-button>
         </template>
         <template v-else>
-            <el-button class="toolbar__btn" type="info" size="small" :disabled="true" @click="emit('remove')">
+            <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
+                @click="emit('remove')">
                 SEO
             </el-button>
         </template>
@@ -30,6 +31,10 @@ import {
 } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown'])
 const props = defineProps({
+    loading: {
+        type: Boolean,
+        default: false,
+    },
     allowDelete: {
         type: Boolean,
         default: true

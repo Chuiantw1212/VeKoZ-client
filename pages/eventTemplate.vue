@@ -13,9 +13,8 @@
                             </div>
                         </div>
                     </template>
-                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
-                        @change="handleChange($event)" @remove="removeDesign($event)"
-                        @dragstart="setTemplateTemp($event)">
+                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true" :onchange="handleChange"
+                        @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -106,6 +105,7 @@ import { mutable } from 'element-plus/es/utils/typescript.mjs'
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
+const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 
 // 拖曳中的模板資料
@@ -215,7 +215,7 @@ async function setDefaultTemplate() {
 }
 
 async function handleChange(templateDesign: ITemplateDesign) {
-    await repoEvent.patchEventTemplateDesign({
+    repoEvent.patchEventTemplateDesign({
         id: templateDesign.id,
         mutable: templateDesign.mutable
     })
