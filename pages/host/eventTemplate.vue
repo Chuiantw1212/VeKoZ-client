@@ -1,7 +1,7 @@
 <template>
     <div class="eventTemplate">
         <el-row :gutter="20">
-            <el-col :span="16">
+            <el-col :span="repoUI.isDesktop ? 16 : 24">
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
@@ -29,7 +29,7 @@
                     </div>
                 </el-card>
             </el-col>
-            <el-col :span="8">
+            <el-col v-if="repoUI.isDesktop" :span="8">
                 <el-card class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
@@ -101,6 +101,7 @@
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
+const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()

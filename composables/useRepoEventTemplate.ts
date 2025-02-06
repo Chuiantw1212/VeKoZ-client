@@ -4,6 +4,8 @@ import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('eventTemplate', () => {
     const defaultApi = useVenoniaApi()
+    const mostRecentEventTemplate = ref<IEventTemplate>()
+
     async function getEventTemplate() {
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'GET',
@@ -16,6 +18,11 @@ export default defineStore('eventTemplate', () => {
             method: 'POST',
             body,
         })
+        // const result = response.text()
+        // if (result) {
+        //     body.id = result
+        //     mostRecentEventTemplate.value = body
+        // }
         return response.text()
     }
     async function patchEventTemplate(body: string[]) {

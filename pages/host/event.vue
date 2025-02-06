@@ -79,7 +79,7 @@ onMounted(async () => {
     isLoading.value = true
     await Promise.all([
         getEventList(),
-        getEventTemplate()
+        // getEventTemplate()
     ])
     isLoading.value = false
 })
@@ -160,6 +160,7 @@ async function getEventTemplate() {
 
 async function openNewEventDialog(data: IEventCreation) {
     isLoading.value = true
+    await getEventTemplate()
     const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })

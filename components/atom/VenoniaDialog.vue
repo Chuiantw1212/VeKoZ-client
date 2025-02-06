@@ -34,15 +34,15 @@ const width = computed(() => {
      * 寬螢幕最大950px適合
      */
     let width: string | number = '50%'
-    return width
     if (import.meta.client) {
         const innerWidth = window.innerWidth * 0.85
-        if (repoUI.isMobile) {
+        if (repoUI.isLarge) {
             width = Math.min(950, innerWidth)
         } else {
             width = window.innerWidth * 0.85
         }
     }
+    return width
 })
 </script>
 <style lang="scss" scoped>
