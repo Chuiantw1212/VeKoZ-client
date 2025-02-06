@@ -2,8 +2,9 @@
     <!-- 檢視與編輯用 -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
-        <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
-            :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled">
+        <el-select v-model="customDesign.mutable.value" :placeholder="editPlaceHolder" :filterable="true"
+            :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
+            :disabled="disabled || !props.organizationId">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                 :value="String(item.id)" />
         </el-select>
@@ -105,6 +106,10 @@ watch(() => props.organizationId, (newValue) => {
 watch(() => customDesign.value, (newValue) => {
     handleChange(newValue)
 }, { deep: true })
+
+const editPlaceHolder = computed(() => {
+    return props.organizationId ? '請選擇現有組織成員' : '請先選擇組織'
+})
 
 // methods
 async function handleChange(templateDesign: any) {
