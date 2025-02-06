@@ -39,9 +39,10 @@
                 </el-icon>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogTemplate.id" :icon="Delete" text @click="deleteEvent()">
+                <el-button v-if="dialogTemplate.id" v-loading="isPatchLoading" :icon="Delete" text
+                    @click="deleteEvent()">
                 </el-button>
-                <el-button v-loading="isLoading" :icon="Close" text @click="cancelEventEditing()">
+                <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
             <template #default>
@@ -67,6 +68,7 @@ const repoEvent = useRepoEvent()
 const repoEventTemplate = useRepoEventTemplate()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
+const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
 const calendarEventList = ref<IEvent[]>([])
 const currentEvent = ref<IEvent>()
@@ -87,8 +89,10 @@ onMounted(async () => {
 
 // Methods
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
+    isPatchLoading.value = true
     templateDesign.eventId = currentEvent.value?.id
     await repoEvent.patchEventForm(templateDesign)
+    isPatchLoading.value = false
 }
 
 async function getEventList() {
