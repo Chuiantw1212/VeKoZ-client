@@ -7,7 +7,7 @@
         </div>
         <el-form label-width="auto">
             <template v-for="(item, index) in templateDesigns">
-                item.type: {{ item.type }}
+                <!-- item.type: {{ item.type }} -->
                 <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
                     :onchange="onchange" :isDesigning="isDesigning" @dragstart="handleDragStart(index)"
                     @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
@@ -119,15 +119,15 @@ function getOrganizationId() {
 function handleRemove(index: number) {
     const item = templateDesigns.value[index]
     emit('remove', {
+        ...item,
         index,
-        item,
     })
 }
 function handleDragStart(index: number) {
     const item = templateDesigns.value[index]
     emit('dragstart', {
+        ...item,
         index,
-        item,
     })
 }
 function handleUp(index: number) {

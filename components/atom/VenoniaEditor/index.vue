@@ -1,10 +1,9 @@
 <template>
     <ClientOnly>
-        Editor
-        <!-- <div class="ckeditor">
+        <div class="ckeditor">
             <div :id="`editor-${id}`" ref="editorRef">
             </div>
-        </div> -->
+        </div>
     </ClientOnly>
 </template>
 
@@ -71,12 +70,17 @@ const props = defineProps({
 watch(() => props.disabled, (newValue) => {
     setEditorEndable()
 }, { immediate: true })
+watch(() => editorRef.value, (newValue) => {
+    if (newValue) {
+        initializeCKEditor()
+    }
+})
 
 async function initializeCKEditor() {
-    const element = document.getElementById(`editor-${props.id}`)
-    if (!element) {
-        return
-    }
+    // const element = document.getElementById(`editor-${props.id}`)
+    // if (!element) {
+    //     return
+    // }
     // 使用CDN
     const editorConfig: EditorConfig = {
         licenseKey: 'GPL',
@@ -94,7 +98,7 @@ async function initializeCKEditor() {
     const siteUrl = useRuntimeConfig().public.siteUrl
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || (window as any).CKEDITOR
-    const editor = await ClassicEditor.create(element, editorConfig)
+    const editor = await ClassicEditor.create(editorRef.value, editorConfig)
 
     // 附加初始值
     if (localValue.value) {
@@ -126,9 +130,9 @@ function setEditorEndable() {
 }
 
 
-onMounted(async () => {
-    initializeCKEditor()
-})
+// onMounted(async () => {
+//     initializeCKEditor()
+// })
 onBeforeUnmount(() => {
     if (editorInstance.value) {
         editorInstance.value.destroy()
