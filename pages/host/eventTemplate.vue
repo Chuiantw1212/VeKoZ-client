@@ -259,7 +259,7 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
 }
 async function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
-    isLoading.value = true
+    // isLoading.value = true
 
     // 插入元素
     const templateDesign: ITemplateDesign = {
@@ -277,11 +277,13 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         // 屬於原有模板拖曳
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
         // 刪除原本位置的的模板
+        // nextTick(() => {
         if (destinationIndex < sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
         } else {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
+        // })
     } else {
         // 屬於新增的模板設計
         const designId = await repoEventTemplate.postEventTemplateDesign({
@@ -303,6 +305,12 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     templateTemp.value.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
     isLoading.value = false
+
+    // 重新渲染
+    // const temp = eventTemplate.value
+    // eventTemplate.value = {
+    //     designs: []
+    // }
 }
 
 async function removeDesign(data: any) {

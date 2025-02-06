@@ -1,18 +1,20 @@
 <template>
-    <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
-        </AtomVenoniaEditor>
-    </el-form-item>
-    <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
-        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
-        <template v-slot:default>
-            <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled"
-                :placeholder="placeholder">
+    <div>
+        <!-- 檢視與編輯用 -->
+        <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+            <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaEditor>
-        </template>
-    </MoleculeCustomToolbar>
+        </el-form-item>
+        <!-- 樣板編輯專用 -->
+        <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+            @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
+            @moveDown="emit('moveDown')">
+            <template v-slot:default>
+                <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled" :placeholder="placeholder">
+                </AtomVenoniaEditor>
+            </template>
+        </MoleculeCustomToolbar>
+    </div>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])

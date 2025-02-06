@@ -1,9 +1,10 @@
 <template>
     <ClientOnly>
-        <div class="ckeditor">
+        Editor
+        <!-- <div class="ckeditor">
             <div :id="`editor-${id}`" ref="editorRef">
             </div>
-        </div>
+        </div> -->
     </ClientOnly>
 </template>
 
@@ -72,6 +73,10 @@ watch(() => props.disabled, (newValue) => {
 }, { immediate: true })
 
 async function initializeCKEditor() {
+    const element = document.getElementById(`editor-${props.id}`)
+    if (!element) {
+        return
+    }
     // 使用CDN
     const editorConfig: EditorConfig = {
         licenseKey: 'GPL',
@@ -89,8 +94,6 @@ async function initializeCKEditor() {
     const siteUrl = useRuntimeConfig().public.siteUrl
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || (window as any).CKEDITOR
-
-    const element = document.getElementById(`editor-${props.id}`)
     const editor = await ClassicEditor.create(element, editorConfig)
 
     // 附加初始值
@@ -127,7 +130,9 @@ onMounted(async () => {
     initializeCKEditor()
 })
 onBeforeUnmount(() => {
-    editorInstance.value.destroy()
+    if (editorInstance.value) {
+        editorInstance.value.destroy()
+    }
 })
 </script>
 
