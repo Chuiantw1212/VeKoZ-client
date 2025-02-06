@@ -9,7 +9,7 @@
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                placeholder="請輸入欄位名稱"></el-input>
+                placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"

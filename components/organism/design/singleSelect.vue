@@ -12,7 +12,7 @@
             <div class="design__item">
                 <label class="item__label">
                     <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                        placeholder="請輸入欄位名稱"></el-input>
+                        placeholder="欄位名稱"></el-input>
                 </label>
                 <el-select v-model="customDesign.mutable.value" :placeholder="placeholder" :clearable="true"
                     :allow-create="true">

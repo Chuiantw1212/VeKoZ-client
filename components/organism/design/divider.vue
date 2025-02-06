@@ -9,7 +9,7 @@
         <template v-slot:default>
             <el-divider>
                 <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                    placeholder="請輸入欄位名稱" :disabled="disabled"></el-input>
+                    placeholder="欄位名稱" :disabled="disabled"></el-input>
             </el-divider>
         </template>
     </MoleculeDesignToolbar>

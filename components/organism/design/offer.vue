@@ -1,71 +1,44 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <div class="offerList">
-            <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                <!-- <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
-                    :maxlength="30" :show-word-limit="true"></el-input> -->
-                <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
-                    :disabled="disabled">
-                    <template #suffix>
-                        <span>張</span>
-                    </template>
-                </el-input-number>
-                <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                    :disabled="disabled">
-                    <template #suffix>
-                        <span>元</span>
-                    </template>
-                </el-input-number>
-                <!-- <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
-                    <el-icon>
-                        <Plus />
-                    </el-icon>
-                </el-button>
-                <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
-                    <el-icon>
-                        <Minus />
-                    </el-icon>
-                </el-button> -->
-            </div>
-        </div class="offers">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.name">
+        <el-row :gutter="12">
+            <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.count" :min="0"
+                :disabled="disabled">
+                <template #suffix>
+                    <span>張</span>
+                </template>
+            </el-input-number>
+            <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.price" :min="0"
+                :disabled="disabled">
+                <template #suffix>
+                    <span>元</span>
+                </template>
+            </el-input-number>
+        </el-row>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                placeholder="請輸入欄位名稱"></el-input>
+            <el-input v-model="customDesign.mutable.name" :maxlength="8" :show-word-limit="true"
+                placeholder="票券名稱"></el-input>
         </template>
         <template v-slot:default>
-            <div class="offerList">
-                <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                    <!-- <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
-                        :maxlength="30" :show-word-limit="true"></el-input> -->
-                    <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
-                        :disabled="disabled">
-                        <template #suffix>
-                            <span>張</span>
-                        </template>
-                    </el-input-number>
-                    <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                        :disabled="disabled">
-                        <template #suffix>
-                            <span>元</span>
-                        </template>
-                    </el-input-number>
-                    <!-- <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                    </el-button>
-                    <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
-                        <el-icon>
-                            <Minus />
-                        </el-icon>
-                    </el-button> -->
-                </div>
-            </div class="offers">
+            <div class="offer">
+                <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.count" :min="0"
+                    :disabled="disabled">
+                    <template #suffix>
+                        <span>張</span>
+                    </template>
+                </el-input-number>
+
+                <el-input-number class="offer__price" placeholder="票價" v-model="customDesign.mutable.price" :min="0"
+                    :disabled="disabled">
+                    <template #suffix>
+                        <span>元</span>
+                    </template>
+                </el-input-number>
+            </div>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -78,8 +51,9 @@ const repoUI = useRepoUI()
 interface IModel {
     type: 'offer',
     mutable: {
-        label: string,
-        offers: any[]
+        name: string,
+        price: number,
+        count: number,
     }
 }
 
@@ -87,14 +61,9 @@ const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'offer',
         mutable: {
-            label: '', // 此為必要欄位，且必須為空白，不然空間塞不下
-            offers: [
-                {
-                    name: '',
-                    count: null,
-                    price: null,
-                }
-            ]
+            name: "票券",
+            price: null,
+            count: null,
         }
     }
 })
@@ -126,13 +95,6 @@ const props = defineProps({
     }
 })
 
-// Hooks
-const newOffer = ref({
-    name: '',
-    count: null,
-    price: null,
-})
-
 // 附加預設值
 watch(() => customDesign.value, (newValue) => {
     if (newValue?.mutable) {
@@ -141,10 +103,9 @@ watch(() => customDesign.value, (newValue) => {
     const defaultValue = {
         type: 'offer',
         mutable: {
-            label: '?',
-            offers: [
-                newOffer.value,
-            ],
+            name: "",
+            price: null,
+            count: null,
         }
     }
     const mergedItem = Object.assign(defaultValue, newValue)
@@ -164,40 +125,15 @@ async function handleChange(templateDesign: any) {
         isLoading.value = false
     })
 }
-function createOffer() {
-    customDesign.value.mutable.offers.push(newOffer.value)
-}
-function removeOffer(index: number) {
-    customDesign.value.mutable.offers.splice(index, 1)
-}
 </script>
 <style lang="scss" scoped>
-.offerList {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
 .offer {
     display: flex;
     justify-content: space-between;
     gap: 12px;
 
-    .offer__name {
-        width: 25%;
-    }
-
-    .offer__count {
-        width: 25%;
-    }
-
-    .offer__price {
-        width: 25%;
-    }
-
-    .offer__btn {
-        // flex: 0.1;
-        width: fit-content;
+    >* {
+        width: 100%;
     }
 }
 </style>
