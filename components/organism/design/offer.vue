@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.name">
-        <el-row :gutter="12">
+        <div class="offer">
             <el-input-number class="offer__count" placeholder="數量" v-model="customDesign.mutable.count" :min="0"
                 :disabled="disabled">
                 <template #suffix>
@@ -14,7 +14,7 @@
                     <span>元</span>
                 </template>
             </el-input-number>
-        </el-row>
+        </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"

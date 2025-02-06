@@ -31,7 +31,7 @@
 
         <AtomVenoniaDialog v-model="dialogVisible">
             <template #header>
-                <el-text v-loading="isLoading" size="large">
+                <el-text size="large">
                     活動編輯
                 </el-text>
                 <el-icon>
@@ -41,7 +41,7 @@
             <template #headerUI>
                 <el-button v-if="dialogTemplate.id" :icon="Delete" text @click="deleteEvent()">
                 </el-button>
-                <el-button :icon="Close" text @click="cancelEventEditing()">
+                <el-button v-loading="isLoading" :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
             <template #default>
@@ -86,6 +86,9 @@ onMounted(async () => {
 
 // Methods
 function handleChange(templateDesign: ITemplateDesign) {
+    console.log({
+        templateDesign
+    })
     // repoEvent.patchEvent({
     //     id: templateDesign.id,
     //     mutable: templateDesign.mutable
@@ -103,7 +106,7 @@ async function getEventList() {
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
         return {
             id: String(event.id),
-            title: String(event.name),
+            title: String(event.name ?? '未命名'),
             start: String(event.startDate),
             end: String(event.endDate),
             startStr: String(event.startDate),

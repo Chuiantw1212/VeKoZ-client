@@ -37,15 +37,18 @@ export default defineStore('ui', () => {
         isResizing.value = false
     }
 
-    if (import.meta.client) {
-        setWidth()
-        window.addEventListener('resize', () => {
-            isResizing.value = true
-            debounce('resize', () => {
-                setWidth()
+    onMounted(() => {
+        if (import.meta.client) {
+            setWidth()
+            window.addEventListener('resize', () => {
+                isResizing.value = true
+                debounce('resize', () => {
+                    setWidth()
+                })
             })
-        })
-    }
+        }
+    })
+
 
     // Methods
     /**

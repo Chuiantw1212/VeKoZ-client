@@ -1,6 +1,6 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="props.title" :width="width" :show-close="false" :lock-scroll="true"
-        :align-center="true" body-class="venonia-dialog-body">
+    <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width" :show-close="false"
+        :lock-scroll="true" :align-center="true">
         <template #header>
             <div class="venonia-dialog-header">
                 <div>
@@ -11,10 +11,13 @@
                 </div>
             </div>
         </template>
-        <slot name="default"></slot>
+        <div class="venonia-dialog-body">
+            <slot name="default"></slot>
+        </div>
     </el-dialog>
 </template>
 <script setup lang="ts">
+const repoUI = useRepoUI()
 const dialogVisible = defineModel<boolean>('modelValue', {
     default: false
 })
@@ -30,38 +33,46 @@ const width = computed(() => {
      * 手機版本橫置85%比較適合
      * 寬螢幕最大950px適合
      */
+    let width: string | number = '50%'
+    return width
     if (import.meta.client) {
         const innerWidth = window.innerWidth * 0.85
-        return Math.min(950, innerWidth)
+        if (repoUI.isMobile) {
+            width = Math.min(950, innerWidth)
+        } else {
+            width = window.innerWidth * 0.85
+        }
     }
-    return '50%'
 })
 </script>
 <style lang="scss" scoped>
-.venonia-dialog-header {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-
-    .header__btnGroup {
+.venonia-dialog {
+    .venonia-dialog-header {
         display: flex;
+        width: 100%;
         align-items: center;
+        justify-content: space-between;
 
-        .btnGroup__btn {
-            width: 40px;
-            height: 40px;
-            background: transparent;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            font-size: var(--el-message-close-size, 16px);
+        .header__btnGroup {
+            display: flex;
+            align-items: center;
+
+            .btnGroup__btn {
+                width: 40px;
+                height: 40px;
+                background: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                font-size: var(--el-message-close-size, 16px);
+            }
         }
     }
-}
 
-.venonia-dialog-body {
-    max-height: calc(100vh - 180px);
-    overflow-y: auto;
+    .venonia-dialog-body {
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+        padding: 0 20px;
+    }
 }
 </style>

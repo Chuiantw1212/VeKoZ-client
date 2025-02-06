@@ -32,6 +32,7 @@ onMounted(() => {
     nextTick(() => {
         listenToDateCell(true)
         listenToFcButton(true)
+        resizeCalendar()
     })
 })
 
@@ -42,17 +43,21 @@ onBeforeUnmount(() => {
 
 watch(() => repoUI.isResizing, (newValue: boolean, oldValue: boolean) => {
     if (!newValue && oldValue) {
-        repoUI.debounce(props.id, () => {
-            setTimeout(() => {
-                const idealHeight = window.innerHeight - 150
-                calendarInstance.value?.setOption('height', idealHeight);
-                calendarInstance.value?.updateSize()
-            }, 50) // 不科學實驗結果的最佳數字
-        })
+        resizeCalendar()
     }
 })
 
 // Methods
+function resizeCalendar() {
+    repoUI.debounce(props.id, () => {
+        setTimeout(() => {
+            const idealHeight = window.innerHeight - 150
+            calendarInstance.value?.setOption('height', idealHeight);
+            calendarInstance.value?.updateSize()
+        }, 50) // 不科學實驗結果的最佳數字
+    })
+}
+
 function initializeCalendar() {
     const calendarEl = calendarRef.value
     if (!calendarEl) {
