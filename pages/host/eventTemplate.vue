@@ -67,7 +67,8 @@
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="editor"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <AtomVenoniaEditor isDesigning="false" :disabled="true"></AtomVenoniaEditor>
+                            <OrganismDesignEditor :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
+                            </OrganismDesignEditor>
                         </div>
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organization"

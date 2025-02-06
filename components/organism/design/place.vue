@@ -1,5 +1,5 @@
 <template>
-    <!-- 檢視用 -->
+    <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
         <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
             :disabled="disabled" @change="setLocationAddress($event)">
@@ -8,7 +8,7 @@
         <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
             :disabled="true"></el-input>
     </el-form-item>
-    <!-- 編輯用 -->
+    <!-- 樣板編輯專用 -->
     <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>

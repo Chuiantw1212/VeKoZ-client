@@ -1,11 +1,11 @@
 <template>
-    <!-- 檢視用 -->
+    <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
         <el-input v-model="customDesign.mutable.name" placeholder="微課室" :disabled="disabled"></el-input>
         <el-input class="design__mt" v-model="customDesign.mutable.url" placeholder="https://venonia.com"
             :disabled="disabled"></el-input>
     </el-form-item>
-    <!-- 編輯用 -->
+    <!-- 樣板編輯專用 -->
     <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>

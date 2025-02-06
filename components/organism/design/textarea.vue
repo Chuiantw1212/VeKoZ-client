@@ -1,10 +1,10 @@
 <template>
-    <!-- 檢視用 -->
+    <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
         <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
             :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
-    <!-- 編輯用 -->
+    <!-- 樣板編輯專用 -->
     <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>

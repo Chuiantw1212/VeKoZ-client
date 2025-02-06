@@ -45,7 +45,6 @@ const props = defineProps({
                         'alignment',
                         'bulletedList',
                         'numberedList',
-                        // 'todoList',
                         '|',
                         'removeFormat'
                     ]
@@ -73,20 +72,11 @@ const localValue = computed({
     }
 })
 
-watch(() => props.disabled, (newValue) => {
-    if (editorInstance.value) {
-        editorInstance.value.enableReadOnlyMode()
-    }
-}, { immediate: true })
-
-// watch(
-//     () => localValue.value,
-//     (newValue) => {
-//         if (newValue && editorInstance.value) {
-//             editorInstance.value.setData(newValue)
-//         }
-//     }, { immediate: true }
-// )
+// watch(() => props.disabled, (newValue) => {
+//     // if (editorInstance.value) {
+//     //     editorInstance.value.enableReadOnlyMode()
+//     // }
+// }, { immediate: true })
 
 async function initializeCKEditor() {
     // 使用CDN

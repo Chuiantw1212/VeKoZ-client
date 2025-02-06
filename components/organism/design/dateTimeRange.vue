@@ -1,10 +1,10 @@
 <template>
-    <!-- 檢視用 -->
+    <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
         <el-date-picker v-model="customDesign.mutable.value" :placeholder="placeholder" type="datetimerange"
             :disabled="disabled"></el-date-picker>
     </el-form-item>
-    <!-- 編輯用 -->
+    <!-- 樣板編輯專用 -->
     <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" :allowDelete="allowDelete" @moveDown="emit('moveDown')">
         <template v-slot:label>

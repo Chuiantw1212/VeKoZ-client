@@ -1,5 +1,5 @@
 <template>
-    <!-- 檢視用 -->
+    <!-- 檢視與編輯用 -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
         <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
@@ -8,7 +8,7 @@
                 :value="String(item.id)" />
         </el-select>
     </el-form-item>
-    <!-- 編輯用 -->
+    <!-- 樣板編輯專用 -->
     <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
