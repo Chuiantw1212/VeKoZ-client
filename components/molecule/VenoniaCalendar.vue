@@ -107,6 +107,10 @@ function addEvent(event: IFullCalendarEvent) {
     calendarInstance.value?.addEvent(event)
 }
 
+function getEventById(event: string) {
+    return calendarInstance.value?.getEventById(event)
+}
+
 function removeAllEvents() {
     calendarInstance.value?.removeAllEvents()
 }
@@ -185,6 +189,7 @@ function toggleEventAddingBtn(event: Event) {
 defineExpose({
     addEvent,
     removeAllEvents,
+    getEventById,
 })
 </script>
 

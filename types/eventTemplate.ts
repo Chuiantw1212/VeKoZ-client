@@ -18,6 +18,7 @@ export interface ITemplateDesign {
         url?: string,
         offers?: any[]
     },
+    sqlField?: string;
 }
 
 export interface ITemplateDragSouce extends ITemplateDesign {

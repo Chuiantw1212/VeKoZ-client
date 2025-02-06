@@ -91,8 +91,19 @@ onMounted(async () => {
 // Methods
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
     isPatchLoading.value = true
-    templateDesign.eventId = currentEvent.value?.id
+    if (!currentEvent.value || !venoniaCalendarRef.value) {
+        return
+    }
+    templateDesign.eventId = currentEvent.value.id
     await repoEvent.patchEventForm(templateDesign)
+    if (templateDesign.sqlField === 'date') {
+        const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
+        calendarEvent?.remove()
+        currentEvent.value.startDate = new Date(templateDesign.mutable?.value[0]).toISOString()
+        currentEvent.value.endDate = new Date(templateDesign.mutable?.value[1]).toISOString()
+        const newFullCalendarEvent = parseFullCalendarEvent(currentEvent.value)
+        venoniaCalendarRef.value.addEvent(newFullCalendarEvent)
+    }
     isPatchLoading.value = false
 }
 
@@ -105,20 +116,24 @@ async function getEventList() {
     })
 
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
-        return {
-            id: String(event.id),
-            title: String(event.name ?? '未命名'),
-            start: String(event.startDate),
-            end: String(event.endDate),
-            startStr: String(event.startDate),
-            endStr: String(event.endDate),
-            editable: true,
-        }
+        return parseFullCalendarEvent(event)
     })
 
     fullCalendarEventList.forEach(event => {
         venoniaCalendarRef.value?.addEvent(event)
     })
+}
+
+function parseFullCalendarEvent(event: IEvent): IFullCalendarEvent {
+    return {
+        id: String(event.id),
+        title: String(event.name ?? '未命名'),
+        start: String(event.startDate),
+        end: String(event.endDate),
+        startStr: String(event.startDate),
+        endStr: String(event.endDate),
+        editable: true,
+    }
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
@@ -146,21 +161,6 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
         startDate: newStartDate.toISOString(),
         endDate: newEndDate.toISOString()
     })
-    // console.log(dialogTemplate.value.designs)
-    // const dateDesign = dialogTemplate.value.designs.find(design => {
-    //     return design.type === 'dateTimeRange'
-    // })
-    // if (dateDesign) {
-    //     const newStartStr = newStartDate.toISOString()
-    //     const newEndStr = newEndDate.toISOString()
-    //     if (dateDesign.mutable) {
-    //         dateDesign.mutable.value = [newStartStr, newEndStr]
-    //         isPatchLoading.value = true
-    //         dateDesign.eventId = currentEvent.value?.id
-    //         await repoEvent.patchEventForm(dateDesign)
-    //         isPatchLoading.value = false
-    //     }
-    // }
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {

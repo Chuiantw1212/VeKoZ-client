@@ -26,7 +26,7 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function getEventList(params: IEvent) {
+    async function getEventList(params: IEvent): Promise<IEvent[]> {
         const response = await defaultApi.authRequest(`/event/list`, {
             method: 'GET',
             params,
