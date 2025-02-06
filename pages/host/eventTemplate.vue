@@ -213,10 +213,6 @@ async function setDefaultTemplate() {
 }
 
 async function handleChange(templateDesign: ITemplateDesign) {
-    console.log({
-        templateDesign
-    })
-
     repoEventTemplate.patchEventTemplateDesign({
         id: templateDesign.id,
         mutable: templateDesign.mutable

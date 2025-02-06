@@ -4,15 +4,15 @@
         {{ customDesign.mutable.label }}
     </el-divider>
     <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:default>
             <el-divider>
-                <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"
-                    :disabled="disabled">
+                <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"
+                    :disabled="disabled"></el-input>
             </el-divider>
         </template>
-    </MoleculeCustomToolbar>
+    </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])

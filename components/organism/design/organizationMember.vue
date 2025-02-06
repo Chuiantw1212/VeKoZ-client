@@ -9,10 +9,10 @@
         </el-select>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+            <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
@@ -21,7 +21,7 @@
                     :value="String(item.id)" />
             </el-select>
         </template>
-    </MoleculeCustomToolbar>
+    </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'

@@ -30,35 +30,34 @@
         </el-row>
 
         <AtomVenoniaDialog v-model="dialogVisible">
-            <template #header="{ titleId, titleClass }">
-                <div class="venonia-dialog-header">
-                    <span :id="titleId" :class="titleClass">活動編輯</span>
-                    <div class="header__btnGroup">
-                        <el-button v-if="dialogTemplate.id" class="btnGroup__btn" @click="deleteEvent()">
-                            <el-icon>
-                                <Delete />
-                            </el-icon>
-                        </el-button>
-                        <el-button class="btnGroup__btn" @click="cancelEventEditing()">
-                            <el-icon>
-                                <Close />
-                            </el-icon>
-                        </el-button>
-                    </div>
-                </div>
+            <template #header>
+                <el-text v-loading="isLoading" size="large">
+                    活動編輯
+                </el-text>
+                <el-icon>
+
+                </el-icon>
             </template>
-            <el-container v-loading.lock="isLoading">
-                <FormTemplateDesign v-model="dialogTemplate.designs"></FormTemplateDesign>
-            </el-container>
+            <template #headerUI>
+                <el-button v-if="dialogTemplate.id" :icon="Delete" text @click="deleteEvent()">
+                </el-button>
+                <el-button :icon="Close" text @click="cancelEventEditing()">
+                </el-button>
+            </template>
+            <template #default>
+                <el-container v-loading.lock="isLoading">
+                    <FormTemplateDesign v-model="dialogTemplate.designs" :onchange="handleChange"></FormTemplateDesign>
+                </el-container>
+            </template>
         </AtomVenoniaDialog>
     </div>
 </template>
 
 <script setup lang="ts">
 import useRepoEvent from '~/composables/useRepoEvent';
-import { Delete, Close } from '@element-plus/icons-vue';
+import { Delete, Close, } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
-import type { IEventTemplate, } from '~/types/eventTemplate'
+import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 
@@ -86,6 +85,13 @@ onMounted(async () => {
 })
 
 // Methods
+function handleChange(templateDesign: ITemplateDesign) {
+    // repoEvent.patchEvent({
+    //     id: templateDesign.id,
+    //     mutable: templateDesign.mutable
+    // })
+}
+
 async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)

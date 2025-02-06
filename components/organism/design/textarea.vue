@@ -5,16 +5,16 @@
             :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+            <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-mention v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
                 :placeholder="placeholder" :disabled="disabled" />
         </template>
-    </MoleculeCustomToolbar>
+    </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])

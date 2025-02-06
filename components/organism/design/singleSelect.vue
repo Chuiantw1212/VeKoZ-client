@@ -7,18 +7,19 @@
     </template>
     <!-- 樣板編輯專用 -->
     <template v-else-if="customDesign.mutable" :loading="isLoading">
-        <MoleculeCustomToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
+        <MoleculeDesignToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <div class="design__item">
                 <label class="item__label">
-                    <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+                    <el-input v-model="customDesign.mutable.label" class="label__input"
+                        placeholder="請輸入欄位名稱"></el-input>
                 </label>
                 <el-select v-model="customDesign.mutable.value" :placeholder="placeholder" :clearable="true"
                     :allow-create="true">
                     <el-option v-for="(item, index) in options" :key="index" :label="item.name" :value="item.id" />
                 </el-select>
             </div>
-        </MoleculeCustomToolbar>
+        </MoleculeDesignToolbar>
     </template>
 </template>
 <script setup lang="ts">

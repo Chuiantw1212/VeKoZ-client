@@ -5,16 +5,16 @@
             :disabled="disabled"></el-date-picker>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" :allowDelete="allowDelete" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+            <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-date-picker :placeholder="placeholder" v-model="customDesign.mutable.value" type="datetimerange"
                 :disabled="true"></el-date-picker>
         </template>
-    </MoleculeCustomToolbar>
+    </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])

@@ -6,7 +6,7 @@
         </div>
 
         <div>
-            <input v-model="inputText" placeholder="搜尋選項">
+            <el-input v-model="inputText" placeholder="搜尋選項">
             <select v-model="selectValue" class="form__select" :disabled="disabled" @change="handleChange()">
                 <option :label="placeholder" value=""></option>
                 <option v-for="(item) in options" :key="item[itemValue]" :label="item[itemLabel]" :value="item.value"

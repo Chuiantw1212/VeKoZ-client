@@ -4,41 +4,12 @@
   justify-content: space-between;
 }
 
-.venonia-dialog-header {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-
-  .header__btnGroup {
-    display: flex;
-    align-items: center;
-
-    .btnGroup__btn {
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      font-size: var(--el-message-close-size, 16px);
-    }
-  }
-}
-
-.venonia-dialog-body {
-  max-height: calc(100vh - 180px);
-  overflow-y: auto;
-}
-
 .venonia-card {
   .venonia-card-header {
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: space-between;
-
-    .header__btnGroup {}
   }
 
   .card__body {

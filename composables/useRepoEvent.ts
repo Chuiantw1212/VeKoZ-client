@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
 import type { IEvent } from '~/types/event'
-import type { IEventTemplate } from '~/types/eventTemplate'
+import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
@@ -12,7 +12,7 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function patchEvent(body: IEventTemplate) {
+    async function patchEvent(body: ITemplateDesign) {
         const response = await defaultApi.authRequest(`/event`, {
             method: 'PATCH',
             body,

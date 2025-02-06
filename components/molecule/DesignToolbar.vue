@@ -1,12 +1,12 @@
 <template>
-    <div class="customToolbar">
-        <div class="customToolbar__draggable" draggable="true">
-            <el-icon class="customToolbar__move" @dragstart="emit('dragstart')">
+    <div class="toolbar">
+        <div v-if="isDesigning" class="toolbar__draggable" draggable="true">
+            <el-icon class="toolbar__move" @dragstart="emit('dragstart')">
                 <More />
             </el-icon>
             <slot name="label"></slot>
         </div>
-        <div name="default" class="customToolbar__default">
+        <div name="default" class="toolbar__default">
             <slot name="default"></slot>
         </div>
         <template v-if="allowDelete">
@@ -16,7 +16,7 @@
                 </el-icon>
             </el-button>
         </template>
-        <template v-else>
+        <template v-if="!allowDelete">
             <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
                 @click="emit('remove')">
                 SEO
@@ -35,6 +35,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isDesigning: {
+        type: Boolean,
+        default: true
+    },
     allowDelete: {
         type: Boolean,
         default: true
@@ -42,27 +46,24 @@ const props = defineProps({
 })
 </script>
 <style lang="scss" scoped>
-.customToolbar {
+.toolbar {
     display: flex;
     gap: 12px;
     align-items: center;
+    width: 100%;
 
-    .customToolbar__draggable {
+    .toolbar__draggable {
         display: flex;
         align-items: center;
         gap: 12px;
-
-        >* {
-            height: 24px;
-        }
     }
 
-    .customToolbar__move {
+    .toolbar__move {
         transform: rotate(90deg);
         cursor: grab;
     }
 
-    .customToolbar__default {
+    .toolbar__default {
         width: 100%;
     }
 

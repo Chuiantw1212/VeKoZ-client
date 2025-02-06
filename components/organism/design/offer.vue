@@ -3,8 +3,8 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
         <div class="offerList">
             <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
-                    :maxlength="30" :show-word-limit="true"></el-input>
+                <!-- <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
+                    :maxlength="30" :show-word-limit="true"></el-input> -->
                 <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
                     :disabled="disabled">
                     <template #suffix>
@@ -17,7 +17,7 @@
                         <span>元</span>
                     </template>
                 </el-input-number>
-                <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
+                <!-- <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -26,21 +26,21 @@
                     <el-icon>
                         <Minus />
                     </el-icon>
-                </el-button>
+                </el-button> -->
             </div>
         </div class="offers">
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱">
+            <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <div class="offerList">
                 <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                    <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
-                        :maxlength="30" :show-word-limit="true"></el-input>
+                    <!-- <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
+                        :maxlength="30" :show-word-limit="true"></el-input> -->
                     <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
                         :disabled="disabled">
                         <template #suffix>
@@ -53,7 +53,7 @@
                             <span>元</span>
                         </template>
                     </el-input-number>
-                    <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
+                    <!-- <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -62,11 +62,11 @@
                         <el-icon>
                             <Minus />
                         </el-icon>
-                    </el-button>
+                    </el-button> -->
                 </div>
             </div class="offers">
         </template>
-    </MoleculeCustomToolbar>
+    </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 import { Plus, Minus } from '@element-plus/icons-vue'

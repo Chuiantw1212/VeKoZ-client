@@ -1,8 +1,15 @@
 <template>
     <el-dialog v-model="dialogVisible" :title="props.title" :width="width" :show-close="false" :lock-scroll="true"
         :align-center="true" body-class="venonia-dialog-body">
-        <template #header="{ titleId, titleClass }">
-            <slot name="header" :titleId="titleId" :titleClass="titleClass"></slot>
+        <template #header>
+            <div class="venonia-dialog-header">
+                <div>
+                    <slot name="header"></slot>
+                </div>
+                <div>
+                    <slot name="headerUI"></slot>
+                </div>
+            </div>
         </template>
         <slot name="default"></slot>
     </el-dialog>
@@ -23,8 +30,11 @@ const width = computed(() => {
      * 手機版本橫置85%比較適合
      * 寬螢幕最大950px適合
      */
-    const innerWidth = window.innerWidth * 0.85
-    return Math.min(950, innerWidth)
+    if (import.meta.client) {
+        const innerWidth = window.innerWidth * 0.85
+        return Math.min(950, innerWidth)
+    }
+    return '50%'
 })
 </script>
 <style lang="scss" scoped>

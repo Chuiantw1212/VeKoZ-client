@@ -6,14 +6,14 @@
             </AtomVenoniaEditor>
         </el-form-item>
         <!-- 樣板編輯專用 -->
-        <MoleculeCustomToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+        <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
                 <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled" :placeholder="placeholder">
                 </AtomVenoniaEditor>
             </template>
-        </MoleculeCustomToolbar>
+        </MoleculeDesignToolbar>
     </div>
 </template>
 <script setup lang="ts">
