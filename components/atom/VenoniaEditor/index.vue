@@ -1,7 +1,7 @@
 <template>
     <ClientOnly>
         <div class="ckeditor">
-            <div :id="`editor`" ref="editorRef" :disabled="disabled">
+            <div :id="`editor-${id}`" ref="editorRef">
             </div>
         </div>
     </ClientOnly>
@@ -15,10 +15,15 @@ const editorRef = ref()
 const editorInstance = ref()
 const emit = defineEmits(['update:modelValue'])
 
+const localValue = defineModel<String>('modelValue', {
+    type: String,
+    default: ''
+})
+
 const props = defineProps({
-    modelValue: {
+    id: {
         type: String,
-        default: ''
+        default: crypto.randomUUID()
     },
     toolbar: {
         type: Array,
@@ -62,21 +67,9 @@ const props = defineProps({
     }
 })
 
-const localValue = computed({
-    get() {
-        const value = props.modelValue ?? ''
-        return value
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
-})
-
-// watch(() => props.disabled, (newValue) => {
-//     // if (editorInstance.value) {
-//     //     editorInstance.value.enableReadOnlyMode()
-//     // }
-// }, { immediate: true })
+watch(() => props.disabled, (newValue) => {
+    setEditorEndable()
+}, { immediate: true })
 
 async function initializeCKEditor() {
     // 使用CDN
@@ -97,7 +90,7 @@ async function initializeCKEditor() {
     const { default: importedEditor } = await import(/* @vite-ignore */`${siteUrl}/ckeditor/bundle.js`)
     const ClassicEditor = importedEditor || (window as any).CKEDITOR
 
-    const element = document.getElementById('editor')
+    const element = document.getElementById(`editor-${props.id}`)
     const editor = await ClassicEditor.create(element, editorConfig)
 
     // 附加初始值
@@ -111,18 +104,30 @@ async function initializeCKEditor() {
         localValue.value = newValue
     })
 
-    // 更新狀態
-    if (props.disabled) {
-        editor.enableReadOnlyMode('docs-snippet')
-    }
-
     // 紀錄instance
     editorInstance.value = markRaw(editor)
+
+    // 更新狀態
+    setEditorEndable()
+}
+
+function setEditorEndable() {
+    if (!editorInstance.value) {
+        return
+    }
+    if (props.disabled) {
+        editorInstance.value.enableReadOnlyMode('docs-snippet')
+    } else {
+        editorInstance.value.disableReadOnlyMode('docs-snippet')
+    }
 }
 
 
 onMounted(async () => {
     initializeCKEditor()
+})
+onBeforeUnmount(() => {
+    editorInstance.value.destroy()
 })
 </script>
 

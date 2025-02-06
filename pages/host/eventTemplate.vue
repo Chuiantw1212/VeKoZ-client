@@ -265,7 +265,9 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     const templateDesign: ITemplateDesign = {
         id: templateTemp.value.id,
         type: templateTemp.value.type,
-        mutable: templateTemp.value.mutable ?? {}
+        mutable: templateTemp.value.mutable ?? {
+            label: '' // 必要?
+        }
     }
 
     // 先更新資料庫再更新畫面
