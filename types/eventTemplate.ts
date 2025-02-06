@@ -8,6 +8,7 @@ export interface IEventTemplate {
 
 export interface ITemplateDesign {
     id?: string,
+    eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
     type?: string,
     mutable?: {
         label?: string,

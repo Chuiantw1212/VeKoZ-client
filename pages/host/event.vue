@@ -87,6 +87,7 @@ onMounted(async () => {
 
 // Methods
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
+    templateDesign.eventId = currentEvent.value?.id
     await repoEvent.patchEventForm(templateDesign)
 }
 
