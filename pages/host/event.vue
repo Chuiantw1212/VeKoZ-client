@@ -142,7 +142,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     // 送出請求
     await repoEvent.patchEventCalendar({
         id: eventId,
-        dateId: changedEvent?.dateId,
+        dateDesignId: changedEvent?.dateDesignId,
         startDate: newStartDate.toISOString(),
         endDate: newEndDate.toISOString()
     })
