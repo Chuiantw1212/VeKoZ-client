@@ -109,8 +109,6 @@ function addEvent(event: IFullCalendarEvent) {
 
 function removeAllEvents() {
     calendarInstance.value?.removeAllEvents()
-    // calendarInstance.value.getEvet
-    // calendarInstance.value?.removeEvent(eventId)
 }
 
 function listenToDateCell(isOn: boolean) {

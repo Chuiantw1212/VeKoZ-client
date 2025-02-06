@@ -13,6 +13,7 @@ export interface IEvent {
     locationName?: string,
     virtualLocationName?: string,
     virtualLocationUrl?: string,
+    dateId?: string,
     startDate?: string,
     endDate?: string,
     description?: string,

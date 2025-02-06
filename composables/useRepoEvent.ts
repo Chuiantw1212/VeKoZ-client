@@ -12,15 +12,15 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function patchEventCalendar(body: any) {
-        const response = await defaultApi.authRequest(`/event/calendar`, {
+    async function patchEventForm(body: ITemplateDesign) {
+        const response = await defaultApi.authRequest(`/event/form`, {
             method: 'PATCH',
             body,
         })
         return response.json()
     }
-    async function patchEventForm(body: ITemplateDesign) {
-        const response = await defaultApi.authRequest(`/event/form`, {
+    async function patchEventCalendar(body: IEvent) {
+        const response = await defaultApi.authRequest(`/event/calendar`, {
             method: 'PATCH',
             body,
         })
@@ -50,8 +50,8 @@ export default defineStore('event', () => {
         getEventList,
         getEvent,
         postEvent,
-        patchEventCalendar,
         patchEventForm,
+        patchEventCalendar,
         deleteEvent,
     }
 })

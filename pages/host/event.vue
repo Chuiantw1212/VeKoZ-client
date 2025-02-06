@@ -47,7 +47,9 @@
             </template>
             <template #default>
                 <el-container v-loading.lock="isLoading">
-                    <FormTemplateDesign v-model="dialogTemplate.designs" :onchange="handleEventFormChange">
+                    <!-- 用v-if避免更新請求重複派送 -->
+                    <FormTemplateDesign v-if="dialogVisible" v-model="dialogTemplate.designs"
+                        :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
             </template>
@@ -82,7 +84,6 @@ onMounted(async () => {
     isLoading.value = true
     await Promise.all([
         getEventList(),
-        // getEventTemplate()
     ])
     isLoading.value = false
 })
@@ -138,8 +139,28 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     newEndDate.setMonth(newMonth)
     newEndDate.setDate(newDate)
 
-    // repoEvent
-
+    // 送出請求
+    await repoEvent.patchEventCalendar({
+        id: eventId,
+        dateId: changedEvent?.dateId,
+        startDate: newStartDate.toISOString(),
+        endDate: newEndDate.toISOString()
+    })
+    // console.log(dialogTemplate.value.designs)
+    // const dateDesign = dialogTemplate.value.designs.find(design => {
+    //     return design.type === 'dateTimeRange'
+    // })
+    // if (dateDesign) {
+    //     const newStartStr = newStartDate.toISOString()
+    //     const newEndStr = newEndDate.toISOString()
+    //     if (dateDesign.mutable) {
+    //         dateDesign.mutable.value = [newStartStr, newEndStr]
+    //         isPatchLoading.value = true
+    //         dateDesign.eventId = currentEvent.value?.id
+    //         await repoEvent.patchEventForm(dateDesign)
+    //         isPatchLoading.value = false
+    //     }
+    // }
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
