@@ -8,8 +8,8 @@
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:default>
             <el-divider>
-                <el-input v-model="customDesign.mutable.label" class="label__input" placeholder="請輸入欄位名稱"
-                    :disabled="disabled"></el-input>
+                <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
+                    placeholder="請輸入欄位名稱" :disabled="disabled"></el-input>
             </el-divider>
         </template>
     </MoleculeDesignToolbar>

@@ -7,7 +7,7 @@
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :showPassword="true" class="label__input"
+            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
                 placeholder="請輸入欄位名稱"></el-input>
         </template>
         <template v-slot:default>
