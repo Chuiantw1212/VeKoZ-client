@@ -4,7 +4,7 @@
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
-                        @eventChange="handleEventChange($event)" @event-click="handleEventClick($event)">
+                        @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)">
                     </MoleculeVenoniaCalendar>
                 </el-card>
             </el-col>
@@ -46,7 +46,8 @@
             </template>
             <template #default>
                 <el-container v-loading.lock="isLoading">
-                    <FormTemplateDesign v-model="dialogTemplate.designs" :onchange="handleChange"></FormTemplateDesign>
+                    <FormTemplateDesign v-model="dialogTemplate.designs" :onchange="handleEventFormChange">
+                    </FormTemplateDesign>
                 </el-container>
             </template>
         </AtomVenoniaDialog>
@@ -85,14 +86,8 @@ onMounted(async () => {
 })
 
 // Methods
-function handleChange(templateDesign: ITemplateDesign) {
-    console.log({
-        templateDesign
-    })
-    // repoEvent.patchEvent({
-    //     id: templateDesign.id,
-    //     mutable: templateDesign.mutable
-    // })
+async function handleEventFormChange(templateDesign: ITemplateDesign) {
+    await repoEvent.patchEventForm(templateDesign)
 }
 
 async function getEventList() {
@@ -120,7 +115,7 @@ async function getEventList() {
     })
 }
 
-async function handleEventChange(changeInfo: IChangeInfo) {
+async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     /**
      * 疑似BUG，無法直接拿到endDateStr
      */
