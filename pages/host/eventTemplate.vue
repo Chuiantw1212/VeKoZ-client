@@ -228,8 +228,8 @@ async function resetEventTemplate() {
 }
 
 async function postEventTemplate() {
-    await repoEventTemplate.postEventTemplate(eventTemplate.value)
-    await getEventTemplate()
+    const result = await repoEventTemplate.postEventTemplate(eventTemplate.value)
+    eventTemplate.value = result
 }
 
 async function addOnDropListener(isOn: boolean) {

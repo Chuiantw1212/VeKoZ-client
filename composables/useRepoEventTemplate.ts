@@ -52,11 +52,13 @@ export default defineStore('eventTemplate', () => {
         return response.text()
     }
     async function patchEventTemplateDesign(body: ITemplateDesign) {
-        const response = await defaultApi.authRequest(`/event/template/design`, {
-            method: 'PATCH',
-            body,
-        })
-        return response.text()
+        if (body.id) {
+            const response = await defaultApi.authRequest(`/event/template/design`, {
+                method: 'PATCH',
+                body,
+            })
+            return response.text()
+        }
     }
     return {
         // Template
