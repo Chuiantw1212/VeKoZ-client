@@ -78,8 +78,8 @@ onMounted(() => {
 })
 
 // 附加預設值
-watch(() => customDesign.value, (newValue) => {
-    if (newValue?.mutable) {
+onMounted(() => {
+    if (customDesign.value?.mutable) {
         return
     }
 
@@ -91,7 +91,7 @@ watch(() => customDesign.value, (newValue) => {
             value: '',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
 })
 

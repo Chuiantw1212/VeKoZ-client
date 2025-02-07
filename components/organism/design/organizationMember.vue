@@ -43,7 +43,7 @@ const customDesign = defineModel<IModel>('modelValue', {
     default: {
         type: 'organizationMember',
         mutable: {
-            label: '組織', // 純瀏覽時使用
+            label: '組織成員', // 純瀏覽時使用
             value: ''
         }
     }
@@ -84,8 +84,8 @@ const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
 // 附加預設值
-watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+onMounted(() => {
+    if (customDesign.value.mutable) {
         return
     }
     const defaultValue = {
@@ -94,7 +94,7 @@ watch(() => customDesign.value, (newValue) => {
             label: '組織成員',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
 })
 

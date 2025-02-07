@@ -110,7 +110,7 @@ function getOrganizationId() {
         return design.type === 'organization'
     })
     if (organization) {
-        return organization.mutable.value
+        return organization.mutable?.value
     }
 }
 function handleRemove(index: number) {

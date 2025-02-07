@@ -78,8 +78,8 @@ onMounted(() => {
 })
 
 // 附加預設值
-watch(() => customDesign.value, (newValue: any) => {
-    if (newValue?.mutable) {
+onMounted(() => {
+    if (customDesign.value?.mutable) {
         return
     }
     const defaultValue = {
@@ -88,9 +88,9 @@ watch(() => customDesign.value, (newValue: any) => {
             label: '空間地點',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
-}, { deep: true })
+})
 
 // 觸發更新
 watch(() => customDesign.value, (newValue) => {

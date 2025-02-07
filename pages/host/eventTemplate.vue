@@ -76,15 +76,15 @@
                             <OrganismDesignOrganization :disabled="true" :isDesigning="false">
                             </OrganismDesignOrganization>
                         </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="offer"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOffer :disabled="true" :isDesigning="false">
-                            </OrganismDesignOffer>
-                        </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
                             <OrganismDesignOrganizationMember :disabled="true" :isDesigning="false">
                             </OrganismDesignOrganizationMember>
+                        </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="offer"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <OrganismDesignOffer :disabled="true" :isDesigning="false">
+                            </OrganismDesignOffer>
                         </div>
                         <div class="eventTemplate__draggable" draggable="true" data-type="place"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">

@@ -64,8 +64,8 @@ const props = defineProps({
 })
 
 // 附加預設值
-watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+onMounted(() => {
+    if (customDesign.value.mutable) {
         return
     }
     const defaultValue = {
@@ -74,7 +74,7 @@ watch(() => customDesign.value, (newValue) => {
             label: '',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
 })
 

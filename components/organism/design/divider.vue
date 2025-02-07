@@ -8,8 +8,8 @@
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:default>
             <el-divider>
-                <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                    placeholder="欄位名稱" :disabled="disabled"></el-input>
+                <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"
+                    :disabled="disabled"></el-input>
             </el-divider>
         </template>
     </MoleculeDesignToolbar>
@@ -59,8 +59,8 @@ const props = defineProps({
 })
 
 // 附加預設值
-watch(() => customDesign.value, (newValue) => {
-    if (newValue?.mutable) {
+onMounted(() => {
+    if (customDesign.value?.mutable) {
         return
     }
     const defaultValue = {
@@ -69,9 +69,8 @@ watch(() => customDesign.value, (newValue) => {
             label: '',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
-
 })
 
 // 觸發更新
