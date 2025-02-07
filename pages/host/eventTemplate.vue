@@ -256,16 +256,22 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
 }
 async function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
-    // isLoading.value = true
-
     // 插入元素
     const templateDesign: ITemplateDesign = {
         id: templateTemp.value.id,
         type: templateTemp.value.type,
-        mutable: templateTemp.value.mutable ?? {
-            label: '' // 必要?
-        }
+        // mutable: templateTemp.value.mutable
     }
+
+    // // 新的元素賦予必要預設值
+    // if (!templateTemp.value.mutable) {
+    //     templateDesign.mutable = {
+    //         label: ''
+    //     }
+    //     if (templateDesign.type === 'offer') {
+    //         templateDesign.mutable.offers = [{}]
+    //     }
+    // }
 
     // 先更新資料庫再更新畫面
     const hasSource = templateTemp.value.index !== -1
