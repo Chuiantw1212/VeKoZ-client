@@ -30,8 +30,8 @@
                     </el-button>
                 </template>
                 <template v-if="disabled">
-                    <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="true"
-                        :maxlength="30" :show-word-limit="true"></el-input>
+                    <el-input placeholder="票券名稱" v-model="offer.name" :disabled="true" :maxlength="30"
+                        :show-word-limit="true"></el-input>
                     <el-input placeholder="數量" :disabled="true"></el-input>
                     <el-input placeholder="票價" :disabled="true"></el-input>
                 </template>
@@ -183,27 +183,28 @@ function removeOffer(index: number) {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
 }
 
 .offer {
     display: flex;
-    // justify-content: space-between;
     gap: 12px;
+    width: 100%;
 
-    // .offer__name {
-    //     width: 25%;
-    // }
+    .offer__name {
+        flex: 1;
+    }
 
-    // .offer__count {
-    //     width: 25%;
-    // }
+    .offer__count {
+        flex: 1;
+    }
 
-    // .offer__price {
-    //     width: 25%;
-    // }
+    .offer__price {
+        flex: 1;
+    }
 
-    // .offer__btn {
-    //     width: fit-content;
-    // }
+    .offer__btn {
+        width: fit-content;
+    }
 }
 </style>
