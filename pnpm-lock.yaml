@@ -32,6 +32,9 @@ importers:
       '@fullcalendar/timegrid':
         specifier: ^6.1.15
         version: 6.1.15(@fullcalendar/core@6.1.15)
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       ckeditor5:
         specifier: ^44.1.0
         version: 44.1.0

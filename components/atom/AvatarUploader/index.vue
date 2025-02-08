@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import { Buffer } from 'buffer'
+import { Buffer } from 'buffer/'
 import placeholderImage from './placeholder.png'
 export default {
     name: 'photoSingle',
