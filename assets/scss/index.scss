@@ -17,16 +17,12 @@
   }
 
   .card__body--270 {
-    max-height: calc(100vh - 270px);
+    height: calc(100vh - 270px);
   }
 
   .card__body--205 {
-    max-height: calc(100vh - 205px);
+    height: calc(100vh - 205px);
   }
-}
-
-.venonia-card--768 {
-  max-width: 768px;
 }
 
 // Global reset
