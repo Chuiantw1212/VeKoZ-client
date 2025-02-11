@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
+import type { IOrganization } from '~/types/organization'
 
 export default defineStore('organization', () => {
     const defaultApi = useVenoniaApi()
@@ -16,10 +17,10 @@ export default defineStore('organization', () => {
         })
         return response
     }
-    async function putOrganization(body: any) {
-        const response = await defaultApi.authRequest(`/organization`, {
+    async function putOrganization(organization: IOrganization) {
+        const response = await defaultApi.authRequest(`/organization/${organization.id}`, {
             method: 'PUT',
-            body,
+            body: organization,
         })
         return response
     }

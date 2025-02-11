@@ -38,6 +38,7 @@ const repoPlace = useRepoPlace()
 
 const tableItems = ref([])
 
+// 要被整包送出的使用reactive避免JSON.stringify錯誤
 const form = reactive<IPlace>({
   name: '',
   address: '',
@@ -56,7 +57,11 @@ onMounted(() => {
 
 // methods
 function openNewDialog() {
-  form.value = {}
+  Object.assign(form, {
+    name: '',
+    address: '',
+    description: ""
+  })
   placeDialog.visibility = true
   placeDialog.mode = 'ADD'
 }
@@ -93,6 +98,9 @@ async function getPlaceList() {
 }
 
 async function deletePlace(row: IPlace) {
+  if (!row.id) {
+    return
+  }
   const result = await ElMessageBox.confirm(
     '是否永久刪除資料？刪除後無法還原。',
     {
