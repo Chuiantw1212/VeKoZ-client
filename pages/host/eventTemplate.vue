@@ -5,16 +5,16 @@
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
-                            套版設計
+                            模板設計
                             <div class="header__btnGroup">
                                 <el-button size="small" @click="templateListDialog.isOpen = true">
                                     選擇模板
                                 </el-button>
-                                <el-button size="small">
-                                    套版另存
+                                <el-button size="small" @click="openSaveMessageBox">
+                                    模板另存
                                 </el-button>
                                 <el-button size="small" @click="resetEventTemplate">
-                                    套版預設
+                                    模板預設
                                 </el-button>
                             </div>
                         </div>
@@ -106,6 +106,10 @@
                 </el-card>
             </el-col>
         </el-row>
+        <AtomVenoniaDialog v-model="saveMessageBox.isOpen">
+            <el-input></el-input>
+        </AtomVenoniaDialog>
+
         <AtomVenoniaDialog v-model="templateListDialog.isOpen">
             <el-table :data="templateList" style="width: 100%">
                 <el-table-column prop="date" label="上次修改" />
@@ -140,7 +144,9 @@ const eventTemplate = ref<IEventTemplate>({
 
 const organizationList = ref<IOrganization[]>([])
 const placeList = ref<IPlace[]>([])
-
+const saveMessageBox = ref({
+    isOpen: false,
+})
 const templateListDialog = ref({
     isOpen: false,
 })
@@ -168,6 +174,21 @@ onBeforeUnmount(() => {
 })
 
 // methods
+async function openSaveMessageBox() {
+    const result: { value: any, action: string } = await ElMessageBox.prompt('請輸入模板名稱', '另存模板', {
+        confirmButtonText: '確認',
+        cancelButtonText: '取消',
+        inputPlaceholder: '請輸入模板名稱',
+    })
+    const { action } = result
+    const templateName = result.value
+    if (action === 'confirm') {
+        isLoading.value = true
+        await postEventTemplate(templateName)
+        isLoading.value = false
+    }
+}
+
 async function setDefaultTemplate() {
     delete eventTemplate.value.designIds
     Object.assign(eventTemplate.value, {
@@ -255,8 +276,12 @@ async function resetEventTemplate() {
     postEventTemplate()
 }
 
-async function postEventTemplate() {
-    const result = await repoEventTemplate.postEventTemplate(eventTemplate.value)
+async function postEventTemplate(templateName: string = '') {
+    const newTemplate = eventTemplate.value
+    if (templateName) {
+        newTemplate.name = templateName
+    }
+    const result = await repoEventTemplate.postEventTemplate(newTemplate)
     eventTemplate.value = result
 }
 

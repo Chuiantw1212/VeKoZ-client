@@ -13,7 +13,7 @@
         <el-icon>
           <Document />
         </el-icon>
-        <template #title>活動套版管理</template>
+        <template #title>活動模板管理</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/place">

@@ -3,7 +3,8 @@ export interface IEventTemplate {
     id?: string,
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
     designs: ITemplateDesign[],
-    designIds?: string[]
+    designIds?: string[],
+    name?: string,
 }
 
 export interface ITemplateDesign {

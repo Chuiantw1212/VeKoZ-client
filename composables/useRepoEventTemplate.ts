@@ -18,11 +18,6 @@ export default defineStore('eventTemplate', () => {
             method: 'POST',
             body,
         })
-        // const result = response.text()
-        // if (result) {
-        //     body.id = result
-        //     mostRecentEventTemplate.value = body
-        // }
         return response.text()
     }
     async function patchEventTemplate(body: string[]) {
