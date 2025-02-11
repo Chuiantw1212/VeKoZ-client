@@ -37,23 +37,37 @@
             </template>
         </el-dialog>
 
-        <el-dialog v-model="organizationMemberDialog.visibility" title="成員設定" class="event__template">
+        <AtomVenoniaDialog v-model="organizationMemberDialog.visibility">
+            <template #header>
+                <el-text size="large">
+                    成員設定
+                </el-text>
+            </template>
+            <template #headerUI>
+                <el-button :icon="Close" text>
+                </el-button>
+            </template>
             <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="organization"
                 :mode="organizationMemberDialog.mode">
             </FormOrganizationMember>
-            <template #footer>
+            <!-- <template #footer>
                 <el-button @click="organizationMemberDialog.visibility = false">取消</el-button>
                 <el-button type="primary" @click="hanelDialogConfirm()">
                     確認
                 </el-button>
-            </template>
-        </el-dialog>
+            </template> -->
+        </AtomVenoniaDialog>
+        <!-- <el-dialog v-model="organizationMemberDialog.visibility" title="成員設定" class="event__template">
+        </el-dialog> -->
     </div>
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
+import { Delete, Close, } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
+
+const isPatchLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])

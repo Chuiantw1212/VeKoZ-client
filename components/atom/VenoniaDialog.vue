@@ -1,6 +1,6 @@
 <template>
-    <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width" :show-close="false"
-        :lock-scroll="true" :align-center="true">
+    <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
+        :show-close="showClose" :lock-scroll="true" :align-center="true">
         <template #header>
             <div class="venonia-dialog-header">
                 <div>
@@ -11,9 +11,16 @@
                 </div>
             </div>
         </template>
-        <div class="venonia-dialog-body">
-            <slot name="default"></slot>
-        </div>
+        <template #default>
+            <div class="venonia-dialog-body">
+                <slot name="default"></slot>
+            </div>
+        </template>
+        <template #footer>
+            <div class="venonia-dialog-body">
+                <slot name="footer"></slot>
+            </div>
+        </template>
     </el-dialog>
 </template>
 <script setup lang="ts">
@@ -25,6 +32,10 @@ const props = defineProps({
     title: {
         type: String,
         default: ''
+    },
+    showClose: {
+        type: Boolean,
+        default: false,
     }
 })
 const width = computed(() => {

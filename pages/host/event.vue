@@ -11,7 +11,7 @@
             <el-col v-if="repoUI.isLarge" :span="8">
                 <el-card>
                     <template #header>
-                        月曆切換與訂閱
+                        月曆連動
                     </template>
                     <el-input placeholder="請搜尋欲訂閱的月曆或輸入月曆ID"></el-input>
                     <ul>
@@ -25,6 +25,7 @@
                             個人行事曆
                         </li>
                     </ul>
+                    如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                 </el-card>
             </el-col>
         </el-row>

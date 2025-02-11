@@ -77,7 +77,7 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'multiMonthYear,dayGridMonth,dayGridWeek,listWeek'
+            right: 'dayGridMonth,dayGridWeek,listWeek'
             // right: ''
         },
         multiMonthMaxColumns: 1, // force a single column
