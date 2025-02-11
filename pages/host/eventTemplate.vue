@@ -5,10 +5,16 @@
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
-                            活動套版
+                            套版設計
                             <div class="header__btnGroup">
+                                <el-button size="small" @click="templateListDialog.isOpen = true">
+                                    選擇模板
+                                </el-button>
+                                <el-button size="small">
+                                    套版另存
+                                </el-button>
                                 <el-button size="small" @click="resetEventTemplate">
-                                    套用預設模板
+                                    套版預設
                                 </el-button>
                             </div>
                         </div>
@@ -100,12 +106,20 @@
                 </el-card>
             </el-col>
         </el-row>
+        <AtomVenoniaDialog v-model="templateListDialog.isOpen">
+            <el-table :data="templateList" style="width: 100%">
+                <el-table-column prop="date" label="上次修改" />
+                <el-table-column prop="name" label="標題" />
+            </el-table>
+        </AtomVenoniaDialog>
     </div>
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
+import type { IEvent } from '~/types/event'
+
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganization = useRepoOrganization()
@@ -126,6 +140,15 @@ const eventTemplate = ref<IEventTemplate>({
 
 const organizationList = ref<IOrganization[]>([])
 const placeList = ref<IPlace[]>([])
+
+const templateListDialog = ref({
+    isOpen: false,
+})
+const templateList = ref<IEvent[]>([
+    {
+        name: '理財框架',
+    }
+])
 
 // Hooks
 onMounted(async () => {
