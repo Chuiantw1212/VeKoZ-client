@@ -1,27 +1,29 @@
 <template>
-    <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
-        :show-close="showClose" :lock-scroll="true" :align-center="true">
-        <template #header="{ close, titleId, titleClass }">
-            <div class="venonia-dialog-header">
-                <div>
-                    <slot name="header"></slot>
+    <div>
+        <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
+            :show-close="showClose" :lock-scroll="true" :align-center="true">
+            <template #header="{ close, titleId, titleClass }">
+                <div class="venonia-dialog-header">
+                    <div>
+                        <slot name="header"></slot>
+                    </div>
+                    <div>
+                        <slot name="headerUI"></slot>
+                    </div>
                 </div>
-                <div>
-                    <slot name="headerUI"></slot>
+            </template>
+            <template #default>
+                <div class="venonia-dialog-body">
+                    <slot name="default"></slot>
                 </div>
-            </div>
-        </template>
-        <template #default>
-            <div class="venonia-dialog-body">
-                <slot name="default"></slot>
-            </div>
-        </template>
-        <template #footer>
-            <div class="venonia-dialog-body">
-                <slot name="footer"></slot>
-            </div>
-        </template>
-    </el-dialog>
+            </template>
+            <template #footer>
+                <div class="venonia-dialog-body">
+                    <slot name="footer"></slot>
+                </div>
+            </template>
+        </el-dialog>
+    </div>
 </template>
 <script setup lang="ts">
 const repoUI = useRepoUI()
@@ -36,7 +38,7 @@ const props = defineProps({
     showClose: {
         type: Boolean,
         default: true,
-    }
+    },
 })
 const width = computed(() => {
     /**

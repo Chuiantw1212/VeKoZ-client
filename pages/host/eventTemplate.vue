@@ -28,7 +28,6 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    <!-- {{ eventTemplate.designs }} -->
                     <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
                         class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -109,20 +108,22 @@
             </el-col>
         </el-row>
         <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
-            <FormEventTemplate v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
-                @update:modelValue="loadTemplate($event)">
-            </FormEventTemplate>
+            <template #default>
+                <FormEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)">
+                </FormEventTemplate>
+            </template>
         </AtomVenoniaDialog>
-
         <AtomVenoniaDialog v-model="templateSavingDialog.isOpen" :showClose="true">
             <template #header>
                 另存新模板
             </template>
-            <el-form v-if="templateSavingDialog.isOpen">
-                <el-form-item label="模板名稱">
-                    <el-input v-model="templateSavingDialog.name" placeholder="請輸入另存的模板名稱"></el-input>
-                </el-form-item>
-            </el-form>
+            <template #default>
+                <el-form v-if="templateSavingDialog.isOpen" ref="saveFormRef" :model="templateSavingDialog">
+                    <el-form-item label="模板名稱" :required="true" prop="name">
+                        <el-input v-model="templateSavingDialog.name" placeholder="請輸入另存的模板名稱"></el-input>
+                    </el-form-item>
+                </el-form>
+            </template>
             <template #footer>
                 <el-button @click="confirmSaveDialog()">儲存</el-button>
             </template>
@@ -133,6 +134,7 @@
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
+import type { FormInstance } from 'element-plus'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
@@ -160,6 +162,7 @@ const loadTemplateDialog = ref({
     isOpen: false,
 })
 
+const saveFormRef = ref<FormInstance>()
 const templateSavingDialog = ref({
     isOpen: false,
     name: ''
@@ -194,6 +197,10 @@ async function openSaveDialog() {
 }
 
 async function confirmSaveDialog() {
+    const isValid = await saveFormRef.value?.validate()
+    if (!isValid) {
+        return
+    }
     isLoading.value = true
     await postEventTemplate(templateSavingDialog.value.name)
     templateSavingDialog.value.isOpen = false

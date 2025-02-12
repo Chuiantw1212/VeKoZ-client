@@ -10,7 +10,7 @@
                 </template>
             </template>
         </el-table-column>
-        <el-table-column prop="name" label="標題" />
+        <el-table-column prop="name" label="模板名稱" />
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
                 <template v-if="row.id === eventTemplate.id">
@@ -96,7 +96,7 @@ async function getEventTemplateList() {
     templateList.value = [
         {
             id: 'default',
-            name: '系統預設模板',
+            name: '系統預設',
         },
         ...result
     ]
