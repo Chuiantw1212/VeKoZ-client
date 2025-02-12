@@ -10,6 +10,7 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
+    height: 32px;
 
     >* {
       margin-bottom: 0px;
@@ -25,7 +26,7 @@
   }
 
   .card__body--205 {
-    height: calc(100vh - 205px);
+    height: calc(100vh - 215px);
   }
 }
 

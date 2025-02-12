@@ -9,7 +9,6 @@
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱"
                                     @change="patchTemplateName()"></el-input>
                             </el-form-item>
-                            {{ eventTemplate.id }}
                             <div class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true">
                                     開啓模板
@@ -29,7 +28,7 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    {{ eventTemplate.designs }}
+                    <!-- {{ eventTemplate.designs }} -->
                     <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
                         class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -109,10 +108,9 @@
                 </el-card>
             </el-col>
         </el-row>
-        Ï
         <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <FormEventTemplate v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
-                @update:modelValue="loadTemplate()">
+                @update:modelValue="loadTemplate($event)">
             </FormEventTemplate>
         </AtomVenoniaDialog>
 
@@ -122,7 +120,7 @@
             </template>
             <el-form v-if="templateSavingDialog.isOpen">
                 <el-form-item label="模板名稱">
-                    <el-input v-model="templateSavingDialog.name"></el-input>
+                    <el-input v-model="templateSavingDialog.name" placeholder="請輸入另存的模板名稱"></el-input>
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -142,16 +140,17 @@ const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
 const isLoading = ref<boolean>(false)
 
-// 拖曳中的模板資料
+// 主要的模板資料
+const eventTemplate = ref<IEventTemplate>({
+    id: '',
+    designs: [] as ITemplateDesign[]
+})
+
+// 拖曳中的模板設計
 const templateTemp = ref<ITemplateDragSouce>({
     type: '',
     id: '',
     index: -1
-})
-
-const eventTemplate = ref<IEventTemplate>({
-    id: '',
-    designs: [] as ITemplateDesign[]
 })
 
 const organizationList = ref<IOrganization[]>([])
@@ -191,21 +190,14 @@ async function patchTemplateName() {
 }
 
 async function openSaveDialog() {
-    const header1 = eventTemplate.value.designs.find((design) => {
-        return design.type === 'header1'
-    })
-    if (header1) {
-        const name = header1?.mutable?.value || '未命名'
-        templateSavingDialog.value.name = `${name}模板`
-    }
     templateSavingDialog.value.isOpen = true
 }
 
 async function confirmSaveDialog() {
     isLoading.value = true
     await postEventTemplate(templateSavingDialog.value.name)
-    isLoading.value = false
     templateSavingDialog.value.isOpen = false
+    isLoading.value = false
 }
 
 async function getRecentTemplate() {
@@ -216,9 +208,13 @@ async function getRecentTemplate() {
     }
 }
 
-async function loadTemplate() {
+async function loadTemplate(loadedTemplate: IEventTemplate) {
+    console.log({
+        origin: eventTemplate.value.id,
+        loaded: loadedTemplate.id
+    })
     loadTemplateDialog.value.isOpen = false
-    if (!eventTemplate.value.id) {
+    if (!loadedTemplate.id) {
         setDefaultTemplate()
         await postEventTemplate()
     }
