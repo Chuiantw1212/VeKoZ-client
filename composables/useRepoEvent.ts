@@ -5,10 +5,14 @@ import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
-    async function postEvent(body: IEventTemplate) {
+    async function postEvent(event: IEventTemplate) {
+        if (!event.designs.length) {
+            alert(`!event.designs.length`)
+            return
+        }
         const response = await defaultApi.authRequest(`/event`, {
             method: 'POST',
-            body,
+            body: event,
         })
         return response.json()
     }

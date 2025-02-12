@@ -109,8 +109,8 @@
         </el-row>
         <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>
-                <FormEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)">
-                </FormEventTemplate>
+                <FormEditEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)">
+                </FormEditEventTemplate>
             </template>
         </AtomVenoniaDialog>
         <AtomVenoniaDialog v-model="templateSavingDialog.isOpen" :showClose="true">
@@ -135,6 +135,7 @@ import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
+import defaultTemplateDesigns from '~/assets/defaultTemplateDesigns.json'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
@@ -216,10 +217,6 @@ async function getRecentTemplate() {
 }
 
 async function loadTemplate(loadedTemplate: IEventTemplate) {
-    console.log({
-        origin: eventTemplate.value.id,
-        loaded: loadedTemplate.id
-    })
     loadTemplateDialog.value.isOpen = false
     if (!loadedTemplate.id) {
         setDefaultTemplate()
@@ -230,77 +227,8 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
 function setDefaultTemplate() {
     delete eventTemplate.value.designIds
     Object.assign(eventTemplate.value, {
-        designs: [
-            {
-                type: 'header1',
-                mutable: {
-                    label: '活動名稱'
-                }
-            },
-            {
-                type: 'dateTimeRange',
-                mutable: {
-                    label: '活動時間'
-                }
-            },
-            {
-                type: 'organization',
-                mutable: {
-                    label: '主辦單位'
-                }
-            },
-            {
-                type: 'organizationMember',
-                mutable: {
-                    label: '講者/主持'
-                }
-            },
-            {
-                type: 'textarea',
-                mutable: {
-                    label: '活動摘要'
-                }
-            },
-            {
-                type: 'place',
-                mutable: {
-                    label: '線下空間'
-                }
-            },
-            {
-                type: 'url',
-                mutable: {
-                    label: '線上連結'
-                }
-            },
-            {
-                type: 'offer',
-                mutable: {
-                    label: '公開票組',
-                    offers: [
-                        {
-
-                        }
-                    ]
-                }
-            },
-            {
-                type: 'divider',
-                mutable: {
-                    label: '活動詳細內容'
-                }
-            },
-            {
-                type: 'editor',
-                mutable: {
-                    label: ''
-                }
-            },
-        ]
+        designs: defaultTemplateDesigns
     })
-    if (!eventTemplate.value.name) {
-        eventTemplate.value.name = '未命名模板'
-    }
 }
 
 async function handleChange(templateDesign: ITemplateDesign) {

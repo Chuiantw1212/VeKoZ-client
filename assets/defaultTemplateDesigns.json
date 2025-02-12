@@ -1,0 +1,65 @@
+[
+    {
+        "type": "header1",
+        "mutable": {
+            "label": "活動名稱"
+        }
+    },
+    {
+        "type": "dateTimeRange",
+        "mutable": {
+            "label": "活動時間"
+        }
+    },
+    {
+        "type": "organization",
+        "mutable": {
+            "label": "主辦單位"
+        }
+    },
+    {
+        "type": "organizationMember",
+        "mutable": {
+            "label": "講者/主持"
+        }
+    },
+    {
+        "type": "textarea",
+        "mutable": {
+            "label": "活動摘要"
+        }
+    },
+    {
+        "type": "place",
+        "mutable": {
+            "label": "線下空間"
+        }
+    },
+    {
+        "type": "url",
+        "mutable": {
+            "label": "線上連結"
+        }
+    },
+    {
+        "type": "offer",
+        "mutable": {
+            "label": "公開票組",
+            "offers": [
+                {}
+            ]
+        }
+    },
+    {
+        "type": "divider",
+        "mutable": {
+            "label": "活動詳細內容"
+        }
+    },
+    {
+        "type": "editor",
+        "mutable": {
+            "label": ""
+        }
+    }
+]

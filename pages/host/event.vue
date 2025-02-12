@@ -30,14 +30,11 @@
             </el-col>
         </el-row>
 
-        <AtomVenoniaDialog v-model="dialogVisible">
+        <AtomVenoniaDialog v-model="eventDialogIsOpen" :showClose="false">
             <template #header>
                 <el-text size="large">
                     活動編輯
                 </el-text>
-                <el-icon>
-
-                </el-icon>
             </template>
             <template #headerUI>
                 <el-button v-if="dialogTemplate.id" v-loading="isPatchLoading" :icon="Delete" text
@@ -49,36 +46,46 @@
             <template #default>
                 <el-container v-loading.lock="isLoading">
                     <!-- 用v-if避免更新請求重複派送 -->
-                    <FormTemplateDesign v-if="dialogVisible" v-model="dialogTemplate.designs"
+                    <FormTemplateDesign v-if="eventDialogIsOpen" v-model="dialogTemplate.designs"
                         :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
             </template>
         </AtomVenoniaDialog>
+
+        <AtomVenoniaDialog v-model="loadTemplateDialogIsOpen" :showClose="true">
+            <template #header>
+                <el-text size="large">
+                    選擇模板
+                </el-text>
+            </template>
+            <FormReadEventTemplate v-model="dialogTemplate" @update:modelValue="openCalendarEvent()">
+            </FormReadEventTemplate>
+        </AtomVenoniaDialog>
     </div>
 </template>
 
 <script setup lang="ts">
-import useRepoEvent from '~/composables/useRepoEvent';
 import { Delete, Close, } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
-
-// Data
 const repoEvent = useRepoEvent()
-const repoEventTemplate = useRepoEventTemplate()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
+
+// Data
+const calendarEventCreation = ref<IEventCreation>()
 const calendarEventList = ref<IEvent[]>([])
 const currentEvent = ref<IEvent>()
-const dialogVisible = ref(false)
+const eventDialogIsOpen = ref<boolean>(false)
 const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
+const loadTemplateDialogIsOpen = ref<boolean>(false)
 
 // Hooks
 onMounted(async () => {
@@ -170,38 +177,34 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     dialogTemplate.value.eventId = eventId // 用這行刪除
     Object.assign(dialogTemplate.value, eventTemplate)
-    dialogVisible.value = true
+    eventDialogIsOpen.value = true
 }
 
-async function getEventTemplate() {
-    const result = await repoEventTemplate.getEventTemplate()
-    if (result) {
-        dialogTemplate.value = result
-    }
+async function openNewEventDialog(eventCreation: IEventCreation) {
+    calendarEventCreation.value = eventCreation
+    loadTemplateDialogIsOpen.value = true
 }
 
-async function openNewEventDialog(data: IEventCreation) {
-    isLoading.value = true
-    await getEventTemplate()
+async function openCalendarEvent() {
+    loadTemplateDialogIsOpen.value = false
     const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
     })
-    if (seoDateTimeRange) {
-        if (seoDateTimeRange.mutable) {
-            const { date } = data
-            seoDateTimeRange.mutable.value = [date, date]
-        }
+
+    if (seoDateTimeRange?.mutable && calendarEventCreation.value) {
+        const { date } = calendarEventCreation.value
+        seoDateTimeRange.mutable.value = [date, date]
     }
+
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
     currentEvent.value = newEvent
     dialogTemplate.value.eventId = newEvent.eventId
-    await getEventList()
-    dialogVisible.value = true
-    isLoading.value = false
+    eventDialogIsOpen.value = true
+    await getEventList() // 在背景更新月曆事件
 }
 
 async function cancelEventEditing() {
-    dialogVisible.value = false
+    eventDialogIsOpen.value = false
 }
 
 async function deleteEvent() {
@@ -210,7 +213,7 @@ async function deleteEvent() {
         await repoEvent.deleteEvent(dialogTemplate.value.eventId)
         venoniaCalendarRef.value?.removeAllEvents()
         await getEventList()
-        dialogVisible.value = false
+        eventDialogIsOpen.value = false
         isLoading.value = false
     }
 }

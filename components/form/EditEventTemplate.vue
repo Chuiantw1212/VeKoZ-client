@@ -93,13 +93,12 @@ async function deleteTemplate(template: IEventTemplate) {
 async function getEventTemplateList() {
     isLoading.value = true
     const result = await repoEventTemplate.getEventTemplateList()
-    templateList.value = [
-        {
-            id: 'default',
-            name: '系統預設',
-        },
-        ...result
-    ]
+    templateList.value = result
+    templateList.value.unshift({
+        id: 'default',
+        name: '系統預設',
+    })
+
     if (templateList.value.length === 1) {
         // 只剩下預設可選，刪除模板Id，觸發父層的Reset
         eventTemplate.value.id = ''
