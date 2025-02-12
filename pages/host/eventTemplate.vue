@@ -202,12 +202,12 @@ async function confirmSaveDialog() {
 
 async function getRecentTemplate() {
     const templateList: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
-    templateList.sort((a: IEventTemplate, b: IEventTemplate) => {
-        if (a.lastmod && b.lastmod) {
-            return Number(b.lastmod) - Number(a.lastmod)
-        }
-        return 0
-    })
+    // templateList.sort((a: IEventTemplate, b: IEventTemplate) => {
+    //     if (a.lastmod && b.lastmod) {
+    //         return Number(b.lastmod) - Number(a.lastmod)
+    //     }
+    //     return 0
+    // })
     const mostRecentTemplate = templateList[0]
     if (mostRecentTemplate?.id) {
         await getEventTemplate(mostRecentTemplate.id)

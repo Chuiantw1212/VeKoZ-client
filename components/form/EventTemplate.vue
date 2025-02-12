@@ -6,7 +6,7 @@
                     <template v-if="row.lastmod">
                         {{ new Date(row.lastmod).toLocaleString('zh-TW') }}
                     </template>
-<template v-else>
+                    <template v-else>
                         -
                     </template>
                 </template>
@@ -51,11 +51,18 @@ onMounted(() => {
 })
 
 // Methods
-function selectTemplate(template: IEventTemplate) {
+async function selectTemplate(template: IEventTemplate) {
+    if (!template.id) {
+        return
+    }
     if (template.id === 'default') {
         // 刪除模板Id，觸發父層的Reset
         eventTemplate.value.id = ''
-        // emit('update:modelValue', eventTemplate.value)
+    } else {
+        const result = await repoEventTemplate.getEventTemplate(template.id)
+        if (result) {
+            eventTemplate.value = result
+        }
     }
     emit('update:modelValue', eventTemplate.value)
 }
@@ -80,6 +87,7 @@ async function getEventTemplateList() {
     if (templateList.value.length === 1) {
         // 只剩下預設可選，刪除模板Id，觸發父層的Reset
         eventTemplate.value.id = ''
+        eventTemplate.value.name = ''
         emit('update:modelValue', eventTemplate.value)
     }
 }
