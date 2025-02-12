@@ -1,9 +1,4 @@
 <template>
-    <div v-if="templateDesigns.length">
-        <slot :index="0">
-
-        </slot>
-    </div>
     <el-form class="designForm" label-width="auto">
         <template v-for="(item, index) in templateDesigns">
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"

@@ -26,12 +26,21 @@ export default defineStore('eventTemplate', () => {
         })
         return response.json()
     }
-    async function patchEventTemplate(template: IEventTemplate) {
+    async function patchTemplateDesignIds(template: IEventTemplate) {
         const templateDesignIds = template.designs.map(design => String(design.id))
         const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
             method: 'PATCH',
             body: {
                 designIds: templateDesignIds
+            },
+        })
+        return response.text()
+    }
+    async function patchTemplateName(template: IEventTemplate) {
+        const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
+            method: 'PATCH',
+            body: {
+                name: template.name
             },
         })
         return response.text()
@@ -69,7 +78,8 @@ export default defineStore('eventTemplate', () => {
         postEventTemplate,
         getEventTemplate,
         getEventTemplateList,
-        patchEventTemplate,
+        patchTemplateDesignIds,
+        patchTemplateName,
         deleteEventTemplate,
         // Design
         postEventTemplateDesign,

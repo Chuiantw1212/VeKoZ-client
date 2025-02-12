@@ -5,16 +5,17 @@
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
-                            模板設計
+                            <el-form-item label="模板名稱">
+                                <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱"
+                                    @change="patchTemplateName()"></el-input>
+                            </el-form-item>
+                            {{ eventTemplate.id }}
                             <div class="header__btnGroup">
-                                <el-button size="small" @click="templateListDialog.isOpen = true">
-                                    選擇模板
+                                <el-button size="small" @click="loadTemplateDialog.isOpen = true">
+                                    開啓模板
                                 </el-button>
                                 <el-button size="small" @click="openSaveDialog">
-                                    模板另存
-                                </el-button>
-                                <el-button size="small" @click="resetEventTemplate">
-                                    模板預設
+                                    另存新檔
                                 </el-button>
                             </div>
                         </div>
@@ -28,7 +29,7 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    {{ eventTemplate }}
+                    {{ eventTemplate.designs }}
                     <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
                         class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -108,9 +109,10 @@
                 </el-card>
             </el-col>
         </el-row>
-        <AtomVenoniaDialog v-model="templateListDialog.isOpen" :showClose="true">
-            <FormEventTemplate v-if="templateListDialog.isOpen" v-model="eventTemplate"
-                @update:modelValue="handleTemplateDialog()">
+        Ï
+        <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
+            <FormEventTemplate v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
+                @update:modelValue="loadTemplate()">
             </FormEventTemplate>
         </AtomVenoniaDialog>
 
@@ -155,7 +157,7 @@ const eventTemplate = ref<IEventTemplate>({
 const organizationList = ref<IOrganization[]>([])
 const placeList = ref<IPlace[]>([])
 
-const templateListDialog = ref({
+const loadTemplateDialog = ref({
     isOpen: false,
 })
 
@@ -182,6 +184,12 @@ onBeforeUnmount(() => {
 })
 
 // methods
+async function patchTemplateName() {
+    repoUI.debounce('templateName', async () => {
+        await repoEventTemplate.patchTemplateName(eventTemplate.value)
+    })
+}
+
 async function openSaveDialog() {
     const header1 = eventTemplate.value.designs.find((design) => {
         return design.type === 'header1'
@@ -202,22 +210,16 @@ async function confirmSaveDialog() {
 
 async function getRecentTemplate() {
     const templateList: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
-    // templateList.sort((a: IEventTemplate, b: IEventTemplate) => {
-    //     if (a.lastmod && b.lastmod) {
-    //         return Number(b.lastmod) - Number(a.lastmod)
-    //     }
-    //     return 0
-    // })
     const mostRecentTemplate = templateList[0]
     if (mostRecentTemplate?.id) {
         await getEventTemplate(mostRecentTemplate.id)
     }
 }
 
-async function handleTemplateDialog() {
-    templateListDialog.value.isOpen = false
-    setDefaultTemplate()
+async function loadTemplate() {
+    loadTemplateDialog.value.isOpen = false
     if (!eventTemplate.value.id) {
+        setDefaultTemplate()
         await postEventTemplate()
     }
 }
@@ -293,6 +295,9 @@ function setDefaultTemplate() {
             },
         ]
     })
+    if (!eventTemplate.value.name) {
+        eventTemplate.value.name = '未命名模板'
+    }
 }
 
 async function handleChange(templateDesign: ITemplateDesign) {
@@ -300,15 +305,6 @@ async function handleChange(templateDesign: ITemplateDesign) {
         id: templateDesign.id,
         mutable: templateDesign.mutable
     })
-}
-
-async function resetEventTemplate() {
-    const oldTemplateId = eventTemplate.value.id
-    await repoEventTemplate.deleteEventTemplate(String(oldTemplateId))
-    if (!eventTemplate.value.id) {
-        await setDefaultTemplate()
-        await postEventTemplate()
-    }
 }
 
 async function postEventTemplate(templateName: string = '') {
@@ -375,7 +371,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     }
 
     // 更新模板順序
-    repoEventTemplate.patchEventTemplate(eventTemplate.value)
+    repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
 
     // Reset flags
     templateTemp.value.id = '' // 用來判斷是否為新增的欄位
@@ -390,7 +386,7 @@ async function removeDesign(data: any) {
     await repoEventTemplate.deleteEventTemplateDesign(data.id)
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
-    await repoEventTemplate.patchEventTemplate(eventTemplate.value)
+    await repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
     isLoading.value = false
 }
 
