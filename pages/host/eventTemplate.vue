@@ -10,7 +10,7 @@
                                 <el-button size="small" @click="templateListDialog.isOpen = true">
                                     選擇模板
                                 </el-button>
-                                <el-button size="small" @click="openSaveMessageBox">
+                                <el-button size="small" @click="openSaveDialog">
                                     模板另存
                                 </el-button>
                                 <el-button size="small" @click="resetEventTemplate">
@@ -28,7 +28,9 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
+                    {{ eventTemplate }}
+                    <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
+                        class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
@@ -106,15 +108,24 @@
                 </el-card>
             </el-col>
         </el-row>
-        <AtomVenoniaDialog v-model="saveMessageBox.isOpen">
-            <el-input></el-input>
+        <AtomVenoniaDialog v-model="templateListDialog.isOpen" :showClose="true">
+            <FormEventTemplate v-if="templateListDialog.isOpen" v-model="eventTemplate"
+                @update:modelValue="handleTemplateDialog()">
+            </FormEventTemplate>
         </AtomVenoniaDialog>
 
-        <AtomVenoniaDialog v-model="templateListDialog.isOpen">
-            <el-table :data="templateList" style="width: 100%">
-                <el-table-column prop="date" label="上次修改" />
-                <el-table-column prop="name" label="標題" />
-            </el-table>
+        <AtomVenoniaDialog v-model="templateSavingDialog.isOpen" :showClose="true">
+            <template #header>
+                另存新模板
+            </template>
+            <el-form v-if="templateSavingDialog.isOpen">
+                <el-form-item label="模板名稱">
+                    <el-input v-model="templateSavingDialog.name"></el-input>
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <el-button @click="confirmSaveDialog()">儲存</el-button>
+            </template>
         </AtomVenoniaDialog>
     </div>
 </template>
@@ -122,7 +133,6 @@
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
-import type { IEvent } from '~/types/event'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
@@ -144,17 +154,15 @@ const eventTemplate = ref<IEventTemplate>({
 
 const organizationList = ref<IOrganization[]>([])
 const placeList = ref<IPlace[]>([])
-const saveMessageBox = ref({
-    isOpen: false,
-})
+
 const templateListDialog = ref({
     isOpen: false,
 })
-const templateList = ref<IEvent[]>([
-    {
-        name: '理財框架',
-    }
-])
+
+const templateSavingDialog = ref({
+    isOpen: false,
+    name: ''
+})
 
 // Hooks
 onMounted(async () => {
@@ -162,9 +170,9 @@ onMounted(async () => {
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
-    await getEventTemplate()
+    await getRecentTemplate()
     if (!eventTemplate.value.id) {
-        setDefaultTemplate()
+        await setDefaultTemplate()
         await postEventTemplate()
     }
     isLoading.value = false
@@ -174,22 +182,47 @@ onBeforeUnmount(() => {
 })
 
 // methods
-async function openSaveMessageBox() {
-    const result: { value: any, action: string } = await ElMessageBox.prompt('請輸入模板名稱', '另存模板', {
-        confirmButtonText: '確認',
-        cancelButtonText: '取消',
-        inputPlaceholder: '請輸入模板名稱',
+async function openSaveDialog() {
+    const header1 = eventTemplate.value.designs.find((design) => {
+        return design.type === 'header1'
     })
-    const { action } = result
-    const templateName = result.value
-    if (action === 'confirm') {
-        isLoading.value = true
-        await postEventTemplate(templateName)
-        isLoading.value = false
+    if (header1) {
+        const name = header1?.mutable?.value || '未命名'
+        templateSavingDialog.value.name = `${name}模板`
+    }
+    templateSavingDialog.value.isOpen = true
+}
+
+async function confirmSaveDialog() {
+    isLoading.value = true
+    await postEventTemplate(templateSavingDialog.value.name)
+    isLoading.value = false
+    templateSavingDialog.value.isOpen = false
+}
+
+async function getRecentTemplate() {
+    const templateList: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
+    templateList.sort((a: IEventTemplate, b: IEventTemplate) => {
+        if (a.lastmod && b.lastmod) {
+            return Number(b.lastmod) - Number(a.lastmod)
+        }
+        return 0
+    })
+    const mostRecentTemplate = templateList[0]
+    if (mostRecentTemplate?.id) {
+        await getEventTemplate(mostRecentTemplate.id)
     }
 }
 
-async function setDefaultTemplate() {
+async function handleTemplateDialog() {
+    templateListDialog.value.isOpen = false
+    setDefaultTemplate()
+    if (!eventTemplate.value.id) {
+        await postEventTemplate()
+    }
+}
+
+function setDefaultTemplate() {
     delete eventTemplate.value.designIds
     Object.assign(eventTemplate.value, {
         designs: [
@@ -272,8 +305,10 @@ async function handleChange(templateDesign: ITemplateDesign) {
 async function resetEventTemplate() {
     const oldTemplateId = eventTemplate.value.id
     await repoEventTemplate.deleteEventTemplate(String(oldTemplateId))
-    setDefaultTemplate()
-    postEventTemplate()
+    if (!eventTemplate.value.id) {
+        await setDefaultTemplate()
+        await postEventTemplate()
+    }
 }
 
 async function postEventTemplate(templateName: string = '') {
@@ -313,18 +348,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     const templateDesign: ITemplateDesign = {
         id: templateTemp.value.id,
         type: templateTemp.value.type,
-        // mutable: templateTemp.value.mutable
     }
-
-    // // 新的元素賦予必要預設值
-    // if (!templateTemp.value.mutable) {
-    //     templateDesign.mutable = {
-    //         label: ''
-    //     }
-    //     if (templateDesign.type === 'offer') {
-    //         templateDesign.mutable.offers = [{}]
-    //     }
-    // }
 
     // 先更新資料庫再更新畫面
     const hasSource = templateTemp.value.index !== -1
@@ -333,13 +357,11 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         // 屬於原有模板拖曳
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
         // 刪除原本位置的的模板
-        // nextTick(() => {
         if (destinationIndex < sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
         } else {
             eventTemplate.value.designs.splice(sourceIndex, 1)
         }
-        // })
     } else {
         // 屬於新增的模板設計
         const designId = await repoEventTemplate.postEventTemplateDesign({
@@ -353,20 +375,13 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     }
 
     // 更新模板順序
-    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
-    repoEventTemplate.patchEventTemplate(templateDesignIds)
+    repoEventTemplate.patchEventTemplate(eventTemplate.value)
 
     // Reset flags
     templateTemp.value.id = '' // 用來判斷是否為新增的欄位
     templateTemp.value.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
     isLoading.value = false
-
-    // 重新渲染
-    // const temp = eventTemplate.value
-    // eventTemplate.value = {
-    //     designs: []
-    // }
 }
 
 async function removeDesign(data: any) {
@@ -375,8 +390,7 @@ async function removeDesign(data: any) {
     await repoEventTemplate.deleteEventTemplateDesign(data.id)
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
-    const templateDesignIds = eventTemplate.value.designs.map(design => String(design.id))
-    await repoEventTemplate.patchEventTemplate(templateDesignIds)
+    await repoEventTemplate.patchEventTemplate(eventTemplate.value)
     isLoading.value = false
 }
 
@@ -390,8 +404,8 @@ function cancelDragging() {
     templateTemp.value.type = ''
 }
 
-async function getEventTemplate() {
-    const result = await repoEventTemplate.getEventTemplate()
+async function getEventTemplate(templateId: string) {
+    const result = await repoEventTemplate.getEventTemplate(templateId)
     if (result) {
         Object.assign(eventTemplate.value, result)
     }

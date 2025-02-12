@@ -5,11 +5,13 @@ export interface IEventTemplate {
     designs: ITemplateDesign[],
     designIds?: string[],
     name?: string,
+    lastmod?: any,
 }
 
 export interface ITemplateDesign {
     id?: string,
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
+    templateId?: string,
     type?: string,
     mutable?: {
         label?: string,
@@ -19,7 +21,8 @@ export interface ITemplateDesign {
         url?: string,
         offers?: any[]
     },
-    sqlField?: string;
+    sqlField?: string,
+    lastmod?: any,
 }
 
 export interface ITemplateDragSouce extends ITemplateDesign {

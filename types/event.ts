@@ -17,6 +17,7 @@ export interface IEvent {
     startDate?: string,
     endDate?: string,
     description?: string,
+    lastmod?: any,
 }
 
 /**

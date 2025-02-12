@@ -4,26 +4,35 @@ import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('eventTemplate', () => {
     const defaultApi = useVenoniaApi()
-    const mostRecentEventTemplate = ref<IEventTemplate>()
 
-    async function getEventTemplate() {
-        const response = await defaultApi.authRequest(`/event/template`, {
+    async function getEventTemplate(templateId: string) {
+        const response = await defaultApi.authRequest(`/event/template/${templateId}`, {
             method: 'GET',
         })
         const result: IEventTemplate | 0 = response.json()
         return result
     }
+    async function getEventTemplateList() {
+        const response = await defaultApi.authRequest(`/event/template/list`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function postEventTemplate(body: IEventTemplate) {
+        delete body.id // 另存新檔案
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'POST',
             body,
         })
-        return response.text()
+        return response.json()
     }
-    async function patchEventTemplate(body: string[]) {
-        const response = await defaultApi.authRequest(`/event/template`, {
+    async function patchEventTemplate(template: IEventTemplate) {
+        const templateDesignIds = template.designs.map(design => String(design.id))
+        const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
             method: 'PATCH',
-            body,
+            body: {
+                designIds: templateDesignIds
+            },
         })
         return response.text()
     }
@@ -59,6 +68,7 @@ export default defineStore('eventTemplate', () => {
         // Template
         postEventTemplate,
         getEventTemplate,
+        getEventTemplateList,
         patchEventTemplate,
         deleteEventTemplate,
         // Design
