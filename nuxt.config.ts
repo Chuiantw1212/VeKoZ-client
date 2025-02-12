@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@vueuse/nuxt',
-    // '@unocss/nuxt',
     '@pinia/nuxt',
     '@element-plus/nuxt',
     '@nuxtjs/color-mode'
@@ -29,9 +28,6 @@ export default defineNuxtConfig({
     }
   },
 
-  // runtimeConfig: {
-  //   apiBase: 'http://localhost:8080',
-  // },
   runtimeConfig: {
     // The private keys which are only available within server-side
     apiSecret: 'There is no secret in fron end.',
@@ -44,7 +40,8 @@ export default defineNuxtConfig({
 
   // css
   css: [
-    '~/assets/scss/index.scss'
+    '~/assets/scss/venonia.scss',
+    '~/assets/scss/element.scss'
   ],
 
   // vueuse
@@ -81,17 +78,6 @@ export default defineNuxtConfig({
       crawlLinks: false,
       routes: ['/'],
       ignore: ['/hi'],
-    },
-  },
-
-  vite: {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-          additionalData: `@use "@/assets/scss/element/index.scss" as element;`,
-        },
-      },
     },
   },
 

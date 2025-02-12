@@ -10,21 +10,20 @@
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="8">
                 <el-card>
-                    <template #header>
-                        月曆連動
-                    </template>
-                    <el-input placeholder="請搜尋欲訂閱的月曆或輸入月曆ID"></el-input>
-                    <ul>
-                        <li>
-                            歐洲多語言
-                        </li>
-                        <li>
-                            常識經濟學
-                        </li>
-                        <li>
-                            個人行事曆
-                        </li>
-                    </ul>
+                    <el-divider>Google Calendar連動</el-divider>
+                    <el-row>
+                        <el-col :span="20">
+                            <el-input placeholder="請輸入月曆ID或Gmail"></el-input>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-button>連動</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-divider>篩選</el-divider>
+                    <el-checkbox-group v-model="selectedOrganizations">
+                        <el-checkbox v-for="(item) in organizationList" :label="item.name" :value="item.id" />
+                    </el-checkbox-group>
+                    <el-divider>Todo</el-divider>
                     如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                 </el-card>
             </el-col>
@@ -71,12 +70,15 @@ import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
+import type { IOrganization } from '~/types/organization';
 const repoEvent = useRepoEvent()
+const repoOrganization = useRepoOrganization()
 const repoUI = useRepoUI()
 const isLoading = ref<boolean>(false)
 const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
-
+const organizationList = ref<IOrganization[]>([])
+const selectedOrganizations = ref<string[]>([])
 // Data
 const calendarEventCreation = ref<IEventCreation>()
 const calendarEventList = ref<IEvent[]>([])
@@ -92,11 +94,17 @@ onMounted(async () => {
     isLoading.value = true
     await Promise.all([
         getEventList(),
+        getOrganizationList()
     ])
     isLoading.value = false
 })
 
 // Methods
+async function getOrganizationList() {
+    const result = await repoOrganization.getOrganizationList()
+    organizationList.value = result
+}
+
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
     isPatchLoading.value = true
     if (!currentEvent.value || !venoniaCalendarRef.value) {

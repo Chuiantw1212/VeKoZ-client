@@ -5,7 +5,7 @@
             <ElButton @click="openNewDialog()">新增組織</ElButton>
         </div>
 
-        <el-table :data="organizationList">
+        <el-table v-loading="isLoading" :data="organizationList">
             <el-table-column prop="logo" label="Logo">
                 <template #default="{ row }">
                     <img width="40px" :src="row.logo">
@@ -18,7 +18,7 @@
                     <el-button link type="primary" size="small" @click="editOrganizationDialog(row)">編輯組織</el-button>
                     <el-button link type="primary" size="small"
                         @click="editOrganizationMemberDialog(row)">編輯成員</el-button>
-                    <el-button link type="danger" size="small" @click="deleteOrganization()">
+                    <el-button link type="danger" size="small" @click="deleteOrganization(row)">
                         刪除
                     </el-button>
                 </template>
@@ -67,7 +67,7 @@ import { Delete, Close, } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 
-const isPatchLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])
@@ -128,7 +128,7 @@ function editOrganizationMemberDialog(item: IOrganization) {
     organizationMemberDialog.visibility = true
 }
 
-async function deleteOrganization() {
+async function deleteOrganization(item: IOrganization) {
     const result = await ElMessageBox.confirm(
         '是否永久刪除資料？刪除後無法還原。',
         {
@@ -139,8 +139,10 @@ async function deleteOrganization() {
         }
     )
     if (result === 'confirm') {
-        await repoOrganization.deleteOrganization()
-        getOrganizationList()
+        isLoading.value = true
+        await repoOrganization.deleteOrganization(item.id)
+        await getOrganizationList()
+        isLoading.value = false
     }
 }
 
