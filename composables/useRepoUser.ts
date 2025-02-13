@@ -4,7 +4,12 @@ import useVenoniaApi from './useVenoniaApi'
 
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
-
+    async function getUser() {
+        const response = await defaultApi.authRequest(`/user`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function postUser(body: any) {
         const response = await defaultApi.authRequest(`/user`, {
             method: 'POST',
@@ -37,6 +42,7 @@ export default defineStore('user', () => {
         return response.body
     }
     return {
+        getUser,
         deleteUser,
         postUser,
         patchUserProfile,

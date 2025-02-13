@@ -6,9 +6,6 @@
           <HeaderMenu></HeaderMenu>
         </el-header>
         <el-container>
-          <el-aside class="defaultLayout__aside">
-            <SideMenu></SideMenu>
-          </el-aside>
           <el-container>
             <el-main class="defaultLayout__main">
               <slot></slot>
@@ -22,7 +19,7 @@
 <script setup lang="ts">
 import HeaderMenu from '~/components/organism/HeaderMenu.vue'
 import SideMenu from '~/components/organism/SideMenu.vue';
-import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
+// import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 </script>
 <style lang="scss" scoped>
 .defaultLayout {
