@@ -4,7 +4,8 @@
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
-                        @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)">
+                        @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)"
+                        @dates-set="handleDatesSet($event)">
                     </MoleculeVenoniaCalendar>
                 </el-card>
             </el-col>
@@ -68,12 +69,14 @@
 import { Delete, Close, } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { CalendarApi, } from '@fullcalendar/core/index.js';
+import type { CalendarApi, DatesSetArg, } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
+import type { IPreferenceEvent } from '~/types/user';
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoUI = useRepoUI()
+const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
@@ -100,6 +103,15 @@ onMounted(async () => {
 })
 
 // Methods
+async function handleDatesSet(datesSetArg: DatesSetArg) {
+    const { view } = datesSetArg
+    const type = view.type as 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
+    const preferenceEvnet: IPreferenceEvent = {
+        calendarViewType: type,
+    }
+    repoUser.patchUserPreference('event', preferenceEvnet)
+}
+
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result

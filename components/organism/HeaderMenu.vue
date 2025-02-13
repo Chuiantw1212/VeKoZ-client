@@ -56,9 +56,7 @@ async function setUserType(userType: UserType) {
     repoAuth.setUserType(userType)
     if (userType) {
         // 紀錄為上次登錄狀態
-        repoUser.patchUserPreference({
-            userType,
-        })
+        repoUser.patchUserPreference('userType', userType)
     }
     if (userType === 'host') {
         router.push('/host/event')
@@ -95,7 +93,10 @@ function addFirebaseListener() {
 }
 
 async function handleLoggedIn(user: IUser) {
-    setUserType('host')
+    const { preference } = user
+    if (preference?.userType) {
+        setUserType(preference.userType)
+    }
 }
 
 async function registeredNewUser(firebaseUser: User) {

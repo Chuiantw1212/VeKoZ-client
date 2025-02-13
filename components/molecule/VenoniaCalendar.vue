@@ -5,7 +5,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Calendar, type CalendarApi } from '@fullcalendar/core';
+import { Calendar, } from '@fullcalendar/core';
+import type { CalendarApi, DatesSetArg, ViewMountArg } from '@fullcalendar/core';
 import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -15,7 +16,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
 import type { IFullCalendarEvent, IChangeInfo, IEventClickInfo } from '~/types/fullCalendar';
 
-const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventClick'])
+const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventClick', 'datesSet'])
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
@@ -72,6 +73,8 @@ function initializeCalendar() {
         events: [],
         eventClick: handleEventClick,
         eventChange: handleEventChange,
+        viewDidMount: handleViewDidMount,
+        datesSet: handleDatesSet,
         locales: [zhTwLocale],
         locale: 'zh-tw',
         headerToolbar: {
@@ -88,6 +91,25 @@ function initializeCalendar() {
     // 紀錄instance
     calendarInstance.value = markRaw(calendar)
 }
+
+/**
+ * 
+ */
+function handleDatesSet(datesSetArg: DatesSetArg) {
+    emit('datesSet', datesSetArg)
+}
+
+/**
+ * 
+ */
+function handleViewDidMount(viewMountArg: ViewMountArg) {
+    const { view } = viewMountArg
+    const { type } = view
+    // console.log({
+    //     type
+    // })
+}
+
 /**
  * https://fullcalendar.io/docs/eventClick
  */

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getAuth, } from "firebase/auth"
+// import { getAuth, } from "firebase/auth"
 import useVenoniaApi from './useVenoniaApi'
 import type { IUser, UserType } from '~/types/user'
 /**
@@ -9,7 +9,7 @@ import type { IUser, UserType } from '~/types/user'
 export default defineStore('auth', () => {
     // State
     const defaultApi = useVenoniaApi()
-    const userInfo = ref<IUser>()
+    // const userInfo = ref<IUser>()
     const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     // Actions
     function getUserType() {
@@ -18,9 +18,9 @@ export default defineStore('auth', () => {
     function setUserType(userTypeValue: UserType) {
         userType.value = userTypeValue
     }
-    function setUserInfo(loggedInUser: IUser) {
-        userInfo.value = loggedInUser
-    }
+    // function setUserInfo(loggedInUser: IUser) {
+    //     userInfo.value = loggedInUser
+    // }
     async function postVerificationEmail(body: any) {
         const response = await defaultApi.authRequest(`/auth/verificationEmail`, {
             method: 'POST',
@@ -38,7 +38,7 @@ export default defineStore('auth', () => {
     return {
         userType,
         getUserType,
-        setUserInfo,
+        // setUserInfo,
         setUserType,
         postVerificationEmail,
         getReauthResult,
