@@ -13,6 +13,11 @@
             </el-table-column>
             <el-table-column prop="name" label="名稱" />
             <el-table-column prop="description" label="描述" />
+            <el-table-column prop="lastmod" label="上次更新">
+                <template #default="{ row }">
+                   {{new Date(row.lastmod).toLocaleString('zh-TW')}}
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
                     <el-button link type="primary" size="small" @click="editOrganizationDialog(row)">編輯組織</el-button>
@@ -129,20 +134,24 @@ function editOrganizationMemberDialog(item: IOrganization) {
 }
 
 async function deleteOrganization(item: IOrganization) {
-    const result = await ElMessageBox.confirm(
-        '是否永久刪除資料？刪除後無法還原。',
-        {
-            title: '警告',
-            confirmButtonText: '確認',
-            cancelButtonText: '取消',
-            type: 'warning',
+    try {
+        const result = await ElMessageBox.confirm(
+            `永久刪除"${item.name}"？刪除後無法還原。`,
+            {
+                title: '警告',
+                confirmButtonText: '確認',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+        if (result === 'confirm') {
+            isLoading.value = true
+            await repoOrganization.deleteOrganization(item.id)
+            await getOrganizationList()
+            isLoading.value = false
         }
-    )
-    if (result === 'confirm') {
-        isLoading.value = true
-        await repoOrganization.deleteOrganization(item.id)
-        await getOrganizationList()
-        isLoading.value = false
+    } catch (error:any){
+        // Do nothing
     }
 }
 

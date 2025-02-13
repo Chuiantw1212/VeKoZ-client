@@ -1,18 +1,14 @@
 <template>
-    <el-form>
-        <el-row justify="space-between">
-            <el-col :span="12">
+    <el-form label-width="auto">
+        <el-row>
+            <el-col :span="14">
                 <el-form-item label="單位名稱">
                     <ElInput v-model="organization.name" :maxlength="30" :show-word-limit="true" placeholder="請輸入">
                     </ElInput>
                 </el-form-item>
-                <el-form-item label="Google Calendar Id">
-                    <ElInput v-model="organization.googleCalendarId" :maxlength="30" :show-word-limit="true"
-                        placeholder="請輸入">
-                    </ElInput>
-                </el-form-item>
+
             </el-col>
-            <el-col :span="8">
+            <el-col :span="10">
                 <el-form-item label="商標">
                     <ClientOnly>
                         <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
@@ -28,6 +24,21 @@
                 </el-form-item>
             </el-col>
         </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-form-item label="Google 日曆">
+                    <ElInput v-model="organization.googleCalendarId" :maxlength="150" :show-word-limit="true"
+                        placeholder="請輸入你為這個組織建立的 Google 日曆 ID">
+                    </ElInput>
+                </el-form-item>
+            </el-col>
+        </el-row>
+        <el-alert type="info" show-icon :closable="false">
+            <p>
+                有關Google 日曆連動的中文教學，請參考<a target="_blank"
+                    href="https://support.google.com/a/answer/1626902?hl=zh-Hant">建立及共用群組日曆</a>
+            </p>
+        </el-alert>
         <template v-if="mode === 'ADD'">
             <el-divider>
                 成員管理
