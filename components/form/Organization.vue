@@ -24,6 +24,21 @@
                 </el-form-item>
             </el-col>
         </el-row>
+        <!-- <el-alert type="info" show-icon :closable="false">
+            有關SEO注意事項，依據以下標準，SEO效果最好。
+            <ul>
+                <li>
+                    1. 標題30中文字左右
+                </li>
+                <li>
+                    2. 描述120~150中文字左右
+                </li>
+                <li>
+                    3. 附上商標，在社群媒體可作為分享用的縮圖
+                </li>
+            </ul>
+        </el-alert>
+        <br/> -->
         <el-row>
             <el-col :span="24">
                 <el-form-item label="Google 日曆">
