@@ -6,19 +6,19 @@
         </div>
 
         <el-table v-loading="isLoading" :data="organizationList">
-            <el-table-column prop="logo" label="Logo">
+            <el-table-column prop="logo" label="Logo" width="80em">
                 <template #default="{ row }">
                     <img width="40px" :src="row.logo">
                 </template>
             </el-table-column>
-            <el-table-column prop="name" label="名稱" />
-            <el-table-column prop="description" label="描述" />
-            <el-table-column prop="lastmod" label="上次更新">
+            <el-table-column prop="name" label="名稱" width="200em" />
+            <el-table-column prop="description" label="描述" :width="repoUI.isLarge?undefined:'600em'" />
+            <el-table-column prop="lastmod" label="上次更新" width="100em">
                 <template #default="{ row }">
-                   {{new Date(row.lastmod).toLocaleString('zh-TW')}}
+                   {{new Date(row.lastmod).toLocaleDateString('zh-TW')}}
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" label="功能">
+            <el-table-column fixed="right" label="功能" width="200em">
                 <template #default="{ row }">
                     <el-button link type="primary" size="small" @click="editOrganizationDialog(row)">編輯組織</el-button>
                     <el-button link type="primary" size="small"
@@ -30,7 +30,12 @@
             </el-table-column>
         </el-table>
 
-        <el-dialog v-model="organizationDialog.visibility" title="組織設定" class="event__template">
+        <AtomVenoniaDialog v-model="organizationDialog.visibility" class="event__template">
+            <template #header>
+                <el-text size="large">
+                    組織設定
+                </el-text>
+            </template>
             <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
                 :mode="organizationDialog.mode">
             </FormOrganization>
@@ -40,7 +45,7 @@
                     確認
                 </el-button>
             </template>
-        </el-dialog>
+        </AtomVenoniaDialog>
 
         <AtomVenoniaDialog v-model="organizationMemberDialog.visibility">
             <template #header>
@@ -71,6 +76,7 @@ import type { IOrganization } from '~/types/organization'
 import { Delete, Close, } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus'
 import useRepoOrganization from '~/composables/useRepoOrganization'
+const repoUI = useRepoUI()
 
 const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
