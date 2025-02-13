@@ -6,6 +6,11 @@
                     <ElInput v-model="organization.name" :maxlength="30" :show-word-limit="true" placeholder="請輸入">
                     </ElInput>
                 </el-form-item>
+                <el-form-item label="Google Calendar Id">
+                    <ElInput v-model="organization.googleCalendarId" :maxlength="30" :show-word-limit="true"
+                        placeholder="請輸入">
+                    </ElInput>
+                </el-form-item>
             </el-col>
             <el-col :span="8">
                 <el-form-item label="商標">

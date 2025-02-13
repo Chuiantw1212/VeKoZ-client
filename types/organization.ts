@@ -3,6 +3,7 @@ export type IOrganization = {
     name: string,
     description: string,
     logo: string | Buffer,
+    googleCalendarId?: string,
 }
 
 export type IOrganizationMember = {
