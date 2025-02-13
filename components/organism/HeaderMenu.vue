@@ -1,6 +1,6 @@
 <template>
     <el-menu class="headerMenu" mode="horizontal" :ellipsis="false" :menu-trigger="'click'">
-        <el-menu-item @click="repoUI.toggleMenu()">
+        <el-menu-item v-if="repoAuth.getUserType() === 'host'" @click="repoUI.toggleMenu()">
             <el-icon>
                 <More />
             </el-icon>
@@ -15,10 +15,10 @@
                 <el-avatar :size="32" :src="avatar" />
             </template>
             <el-menu-item index="1-1">
-                <NuxtLink v-if="repoAuth.getUserType() === 'attendee'" @click="repoAuth.setUserType('host')">
+                <NuxtLink v-if="repoAuth.getUserType() === 'attendee'" @click="setUserType('host')">
                     切換為主辦方
                 </NuxtLink>
-                <NuxtLink v-if="repoAuth.getUserType() === 'host'" @click="repoAuth.setUserType('attendee')">
+                <NuxtLink v-if="repoAuth.getUserType() === 'host'" @click="setUserType('attendee')">
                     切換為一般用戶
                 </NuxtLink>
             </el-menu-item>
@@ -54,6 +54,13 @@ onMounted(() => {
 })
 
 // Methods
+async function setUserType(userType: 'attendee' | 'host') {
+    repoAuth.setUserType(userType)
+    repoUser.patchUserPreference({
+        userType,
+    })
+}
+
 function addFirebaseListener() {
     try {
         const auth = getAuth()

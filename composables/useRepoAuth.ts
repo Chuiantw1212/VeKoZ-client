@@ -10,7 +10,7 @@ export default defineStore('auth', () => {
     // State
     const defaultApi = useVenoniaApi()
     const userInfo = ref<IUser>()
-    const userType = ref<UserType>('') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
+    const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     // Actions
     function getUserType() {
         return userType.value
