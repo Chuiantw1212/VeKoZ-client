@@ -38,12 +38,18 @@ importers:
       ckeditor5:
         specifier: ^44.1.0
         version: 44.1.0
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       element-plus:
         specifier: ^2.9.0
         version: 2.9.3(vue@3.5.13(typescript@5.7.3))
       firebase:
         specifier: ^11.2.0
         version: 11.2.0
+      lodash-unified:
+        specifier: ^1.0.3
+        version: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21)
       pinia:
         specifier: ^2.1.6
         version: 2.3.1(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))

@@ -81,6 +81,14 @@ export default defineNuxtConfig({
     },
   },
 
+  vite: {
+    optimizeDeps: {
+      include: [
+        'dayjs'
+      ]
+    }
+  },
+
   elementPlus: {
     icon: 'ElIcon',
     importStyle: 'scss',
