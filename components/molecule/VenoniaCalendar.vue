@@ -6,8 +6,9 @@
 </template>
 <script setup lang="ts">
 import { Calendar, } from '@fullcalendar/core';
-import type { CalendarApi, DatesSetArg, ViewMountArg } from '@fullcalendar/core';
+import type { CalendarApi, DatesSetArg, EventSourceInput, ViewMountArg } from '@fullcalendar/core';
 import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
+import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -68,9 +69,8 @@ function initializeCalendar() {
     // 設定Calendar
     const idealHeight = window.innerHeight - 150
     const calendar = new Calendar(calendarEl, {
-        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin, googleCalendarPlugin],
         initialView: 'dayGridMonth',
-        events: [],
         eventClick: handleEventClick,
         eventChange: handleEventChange,
         viewDidMount: handleViewDidMount,
@@ -81,7 +81,6 @@ function initializeCalendar() {
             left: 'today prev,next',
             center: 'title',
             right: 'dayGridMonth,dayGridWeek,listWeek'
-            // right: ''
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
@@ -131,6 +130,13 @@ function handleEventChange(changeInfo: any) {
 
 function addEvent(event: IFullCalendarEvent) {
     calendarInstance.value?.addEvent(event)
+}
+
+function addEventSource(eventSource: EventSourceInput) {
+    console.log({
+        eventSource
+    })
+    calendarInstance.value?.addEventSource(eventSource)
 }
 
 function getEventById(event: string) {
@@ -214,6 +220,7 @@ function toggleEventAddingBtn(event: Event) {
 
 defineExpose({
     addEvent,
+    addEventSource,
     removeAllEvents,
     getEventById,
     changeView,

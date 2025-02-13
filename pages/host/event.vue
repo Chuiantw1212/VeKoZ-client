@@ -12,8 +12,9 @@
             <el-col v-if="repoUI.isLarge" :span="5">
                 <el-card>
                     <el-divider content-position="left">篩選</el-divider>
-                    <el-checkbox-group v-model="selectedOrganizations">
-                        <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)" :value="item.id" />
+                    <el-checkbox-group v-model="selectedOrganizationIds">
+                        <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
+                            :value="item.id" />
                     </el-checkbox-group>
                     <el-divider content-position="left">Todo</el-divider>
                     如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
@@ -60,7 +61,7 @@
 import { Delete, Close, } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { CalendarApi, DatesSetArg, } from '@fullcalendar/core/index.js';
+import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
@@ -72,7 +73,7 @@ const isLoading = ref<boolean>(false)
 const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
 const organizationList = ref<IOrganization[]>([])
-const selectedOrganizations = ref<string[]>([])
+const selectedOrganizationIds = ref<string[]>([])
 // Data
 const calendarEventCreation = ref<IEventCreation>()
 const calendarEventList = ref<IEvent[]>([])
@@ -100,9 +101,9 @@ watch((() => repoUser.userType), () => {
 }, { immediate: true })
 
 // Methods
-function trimOrganizationName(item:IOrganization){
-    if(item.name.length>=10){
-        return  `${item.name.slice(0,8)}...`
+function trimOrganizationName(item: IOrganization) {
+    if (item.name.length >= 10) {
+        return `${item.name.slice(0, 8)}...`
     } else {
         return item.name
     }
@@ -127,6 +128,24 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
+
+    selectedOrganizationIds.value = result.map(org => {
+        return org.id
+    })
+    return
+    result.forEach(org => {
+        /**
+         * https://fullcalendar.io/docs/event-source-object
+         */
+        const googleCalendarFeed: EventSourceInput = {
+            googleCalendarId: org.googleCalendarId,
+            color: 'red',   // an option!
+            textColor: 'red', // an option!
+            editable: false,
+            url: '',
+        }
+        venoniaCalendarRef.value?.addEventSource(googleCalendarFeed)
+    })
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
