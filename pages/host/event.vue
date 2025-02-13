@@ -99,10 +99,23 @@ onMounted(async () => {
         getEventList(),
         getOrganizationList()
     ])
+    // setCalendarView()
     isLoading.value = false
 })
+watch((() => repoUser.userType), () => {
+    if (repoUser.userInfo.id) {
+        setCalendarView()
+    }
+}, { immediate: true })
 
 // Methods
+function setCalendarView() {
+    const preference = repoUser.userInfo.preference
+    const calendarViewType = preference?.event.calendarViewType
+    if (calendarViewType) {
+        venoniaCalendarRef.value?.changeView(calendarViewType)
+    }
+}
 async function handleDatesSet(datesSetArg: DatesSetArg) {
     const { view } = datesSetArg
     const type = view.type as 'dayGridMonth' | 'dayGridWeek' | 'listWeek'

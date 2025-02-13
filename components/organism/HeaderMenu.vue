@@ -1,6 +1,6 @@
 <template>
     <el-menu class="headerMenu" mode="horizontal" :ellipsis="false" :menu-trigger="'click'">
-        <el-menu-item v-if="repoAuth.getUserType() === 'host'" @click="repoUI.toggleMenu()">
+        <el-menu-item v-if="repoUser.userType === 'host'" @click="repoUI.toggleMenu()">
             <el-icon>
                 <More />
             </el-icon>
@@ -10,15 +10,15 @@
                 <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
-        <el-sub-menu v-if="repoAuth.getUserType()" index="1" class="headerMenu__firstItem">
+        <el-sub-menu v-if="repoUser.userType" index="1" class="headerMenu__firstItem">
             <template #title>
                 <el-avatar :size="32" :src="avatar" />
             </template>
             <el-menu-item index="1-1">
-                <NuxtLink v-if="repoAuth.getUserType() === 'attendee'" @click="setUserType('host')">
+                <NuxtLink v-if="repoUser.userType === 'attendee'" @click="setUserType('host')">
                     切換為主辦方
                 </NuxtLink>
-                <NuxtLink v-if="repoAuth.getUserType() === 'host'" @click="setUserType('attendee')">
+                <NuxtLink v-if="repoUser.userType === 'host'" @click="setUserType('attendee')">
                     切換為一般用戶
                 </NuxtLink>
             </el-menu-item>
@@ -53,7 +53,7 @@ onMounted(() => {
 
 // Methods
 async function setUserType(userType: UserType) {
-    repoAuth.setUserType(userType)
+    repoUser.userType = userType
     if (userType) {
         // 紀錄為上次登錄狀態
         repoUser.patchUserPreference('userType', userType)

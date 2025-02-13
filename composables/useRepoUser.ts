@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
 import useVenoniaApi from './useVenoniaApi'
-import type { IUserPreference } from '~/types/user'
-import type { IUser } from '~/types/user'
+import type { IUser, IUserPreference, UserType } from '~/types/user'
 
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
+
+    // const userInfo = ref<IUser>()
+    const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     const userInfo = ref<IUser>({
         preference: {
             event: {
@@ -13,7 +15,6 @@ export default defineStore('user', () => {
             }
         }
     })
-
     /**
      * 抓用戶自己的資料專用
      * @returns 
@@ -75,6 +76,8 @@ export default defineStore('user', () => {
         return response.body
     }
     return {
+        userType,
+        userInfo,
         getUser,
         deleteUser,
         postUser,

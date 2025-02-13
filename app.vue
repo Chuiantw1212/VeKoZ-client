@@ -6,7 +6,7 @@
                 <HeaderMenu></HeaderMenu>
             </el-header>
             <el-container>
-                <el-aside v-if="repoAuth.getUserType() === 'host'" class="defaultLayout__aside">
+                <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
                     <SideMenu></SideMenu>
                 </el-aside>
                 <el-container>
@@ -24,7 +24,7 @@ import HeaderMenu from '~/components/organism/HeaderMenu.vue'
 import SideMenu from '~/components/organism/SideMenu.vue';
 import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 
-const repoAuth = useRepoAuth()
+const repoUser = useRepoUser()
 </script>
 <style lang="scss" scoped>
 .defaultLayout {

@@ -92,6 +92,10 @@ function initializeCalendar() {
     calendarInstance.value = markRaw(calendar)
 }
 
+function changeView(viewType: string) {
+    calendarInstance.value?.changeView(viewType)
+}
+
 /**
  * 
  */
@@ -212,6 +216,7 @@ defineExpose({
     addEvent,
     removeAllEvents,
     getEventById,
+    changeView,
 })
 </script>
 
