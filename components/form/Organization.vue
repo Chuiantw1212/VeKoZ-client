@@ -6,7 +6,10 @@
                     <ElInput v-model="organization.name" :maxlength="30" :show-word-limit="true" placeholder="請輸入">
                     </ElInput>
                 </el-form-item>
-
+                <el-form-item label="統一編號">
+                    <el-input v-model="organization.taxID" :maxlength="8" :show-word-limit="true"
+                        placeholder="請輸入"></el-input>
+                </el-form-item>
             </el-col>
             <el-col :span="10">
                 <el-form-item label="商標">
@@ -17,10 +20,12 @@
             </el-col>
         </el-row>
         <el-row>
+        </el-row>
+        <el-row>
             <el-col :span="24">
                 <el-form-item label="描述">
-                    <el-mention v-model="organization.description" :maxlength="150" type="textarea"
-                        :show-word-limit="true" placeholder="請輸入"></el-mention>
+                    <el-input v-model="organization.description" :maxlength="150" type="textarea"
+                        :show-word-limit="true" placeholder="請輸入"></el-input>
                 </el-form-item>
             </el-col>
         </el-row>

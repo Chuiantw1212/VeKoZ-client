@@ -8,8 +8,8 @@
             <el-input v-model="form.address" placeholder="請輸入" :show-word-limit="true" :maxlength="150" />
         </el-form-item>
         <el-form-item label="描述">
-            <el-mention v-model="form.description" placeholder="請輸入" maxlength=" 150" type="textarea"
-                :show-word-limit="true"></el-mention>
+            <el-input v-model="form.description" placeholder="請輸入" maxlength=" 150" type="textarea"
+                :show-word-limit="true"></el-input>
         </el-form-item>
     </el-form>
 </template>
