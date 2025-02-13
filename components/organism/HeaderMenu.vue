@@ -47,6 +47,8 @@ const repoAuth = useRepoAuth()
 
 // Hooks
 const router = useRouter()
+const route = useRoute()
+
 onMounted(() => {
     addFirebaseListener()
 })
@@ -59,10 +61,12 @@ async function setUserType(userType: UserType) {
         repoUser.patchUserPreference('userType', userType)
     }
     if (userType === 'host') {
-        router.push('/host/event')
+        // router.push('/host/event')
     }
     if (userType === 'attendee') {
-        router.push('/events')
+        // if (route.name === 'index') {
+        //     router.push('/events')
+        // }
     }
 }
 
