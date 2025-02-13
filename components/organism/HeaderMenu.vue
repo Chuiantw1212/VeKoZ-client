@@ -10,7 +10,7 @@
                 <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
-        <el-sub-menu v-if="isSignedIn" index="1" class="headerMenu__firstItem">
+        <el-sub-menu v-if="repoAuth.getUserType()" index="1" class="headerMenu__firstItem">
             <template #title>
                 <el-avatar :size="32" :src="avatar" />
             </template>
@@ -23,9 +23,9 @@
                 </NuxtLink>
             </el-menu-item>
             <el-menu-item index="1-2">
-                <NuxtLink @click="handleSignOut()">
+                <el-button @click="handleSignOut()">
                     登出
-                </NuxtLink>
+                </el-button>
             </el-menu-item>
         </el-sub-menu>
         <el-menu-item v-else class="headerMenu__firstItem">
@@ -40,12 +40,10 @@
 import { More, Fold, Menu } from '@element-plus/icons-vue'
 import { getAuth, onAuthStateChanged, signOut, type User, } from "firebase/auth"
 import avatar from '@/assets/mock/user.jpg'
-import { ref } from 'vue'
-import type { IUser } from '~/types/user'
+import type { IUser, UserType } from '~/types/user'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const repoAuth = useRepoAuth()
-const isSignedIn = ref(false)
 
 // Hooks
 const router = useRouter()
@@ -54,45 +52,50 @@ onMounted(() => {
 })
 
 // Methods
-async function setUserType(userType: 'attendee' | 'host') {
+async function setUserType(userType: UserType) {
     repoAuth.setUserType(userType)
-    repoUser.patchUserPreference({
-        userType,
-    })
-}
-
-function addFirebaseListener() {
-    try {
-        const auth = getAuth()
-        onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-            if (!firebaseUser) {
-                // 登出後回到首頁
-                router.push('/')
-                return
-            }
-            if (firebaseUser.emailVerified) {
-                // 判斷是否為已註冊用戶
-                const user: IUser = await repoUser.getUser()
-                if (user.id) {
-                    handleLoggedIn(user)
-                } else {
-                    registeredNewUser(firebaseUser)
-                }
-            } else {
-                // 給出重新驗證的畫面
-            }
+    if (userType) {
+        // 紀錄為上次登錄狀態
+        repoUser.patchUserPreference({
+            userType,
         })
-    } catch (error: any) {
-        console.log(error.message || error)
+    }
+    if (userType === 'host') {
+        router.push('/host/event')
+    }
+    if (userType === 'attendee') {
+        router.push('/events')
     }
 }
 
-async function handleLoggedIn(user: IUser) {
-    isSignedIn.value = true
-    repoAuth.setUserType('attendee')
-    router.push({
-        name: 'host'
+function addFirebaseListener() {
+    const auth = getAuth()
+    onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+        if (!firebaseUser) {
+            // 這邊如果做事會中斷登入流程。
+            setUserType('')
+            return
+        }
+        if (firebaseUser.emailVerified) {
+            // 判斷是否為已註冊用戶
+            const user: IUser = await repoUser.getUser()
+            if (user.id) {
+                handleLoggedIn(user)
+            } else {
+                registeredNewUser(firebaseUser)
+            }
+        } else {
+            // 給出重新驗證的畫面
+        }
     })
+    var user = auth.currentUser;
+    console.log({
+        user
+    })
+}
+
+async function handleLoggedIn(user: IUser) {
+    setUserType('host')
 }
 
 async function registeredNewUser(firebaseUser: User) {
@@ -111,7 +114,6 @@ async function registeredNewUser(firebaseUser: User) {
 async function handleSignOut() {
     const auth = getAuth()
     await signOut(auth)
-    isSignedIn.value = false
     router.push({
         name: 'signin',
     })

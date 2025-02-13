@@ -27,7 +27,7 @@ function initializeFirebaseUI() {
                 provider: nuxtAppFirebase.auth.EmailAuthProvider.PROVIDER_ID,
             }
         ],
-        // signInFlow: 'popup',
+        signInFlow: 'popup', // redirect開發時，onAuthStateChanged總是回傳null，必須使用popup才有可能登入成功。
         // Terms of service url.
         tosUrl: 'https://storage.googleapis.com/public.econ-sense.com/Terms%20of%20Use.pdf',
         // Privacy policy url.
