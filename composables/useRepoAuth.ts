@@ -9,9 +9,12 @@ import type { IUser, UserType } from '~/types/user'
 export default defineStore('auth', () => {
     // State
     const defaultApi = useVenoniaApi()
-    const userInfo = ref<IUser>() 
+    const userInfo = ref<IUser>()
     const userType = ref<UserType>('') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     // Actions
+    function getUserType() {
+        return userType.value
+    }
     function setUserType(userTypeValue: UserType) {
         userType.value = userTypeValue
     }
@@ -33,6 +36,8 @@ export default defineStore('auth', () => {
         return response
     }
     return {
+        userType,
+        getUserType,
         setUserInfo,
         setUserType,
         postVerificationEmail,

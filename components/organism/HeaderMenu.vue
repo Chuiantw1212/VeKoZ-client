@@ -10,11 +10,19 @@
                 <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
-        <el-sub-menu v-if="isSignedIn" index="2" class="headerMenu__firstItem">
+        <el-sub-menu v-if="isSignedIn" index="1" class="headerMenu__firstItem">
             <template #title>
                 <el-avatar :size="32" :src="avatar" />
             </template>
-            <el-menu-item index="2-1">
+            <el-menu-item index="1-1">
+                <NuxtLink v-if="repoAuth.getUserType() === 'attendee'" @click="repoAuth.setUserType('host')">
+                    切換為主辦方
+                </NuxtLink>
+                <NuxtLink v-if="repoAuth.getUserType() === 'host'" @click="repoAuth.setUserType('attendee')">
+                    切換為一般用戶
+                </NuxtLink>
+            </el-menu-item>
+            <el-menu-item index="1-2">
                 <NuxtLink @click="handleSignOut()">
                     登出
                 </NuxtLink>
@@ -74,6 +82,7 @@ function addFirebaseListener() {
 
 async function handleLoggedIn(user: IUser) {
     isSignedIn.value = true
+    repoAuth.setUserType('attendee')
     router.push({
         name: 'host'
     })
