@@ -1,7 +1,7 @@
 <template>
     <div class="event">
         <el-row :gutter="20">
-            <el-col :span="repoUI.isLarge ? 16 : 24">
+            <el-col :span="repoUI.isLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
                         @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)"
@@ -9,9 +9,9 @@
                     </MoleculeVenoniaCalendar>
                 </el-card>
             </el-col>
-            <el-col v-if="repoUI.isLarge" :span="8">
+            <el-col v-if="repoUI.isLarge" :span="5">
                 <el-card>
-                    <el-divider>Google Calendar連動</el-divider>
+                    <el-divider content-position="left">Google Calendar連動</el-divider>
                     <el-row>
                         <el-col :span="20">
                             <el-input placeholder="請輸入月曆ID或Gmail"></el-input>
@@ -20,11 +20,11 @@
                             <el-button>連動</el-button>
                         </el-col>
                     </el-row>
-                    <el-divider>篩選</el-divider>
+                    <el-divider content-position="left">篩選</el-divider>
                     <el-checkbox-group v-model="selectedOrganizations">
                         <el-checkbox v-for="(item) in organizationList" :label="item.name" :value="item.id" />
                     </el-checkbox-group>
-                    <el-divider>Todo</el-divider>
+                    <el-divider content-position="left">Todo</el-divider>
                     如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                 </el-card>
             </el-col>
