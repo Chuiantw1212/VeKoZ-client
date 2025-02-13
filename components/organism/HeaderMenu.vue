@@ -1,27 +1,31 @@
 <template>
-  <el-menu class="headerMenu" mode="horizontal" :ellipsis="false">
-    <el-menu-item @click="repoUI.toggleMenu()">
-      <el-icon>
-        <More />
-      </el-icon>
-    </el-menu-item>
-    <NuxtLink to="/">
-      <el-menu-item class="headerMenu__logo">
-        <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
-      </el-menu-item>
-    </NuxtLink>
-    <el-menu-item class="headerMenu__firstItem">
-      <NuxtLink v-if="isSignedIn" @click="handleSignOut()">
-        登出
-      </NuxtLink>
-      <NuxtLink v-else to="/signin">
-        登入
-      </NuxtLink>
-    </el-menu-item>
-    <el-menu-item>
-      <el-avatar :size="32" :src="avatar" />
-    </el-menu-item>
-  </el-menu>
+    <el-menu class="headerMenu" mode="horizontal" :ellipsis="false" :menu-trigger="'click'">
+        <el-menu-item @click="repoUI.toggleMenu()">
+            <el-icon>
+                <More />
+            </el-icon>
+        </el-menu-item>
+        <NuxtLink to="/">
+            <el-menu-item class="headerMenu__logo">
+                <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
+            </el-menu-item>
+        </NuxtLink>
+        <el-sub-menu v-if="isSignedIn" index="2" class="headerMenu__firstItem">
+            <template #title>
+                <el-avatar :size="32" :src="avatar" />
+            </template>
+            <el-menu-item index="2-1">
+                <NuxtLink @click="handleSignOut()">
+                    登出
+                </NuxtLink>
+            </el-menu-item>
+        </el-sub-menu>
+        <el-menu-item v-else class="headerMenu__firstItem">
+            <NuxtLink to="/signin">
+                登入
+            </NuxtLink>
+        </el-menu-item>
+    </el-menu>
 </template>
 
 <script lang="ts" setup>
@@ -32,25 +36,52 @@ import { ref } from 'vue'
 import type { IUser } from '~/types/user'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-
+const repoAuth = useRepoAuth()
 const isSignedIn = ref(false)
 
+// Hooks
 const router = useRouter()
+onMounted(() => {
+    addFirebaseListener()
+})
 
+// Methods
 function addFirebaseListener() {
-  try {
-    const auth = getAuth()
-    onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-      console.log({
-        firebaseUser
-      })
-      if (!firebaseUser) {
-        router.push('/')
-        return
-      }
+    try {
+        const auth = getAuth()
+        onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+            if (!firebaseUser) {
+                // 登出後回到首頁
+                router.push('/')
+                return
+            }
+            if (firebaseUser.emailVerified) {
+                // 判斷是否為已註冊用戶
+                const user: IUser = await repoUser.getUser()
+                if (user.id) {
+                    handleLoggedIn(user)
+                } else {
+                    registeredNewUser(firebaseUser)
+                }
+            } else {
+                // 給出重新驗證的畫面
+            }
+        })
+    } catch (error: any) {
+        console.log(error.message || error)
+    }
+}
 
-      const { emailVerified, displayName, email, phoneNumber, photoURL, providerId, uid } = firebaseUser
-      const venoniaUser: IUser = {
+async function handleLoggedIn(user: IUser) {
+    isSignedIn.value = true
+    router.push({
+        name: 'host'
+    })
+}
+
+async function registeredNewUser(firebaseUser: User) {
+    const { emailVerified, displayName, email, phoneNumber, photoURL, providerId, uid } = firebaseUser
+    const venoniaUser: IUser = {
         emailVerified,
         displayName: displayName ?? '',
         email: email ?? '',
@@ -58,50 +89,27 @@ function addFirebaseListener() {
         photoURL: photoURL ?? '',
         providerId: providerId,
         uid: uid
-      }
-      if (emailVerified) {
-        // 判斷是否為已註冊用戶
-        const user = await getUser()
-        console.log({
-          user
-        })
-      } else {
-        // 給出重新驗證的畫面
-      }
-      // if (firebaseUser.id) {
-      //   isSignedIn.value = true
-      // }
-    })
-  } catch (error: any) {
-    console.log(error.message || error)
-  }
-}
-
-async function getUser() {
-  const result = await repoUser.getUser()
+    }
 }
 
 async function handleSignOut() {
-  const auth = getAuth()
-  await signOut(auth)
-  router.push({
-    name: 'signin',
-  })
+    const auth = getAuth()
+    await signOut(auth)
+    isSignedIn.value = false
+    router.push({
+        name: 'signin',
+    })
 }
-
-onMounted(() => {
-  addFirebaseListener()
-})
 </script>
 
 <style lang="scss" scoped>
 .headerMenu {
-  .headerMenu__logo {
-    margin: 0px;
-  }
+    .headerMenu__logo {
+        margin: 0px;
+    }
 
-  .headerMenu__firstItem {
-    margin-left: auto;
-  }
+    .headerMenu__firstItem {
+        margin-left: auto;
+    }
 }
 </style>

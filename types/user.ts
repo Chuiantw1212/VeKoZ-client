@@ -1,4 +1,7 @@
+export type UserType = 'host' | 'attendee' | ''
+
 export interface IUser {
+    id?: string,
     emailVerified: boolean,
     displayName: string,
     email: string,
