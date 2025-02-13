@@ -28,17 +28,17 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function patchUserPreference(preference: IUserPreference) {
-        const response = await defaultApi.authRequest(`/user`, {
-            method: 'PATCH',
-            body: preference
-        })
-        return response
-    }
     async function patchUserProfile(body: any) {
         const response = await defaultApi.authRequest(`/user`, {
             method: 'PATCH',
             body
+        })
+        return response
+    }
+    async function patchUserPreference(preference: IUserPreference) {
+        const response = await defaultApi.authRequest(`/user/preference`, {
+            method: 'PATCH',
+            body: preference
         })
         return response
     }
@@ -54,7 +54,8 @@ export default defineStore('user', () => {
         deleteUser,
         postUser,
         patchUserProfile,
-        patchUserPreference,
         putUserPhoto,
+        // User preference
+        patchUserPreference,
     }
 })
