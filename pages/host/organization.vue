@@ -1,7 +1,7 @@
 <template>
     <div class="organization">
         <div class="organization__header">
-            <h1>權限&組織管理</h1>
+            <h1>組織管理</h1>
             <ElButton @click="openNewDialog()">新增組織</ElButton>
         </div>
 

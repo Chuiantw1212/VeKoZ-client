@@ -21,7 +21,7 @@
         <el-icon>
           <Location />
         </el-icon>
-        <template #title>空間&地點管理</template>
+        <template #title>地點管理</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/organization">
@@ -29,7 +29,7 @@
         <el-icon>
           <OfficeBuilding />
         </el-icon>
-        <template #title>權限&組織管理</template>
+        <template #title>組織管理</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/offer">
