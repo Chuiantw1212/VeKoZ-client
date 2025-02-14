@@ -32,6 +32,7 @@
                 <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
+                <el-switch v-model="dialogTemplate.isPublic" size="small" active-text="公開" inactive-text="非公開" />
                 <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
@@ -139,8 +140,8 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     // });
 
     // orgsWithCalendar.forEach(async org => {
-    //     const timeMin = new Date(view.currentStart).toISOString()
-    //     const timeMax = new Date(view.currentEnd).toISOString()
+    //     const timeMin = new Date(view.currentStart)
+    //     const timeMax = new Date(view.currentEnd)
     //     const eventList = await repoGoogle.getGoogleCalendarEvents({
     //         calendarId: org.googleCalendarId,
     //         timeMin,
@@ -172,8 +173,8 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     if (templateDesign.sqlField === 'date') {
         const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
         calendarEvent?.remove()
-        currentEvent.value.startDate = new Date(templateDesign.mutable?.value[0]).toISOString()
-        currentEvent.value.endDate = new Date(templateDesign.mutable?.value[1]).toISOString()
+        currentEvent.value.startDate = new Date(templateDesign.mutable?.value[0])
+        currentEvent.value.endDate = new Date(templateDesign.mutable?.value[1])
         const newFullCalendarEvent = parseFullCalendarEvent(currentEvent.value)
         venoniaCalendarRef.value.addEvent(newFullCalendarEvent)
     }
@@ -185,7 +186,7 @@ async function getEventList() {
     startOfTheMonth.setDate(0)
 
     calendarEventList.value = await repoEvent.getEventList({
-        startDate: startOfTheMonth.toISOString(),
+        startDate: startOfTheMonth,
     })
 
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
@@ -231,8 +232,8 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     await repoEvent.patchEventCalendar({
         id: eventId,
         dateDesignId: changedEvent?.dateDesignId,
-        startDate: newStartDate.toISOString(),
-        endDate: newEndDate.toISOString()
+        startDate: newStartDate,
+        endDate: newEndDate
     })
 }
 

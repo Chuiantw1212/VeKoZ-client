@@ -55,7 +55,7 @@ export default defineStore('ui', () => {
      * https://www.freecodecamp.org/news/javascript-debounce-example/
      * @param isLoading
      */
-    function debounce(id: string, func: Function, timeout = 300) {
+    function debounce(id: string, func: Function, timeout = 500) {
         const existedTimer = debounceTimeout.value[id]
         if (existedTimer) {
             clearTimeout(existedTimer);

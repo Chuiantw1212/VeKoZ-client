@@ -14,8 +14,8 @@ export interface IEvent {
     virtualLocationName?: string,
     virtualLocationUrl?: string,
     dateDesignId?: string,
-    startDate?: string,
-    endDate?: string,
+    startDate?: string | Date,
+    endDate?: string | Date,
     description?: string,
     lastmod?: any,
 }

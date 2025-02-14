@@ -14,14 +14,16 @@
             <template #title>
                 <el-avatar :size="32" :src="avatar" />
             </template>
-            <el-menu-item index="1-1">
-                <NuxtLink v-if="repoUser.userType === 'attendee'" @click="setUserType('host')">
+            <NuxtLink v-if="repoUser.userType === 'attendee'" @click="setUserType('host')">
+                <el-menu-item index="1-1">
                     切換為主辦方
-                </NuxtLink>
-                <NuxtLink v-if="repoUser.userType === 'host'" @click="setUserType('attendee')">
+                </el-menu-item>
+            </NuxtLink>
+            <NuxtLink v-if="repoUser.userType === 'host'" @click="setUserType('attendee')">
+                <el-menu-item index="1-1">
                     切換為一般用戶
-                </NuxtLink>
-            </el-menu-item>
+                </el-menu-item>
+            </NuxtLink>
             <el-menu-item index="1-2">
                 <el-button @click="handleSignOut()">
                     登出
