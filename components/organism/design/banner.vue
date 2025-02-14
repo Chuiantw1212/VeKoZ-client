@@ -75,6 +75,7 @@ const props = defineProps({
 
 // 附加預設值
 onMounted(() => {
+    handleResize()
     window.addEventListener('resize', handleResize)
     if (customDesign.value?.mutable) {
         return
