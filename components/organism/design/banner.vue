@@ -21,7 +21,7 @@ const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', '
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const bannerRef = ref()
-const bannerHeight = ref<string>('100px')
+const bannerHeight = ref<string>('100px') // 配合拖曳用模板高度
 
 interface IModel {
     type: 'banner',
