@@ -79,6 +79,7 @@ import useRepoOrganization from '~/composables/useRepoOrganization'
 const repoUI = useRepoUI()
 
 const isLoading = ref<boolean>(false)
+const isDialogLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])
@@ -103,12 +104,15 @@ const organizationMemberDialog = reactive({
 
 // Methods
 async function hanelDialogConfirm() {
+    isDialogLoading.value = true
+    return
     if (organizationDialog.mode === 'ADD') {
-        postOrganization()
+        await postOrganization()
     }
     if (organizationDialog.mode === 'EDIT') {
-        putOrganization()
+        await putOrganization()
     }
+    isDialogLoading.value = false
 }
 
 async function postOrganization() {

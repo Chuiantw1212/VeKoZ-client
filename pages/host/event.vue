@@ -29,7 +29,7 @@
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogTemplate.id" v-loading="isPatchLoading" :icon="Delete" text
+                <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
                 <el-button :icon="Close" text @click="cancelEventEditing()">
@@ -65,21 +65,25 @@ import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/c
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
+// Data Repo
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
 const isLoading = ref<boolean>(false)
-const isPatchLoading = ref<boolean>(false)
+// Data Calendar
+const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
-const organizationList = ref<IOrganization[]>([])
-const selectedOrganizationIds = ref<string[]>([])
-// Data
 const calendarEventCreation = ref<IEventCreation>()
 const calendarEventList = ref<IEvent[]>([])
-const currentEvent = ref<IEvent>()
+// Data sidemenu
+const organizationList = ref<IOrganization[]>([])
+const selectedOrganizationIds = ref<string[]>([])
+// Data Dialog
+const isDialogPatchLoading = ref<boolean>(false)
 const eventDialogIsOpen = ref<boolean>(false)
+const currentEvent = ref<IEvent>()
 const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
@@ -103,8 +107,8 @@ watch((() => repoUser.userType), () => {
 
 // Methods
 function trimOrganizationName(item: IOrganization) {
-    if (item.name.length >= 10) {
-        return `${item.name.slice(0, 8)}...`
+    if (item.name.length >= 12) {
+        return `${item.name.slice(0, 10)}...`
     } else {
         return item.name
     }
@@ -124,52 +128,42 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
         calendarViewType: type,
     }
     repoUser.patchUserPreference('event', preferenceEvnet)
+
+    // // Remove Google Calendar Events
+    // const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
+    // calendarEvent?.remove()
+
+    // // Get Google Calender Events
+    // const orgsWithCalendar = organizationList.value.filter((org) => {
+    //     return selectedOrganizationIds.value.includes(org.id) && org.googleCalendarId
+    // });
+
+    // orgsWithCalendar.forEach(async org => {
+    //     const timeMin = new Date(view.currentStart).toISOString()
+    //     const timeMax = new Date(view.currentEnd).toISOString()
+    //     const eventList = await repoGoogle.getGoogleCalendarEvents({
+    //         calendarId: org.googleCalendarId,
+    //         timeMin,
+    //         timeMax,
+    //     })
+    //     eventList.forEach((event: IEvent) => {
+    //         const fullCalendarEvent = parseFullCalendarEvent(event)
+    //         venoniaCalendarRef.value?.addEvent(fullCalendarEvent)
+    //     })
+    // })
 }
 
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result
-
+    // 預設全選
     selectedOrganizationIds.value = result.map(org => {
         return org.id
-    })
-
-
-    const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-    const firstDay = new Date(y, m, 1).toISOString();
-    const lastDay = new Date(y, m + 1, 0).toISOString();
-    result.forEach(async org => {
-
-
-        if (org.googleCalendarId) {
-            /**
-             * https://developers.google.com/calendar/api/v3/reference/events/list
-             */
-            const result = await repoGoogle.getGoogleCalendarEvents({
-                calendarId: org.googleCalendarId,
-                timeMin: firstDay,
-                timeMax: lastDay,
-            })
-        }
-    })
-    return
-    result.forEach(org => {
-        /**
-         * https://fullcalendar.io/docs/event-source-object
-         */
-        const googleCalendarFeed: EventSourceInput = {
-            googleCalendarId: org.googleCalendarId,
-            color: 'red',   // an option!
-            textColor: 'red', // an option!
-            editable: false,
-            url: '',
-        }
-        venoniaCalendarRef.value?.addEventSource(googleCalendarFeed)
     })
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
-    isPatchLoading.value = true
+    isDialogPatchLoading.value = true
     if (!currentEvent.value || !venoniaCalendarRef.value) {
         return
     }
@@ -183,7 +177,7 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
         const newFullCalendarEvent = parseFullCalendarEvent(currentEvent.value)
         venoniaCalendarRef.value.addEvent(newFullCalendarEvent)
     }
-    isPatchLoading.value = false
+    isDialogPatchLoading.value = false
 }
 
 async function getEventList() {
@@ -195,7 +189,7 @@ async function getEventList() {
     })
 
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
-        return parseFullCalendarEvent(event)
+        return parseFullCalendarEvent(event, true)
     })
 
     fullCalendarEventList.forEach(event => {
@@ -203,7 +197,7 @@ async function getEventList() {
     })
 }
 
-function parseFullCalendarEvent(event: IEvent): IFullCalendarEvent {
+function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
     return {
         id: String(event.id),
         title: String(event.name ?? '未命名'),
@@ -211,7 +205,7 @@ function parseFullCalendarEvent(event: IEvent): IFullCalendarEvent {
         end: String(event.endDate),
         startStr: String(event.startDate),
         endStr: String(event.endDate),
-        editable: true,
+        editable,
     }
 }
 
@@ -244,6 +238,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
+    eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     currentEvent.value = eventClickInfo.event
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     dialogTemplate.value.eventId = eventId // 用這行刪除

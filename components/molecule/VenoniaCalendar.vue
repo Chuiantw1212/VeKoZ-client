@@ -8,7 +8,6 @@
 import { Calendar, } from '@fullcalendar/core';
 import type { CalendarApi, DatesSetArg, EventSourceInput, ViewMountArg } from '@fullcalendar/core';
 import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
-import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -69,7 +68,7 @@ function initializeCalendar() {
     // 設定Calendar
     const idealHeight = window.innerHeight - 150
     const calendar = new Calendar(calendarEl, {
-        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin, googleCalendarPlugin],
+        plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
         initialView: 'dayGridMonth',
         eventClick: handleEventClick,
         eventChange: handleEventChange,
@@ -96,14 +95,14 @@ function changeView(viewType: string) {
 }
 
 /**
- * 
+ * 每都運作
  */
 function handleDatesSet(datesSetArg: DatesSetArg) {
     emit('datesSet', datesSetArg)
 }
 
 /**
- * 
+ * 只會運作一次
  */
 function handleViewDidMount(viewMountArg: ViewMountArg) {
     const { view } = viewMountArg
@@ -129,6 +128,9 @@ function handleEventChange(changeInfo: any) {
 }
 
 function addEvent(event: IFullCalendarEvent) {
+    console.log({
+        event
+    })
     calendarInstance.value?.addEvent(event)
 }
 

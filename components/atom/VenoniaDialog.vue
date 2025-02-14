@@ -2,7 +2,7 @@
     <div>
         <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
             :show-close="showClose" :lock-scroll="true" :align-center="true">
-            <template #header="{ close, titleId, titleClass }">
+            <template #header>
                 <div class="venonia-dialog-header">
                     <div>
                         <slot name="header"></slot>
@@ -39,6 +39,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    }
 })
 const width = computed(() => {
     /**

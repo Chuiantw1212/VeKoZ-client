@@ -84,6 +84,10 @@ const props = defineProps({
     mode: {
         type: String,
         default: ''
+    },
+    loading: {
+        type: Boolean,
+        default: false,
     }
 })
 
