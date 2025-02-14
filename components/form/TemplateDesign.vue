@@ -77,13 +77,13 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change'])
+const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
+    type: Array,
+    default: function () {
+        return []
+    }
+})
 const props = defineProps({
-    modelValue: {
-        type: Array,
-        default: function () {
-            return []
-        }
-    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -92,14 +92,6 @@ const props = defineProps({
         type: Function,
         default: () => { }
     },
-})
-const templateDesigns = computed({
-    get() {
-        return props.modelValue as any
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
 })
 
 // methods
@@ -134,14 +126,18 @@ function handleDragStart(index: number) {
 function handleUp(index: number) {
     const removedElements = templateDesigns.value.splice(index, 1)
     const target = removedElements[0]
-    const newIndex = Math.max(0, index - 1)
-    templateDesigns.value.splice(newIndex, 0, target)
+    if (target) {
+        const newIndex = Math.max(0, index - 1)
+        templateDesigns.value.splice(newIndex, 0, target)
+    }
 }
 function handleDown(index: number) {
     const removedElements = templateDesigns.value.splice(index, 1)
     const target = removedElements[0]
-    const newIndex = Math.min(templateDesigns.value.length, index + 1)
-    templateDesigns.value.splice(newIndex, 0, target)
+    if (target) {
+        const newIndex = Math.min(templateDesigns.value.length, index + 1)
+        templateDesigns.value.splice(newIndex, 0, target)
+    }
 }
 </script>
 <style lang="scss" scoped>

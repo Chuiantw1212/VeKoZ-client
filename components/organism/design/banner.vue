@@ -2,7 +2,8 @@
     <div ref="bannerRef">
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-            <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="bannerHeight">
+            <AtomBannerUploader v-if="customDesign.mutable" v-model="customDesign.mutable.value" :disabled="disabled"
+                :height="bannerHeight">
             </AtomBannerUploader>
         </el-form-item>
         <!-- 樣板編輯專用 -->
@@ -17,21 +18,14 @@
     </div>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const bannerRef = ref()
 const bannerHeight = ref<string>('100px') // 配合拖曳用模板高度
 
-interface IModel {
-    type: 'banner',
-    mutable: {
-        label: string,
-        value: any,
-    }
-}
-
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: () => {
         return {
             type: 'banner',

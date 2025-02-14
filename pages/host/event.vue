@@ -33,7 +33,7 @@
                     @click="deleteEvent()">
                 </el-button>
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" size="small"
-                    active-text="公開" inactive-text="非公開" />
+                    active-text="公開" inactive-text="非公開" @change="validiateForm()" />
                 <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
@@ -108,6 +108,9 @@ watch((() => repoUser.userType), () => {
 }, { immediate: true })
 
 // Methods
+function validiateForm() {
+    
+}
 function trimOrganizationName(item: IOrganization) {
     if (item.name.length >= 12) {
         return `${item.name.slice(0, 10)}...`
