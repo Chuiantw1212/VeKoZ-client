@@ -2,7 +2,7 @@
     <div ref="bannerRef">
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-            <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="getHeight()">
+            <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="bannerHeight">
             </AtomBannerUploader>
         </el-form-item>
         <!-- 樣板編輯專用 -->
@@ -10,7 +10,7 @@
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="getHeight()">
+                <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="bannerHeight">
                 </AtomBannerUploader>
             </template>
         </MoleculeDesignToolbar>
@@ -21,6 +21,7 @@ const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', '
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const bannerRef = ref()
+const bannerHeight = ref<string>('100px')
 
 interface IModel {
     type: 'banner',
@@ -74,6 +75,7 @@ const props = defineProps({
 
 // 附加預設值
 onMounted(() => {
+    window.addEventListener('resize', handleResize)
     if (customDesign.value?.mutable) {
         return
     }
@@ -90,6 +92,9 @@ onMounted(() => {
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
 })
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize)
+})
 
 // 觸發更新
 watch(() => customDesign.value, (newValue) => {
@@ -104,10 +109,10 @@ async function handleChange(templateDesign: any) {
         isLoading.value = false
     })
 }
-function getHeight() {
-    // repoUI.debounce('bannerResize', () => {
-    const width = bannerRef.value?.clientWidth
-    return `${width / 2}px`
-    // })
+function handleResize() {
+    repoUI.debounce('bannerResize', () => {
+        const width = bannerRef.value?.clientWidth
+        bannerHeight.value = `${width / 2}px`
+    })
 }
 </script>
