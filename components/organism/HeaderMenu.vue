@@ -90,10 +90,6 @@ function addFirebaseListener() {
             // 給出重新驗證的畫面
         }
     })
-    var user = auth.currentUser;
-    console.log({
-        user
-    })
 }
 
 async function handleLoggedIn(user: IUser) {

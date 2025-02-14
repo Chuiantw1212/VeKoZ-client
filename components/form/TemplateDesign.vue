@@ -1,5 +1,5 @@
 <template>
-    <el-form class="designForm" label-width="auto">
+    <el-form class="designForm" label-width="auto"> 
         <template v-for="(item, index) in templateDesigns">
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="isDesigning" @dragstart="handleDragStart(index)"
@@ -58,6 +58,10 @@
                 :onchange="onchange" :isDesigning="isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOffer>
+            <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" :isDesigning="isDesigning" @dragstart="handleDragStart(index)"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignBanner>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

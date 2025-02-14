@@ -77,6 +77,11 @@
                             <OrganismDesignEditor :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
                             </OrganismDesignEditor>
                         </div>
+                        <div class="eventTemplate__draggable" draggable="true" data-type="banner"
+                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                            <OrganismDesignBanner :disabled="true" :isDesigning="false">
+                            </OrganismDesignBanner>
+                        </div>
                         <el-divider content-position="left">高階欄位</el-divider>
                         <div class="eventTemplate__draggable" draggable="true" data-type="eventGroup"
                             @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
