@@ -6,16 +6,16 @@
         </div>
 
         <el-table v-loading="isLoading" :data="organizationList">
-            <el-table-column prop="logo" label="Logo" width="80em">
+            <el-table-column prop="logo" label="商標" width="80em">
                 <template #default="{ row }">
                     <img width="40px" :src="row.logo">
                 </template>
             </el-table-column>
             <el-table-column prop="name" label="名稱" width="200em" />
-            <el-table-column prop="description" label="描述" :width="repoUI.isLarge?undefined:'600em'" />
+            <el-table-column prop="description" label="描述" :width="repoUI.isLarge ? undefined : '600em'" />
             <el-table-column prop="lastmod" label="上次更新" width="100em">
                 <template #default="{ row }">
-                   {{new Date(row.lastmod).toLocaleDateString('zh-TW')}}
+                    {{ new Date(row.lastmod).toLocaleDateString('zh-TW') }}
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="功能" width="200em">
@@ -156,13 +156,13 @@ async function deleteOrganization(item: IOrganization) {
             await getOrganizationList()
             isLoading.value = false
         }
-    } catch (error:any){
+    } catch (error: any) {
         // Do nothing
     }
 }
 
 async function getOrganizationList() {
-    const response = await repoOrganization.getOrganizationList()
+    const response: IOrganization[] = await repoOrganization.getOrganizationList()
     organizationList.value = response
 }
 

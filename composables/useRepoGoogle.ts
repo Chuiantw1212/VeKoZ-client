@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
-import type { IOrganization } from '~/types/organization'
-
-export default defineStore('organization', () => {
+export default defineStore('google', () => {
     const defaultApi = useVenoniaApi()
-    async function getGoogleCalendarEvents() {
-
-        // const response = await defaultApi.authRequest(`/organization/list`, {
-        //     method: 'GET',
-        // })
-        // return response.json()
+    async function getGoogleCalendarEvents(params: any) {
+        const response = await defaultApi.authRequest(`/google/calendar/event/list`, {
+            method: 'GET',
+            params,
+        })
+        return response.json()
     }
     return {
         getGoogleCalendarEvents,

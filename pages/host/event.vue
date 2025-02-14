@@ -69,6 +69,7 @@ const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
+const repoGoogle = useRepoGoogle()
 const isLoading = ref<boolean>(false)
 const isPatchLoading = ref<boolean>(false)
 const venoniaCalendarRef = ref<CalendarApi>()
@@ -131,6 +132,25 @@ async function getOrganizationList() {
 
     selectedOrganizationIds.value = result.map(org => {
         return org.id
+    })
+
+
+    const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    const firstDay = new Date(y, m, 1).toISOString();
+    const lastDay = new Date(y, m + 1, 0).toISOString();
+    result.forEach(async org => {
+
+
+        if (org.googleCalendarId) {
+            /**
+             * https://developers.google.com/calendar/api/v3/reference/events/list
+             */
+            const result = await repoGoogle.getGoogleCalendarEvents({
+                calendarId: org.googleCalendarId,
+                timeMin: firstDay,
+                timeMax: lastDay,
+            })
+        }
     })
     return
     result.forEach(org => {
