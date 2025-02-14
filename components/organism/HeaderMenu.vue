@@ -24,17 +24,15 @@
                     切換為一般用戶
                 </el-menu-item>
             </NuxtLink>
-            <el-menu-item index="1-2">
-                <el-button @click="handleSignOut()">
-                    登出
-                </el-button>
+            <el-menu-item index="1-2" @click="handleSignOut()">
+                登出
             </el-menu-item>
         </el-sub-menu>
-        <el-menu-item v-else class="headerMenu__firstItem">
-            <NuxtLink to="/signin">
+        <NuxtLink v-else to="/signin">
+            <el-menu-item class="headerMenu__firstItem">
                 登入
-            </NuxtLink>
-        </el-menu-item>
+            </el-menu-item>
+        </NuxtLink>
     </el-menu>
 </template>
 
