@@ -104,7 +104,7 @@ watch(() => customDesign.value, (newValue) => {
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
-        await props.onchange(templateDesign)
+        // await props.onchange(templateDesign)
         isLoading.value = false
     })
 }

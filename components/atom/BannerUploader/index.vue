@@ -15,8 +15,8 @@
                     <UploadFilled></UploadFilled>
                 </el-icon>
             </div>
-            <input v-show="false" class="body__input" autocomplete="off" type="file" accept="image/*"
-                :data-required="required" :data-name="name" @change="handleFiles($event)" />
+            <input v-show="false" :disabled="disabled" class="body__input" autocomplete="off" type="file"
+                accept="image/*" :data-required="required" :data-name="name" @change="handleFiles($event)" />
         </label>
     </div>
 </template>
@@ -109,6 +109,7 @@ async function handleFiles(event: any) {
         width: 100%;
         height: 100%;
         display: block;
+        border-radius: 4px;
 
         &:hover {
             .label__placeholder {
