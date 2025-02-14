@@ -128,16 +128,10 @@ function handleEventChange(changeInfo: any) {
 }
 
 function addEvent(event: IFullCalendarEvent) {
-    console.log({
-        event
-    })
     calendarInstance.value?.addEvent(event)
 }
 
 function addEventSource(eventSource: EventSourceInput) {
-    console.log({
-        eventSource
-    })
     calendarInstance.value?.addEventSource(eventSource)
 }
 

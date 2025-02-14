@@ -1,25 +1,17 @@
 <template>
-    <div>
+    <div ref="bannerRef">
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-            <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled">
-
+            <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="getHeight()">
             </AtomBannerUploader>
-            <!-- <AtomVenoniaEditor v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
-            </AtomVenoniaEditor> -->
         </el-form-item>
         <!-- 樣板編輯專用 -->
         <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <div :style="{ width: '100%' }">
-                    <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled">
-
-                    </AtomBannerUploader>
-                </div>
-                <!-- <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled" :placeholder="placeholder">
-                </AtomVenoniaEditor> -->
+                <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="getHeight()">
+                </AtomBannerUploader>
             </template>
         </MoleculeDesignToolbar>
     </div>
@@ -28,22 +20,26 @@
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
+const bannerRef = ref()
+
 interface IModel {
     type: 'banner',
     mutable: {
         label: string,
-        value: string | object,
+        value: any,
     }
 }
 
 const customDesign = defineModel<IModel>('modelValue', {
-    default: {
-        type: 'banner',
-        mutable: {
-            label: '',
-            value: {
-                type: '',
-                buffer: [],
+    default: () => {
+        return {
+            type: 'banner',
+            mutable: {
+                label: '',
+                value: {
+                    type: '',
+                    buffer: [],
+                }
             }
         }
     }
@@ -104,8 +100,14 @@ watch(() => customDesign.value, (newValue) => {
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
-        // await props.onchange(templateDesign)
+        await props.onchange(templateDesign)
         isLoading.value = false
     })
+}
+function getHeight() {
+    // repoUI.debounce('bannerResize', () => {
+    const width = bannerRef.value?.clientWidth
+    return `${width / 2}px`
+    // })
 }
 </script>

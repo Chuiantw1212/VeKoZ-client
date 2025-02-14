@@ -19,8 +19,9 @@
                             </div>
                         </div>
                     </template>
-                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true" :onchange="handleChange"
-                        @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
+                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
+                        :onchange="handleDesignChanged" @remove="removeDesign($event)"
+                        @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
@@ -236,10 +237,11 @@ function setDefaultTemplate() {
     })
 }
 
-async function handleChange(templateDesign: ITemplateDesign) {
+async function handleDesignChanged(templateDesign: ITemplateDesign) {
     repoEventTemplate.patchEventTemplateDesign({
         id: templateDesign.id,
-        mutable: templateDesign.mutable
+        mutable: templateDesign.mutable,
+        type: templateDesign.type, // 處理blob時候用
     })
 }
 

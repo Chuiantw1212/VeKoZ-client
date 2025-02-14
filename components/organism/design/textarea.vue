@@ -1,8 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
-        <el-input v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
-            :placeholder="placeholder" :disabled="disabled" />
+        <el-input v-model="customDesign.mutable.value" type="textarea" :rows="3" :maxlength="150"
+            :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
@@ -12,8 +12,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input v-model="customDesign.mutable.value" type="textarea" :maxlength="150" :show-word-limit="true"
-                :placeholder="placeholder" :disabled="disabled" />
+            <el-input v-model="customDesign.mutable.value" type="textarea" :rows="3" :maxlength="150"
+                :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
         </template>
     </MoleculeDesignToolbar>
 </template>

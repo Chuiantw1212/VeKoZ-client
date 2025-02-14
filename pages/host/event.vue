@@ -32,7 +32,8 @@
                 <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
-                <el-switch v-model="dialogTemplate.isPublic" size="small" active-text="公開" inactive-text="非公開" />
+                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" size="small"
+                    active-text="公開" inactive-text="非公開" />
                 <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
@@ -242,7 +243,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     currentEvent.value = eventClickInfo.event
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
-    dialogTemplate.value.eventId = eventId // 用這行刪除
+    dialogTemplate.value.id = eventId // 用這行刪除
     Object.assign(dialogTemplate.value, eventTemplate)
     eventDialogIsOpen.value = true
 }
@@ -265,7 +266,7 @@ async function openCalendarEvent() {
 
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
     currentEvent.value = newEvent
-    dialogTemplate.value.eventId = newEvent.eventId
+    dialogTemplate.value.id = newEvent.id
     eventDialogIsOpen.value = true
     await getEventList() // 在背景更新月曆事件
 }
@@ -276,8 +277,8 @@ async function cancelEventEditing() {
 
 async function deleteEvent() {
     isLoading.value = true
-    if (dialogTemplate.value.eventId) {
-        await repoEvent.deleteEvent(dialogTemplate.value.eventId)
+    if (dialogTemplate.value.id) {
+        await repoEvent.deleteEvent(dialogTemplate.value.id)
         venoniaCalendarRef.value?.removeAllEvents()
         await getEventList()
         eventDialogIsOpen.value = false

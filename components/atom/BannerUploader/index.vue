@@ -7,9 +7,8 @@
             </div>
         </div>
         <label class="inputGroup__label">
-            <div v-if="localValue.type" class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
-            <!-- <img v-else class="label__image" :style="{ width: props.width, height: props.height, }" :src="placeholder"> -->
-            <div v-else class="label__content">
+            <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
+            <div v-if="!localValue.type && typeof localValue !== 'string'" class="label__content">
                 Banner上傳
                 <el-icon>
                     <UploadFilled></UploadFilled>
@@ -24,7 +23,6 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { Buffer } from 'buffer/'
 const localValue = defineModel('modelValue', {
-    type: Object || String,
     default: function () {
         return {
             type: '',
@@ -151,7 +149,9 @@ async function handleFiles(event: any) {
             background-position: center;
             background-repeat: no-repeat;
             // border-radius: 50%;
-
+            // border: 1px solid red;
+            // width: 100%;
+            height: 100%;
         }
     }
 }
