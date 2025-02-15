@@ -16,14 +16,25 @@ export interface ITemplateDesign {
     type?: string,
     mutable?: {
         label?: string,
+        // 多數欄位使用
         value?: any,
+        // 線下地點
+        locationName?: string,
+        locationAddress?: string,
+        // 線上地點
         name?: string,
-        address?: string,
         url?: string,
-        offers?: any[]
+        // 票券
+        offers?: IOffer[]
     },
     sqlField?: string,
     lastmod?: any,
+}
+
+interface IOffer {
+    name: string,
+    count: number,
+    price: number,
 }
 
 export interface ITemplateDragSouce extends ITemplateDesign {

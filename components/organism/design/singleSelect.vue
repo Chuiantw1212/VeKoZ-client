@@ -14,20 +14,19 @@
                     <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
                         placeholder="欄位名稱"></el-input>
                 </label>
-                <el-select v-model="customDesign.mutable.value" :placeholder="placeholder" :clearable="true"
+                <!-- <el-select v-model="customDesign.mutable.value" :placeholder="placeholder" :clearable="true"
                     :allow-create="true">
                     <el-option v-for="(item, index) in options" :key="index" :label="item.name" :value="item.id" />
-                </el-select>
+                </el-select> -->
             </div>
         </MoleculeDesignToolbar>
     </template>
 </template>
 <script setup lang="ts">
-import type { IOrganization, IOrganizationMember } from '~/types/organization'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
-const repoOrganization = useRepoOrganization()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
+
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -54,16 +53,23 @@ const props = defineProps({
     },
     options: {
         type: Array,
-        default: () => []
+        default: () => {
+            return []
+        }
+    },
+    labelKey: {
+        type: String,
+        default: 'label',
+    },
+    valueKey: {
+        type: String,
+        default: 'value',
     },
     onchange: {
         type: Function,
         default: async () => { }
     }
 })
-
-
-const organizationList = ref<IOrganization[]>([])
 
 // Hooks
 onMounted(() => {
