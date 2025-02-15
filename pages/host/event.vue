@@ -40,7 +40,7 @@
             <template #default>
                 <el-container v-loading.lock="isLoading">
                     <!-- 用v-if避免更新請求重複派送 -->
-                    <FormTemplateDesign v-if="eventDialogIsOpen" v-model="dialogTemplate.designs"
+                    <FormTemplateDesign v-if="eventDialogIsOpen" ref="formRef" v-model="dialogTemplate.designs"
                         :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
@@ -67,6 +67,7 @@ import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/c
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
+import type { FormInstance } from 'element-plus';
 // Data Repo
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
@@ -90,7 +91,7 @@ const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
 const loadTemplateDialogIsOpen = ref<boolean>(false)
-
+const formRef = ref<FormInstance>()
 // Hooks
 onMounted(async () => {
     isLoading.value = true
@@ -109,7 +110,8 @@ watch((() => repoUser.userType), () => {
 
 // Methods
 function validiateForm() {
-    
+    // console.log('execured')
+    // formRef.value?.validate()
 }
 function trimOrganizationName(item: IOrganization) {
     if (item.name.length >= 12) {

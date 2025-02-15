@@ -115,7 +115,8 @@
         </el-row>
         <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>
-                <FormEditEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)">
+                eventTemplate.id {{ eventTemplate.id }}
+                <FormEditEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)" @reset="">
                 </FormEditEventTemplate>
             </template>
         </AtomVenoniaDialog>

@@ -20,7 +20,7 @@
                 </template>
                 <template v-else-if="row.id === 'default'">
                     <el-button size="small" @click="selectTemplate(row)">
-                        套用預設
+                        開新模板
                     </el-button>
                 </template>
                 <template v-else>
@@ -45,7 +45,7 @@ import type { IEventTemplate, } from '~/types/eventTemplate';
 import {
     Delete,
 } from '@element-plus/icons-vue'
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'reset'])
 const repoEventTemplate = useRepoEventTemplate()
 const isLoading = ref<boolean>(false)
 const eventTemplate = defineModel<IEventTemplate>('modelValue', {
@@ -71,6 +71,8 @@ async function selectTemplate(template: IEventTemplate) {
     if (template.id === 'default') {
         // 刪除模板Id，觸發父層的Reset
         eventTemplate.value.id = ''
+        eventTemplate.value.name = ''
+        emit('update:modelValue', eventTemplate.value)
     } else {
         isLoading.value = true
         const result = await repoEventTemplate.getEventTemplate(template.id)
