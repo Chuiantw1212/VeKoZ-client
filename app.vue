@@ -13,10 +13,12 @@
                     <el-main class="defaultLayout__main">
                         <NuxtPage />
                     </el-main>
+                    <el-footer class="defaultLayout__footer">
+                        <OrganismFooterMenu></OrganismFooterMenu>
+                    </el-footer>
                 </el-container>
             </el-container>
         </el-container>
-        <!-- </el-config-provider> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -30,6 +32,13 @@ const repoUser = useRepoUser()
 .defaultLayout {
     .defaultLayout__aside {
         width: fit-content;
+    }
+
+    .defaultLayout__footer {
+        position: fixed;
+        bottom: 0px;
+        width: 100vw;
+        // background-color: red;
     }
 }
 </style>

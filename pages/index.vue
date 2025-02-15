@@ -1,12 +1,28 @@
 <template>
     <div class="index">
-        <el-form :model="form" label-width="auto" style="max-width: 600px">
+        <!-- <el-form :model="form" label-width="auto" style="max-width: 600px">
             <el-form-item label="時間">
                 <el-date-picker v-model="dateRange" type="datetimerange" />
             </el-form-item>
-        </el-form>
+        </el-form> -->
         <el-row :gutter="20">
-            <el-col v-for="(item) in eventList" :span="columnSpan">
+            <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
+                <MoleculeVenoniaCard class="index__card">
+                    <template #default>
+                        <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
+                            style="width: 100%" />
+                    </template>
+                    <template #footer>
+                        <span>
+                            {{ item.name }}
+                        </span>
+                        <span class="footer__offer">
+                            NTD 250
+                        </span>
+                    </template>
+                </MoleculeVenoniaCard>
+            </el-col>
+            <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
                     <template #default>
                         <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
@@ -78,6 +94,9 @@ async function getEventList() {
 </script>
 
 <style lang="scss" scoped>
+.index__row{
+    margin-bottom: 20px;
+}
 .footer__offer {
     white-space: nowrap;
 }
