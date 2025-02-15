@@ -1,10 +1,10 @@
 <template>
-    <el-form ref="formRef" class="designForm" label-width="auto">
-        <div v-if="templateDesigns.length">
-            <slot :index="0">
+    <div v-if="templateDesigns.length">
+        <slot :index="0">
 
-            </slot>
-        </div>
+        </slot>
+    </div>
+    <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
             <!-- 必填寫欄位 -->
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
@@ -97,18 +97,26 @@ const props = defineProps({
     },
 })
 const formRef = ref<FormInstance>()
+const formModel = ref<{ [key: string]: any }>({})
+const formRules = ref<{ [key: string]: any }>({})
+// Hooks
+watch(() => templateDesigns.value, () => {
+    templateDesigns.value.forEach(design => {
+        if (design.formField) {
+            formModel.value[design.formField] = design.mutable?.value
+            formRules.value[design.formField] = {
+                required: true,
+                message: `${design.mutable?.label}為必填`
+            }
+        }
+    })
+}, { immediate: true, deep: true })
 
 // methods
-function validate() {
-    return formRef.value?.validate()
+async function validate() {
+    return await formRef.value?.validate()
 }
 
-function getFirstItem(type: string): number {
-    const index = templateDesigns.value.findIndex((design: ITemplateDesign) => {
-        return design.type === type
-    })
-    return index
-}
 function getOrganizationId() {
     const organization = templateDesigns.value.find((design: ITemplateDesign) => {
         return design.type === 'organization'

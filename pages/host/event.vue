@@ -109,9 +109,12 @@ watch((() => repoUser.userType), () => {
 }, { immediate: true })
 
 // Methods
-function validiateForm() {
-    // console.log('execured')
-    // formRef.value?.validate()
+async function validiateForm() {
+    try {
+        await formRef.value?.validate()
+    } catch (error) {
+        dialogTemplate.value.isPublic = false
+    }
 }
 function trimOrganizationName(item: IOrganization) {
     if (item.name.length >= 12) {
@@ -207,7 +210,7 @@ async function getEventList() {
 function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
     return {
         id: String(event.id),
-        title: String(event.name ?? '未命名'),
+        title: String(event.name || '未命名'),
         start: String(event.startDate),
         end: String(event.endDate),
         startStr: String(event.startDate),

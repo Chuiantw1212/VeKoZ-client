@@ -1,6 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
+        :prop="customDesign.formField">
         <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.value" placeholder="請選擇現有組織"
             :clearable="true" :disabled="disabled">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />

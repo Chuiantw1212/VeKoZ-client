@@ -1,6 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
+        :prop="customDesign.formField">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
             :maxlength="30" :show-word-limit="true" size="large"></el-input>
     </el-form-item>
