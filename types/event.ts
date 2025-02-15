@@ -20,9 +20,9 @@ export interface IEvent {
     lastmod?: any,
     isPublic?: boolean,
     // 搜尋用Flag
-    isMorning: boolean,
-    isAfternoon: boolean,
-    isEvening: boolean,
+    isMorning?: boolean,
+    isAfternoon?: boolean,
+    isEvening?: boolean,
 }
 
 /**

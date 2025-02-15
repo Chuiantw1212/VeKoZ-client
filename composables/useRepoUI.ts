@@ -5,33 +5,42 @@ import { ElLoading } from 'element-plus'
  */
 export default defineStore('ui', () => {
     const isResizing = ref<boolean>(false)
-    const isMobile = ref<boolean>(false) // 576px, 60%+
-    const isTablet = ref<boolean>(false) // 768px, 1%+
-    const isDesktop = ref<boolean>(false) // 992px 
-    const isLarge = ref<boolean>(false) // 1200px 
+    const isSmall = ref<boolean>(false) // 576px, 60%+
+    const isMedium = ref<boolean>(false) // 768px, 1%+
+    const isLarge = ref<boolean>(false) // 992px 
+    const isXLarge = ref<boolean>(false) // 1200px 
+    const isXXLarge = ref<boolean>(false) // 1400px 
     const isMenuCollapse = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const loadingInstance = ref<any>(null)
     const debounceTimeout = ref<{ [key: string]: NodeJS.Timeout }>({})
 
     function setWidth() {
+        /**
+         * https://getbootstrap.com/docs/5.0/layout/containers/
+         */
         const innerWidth = window.innerWidth
-        isMobile.value = false
-        isTablet.value = false
-        isDesktop.value = false
+        isSmall.value = false
+        isMedium.value = false
         isLarge.value = false
+        isXLarge.value = false
+        isXXLarge.value = false
         isMenuCollapse.value = true
         if (innerWidth >= 576) {
-            isMobile.value = true
+            isSmall.value = true
         }
         if (innerWidth >= 768) {
-            isTablet.value = true
+            isMedium.value = true
         }
         if (innerWidth >= 992) {
-            isDesktop.value = true
+            isLarge.value = true
         }
         if (innerWidth >= 1200) {
-            isLarge.value = true
+            isXLarge.value = true
+            isMenuCollapse.value = false
+        }
+        if (innerWidth >= 1400) {
+            isXXLarge.value = true
             isMenuCollapse.value = false
         }
         isResizing.value = false
@@ -85,10 +94,11 @@ export default defineStore('ui', () => {
 
     return {
         isResizing,
-        isMobile,
-        isTablet,
-        isDesktop,
+        isSmall,
+        isMedium,
         isLarge,
+        isXLarge,
+        isXXLarge,
         isLoading,
         isMenuCollapse,
         // Functions

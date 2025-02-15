@@ -1,7 +1,7 @@
 <template>
     <div class="eventTemplate">
         <el-row :gutter="20">
-            <el-col :span="repoUI.isDesktop ? 16 : 24">
+            <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
@@ -37,7 +37,7 @@
                     </div>
                 </el-card>
             </el-col>
-            <el-col v-if="repoUI.isDesktop" :span="8">
+            <el-col v-if="repoUI.isLarge" :span="8">
                 <el-card class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">

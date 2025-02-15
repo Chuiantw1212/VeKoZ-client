@@ -1,7 +1,7 @@
 <template>
     <div class="event">
         <el-row :gutter="20">
-            <el-col :span="repoUI.isLarge ? 19 : 24">
+            <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
                         @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)"
@@ -9,7 +9,7 @@
                     </MoleculeVenoniaCalendar>
                 </el-card>
             </el-col>
-            <el-col v-if="repoUI.isLarge" :span="5">
+            <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
                     <el-divider content-position="left">篩選</el-divider>
                     <el-checkbox-group v-model="selectedOrganizationIds">

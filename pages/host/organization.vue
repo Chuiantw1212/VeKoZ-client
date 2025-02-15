@@ -12,7 +12,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="name" label="名稱" width="200em" />
-            <el-table-column prop="description" label="描述" :width="repoUI.isLarge ? undefined : '600em'" />
+            <el-table-column prop="description" label="描述" :width="repoUI.isXLarge ? undefined : '600em'" />
             <el-table-column prop="lastmod" label="上次更新" width="100em">
                 <template #default="{ row }">
                     {{ new Date(row.lastmod).toLocaleDateString('zh-TW') }}

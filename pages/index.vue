@@ -6,10 +6,8 @@
             </el-form-item>
         </el-form>
         <el-row :gutter="20">
-            <el-col v-for="(item) in eventList" :span="8">
+            <el-col v-for="(item) in eventList" :span="columnSpan">
                 <MoleculeVenoniaCard class="index__card">
-                    <!-- <template #header>
-                    </template> -->
                     <template #default>
                         <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
                             style="width: 100%" />
@@ -18,8 +16,8 @@
                         <span>
                             {{ item.name }}
                         </span>
-                        <span>
-                            $250
+                        <span class="footer__offer">
+                            NTD 250
                         </span>
                     </template>
                 </MoleculeVenoniaCard>
@@ -30,17 +28,44 @@
 
 <script setup lang="ts">
 import type { IEvent } from '~/types/event';
-
+const id = ref<string>(crypto.randomUUID())
+const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const eventList = ref<IEvent[]>([])
 const dateRange = ref([])
-
-// Hooks
 const form = ref<IEvent>({
     startDate: new Date(),
 })
+const columnSpan = ref<number>(8)
+
+// Hooks
+onMounted(() => {
+    const startOfTheMonth = new Date()
+    startOfTheMonth.setDate(0)
+    form.value.startDate = startOfTheMonth
+    getEventList()
+    window.addEventListener('resize', setColumnSpan)
+    setColumnSpan()
+})
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', setColumnSpan)
+})
 
 // Methods
+function setColumnSpan() {
+    repoUI.debounce(id.value, () => {
+        columnSpan.value = 24
+        if (repoUI.isSmall) {
+            columnSpan.value = 12
+        }
+        if (repoUI.isXLarge) {
+            columnSpan.value = 8
+        }
+        if (repoUI.isXXLarge) {
+            columnSpan.value = 6
+        }
+    })
+}
 async function getEventList() {
     const result = await repoEvent.getEventList({
         ...form.value,
@@ -49,19 +74,11 @@ async function getEventList() {
     eventList.value = result
 }
 
-onMounted(() => {
-    const startOfTheMonth = new Date()
-    startOfTheMonth.setDate(0)
-    form.value.startDate = startOfTheMonth
-    getEventList()
-})
 
 </script>
 
 <style lang="scss" scoped>
-// .index {
-//     .index__card {
-//         margin-bottom: 20px;
-//         height: calc((100vh - 200px)/2);
-//     }
-// }</style>
+.footer__offer {
+    white-space: nowrap;
+}
+</style>

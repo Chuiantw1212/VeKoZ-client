@@ -53,7 +53,7 @@ const width = computed(() => {
     let width: string | number = '50%'
     if (import.meta.client) {
         const innerWidth = window.innerWidth * 0.85
-        if (repoUI.isLarge) {
+        if (repoUI.isXLarge) {
             width = Math.min(950, innerWidth)
         } else {
             width = window.innerWidth * 0.85
