@@ -317,10 +317,10 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     isLoading.value = false
 }
 
-async function removeDesign(data: any) {
+async function removeDesign(data: ITemplateDragSouce) {
     isLoading.value = true
     // 更新資料庫
-    await repoEventTemplate.deleteEventTemplateDesign(data.id)
+    await repoEventTemplate.deleteEventTemplateDesign(String(data.item.id))
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
     await repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
