@@ -9,17 +9,17 @@
         <div name="default" class="toolbar__default">
             <slot name="default"></slot>
         </div>
-        <template v-if="allowDelete">
+        <template v-if="required">
+            <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
+                @click="emit('remove')">
+                SEO
+            </el-button>
+        </template>
+        <template v-if="!required">
             <el-button v-loading="loading" class="toolbar__btn" size="small" @click="emit('remove')">
                 <el-icon>
                     <Delete />
                 </el-icon>
-            </el-button>
-        </template>
-        <template v-if="!allowDelete">
-            <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
-                @click="emit('remove')">
-                SEO
             </el-button>
         </template>
     </div>
@@ -39,9 +39,9 @@ const props = defineProps({
         type: Boolean,
         default: true
     },
-    allowDelete: {
+    required: {
         type: Boolean,
-        default: true
+        default: false
     }
 })
 </script>

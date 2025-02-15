@@ -24,14 +24,14 @@
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem"
-                                :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
+                                :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                                 @drop="insertTemplate($event, defaultProps.index)" @dragover="allowDrop($event)">
                             </div>
                         </template>
                     </FormTemplateDesign>
                     <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
                         class="eventTemplate__designItem"
-                        :class="{ 'eventTemplate__designItem--outline': templateTemp.type }"
+                        :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
                     </div>
@@ -115,7 +115,6 @@
         </el-row>
         <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>
-                eventTemplate.id {{ eventTemplate.id }}
                 <FormEditEventTemplate v-model="eventTemplate" @update:modelValue="loadTemplate($event)" @reset="">
                 </FormEditEventTemplate>
             </template>
@@ -158,8 +157,10 @@ const eventTemplate = ref<IEventTemplate>({
 
 // 拖曳中的模板設計
 const templateTemp = ref<ITemplateDragSouce>({
-    type: '',
-    id: '',
+    item: {
+        type: '', // 拖曳中的判斷欄位
+        id: '', // 是否為新增的判斷欄位
+    },
     index: -1
 })
 
@@ -239,10 +240,12 @@ function setDefaultTemplate() {
 }
 
 async function handleDesignChanged(templateDesign: ITemplateDesign) {
+    // 只需要必要欄位，其他建立時已給
     repoEventTemplate.patchEventTemplateDesign({
         id: templateDesign.id,
         mutable: templateDesign.mutable,
         type: templateDesign.type, // 處理blob時候用
+        formField: templateDesign.formField
     })
 }
 
@@ -263,7 +266,7 @@ async function addOnDropListener(isOn: boolean) {
     }
 }
 async function clearOnDrop() {
-    templateTemp.value.type = ''
+    templateTemp.value.item.type = ''
 }
 
 async function getPlaceList() {
@@ -280,10 +283,7 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
 async function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
     // 插入元素
-    const templateDesign: ITemplateDesign = {
-        id: templateTemp.value.id,
-        type: templateTemp.value.type,
-    }
+    const templateDesign: ITemplateDesign = JSON.parse(JSON.stringify(templateTemp.value.item)) // 必須深拷貝，不然會在清除站存資料時影響到模板
 
     // 先更新資料庫再更新畫面
     const hasSource = templateTemp.value.index !== -1
@@ -300,21 +300,18 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     } else {
         // 屬於新增的模板設計
         const designId = await repoEventTemplate.postEventTemplateDesign({
-            type: templateTemp.value.type,
-            destination: destinationIndex,
+            ...templateDesign,
             templateId: eventTemplate.value.id,
-            mutable: templateTemp.value.mutable
         })
         templateDesign.id = designId
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
     }
-
     // 更新模板順序
     repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
 
     // Reset flags
-    templateTemp.value.id = '' // 用來判斷是否為新增的欄位
-    templateTemp.value.type = '' // 用來判斷是否為拖曳中
+    templateTemp.value.item.id = '' // 用來判斷是否為新增的欄位
+    templateTemp.value.item.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
     isLoading.value = false
 }
@@ -333,10 +330,10 @@ function allowDrop(ev: any) {
     ev.preventDefault();
 }
 function setTemplateType(ev: any) {
-    templateTemp.value.type = ev.target.dataset.type
+    templateTemp.value.item.type = ev.target.dataset.type
 }
 function cancelDragging() {
-    templateTemp.value.type = ''
+    templateTemp.value.item.type = ''
 }
 
 async function getEventTemplate(templateId: string) {

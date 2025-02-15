@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required">
         <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="editPlaceHolder"
             :filterable="true" :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
             :disabled="disabled || !props.organizationId">
@@ -10,7 +10,7 @@
         </el-select>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
@@ -56,9 +56,9 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    allowDelete: {
+    required: {
         type: Boolean,
-        default: true
+        default: false
     },
     placeholder: {
         type: String,

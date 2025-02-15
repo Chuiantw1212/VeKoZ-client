@@ -1,11 +1,11 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
             :maxlength="30" :show-word-limit="true" size="large"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
+    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
@@ -41,7 +41,7 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
-    allowDelete: {
+    required: {
         type: Boolean,
         default: false
     },

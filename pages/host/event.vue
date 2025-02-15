@@ -176,7 +176,7 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     }
     templateDesign.eventId = currentEvent.value.id
     await repoEvent.patchEventForm(templateDesign)
-    if (templateDesign.sqlField === 'date') {
+    if (templateDesign.formField === 'date') {
         const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
         calendarEvent?.remove()
         currentEvent.value.startDate = new Date(templateDesign.mutable?.value[0])

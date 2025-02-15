@@ -14,6 +14,7 @@ export interface ITemplateDesign {
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
     templateId?: string,
     type?: string,
+    required?: boolean,
     mutable?: {
         label?: string,
         // 多數欄位使用
@@ -27,8 +28,9 @@ export interface ITemplateDesign {
         // 票券
         offers?: IOffer[]
     },
-    sqlField?: string,
+    formField?: string,
     lastmod?: any,
+    [key: string]: any
 }
 
 interface IOffer {
@@ -37,6 +39,7 @@ interface IOffer {
     price: number,
 }
 
-export interface ITemplateDragSouce extends ITemplateDesign {
+export interface ITemplateDragSouce {
     index: number,
+    item: ITemplateDesign
 }

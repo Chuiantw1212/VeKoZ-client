@@ -6,10 +6,33 @@
             </slot>
         </div>
         <template v-for="(item, index) in templateDesigns">
+            <!-- 必填寫欄位 -->
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)">
             </OrganismDesignHeader1>
+            <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
+                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)">
+            </OrganismDesignDateTimeRange>
+            <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
+                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)">
+            </OrganismDesignOrganization>
+            <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'" v-model="templateDesigns[index]"
+                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
+                :organization-id="getOrganizationId()" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+            </OrganismDesignOrganizationMember>
+            <OrganismDesignTextarea v-if="item.type === 'textarea'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)">
+            </OrganismDesignTextarea>
+            <!-- 非必填寫欄位 -->
             <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
@@ -18,22 +41,6 @@
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignNumber>
-            <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
-                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning"
-                :allow-delete="getFirstItem('organization') < index" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
-            </OrganismDesignOrganization>
-            <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'" v-model="templateDesigns[index]"
-                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning"
-                :allow-delete="getFirstItem('organizationMember') < index" :organization-id="getOrganizationId()"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
-            </OrganismDesignOrganizationMember>
-            <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
-                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning"
-                :allow-delete="getFirstItem('dateTimeRange') < index" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
-            </OrganismDesignDateTimeRange>
             <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
@@ -50,11 +57,6 @@
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignEditor>
-            <OrganismDesignTextarea v-if="item.type === 'textarea'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :isDesigning="props.isDesigning" :allow-delete="getFirstItem('textarea') < index"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
-            </OrganismDesignTextarea>
             <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
@@ -118,14 +120,14 @@ function getOrganizationId() {
 function handleRemove(index: number) {
     const item = templateDesigns.value[index]
     emit('remove', {
-        ...item,
+        item,
         index,
     })
 }
 function handleDragStart(index: number) {
     const item = templateDesigns.value[index]
     emit('dragstart', {
-        ...item,
+        item,
         index,
     })
 }

@@ -20,7 +20,7 @@
                 </template>
                 <template v-else-if="row.id === 'default'">
                     <el-button size="small" @click="selectTemplate(row)">
-                        開新模板
+                        建新板
                     </el-button>
                 </template>
                 <template v-else>

@@ -3,31 +3,41 @@
         "type": "header1",
         "mutable": {
             "label": "活動名稱"
-        }
+        },
+        "required": true,
+        "formField": "name"
     },
     {
         "type": "dateTimeRange",
         "mutable": {
             "label": "活動時間"
-        }
+        },
+        "required": true,
+        "formField": "date"
     },
     {
         "type": "organization",
         "mutable": {
             "label": "主辦單位"
-        }
+        },
+        "required": true,
+        "formField": "organizer"
     },
     {
         "type": "organizationMember",
         "mutable": {
             "label": "講者/主持"
-        }
+        },
+        "required": true,
+        "formField": "performer"
     },
     {
         "type": "textarea",
         "mutable": {
             "label": "活動摘要"
-        }
+        },
+        "required": true,
+        "formField": "description"
     },
     {
         "type": "place",
