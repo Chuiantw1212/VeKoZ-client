@@ -165,10 +165,10 @@ async function handleChange(templateDesign: any) {
     })
 }
 function createOffer() {
-    customDesign.value.mutable.offers.push(newOffer.value)
+    customDesign.value.mutable?.offers?.push(newOffer.value)
 }
 function removeOffer(index: number) {
-    customDesign.value.mutable.offers.splice(index, 1)
+    customDesign.value.mutable?.offers?.splice(index, 1)
 }
 </script>
 <style lang="scss" scoped>
