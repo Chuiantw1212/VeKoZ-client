@@ -1,25 +1,28 @@
 <template>
     <el-menu class="headerMenu" mode="horizontal" :ellipsis="false" :menu-trigger="'click'">
-        <el-menu-item v-if="repoUser.userType === 'host'" @click="repoUI.toggleMenu()">
+        <!-- <el-menu-item v-if="repoUser.userType === 'host'" class="headerMenu__toggle" @click="repoUI.toggleMenu()">
             <el-icon>
                 <More />
             </el-icon>
-        </el-menu-item>
+        </el-menu-item> -->
         <NuxtLink to="/">
             <el-menu-item class="headerMenu__logo">
                 <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
+        <div v-if="repoUser.userType === 'attendee' && repoUI.isLarge" class="attendee__menu">
+            <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
+        </div>
         <el-sub-menu v-if="repoUser.userType" index="1" class="headerMenu__firstItem">
             <template #title>
-                <el-avatar :size="32" :src="avatar" />
+                <OrganismUserAuth></OrganismUserAuth>
             </template>
-            <NuxtLink v-if="repoUser.userType === 'attendee'" @click="setUserType('host')">
+            <NuxtLink v-if="repoUser.userType === 'attendee'" @click="repoUser.setUserType('host')">
                 <el-menu-item index="1-1">
                     切換為主辦方
                 </el-menu-item>
             </NuxtLink>
-            <NuxtLink v-if="repoUser.userType === 'host'" @click="setUserType('attendee')">
+            <NuxtLink v-if="repoUser.userType === 'host'" @click="repoUser.setUserType('attendee')">
                 <el-menu-item index="1-1">
                     切換為一般用戶
                 </el-menu-item>
@@ -37,80 +40,15 @@
 </template>
 
 <script lang="ts" setup>
-import { More, Fold, Menu } from '@element-plus/icons-vue'
-import { getAuth, onAuthStateChanged, signOut, type User, } from "firebase/auth"
-import avatar from '@/assets/mock/user.jpg'
-import type { IUser, UserType } from '~/types/user'
+import { getAuth, signOut, } from "firebase/auth"
+import { MoleculeAttendeeMenuItems } from '#components'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const repoAuth = useRepoAuth()
 
 // Hooks
 const router = useRouter()
-const route = useRoute()
-
-onMounted(() => {
-    addFirebaseListener()
-})
 
 // Methods
-async function setUserType(userType: UserType) {
-    repoUser.userType = userType
-    if (userType) {
-        // 紀錄為上次登錄狀態
-        repoUser.patchUserPreference('userType', userType)
-    }
-    if (userType === 'host') {
-        // router.push('/host/event')
-    }
-    if (userType === 'attendee') {
-        // if (route.name === 'index') {
-        //     router.push('/events')
-        // }
-    }
-}
-
-function addFirebaseListener() {
-    const auth = getAuth()
-    onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-        if (!firebaseUser) {
-            // 這邊如果做事會中斷登入流程。
-            setUserType('')
-            return
-        }
-        if (firebaseUser.emailVerified) {
-            // 判斷是否為已註冊用戶
-            const user: IUser = await repoUser.getUser()
-            if (user.id) {
-                handleLoggedIn(user)
-            } else {
-                registeredNewUser(firebaseUser)
-            }
-        } else {
-            // 給出重新驗證的畫面
-        }
-    })
-}
-
-async function handleLoggedIn(user: IUser) {
-    const { preference } = user
-    if (preference?.userType) {
-        setUserType(preference.userType)
-    }
-}
-
-async function registeredNewUser(firebaseUser: User) {
-    const { emailVerified, displayName, email, phoneNumber, photoURL, providerId, uid } = firebaseUser
-    const venoniaUser: IUser = {
-        emailVerified,
-        displayName: displayName ?? '',
-        email: email ?? '',
-        phoneNumber: phoneNumber ?? '',
-        photoURL: photoURL ?? '',
-        providerId: providerId,
-        uid: uid
-    }
-}
 
 async function handleSignOut() {
     const auth = getAuth()
@@ -123,12 +61,14 @@ async function handleSignOut() {
 
 <style lang="scss" scoped>
 .headerMenu {
+    justify-content: space-between;
+
     .headerMenu__logo {
         margin: 0px;
     }
 
-    .headerMenu__firstItem {
-        margin-left: auto;
+    .attendee__menu {
+        display: flex;
     }
 }
 </style>

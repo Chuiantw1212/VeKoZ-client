@@ -2,7 +2,7 @@
     <div class="defaultLayout">
         <!-- <el-config-provider :locale="zhTw"> -->
         <el-container>
-            <el-header>
+            <el-header v-if="repoUI.isLarge">
                 <HeaderMenu></HeaderMenu>
             </el-header>
             <el-container>
@@ -13,8 +13,8 @@
                     <el-main class="defaultLayout__main">
                         <NuxtPage />
                     </el-main>
-                    <el-footer class="defaultLayout__footer">
-                        <OrganismFooterMenu></OrganismFooterMenu>
+                    <el-footer v-if="repoUser.userType === 'attendee' && !repoUI.isLarge" class="defaultLayout__footer">
+                        <OrganismAttendeeMenu></OrganismAttendeeMenu>
                     </el-footer>
                 </el-container>
             </el-container>
@@ -27,6 +27,7 @@ import SideMenu from '~/components/organism/SideMenu.vue';
 import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 
 const repoUser = useRepoUser()
+const repoUI = useRepoUI()
 </script>
 <style lang="scss" scoped>
 .defaultLayout {

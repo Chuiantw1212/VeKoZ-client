@@ -24,11 +24,16 @@
 </script>
 <style lang="scss" scoped>
 .venonia__card {
+    :deep(.el-card__body) {
+        padding: 0px;
+    }
+
     .card__footer {
         display: flex;
         justify-content: space-between;
         gap: 8px;
         align-items: center;
+        height: 42px;
     }
 }
 </style>

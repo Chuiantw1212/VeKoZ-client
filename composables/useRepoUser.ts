@@ -26,6 +26,13 @@ export default defineStore('user', () => {
         userInfo.value = await response.json() as IUser
         return userInfo.value
     }
+    async function setUserType(newUserType: UserType) {
+        userType.value = newUserType
+        if (newUserType) {
+            // 除了非登入狀態，紀錄登錄狀態
+            patchUserPreference('userType', userType)
+        }
+    }
     async function postUser(body: IUser): Promise<IUser> {
         const response = await defaultApi.authRequest(`/user`, {
             method: 'POST',
@@ -79,6 +86,7 @@ export default defineStore('user', () => {
         userType,
         userInfo,
         getUser,
+        setUserType,
         deleteUser,
         postUser,
         patchUserProfile,
