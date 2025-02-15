@@ -1,12 +1,12 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
-            :disabled="disabled" @change="setLocationAddress($event)">
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.locationName" :placeholder="placeholder"
+            :clearable="true" :disabled="disabled" @change="setLocationAddress($event)">
             <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />
         </el-select>
-        <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
-            :disabled="true"></el-input>
+        <el-input v-if="customDesign.mutable" class="design__mt" placeholder="地址"
+            :model-value="customDesign.mutable.locationAddress" :disabled="true"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -27,20 +27,14 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IPlace } from '~/types/place'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const repoPlace = useRepoPlace()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'place',
-    mutable: {
-        label: string,
-        locationName: string,
-        locationAddress: string,
-    }
-}
-const customDesign = defineModel<IModel>('modelValue', {
+
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'place',
         mutable: {

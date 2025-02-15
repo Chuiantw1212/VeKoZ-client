@@ -1,7 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
-        <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true" :disabled="disabled">
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.value" placeholder="請選擇現有組織"
+            :clearable="true" :disabled="disabled">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
         </el-select>
     </el-form-item>
@@ -21,20 +22,14 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOrganization } from '~/types/organization'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const repoOrganization = useRepoOrganization()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'organization',
-    mutable: {
-        label: string,
-        value: string,
-    }
-}
 
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'organization',
         mutable: {

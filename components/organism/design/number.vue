@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-input-number v-model="customDesign.mutable.value" :placeholder="placeholder"
+        <el-input-number v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
             :disabled="disabled"></el-input-number>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -18,19 +18,12 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 
-interface IModel {
-    type: 'number',
-    mutable: {
-        label: string,
-        value: number,
-    }
-}
-
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'number',
         mutable: {

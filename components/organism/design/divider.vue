@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-divider v-if="!props.isDesigning">
-        {{ customDesign.mutable.label }}
+        {{ customDesign.mutable?.label }}
     </el-divider>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -15,18 +15,12 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'divider',
-    mutable: {
-        label: string,
-        value: string[],
-    }
-}
 
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'divider',
         mutable: {

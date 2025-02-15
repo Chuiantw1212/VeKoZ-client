@@ -1,8 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
-        <el-input v-model="customDesign.mutable.value" type="textarea" :rows="3" :maxlength="150"
-            :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
+        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" type="textarea" :rows="3"
+            :maxlength="150" :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
@@ -18,18 +18,12 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'textarea',
-    mutable: {
-        label: string,
-        value: string,
-    }
-}
 
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'textarea',
         mutable: {

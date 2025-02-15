@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <div class="offerList">
+        <div v-if="customDesign.mutable" class="offerList">
             <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                 <template v-if="!disabled">
                     <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
@@ -36,7 +36,7 @@
                     <el-input placeholder="票價" :disabled="true"></el-input>
                 </template>
             </div>
-        </div class="offers">
+        </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :allowDelete="allowDelete"
@@ -73,25 +73,18 @@
                         </el-icon>
                     </el-button>
                 </div>
-            </div class="offers">
+            </div>
         </template>
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
 import { Plus, Minus } from '@element-plus/icons-vue'
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 
-interface IModel {
-    type: 'offer',
-    mutable: {
-        label: string,
-        offers: any[]
-    }
-}
-
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'offer',
         mutable: {

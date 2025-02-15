@@ -2,8 +2,8 @@
     <!-- 檢視與編輯用 -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="!allowDelete">
-        <el-select v-model="customDesign.mutable.value" :placeholder="editPlaceHolder" :filterable="true"
-            :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="editPlaceHolder"
+            :filterable="true" :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
             :disabled="disabled || !props.organizationId">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
                 :value="String(item.id)" />
@@ -26,20 +26,14 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOrganizationMember } from '~/types/organization'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const repoOrganizationMember = useRepoOrganization()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'organizationMember',
-    mutable: {
-        label: string,
-        value: string,
-    }
-}
 
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'organizationMember',
         mutable: {
