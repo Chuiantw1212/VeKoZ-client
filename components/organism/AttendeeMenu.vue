@@ -28,13 +28,15 @@ const route = useRoute()
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
+    border-top: 1px solid lightgrey;
 
     .footerMenu__logo {
         margin: 0px;
     }
 
-    .footerMenu__firstItem {
-        margin-left: auto;
+    > * {
+        width: 25%;
     }
 }
 </style>

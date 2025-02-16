@@ -1,6 +1,6 @@
 <template>
     <NuxtLink to="/">
-        <el-menu-item>
+        <el-menu-item class="menu__item">
             <el-icon>
                 <Menu />
             </el-icon>
@@ -10,7 +10,7 @@
         </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/follows">
-        <el-menu-item>
+        <el-menu-item class="menu__item">
             <el-icon>
                 <Star />
             </el-icon>
@@ -20,7 +20,7 @@
         </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/">
-        <el-menu-item>
+        <el-menu-item class="menu__item">
             <el-icon>
                 <Ticket />
             </el-icon>
@@ -29,7 +29,7 @@
             </span>
         </el-menu-item>
     </NuxtLink>
-    <el-menu-item v-if="!repoUI.isLarge">
+    <el-menu-item v-if="!repoUI.isLarge" class="menu__item">
         <OrganismUserAuth></OrganismUserAuth>
     </el-menu-item>
     <!-- <NuxtLink to="/">
@@ -47,3 +47,9 @@
 import { Menu, Star, Setting, Ticket } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 </script>
+<style lang="scss">
+.menu__item {
+    display: flex;
+    justify-content: center;
+}
+</style>

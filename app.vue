@@ -39,6 +39,7 @@ const repoUI = useRepoUI()
         position: fixed;
         bottom: 0px;
         width: 100vw;
+        padding: 0px;
         // background-color: red;
     }
 }
