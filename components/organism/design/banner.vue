@@ -107,7 +107,8 @@ async function handleChange(templateDesign: any) {
 function handleResize() {
     repoUI.debounce('bannerResize', () => {
         const width = bannerRef.value?.clientWidth
-        bannerHeight.value = `${width / 2}px`
+        const minHeight = Math.min(390, width / 2)
+        bannerHeight.value = `${minHeight}px`
     })
 }
 </script>

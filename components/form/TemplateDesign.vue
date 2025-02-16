@@ -66,8 +66,9 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
             </OrganismDesignOffer>
             <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)">
             </OrganismDesignBanner>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">

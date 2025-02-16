@@ -5,7 +5,7 @@
             "label": ""
         },
         "required": true,
-        "formField": "banner"
+        "formField": "image"
     },
     {
         "type": "header1",

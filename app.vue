@@ -2,7 +2,7 @@
     <div class="defaultLayout">
         <!-- <el-config-provider :locale="zhTw"> -->
         <el-container>
-            <el-header v-if="repoUI.isLarge">
+            <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
                 <HeaderMenu></HeaderMenu>
             </el-header>
             <el-container>
