@@ -9,7 +9,10 @@ export interface IUser {
     photoURL?: string,
     providerId?: string,
     uid?: string,
-    preference?: IUserPreference
+    preference?: IUserPreference,
+    // SEO使用
+    name?: string,
+    description?: string,
 }
 
 export interface IUserPreference {

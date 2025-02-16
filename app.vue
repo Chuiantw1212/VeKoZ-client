@@ -2,7 +2,8 @@
     <div class="defaultLayout">
         <!-- <el-config-provider :locale="zhTw"> -->
         <el-container>
-            <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
+            <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">  
+                <!-- v-if="repoUser.userType === 'host' || repoUI.isLarge" -->
                 <HeaderMenu></HeaderMenu>
             </el-header>
             <el-container>
@@ -13,7 +14,7 @@
                     <el-main class="defaultLayout__main">
                         <NuxtPage />
                     </el-main>
-                    <el-footer v-if="repoUser.userType === 'attendee' && !repoUI.isLarge" class="defaultLayout__footer">
+                    <el-footer v-if="repoUser.userType !== 'host' && !repoUI.isLarge" class="defaultLayout__footer">
                         <OrganismAttendeeMenu></OrganismAttendeeMenu>
                     </el-footer>
                 </el-container>

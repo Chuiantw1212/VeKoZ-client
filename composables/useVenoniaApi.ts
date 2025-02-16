@@ -45,9 +45,11 @@ export default defineStore('api', {
             }
         },
         async authRequest(url: string, options: requestOptions) {
-            const { method, body, headers, responseType = 'json' } = options
-            // Retrieve token
             await this.setToken()
+            return await this.request(url, options)
+        },
+        async request(url: string, options: requestOptions) {
+            const { method, body, headers, responseType = 'json' } = options
 
             let urlSearchParams: URLSearchParams = null as any
             if (options.params) {

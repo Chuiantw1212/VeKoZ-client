@@ -53,6 +53,10 @@ const props = defineProps({
         type: String,
         default: '請輸入'
     },
+    noMargin: {
+        type: Boolean,
+        default: false
+    },
     onchange: {
         type: Function,
         default: async () => { }

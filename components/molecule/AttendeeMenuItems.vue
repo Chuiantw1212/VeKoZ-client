@@ -29,7 +29,7 @@
             </span>
         </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/settings">
+    <NuxtLink to="/user">
         <el-menu-item v-if="!repoUI.isLarge" class="menu__item">
             <OrganismUserAuth></OrganismUserAuth>
         </el-menu-item>

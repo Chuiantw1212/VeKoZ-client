@@ -30,6 +30,12 @@
             <el-menu-item index="1-2" @click="handleSignOut()">
                 登出
             </el-menu-item>
+            <el-menu-item index="1-8">
+                密碼變更
+            </el-menu-item>
+            <el-menu-item index="1-10">
+                帳號註銷
+            </el-menu-item>
         </el-sub-menu>
         <NuxtLink v-else to="/signin">
             <el-menu-item class="headerMenu__firstItem">

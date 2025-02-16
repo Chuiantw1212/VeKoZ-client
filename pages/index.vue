@@ -30,35 +30,9 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <!-- <el-col :span="12">
-                    <el-form-item label="地點">
-                        <el-select placeholder="請選擇" :clearable="true" :multiple="true">
-                            <el-option v-for="(item, index) in locationTypeOptions" :key="index" :label="item.label"
-                                :value="item.value" />
-                        </el-select>
-                    </el-form-item>
-                </el-col> -->
             </el-row>
         </el-form>
         <el-row :gutter="20" class="index__eventList">
-            <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
-                <MoleculeVenoniaCard class="index__card">
-                    <template #default>
-                        <NuxtLink to="/event/123">
-                            <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
-                            style="width: 100%" />
-                        </NuxtLink>
-                    </template>
-                    <template #footer>
-                        <span>
-                            {{ item.name }}
-                        </span>
-                        <span class="footer__offer">
-                            NTD 250
-                        </span>
-                    </template>
-                </MoleculeVenoniaCard>
-            </el-col>
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
                     <template #default>
@@ -160,13 +134,13 @@ async function getEventList() {
 
 <style lang="scss" scoped>
 .index__eventList {
-    margin-top: 172px; // form height;
+    // margin-top: 172px; // form height;
 }
 
 .index__form {
-    position: fixed;
-    top: 0px;
-    left: 0px;
+    // position: fixed;
+    // top: 0px;
+    // left: 0px;
     width: calc(100vw - 40px); // -padding x2
     z-index: 1;
     background-color: white;
