@@ -1,5 +1,13 @@
 <template>
     <div>
-        追蹤與訂閱的講者或主辦
+        <ul>
+            <li>
+                追蹤與訂閱的講者或主辦
+            </li>
+            <li>
+                取消訂閱也在這
+            </li>
+            <li></li>
+        </ul>
     </div>
 </template>

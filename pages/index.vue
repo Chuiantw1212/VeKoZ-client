@@ -12,8 +12,6 @@
                         <el-input :prefix-icon="Search" placeholder="搜尋"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row  :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="日期">
                         <el-date-picker v-model="dateRange" type="date" placeholder="開始日" />
@@ -24,8 +22,6 @@
                         <el-date-picker v-model="dateRange" type="date" placeholder="結束日" />
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row :gutter="20">
                 <el-col :span="12">
                     <el-form-item label="時段">
                         <el-select placeholder="請選擇" :clearable="true" :multiple="true">
@@ -44,12 +40,14 @@
                 </el-col> -->
             </el-row>
         </el-form>
-        <el-row :gutter="20">
+        <el-row :gutter="20" class="index__eventList">
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
                     <template #default>
-                        <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
+                        <NuxtLink to="/event/123">
+                            <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
                             style="width: 100%" />
+                        </NuxtLink>
                     </template>
                     <template #footer>
                         <span>
@@ -64,8 +62,10 @@
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
                     <template #default>
-                        <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
-                            style="width: 100%" />
+                        <NuxtLink to="/event/123">
+                            <img src="https://storage.googleapis.com/public.venonia.com/eventDesign/imKB1tyxFBlthb4fBbaG/banner.png"
+                                style="width: 100%" />
+                        </NuxtLink>
                     </template>
                     <template #footer>
                         <span>
@@ -159,6 +159,10 @@ async function getEventList() {
 </script>
 
 <style lang="scss" scoped>
+.index__eventList {
+    margin-top: 172px; // form height;
+}
+
 .index__form {
     position: fixed;
     top: 0px;
@@ -167,7 +171,9 @@ async function getEventList() {
     z-index: 1;
     background-color: white;
     padding: 20px;
-    box-shadow: 0 4px 2px -2px gray;
+    // box-shadow: 0 4px 2px -2px gray;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 0px;
 }
 
 .index__row {

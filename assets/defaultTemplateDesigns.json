@@ -1,5 +1,13 @@
 [
     {
+        "type": "banner",
+        "mutable": {
+            "label": ""
+        },
+        "required": true,
+        "formField": "banner"
+    },
+    {
         "type": "header1",
         "mutable": {
             "label": "活動名稱"

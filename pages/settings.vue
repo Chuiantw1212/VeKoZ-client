@@ -1,5 +1,10 @@
 <template>
     <div>
-        切換為主辦方
+        <ul>
+            <li>切換為主辦方</li>
+            <li>密碼變更</li>
+            <li>登出</li>
+            <li>帳號註銷</li>
+        </ul>
     </div>
 </template>
