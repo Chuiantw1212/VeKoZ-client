@@ -3,11 +3,9 @@
 </template>
 <script setup lang="ts">
 import avatar from '@/assets/mock/user.jpg'
-import { getAuth, onAuthStateChanged, signOut, type User, } from "firebase/auth"
-import type { IUser, UserType } from '~/types/user'
-const repoUI = useRepoUI()
+import { getAuth, onAuthStateChanged, type User, } from "firebase/auth"
+import type { IUser } from '~/types/user'
 const repoUser = useRepoUser()
-const repoAuth = useRepoAuth()
 
 // Hooks
 onMounted(() => {
