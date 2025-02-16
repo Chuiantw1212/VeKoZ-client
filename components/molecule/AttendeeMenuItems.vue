@@ -29,7 +29,10 @@
             </span>
         </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/">
+    <el-menu-item v-if="!repoUI.isLarge">
+        <OrganismUserAuth></OrganismUserAuth>
+    </el-menu-item>
+    <!-- <NuxtLink to="/">
         <el-menu-item>
             <el-icon>
                 <Setting />
@@ -38,7 +41,7 @@
                 偏好設定
             </span>
         </el-menu-item>
-    </NuxtLink>
+    </NuxtLink> -->
 </template>
 <script setup lang="ts">
 import { Menu, Star, Setting, Ticket } from '@element-plus/icons-vue'
