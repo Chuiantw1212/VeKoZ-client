@@ -39,9 +39,8 @@ function addFirebaseListener() {
 
 async function handleLoggedIn(user: IUser) {
     const { preference } = user
-    if (preference?.userType) {
-        repoUser.setUserType(preference.userType)
-    }
+    // 使用上次登入狀態或是預設一般參加者
+    repoUser.setUserType(preference?.userType ?? 'attendee')
 }
 
 async function registeredNewUser(firebaseUser: User) {

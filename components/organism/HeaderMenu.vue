@@ -49,12 +49,11 @@ const repoUser = useRepoUser()
 const router = useRouter()
 
 // Methods
-
 async function handleSignOut() {
     const auth = getAuth()
     await signOut(auth)
     router.push({
-        name: 'signin',
+        name: 'signIn',
     })
 }
 </script>

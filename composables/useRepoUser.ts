@@ -5,7 +5,8 @@ import type { IUser, IUserPreference, UserType } from '~/types/user'
 
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
-
+    const route = useRoute()
+    const router = useRouter()
     // const userInfo = ref<IUser>()
     const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     const userInfo = ref<IUser>({
@@ -31,6 +32,18 @@ export default defineStore('user', () => {
         if (newUserType) {
             // 除了非登入狀態，紀錄登錄狀態
             patchUserPreference('userType', userType)
+        }
+        if (newUserType === 'host') {
+            if (!route.path.includes('host')) {
+                router.push({
+                    name: 'host-event'
+                })
+            }
+        }
+        if (newUserType === 'attendee') {
+            if (route.name === 'signIn') {
+                router.push('/events')
+            }
         }
     }
     async function postUser(body: IUser): Promise<IUser> {
