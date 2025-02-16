@@ -13,7 +13,8 @@ export default defineStore('user', () => {
         preference: {
             event: {
 
-            }
+            },
+            userType: ''
         }
     })
     /**
@@ -31,7 +32,7 @@ export default defineStore('user', () => {
         userType.value = newUserType
         if (newUserType) {
             // 除了非登入狀態，紀錄登錄狀態
-            patchUserPreference('userType', userType)
+            patchUserPreference('userType', newUserType)
         }
         if (newUserType === 'host') {
             if (!route.path.includes('host')) {
