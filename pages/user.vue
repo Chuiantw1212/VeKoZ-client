@@ -65,8 +65,8 @@
             系統功能
         </el-divider>
         <div class="user__btnGroup">
-            <el-button class="btnGroup__btn">切換為主辦方</el-button>
             <el-button class="btnGroup__btn">密碼變更</el-button>
+            <el-button class="btnGroup__btn">切換為主辦方</el-button>
             <el-button class="btnGroup__btn">登出</el-button>
         </div>
         <div class="user__delete">
