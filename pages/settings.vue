@@ -2,7 +2,7 @@
     <el-row class="user" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
             <div class="user__btnGroup">
-                <el-button class="btnGroup__btn">密碼變更</el-button>
+                <el-button class="btnGroup__btn" :disabled="true">密碼變更</el-button>
                 <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
                     @click="repoUser.setUserType('host')">切換為主辦方</el-button>
                     <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
