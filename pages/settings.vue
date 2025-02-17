@@ -13,15 +13,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="Email">
-                                <el-input v-model="userForm.email" placeholder="請輸入講者個人頁標題" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="標題">
-                                <el-input v-model="userForm.name" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
-                                    :show-word-limit="true" />
+                                <el-input v-model="userForm.email" placeholder="請輸入講者Email" :disabled="true" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -39,6 +31,14 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
+                            <el-form-item label="標題">
+                                <el-input v-model="userForm.name" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
+                                    :show-word-limit="true" />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
                             <el-form-item label="描述">
                                 <el-input v-model="userForm.description" type="textarea" :rows="3" :maxlength="150"
                                     placeholder="請輸入講者介紹" :show-word-limit="true" />
@@ -46,7 +46,6 @@
                         </el-col>
                     </el-row>
                 </el-form>
-
                 <el-divider>
                     近期主辦(2場)與評價
                 </el-divider>

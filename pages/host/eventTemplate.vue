@@ -44,72 +44,8 @@
                             請拖曳以下選項到 指定位置
                         </div>
                     </template>
-                    <el-form label-width="auto">
-                        <div class="eventTemplate__draggable" draggable="true" data-type="input"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignInput :disabled="true" :isDesigning="false"></OrganismDesignInput>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="number"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignNumber :disabled="true" :isDesigning="false"></OrganismDesignNumber>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="dateTimeRange"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignDateTimeRange :disabled="true" :isDesigning="false">
-                            </OrganismDesignDateTimeRange>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="url"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignUrl :disabled="true" :isDesigning="false">
-                            </OrganismDesignUrl>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="textarea"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignTextarea :disabled="true" :isDesigning="false">
-                            </OrganismDesignTextarea>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="divider"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignDivider :disabled="true" :isDesigning="false">
-                            </OrganismDesignDivider>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="editor"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignEditor :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
-                            </OrganismDesignEditor>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="banner"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignBanner :disabled="true" :isDesigning="false">
-                            </OrganismDesignBanner>
-                        </div>
-                        <el-divider content-position="left">高階欄位</el-divider>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="eventGroup"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignEventGroup :disabled="true" :isDesigning="false">
-                            </OrganismDesignEventGroup>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="organization"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOrganization :disabled="true" :isDesigning="false">
-                            </OrganismDesignOrganization>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="organizationMember"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOrganizationMember :disabled="true" :isDesigning="false">
-                            </OrganismDesignOrganizationMember>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="offer"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignOffer :disabled="true" :isDesigning="false">
-                            </OrganismDesignOffer>
-                        </div>
-                        <div class="eventTemplate__draggable" draggable="true" data-type="place"
-                            @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
-                            <OrganismDesignPlace :disabled="true" :isDesigning="false">
-                            </OrganismDesignPlace>
-                        </div>
-                    </el-form>
+                    <FormDesignDragging @mouseenter="setTemplateType($event)" @mouseleave="cancelDragging()">
+                    </FormDesignDragging>
                 </el-card>
             </el-col>
         </el-row>
