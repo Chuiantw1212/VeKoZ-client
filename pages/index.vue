@@ -1,48 +1,7 @@
 <template>
     <div class="index">
-        <el-form ref="formRef" class="index__form" :class="{ 'margin--header': repoUI.isLarge }" :model="form"
-            label-width="auto">
-            <el-row :gutter="20" align="middle" justify="space-between">
-                <el-col :span="20">
-                    <el-form-item label="搜尋">
-                        <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
-                            @change="getEventList()"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                    <el-form-item>
-                        <el-button :icon="Filter" text>
-
-                        </el-button>
-                    </el-form-item>
-                </el-col>
-                <el-row align="middle" justify="space-between">
-                    <el-col :span="12">
-                        <el-form-item label="開始" :required="true" prop="startDate">
-                            <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="結束" prop="endDate">
-                            <el-date-picker v-model="form.endDate" type="date" placeholder="結束日" :clearable="true" />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="時段">
-                            <el-select placeholder="請選擇" :clearable="true" :multiple="true">
-                                <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
-                                    :value="item.value" />
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="地點">
-                            城市網址參數
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-row>
-        </el-form>
+        <FormSearchEvents ref="formRef" @change="getEventList()">
+        </FormSearchEvents>
         <el-row :gutter="20" class="index__eventList" :class="{ 'mt--120': !repoUI.isMedium }">
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
@@ -69,13 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { Filter, Search, } from '@element-plus/icons-vue'
 import type { IEvent } from '~/types/event';
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
+
+// Data
 const eventList = ref<IEvent[]>([])
-const dateRange = ref([])
 const startDate = new Date()
 const currentMonth = new Date().getMonth()
 const endDate = new Date()
@@ -85,62 +44,22 @@ const form = ref({
     keywords: '',
     startDate: startDate,
     endDate: endDate,
+    timeFrame: '',
+    location: '',
 })
 const columnSpan = ref<number>(8)
-const periodOptions = ref([
-    {
-        label: '上午',
-        value: 'isMorning'
-    },
-    {
-        label: '下午',
-        value: 'isAfternoon',
-    },
-    {
-        label: '晚上',
-        value: 'isEvening'
-    }
-])
-
-const locationTypeOptions = ref([
-    {
-        label: '線上',
-        value: 'online'
-    },
-    {
-        label: "線下",
-        value: 'offline'
-    }
-])
 
 // Hooks
 onMounted(() => {
     getEventList()
     window.addEventListener('resize', setColumnSpan)
     setColumnSpan()
-
-    window.addEventListener('resize', setSearchFormSpan)
-    setSearchFormSpan()
 })
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
-    window.removeEventListener('resize', setSearchFormSpan)
 })
 
 // Methods
-const searchSpan = ref<number>(24)
-const whereFieldSpan = ref<number>(12)
-function setSearchFormSpan() {
-    repoUI.debounce(`${id.value}-form`, () => {
-        searchSpan.value = 24
-        whereFieldSpan.value = 24
-        if (repoUI.isSmall) {
-            searchSpan.value = 9
-            whereFieldSpan.value = 7
-        }
-    })
-}
-
 function setColumnSpan() {
     repoUI.debounce(`${id.value}-col`, () => {
         columnSpan.value = 24
@@ -166,9 +85,8 @@ async function getEventList() {
             ...form.value,
             isPublic: true,
         })
-        eventList.value = result
+        eventList.value = [...result, ...result, ...result, ...result, ...result, ...result]
     }, 500)
-
 }
 
 
