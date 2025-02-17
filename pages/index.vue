@@ -5,7 +5,7 @@
             <el-row :gutter="20" align="middle">
                 <el-col :span="searchSpan">
                     <el-form-item label="搜尋">
-                        <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字"
+                        <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
                             @change="getEventList()"></el-input>
                     </el-form-item>
                 </el-col>
