@@ -102,11 +102,9 @@ onMounted(async () => {
     // setCalendarView()
     isLoading.value = false
 })
-watch((() => repoUser.userType), () => {
-    if (repoUser.userInfo.id) {
-        setCalendarView()
-    }
-}, { immediate: true })
+watch((() => repoUser.userPreference), () => {
+    setCalendarView()
+}, { immediate: true, deep:true })
 
 // Methods
 async function validiateForm() {
@@ -208,9 +206,11 @@ async function getEventList() {
 }
 
 function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
+    const title =  String(event.name || '未命名')
+    const todos = '1/2'
     return {
         id: String(event.id),
-        title: String(event.name || '未命名'),
+        title: `${title}(${todos})`,
         start: String(event.startDate),
         end: String(event.endDate),
         startStr: String(event.startDate),

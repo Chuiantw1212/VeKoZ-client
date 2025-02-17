@@ -28,17 +28,17 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="時段">
-                        <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
-                            <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
+                    <el-form-item label="地點">
+                        <el-select v-model="form.location" placeholder="請選擇">
+                            <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="地點">
-                        <el-select v-model="form.location" placeholder="請選擇">
-                            <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
+                    <el-form-item label="時段">
+                        <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
+                            <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
                                 :value="item.value" />
                         </el-select>
                     </el-form-item>
