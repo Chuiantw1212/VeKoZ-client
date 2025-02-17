@@ -13,7 +13,7 @@ export interface IUser {
     // SEO使用
     name?: string,
     description?: string,
-    seoName: string,
+    seoName?: string,
 }
 
 export interface IUserPreference {

@@ -2,37 +2,45 @@
     <div class="index">
         <el-form ref="formRef" class="index__form" :class="{ 'margin--header': repoUI.isLarge }" :model="form"
             label-width="auto">
-            <el-row :gutter="20" align="middle">
-                <el-col :span="searchSpan">
+            <el-row :gutter="20" align="middle" justify="space-between">
+                <el-col :span="20">
                     <el-form-item label="搜尋">
                         <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
                             @change="getEventList()"></el-input>
                     </el-form-item>
                 </el-col>
-                <!-- 手機不可用daterange -->
-                <el-col :span="whereFieldSpan">
-                    <el-form-item label="開始日" :required="true" prop="startDate">
-                        <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
+                <el-col :span="4">
+                    <el-form-item>
+                        <el-button :icon="Filter" text>
+
+                        </el-button>
                     </el-form-item>
                 </el-col>
-                <el-col :span="whereFieldSpan">
-                    <el-form-item label="結束日" prop="endDate">
-                        <el-date-picker v-model="form.endDate" type="date" placeholder="結束日" :clearable="true" />
-                    </el-form-item>
-                </el-col>
-                <!-- <el-col :span="12">
-                    <el-form-item label="城市">
-                        城市網址參數
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="時段">
-                        <el-select placeholder="請選擇" :clearable="true" :multiple="true">
-                            <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
-                                :value="item.value" />
-                        </el-select>
-                    </el-form-item>
-                </el-col> -->
+                <el-row align="middle" justify="space-between">
+                    <el-col :span="12">
+                        <el-form-item label="開始" :required="true" prop="startDate">
+                            <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="結束" prop="endDate">
+                            <el-date-picker v-model="form.endDate" type="date" placeholder="結束日" :clearable="true" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="時段">
+                            <el-select placeholder="請選擇" :clearable="true" :multiple="true">
+                                <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
+                                    :value="item.value" />
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="地點">
+                            城市網址參數
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </el-row>
         </el-form>
         <el-row :gutter="20" class="index__eventList" :class="{ 'mt--120': !repoUI.isMedium }">
@@ -61,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { Search, } from '@element-plus/icons-vue'
+import { Filter, Search, } from '@element-plus/icons-vue'
 import type { IEvent } from '~/types/event';
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
@@ -125,10 +133,10 @@ const whereFieldSpan = ref<number>(12)
 function setSearchFormSpan() {
     repoUI.debounce(`${id.value}-form`, () => {
         searchSpan.value = 24
-        whereFieldSpan.value = 12
+        whereFieldSpan.value = 24
         if (repoUI.isSmall) {
-            searchSpan.value = 8
-            whereFieldSpan.value = 8
+            searchSpan.value = 9
+            whereFieldSpan.value = 7
         }
     })
 }
@@ -168,7 +176,7 @@ async function getEventList() {
 
 <style lang="scss" scoped>
 .index__eventList {
-    // margin-top: 172px; // form height;
+    margin-top: 60px; // form height;
 }
 
 .index__form {
@@ -178,13 +186,14 @@ async function getEventList() {
     transform: translate(-50%);
     width: calc(100vw - 40px); // -padding x2
     z-index: 1;
-    background-color: rgba(255, 255, 255, 0.5);
+    // background-color: rgba(255, 255, 255, 0.5);
+    background-color: white;
     padding: 20px;
     padding-bottom: 0px;
     // box-shadow: 0 4px 2px -2px gray;
-    // border-bottom: 1px solid lightgrey;
-    border-bottom: 1px solid lightgray;
-    max-width: 600px;
+    border-bottom: 1px solid lightgrey;
+    // border: 1px solid lightgray;
+    // max-width: 720px;
 }
 
 .margin--header {
