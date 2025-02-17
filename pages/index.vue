@@ -1,21 +1,20 @@
 <template>
-    <el-row class="index" :gutter="20">
+    <el-row class="events" :gutter="20">
         <FormSearchEvents v-if="!repoUI.isLarge" v-model="form" ref="formRef" class="form form--mobile"
             @change="getEventList()">
         </FormSearchEvents>
-        <el-col v-else :span="searchFromSize">
-            <div class="test">
-
-                <el-card class="fixedCard">
+        <el-col :span="searchFromSize">
+            <div class="cardContainer">
+                <el-card class="cardContainer__card">
                     <FormSearchEvents v-model="form" ref="formRef" class="form" @change="getEventList()">
                     </FormSearchEvents>
                 </el-card>
+                TODO: 廣告活動放這
             </div>
-            TODO: 廣告活動放這
         </el-col>
         <el-col :span="cardGroupSize">
-            <el-row :gutter="20" class="index__eventList">
-                <el-col v-for="(item) in eventList" :span="cardSize" class="index__row">
+            <el-row :gutter="20">
+                <el-col v-for="(item, index) in eventList" :span="cardSize" class="index__row">
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
@@ -134,9 +133,18 @@ async function getEventList() {
 </script>
 
 <style lang="scss" scoped>
+.events {
+    // max-height: calc(100vh - 200px);
+    // overflow-y: auto;
+}
+
+.index__eventList {
+    max-height: calc(100vh - 160px);
+}
+
 .form {
     z-index: 10;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .form--mobile {
@@ -148,17 +156,14 @@ async function getEventList() {
     border-bottom: 1px solid lightgrey;
 }
 
-.test{
-    position: relative;
-}
+.cardContainer {
+    position: fixed;
+    // width: inherit;
+    max-width: inherit;
 
-.fixedCard {
-    position: sticky;
-    max-width: 100%;
-    z-index: 10;
-    // top: 0px;
-    // left: 0px;
-    // max-width: 100%;
+    .cardContainer__card {
+        width: calc(100% - 20px);
+    }
 }
 
 .index__row {
