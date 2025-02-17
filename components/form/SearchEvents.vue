@@ -4,18 +4,16 @@
         <el-row align="middle" justify="space-between">
             <el-col :span="20">
                 <el-form-item label="搜尋">
-                    <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
-                        @change="getEventList()"></el-input>
+                    <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字"
+                        :maxlength="30"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="4">
-                <!-- <el-form-item> -->
-                <div>
+                <div class="form__btnWrap">
                     <el-button :icon="Filter" text @click="openAdvanced = !openAdvanced">
 
                     </el-button>
                 </div>
-                <!-- </el-form-item> -->
             </el-col>
             <el-row v-if="openAdvanced" align="middle" justify="space-between">
                 <el-col :span="12">
@@ -50,27 +48,29 @@
 </template>
 <script setup lang="ts">
 import { Filter, Search, } from '@element-plus/icons-vue'
-import type { IEvent } from '~/types/event';
 const emit = defineEmits(['change'])
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
-const repoEvent = useRepoEvent()
 const repoMeta = useRepoMeta()
 const openAdvanced = ref<boolean>(false)
 
 // Data
-const eventList = ref<IEvent[]>([])
-const startDate = new Date()
-const currentMonth = new Date().getMonth()
-const endDate = new Date()
-endDate.setMonth(currentMonth + 1)
 const formRef = ref()
-const form = ref({
-    keywords: '',
-    startDate: startDate,
-    endDate: endDate,
-    timeFrame: '',
-    location: '',
+const form = defineModel('modelValue', {
+    type: Object,
+    default: () => {
+        const startDate = new Date()
+        const currentMonth = new Date().getMonth()
+        const endDate = new Date()
+        endDate.setMonth(currentMonth + 1)
+        return {
+            keywords: '',
+            startDate: startDate,
+            endDate: endDate,
+            timeFrame: '',
+            location: '',
+        }
+    }
 })
 
 // Search form data
@@ -92,7 +92,6 @@ const periodOptions = ref([
 
 // Hooks
 onMounted(() => {
-    getEventList()
     getMetaSelectById()
     window.addEventListener('resize', setSearchFormSpan)
     setSearchFormSpan()
@@ -100,6 +99,9 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setSearchFormSpan)
 })
+watch(() => form.value, () => {
+    emit('change')
+}, { deep: true })
 
 // Methods
 async function getMetaSelectById() {
@@ -120,22 +122,6 @@ function setSearchFormSpan() {
     })
 }
 
-async function getEventList() {
-    const isValid = await formRef.value.validate()
-    if (!isValid) {
-        return
-    }
-
-    repoUI.debounce(`${id.value}-search`, async () => {
-        const result = await repoEvent.getEventList({
-            ...form.value,
-            isPublic: true,
-        })
-        eventList.value = result
-    }, 500)
-
-}
-
 async function validate() {
     return await formRef.value.validate()
 }
@@ -144,3 +130,11 @@ defineExpose({
     validate
 })
 </script>
+<style lang="scss" scoped>
+.form__btnWrap {
+    margin-bottom: 20px;
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+</style>

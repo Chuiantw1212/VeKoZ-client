@@ -1,8 +1,9 @@
 <template>
     <div class="index">
-        <FormSearchEvents ref="formRef" @change="getEventList()">
+        <FormSearchEvents v-model="form" ref="formRef" @change="getEventList()">
         </FormSearchEvents>
-        <el-row :gutter="20" class="index__eventList" :class="{ 'mt--120': !repoUI.isMedium }">
+        <!-- {{ eventList }} -->
+        <el-row :gutter="20" class="index__eventList" :class="{ 'mt--60': !repoUI.isMedium }">
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
                 <MoleculeVenoniaCard class="index__card">
                     <template #default>
@@ -81,11 +82,12 @@ async function getEventList() {
     }
 
     repoUI.debounce(`${id.value}-search`, async () => {
+        eventList.value = []
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result, ...result, ...result, ...result, ...result, ...result]
+        eventList.value = result
     }, 500)
 }
 
@@ -118,8 +120,8 @@ async function getEventList() {
     margin-top: 60px;
 }
 
-.mt--120 {
-    margin-top: 120px;
+.mt--60 {
+    margin-top: 60px;
 }
 
 .index__row {
