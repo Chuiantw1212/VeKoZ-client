@@ -3,15 +3,16 @@
         <FormSearchEvents v-if="!repoUI.isLarge" v-model="form" ref="formRef" class="form form--mobile"
             @change="getEventList()">
         </FormSearchEvents>
-        <el-col v-else :span="6">
+        <el-col v-else :span="searchFromSize">
             <el-card>
                 <FormSearchEvents v-model="form" ref="formRef" class="form form--desktop" @change="getEventList()">
                 </FormSearchEvents>
             </el-card>
+            TODO: 廣告活動放這
         </el-col>
-        <el-col :span="repoUI.isLarge ? 18 : 24">
+        <el-col :span="cardGroupSize">
             <el-row :gutter="20" class="index__eventList">
-                <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
+                <el-col v-for="(item) in eventList" :span="cardSize" class="index__row">
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
@@ -57,30 +58,58 @@ const form = ref({
     timeFrame: '',
     location: '',
 })
-const columnSpan = ref<number>(8)
 
 // Hooks
 onMounted(() => {
     getEventList()
-    window.addEventListener('resize', setColumnSpan)
-    setColumnSpan()
+    window.addEventListener('resize', setSearchFormSize)
+    setSearchFormSize()
+    window.addEventListener('resize', setCardGroupSize)
+    setCardGroupSize()
+    window.addEventListener('resize', setCardSize)
+    setCardSize()
 })
 onBeforeUnmount(() => {
-    window.removeEventListener('resize', setColumnSpan)
+    window.removeEventListener('resize', setCardGroupSize)
+    window.removeEventListener('resize', setCardSize)
 })
 
 // Methods
-function setColumnSpan() {
-    repoUI.debounce(`${id.value}-col`, () => {
-        columnSpan.value = 24
+const searchFromSize = ref<number>(6)
+function setSearchFormSize() {
+    repoUI.debounce(`${id.value}-searchForm`, () => {
+        searchFromSize.value = 6
+        if (repoUI.isXLarge) {
+            searchFromSize.value = 5
+        }
+    })
+}
+
+const cardGroupSize = ref<number>(6)
+function setCardGroupSize() {
+    repoUI.debounce(`${id.value}-cardGroup`, () => {
+        cardGroupSize.value = 24
+        if (repoUI.isLarge) {
+            cardGroupSize.value = 18
+        }
+        if (repoUI.isXLarge) {
+            cardGroupSize.value = 19
+        }
+    })
+}
+
+const cardSize = ref<number>(8)
+function setCardSize() {
+    repoUI.debounce(`${id.value}-card`, () => {
+        cardSize.value = 24
         if (repoUI.isSmall) {
-            columnSpan.value = 12
+            cardSize.value = 12
         }
         if (repoUI.isMedium) {
-            columnSpan.value = 12
+            cardSize.value = 12
         }
         // if (repoUI.isXXLarge) {
-        //     columnSpan.value = 6
+        //     cardSize.value = 6
         // }
     })
 }
@@ -96,11 +125,9 @@ async function getEventList() {
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result,...result,...result,...result]
+        eventList.value = [...result, ...result, ...result, ...result]
     }, 500)
 }
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -118,12 +145,8 @@ async function getEventList() {
     border-bottom: 1px solid lightgrey;
 }
 
-.margin--header {
-    // margin-top: 60px;
-}
-
-.mt--60 {
-    // margin-top: 60px;
+.form--desktop {
+    // position: fixed;
 }
 
 .index__row {

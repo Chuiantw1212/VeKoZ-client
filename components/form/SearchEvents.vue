@@ -124,6 +124,9 @@ function setSearchFormSpan() {
         if (repoUI.isSmall) {
             whereFieldSpan.value = 12
         }
+        if (repoUI.isMedium) {
+            whereFieldSpan.value = 12
+        }
         if (repoUI.isLarge) {
             whereFieldSpan.value = 24
         }
