@@ -13,10 +13,12 @@ export interface IUser {
     // SEO使用
     name?: string,
     description?: string,
+    seoName: string,
 }
 
 export interface IUserPreference {
     [key: string]: any,
+    // publicInfos?: string[], // 這邊可能會限制講者開放的資訊  
     uid?: string,
     id?: string,
     userType?: UserType,
