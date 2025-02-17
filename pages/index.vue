@@ -4,10 +4,13 @@
             @change="getEventList()">
         </FormSearchEvents>
         <el-col v-else :span="searchFromSize">
-            <el-card>
-                <FormSearchEvents v-model="form" ref="formRef" class="form form--desktop" @change="getEventList()">
-                </FormSearchEvents>
-            </el-card>
+            <div class="test">
+
+                <el-card class="fixedCard">
+                    <FormSearchEvents v-model="form" ref="formRef" class="form" @change="getEventList()">
+                    </FormSearchEvents>
+                </el-card>
+            </div>
             TODO: 廣告活動放這
         </el-col>
         <el-col :span="cardGroupSize">
@@ -145,8 +148,17 @@ async function getEventList() {
     border-bottom: 1px solid lightgrey;
 }
 
-.form--desktop {
-    // position: fixed;
+.test{
+    position: relative;
+}
+
+.fixedCard {
+    position: sticky;
+    max-width: 100%;
+    z-index: 10;
+    // top: 0px;
+    // left: 0px;
+    // max-width: 100%;
 }
 
 .index__row {
