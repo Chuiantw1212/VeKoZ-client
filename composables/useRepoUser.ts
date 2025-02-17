@@ -9,13 +9,13 @@ export default defineStore('user', () => {
     const router = useRouter()
     // const userInfo = ref<IUser>()
     const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
-    const userInfo = ref<IUser>({
-        preference: {
-            event: {
+    const userInfo = ref<IUser>({})
+    const userPreference = ref<IUserPreference>({
+        event: {
 
-            },
-            userType: ''
-        }
+        },
+        userType: '',
+        isFullScreen: false,
     })
     /**
      * 抓用戶自己的資料專用
@@ -25,7 +25,9 @@ export default defineStore('user', () => {
         const response = await defaultApi.authRequest(`/user`, {
             method: 'GET',
         })
-        userInfo.value = await response.json() as IUser
+        const user = await response.json() as IUser
+        userInfo.value = user
+        userPreference.value = user.preference as IUserPreference
         return userInfo.value
     }
     async function setUserType(newUserType: UserType) {
@@ -74,17 +76,17 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
-        if (!userInfo.value.preference || !userInfo.value.id) {
+        if (!userPreference.value || !userInfo.value.id) {
             return
         }
         if (newValue === Object(newValue)) {
-            const field = userInfo.value.preference[fieldName]
+            const field = userPreference.value[fieldName]
             Object.assign(field, newValue)
         } else {
-            userInfo.value.preference[fieldName] = newValue
+            userPreference.value[fieldName] = newValue
         }
         const newPatch: { [key: string]: any } = {}
-        newPatch[fieldName] = userInfo.value.preference[fieldName]
+        newPatch[fieldName] = userPreference.value[fieldName]
         const response = await defaultApi.authRequest(`/user/preference`, {
             method: 'PATCH',
             body: newPatch
@@ -101,6 +103,7 @@ export default defineStore('user', () => {
     return {
         userType,
         userInfo,
+        userPreference,
         getUser,
         setUserType,
         deleteUser,

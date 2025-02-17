@@ -13,16 +13,25 @@
         <div v-if="repoUser.userType === 'attendee' && repoUI.isLarge" class="attendee__menu">
             <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
         </div>
-        <NuxtLink v-if="repoUser.userType" to="/settings">
-            <el-menu-item index="1" class="headerMenu__firstItem">
-                <OrganismUserAuth></OrganismUserAuth>
+        <div class="menu__endGroup">
+            <el-menu-item>
+                <el-switch
+                v-model="isFullScreen"
+                active-text="全螢幕"
+                @change="patchUserPreference()"
+                />
             </el-menu-item>
-        </NuxtLink>
-        <NuxtLink v-else to="/signin">
-            <el-menu-item class="headerMenu__firstItem">
-                登入
-            </el-menu-item>
-        </NuxtLink>
+            <NuxtLink v-if="repoUser.userType" to="/settings">
+                <el-menu-item index="1" class="headerMenu__firstItem">
+                    <OrganismUserAuth></OrganismUserAuth>
+                </el-menu-item>
+            </NuxtLink>
+            <NuxtLink v-else to="/signin">
+                <el-menu-item class="headerMenu__firstItem">
+                    登入
+                </el-menu-item>
+            </NuxtLink>
+        </div>
     </el-menu>
 </template>
 
@@ -31,11 +40,21 @@ import { getAuth, signOut, } from "firebase/auth"
 import { MoleculeAttendeeMenuItems } from '#components'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
+const isFullScreen = ref<boolean>(false)
 
 // Hooks
 const router = useRouter()
+watch(()=>repoUser.userPreference.isFullScreen,(newValue)=>{
+    if(newValue){
+        isFullScreen.value = true
+    }
+})
 
 // Methods
+function patchUserPreference(){
+    repoUser.patchUserPreference('isFullScreen', isFullScreen.value)
+}
+
 async function handleSignOut() {
     const auth = getAuth()
     await signOut(auth)
@@ -59,6 +78,11 @@ async function handleSignOut() {
 
     .attendee__menu {
         display: flex;
+    }
+
+    .menu__endGroup{
+        display:flex;
+        align-items: center;
     }
 }
 </style>

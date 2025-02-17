@@ -22,6 +22,7 @@ export interface IUserPreference {
     uid?: string,
     id?: string,
     userType?: UserType,
+    isFullScreen?: boolean,
     event: IPreferenceEvent
 }
 

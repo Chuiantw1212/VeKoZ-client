@@ -1,9 +1,8 @@
 <template>
     <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">  
-        <!-- v-if="repoUser.userType === 'host' || repoUI.isLarge" -->
         <HeaderMenu></HeaderMenu>
     </el-header>
-    <el-container class="defaultLayout" :class="{'defaultLayout__attendee': true}">
+    <el-container class="defaultLayout" :class="{'defaultLayout__isStandard': !repoUser.userPreference.isFullScreen}">
         <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
             <SideMenu></SideMenu>
         </el-aside>
@@ -34,8 +33,8 @@ const repoUI = useRepoUI()
     }
 }
 
-.defaultLayout__attendee{
-    max-width: 1280px; // ?
+.defaultLayout__isStandard {
+    max-width: 1280px;
     justify-content: center;
     margin: auto;
 }
