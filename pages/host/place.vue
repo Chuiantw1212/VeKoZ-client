@@ -1,11 +1,12 @@
 <template>
   <div class="venonia-header">
     <h1>地點管理</h1>
-    <ElButton @click="openNewDialog()">新增空間</ElButton>
+    <ElButton @click="openNewDialog()">新增地點</ElButton>
   </div>
-  <br />
+  <p>等待後臺開發，再行推廣空間的畫面。</p>
+  <!-- <h2 content-position="left">常用地點</h2> -->
   <el-table :data="tableItems" style="width: 100%">
-    <el-table-column prop="name" label="空間名稱" />
+    <el-table-column prop="name" label="地點名稱" />
     <el-table-column prop="address" label="地址" />
     <el-table-column prop="description" label="描述" />
     <el-table-column fixed="right" label="功能">
@@ -17,6 +18,8 @@
       </template>
     </el-table-column>
   </el-table>
+  <!-- <h2 content-position="left">擁有空間</h2>
+  TODO：等待後台開發。 -->
 
   <el-dialog v-model="placeDialog.visibility" title="空間設定" class="event__template">
     <FormPlace v-if="placeDialog.visibility" v-model="form" :mode="placeDialog.mode">
