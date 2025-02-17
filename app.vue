@@ -26,6 +26,12 @@ const repoUI = useRepoUI()
 </script>
 <style lang="scss" scoped>
 .defaultLayout {
+    font-family: "Noto Sans TC", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
     justify-content: center;
 
     .defaultLayout__aside {
