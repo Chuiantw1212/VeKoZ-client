@@ -6,19 +6,19 @@
                 <!-- v-if="repoUser.userType === 'host' || repoUI.isLarge" -->
                 <HeaderMenu></HeaderMenu>
             </el-header>
-            <el-container>
+            <el-container class="defaultLayout__main">
                 <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
                     <SideMenu></SideMenu>
                 </el-aside>
                 <el-container>
-                    <el-main class="defaultLayout__main">
+                    <el-main >
                         <NuxtPage />
                     </el-main>
-                    <el-footer v-if="repoUser.userType !== 'host' && !repoUI.isLarge" class="defaultLayout__footer">
-                        <OrganismAttendeeMenu></OrganismAttendeeMenu>
-                    </el-footer>
                 </el-container>
             </el-container>
+            <el-footer v-if="repoUser.userType !== 'host' && !repoUI.isLarge" class="defaultLayout__footer">
+                <OrganismAttendeeMenu></OrganismAttendeeMenu>
+            </el-footer>
         </el-container>
     </div>
 </template>
@@ -36,12 +36,16 @@ const repoUI = useRepoUI()
         width: fit-content;
     }
 
+    .defaultLayout__main{
+        max-width: 1280px; // ?
+        margin:auto;
+    }
+
     .defaultLayout__footer {
         position: fixed;
         bottom: 0px;
         width: 100vw;
         padding: 0px;
-        // background-color: red;
     }
 }
 </style>

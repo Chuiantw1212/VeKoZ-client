@@ -29,9 +29,9 @@ const props = defineProps({
         type: Array,
         default: function () {
             return [
-                'undo',
-                'redo',
-                '|',
+                // 'undo',
+                // 'redo',
+                // '|',
                 'heading',
                 '|',
                 'fontFamily',

@@ -1,19 +1,20 @@
 <template>
-    <el-row class="events" :gutter="20">
+    <el-row class="events" :gutter="8">
         <FormSearchEvents v-if="!repoUI.isLarge" v-model="form" ref="formRef" class="form form--mobile"
             @change="getEventList()">
         </FormSearchEvents>
-        <el-col :span="searchFromSize">
+        <el-col v-else :span="searchFromSize">
             <div class="cardContainer">
                 <el-card class="cardContainer__card">
                     <FormSearchEvents v-model="form" ref="formRef" class="form" @change="getEventList()">
                     </FormSearchEvents>
                 </el-card>
-                TODO: 廣告活動放這
+                <br />
+                廣告合作徵求中
             </div>
         </el-col>
         <el-col :span="cardGroupSize">
-            <el-row :gutter="20">
+            <el-row :gutter="8">
                 <el-col v-for="(item, index) in eventList" :span="cardSize" class="index__row">
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
@@ -82,8 +83,11 @@ function setSearchFormSize() {
     repoUI.debounce(`${id.value}-searchForm`, () => {
         searchFromSize.value = 6
         if (repoUI.isXLarge) {
-            searchFromSize.value = 5
+            // searchFromSize.value = 5
         }
+        // if (repoUI.isXXLarge) {
+        //     searchFromSize.value = 4.5
+        // }
     })
 }
 
@@ -95,8 +99,11 @@ function setCardGroupSize() {
             cardGroupSize.value = 18
         }
         if (repoUI.isXLarge) {
-            cardGroupSize.value = 19
+            // cardGroupSize.value = 19
         }
+        // if (repoUI.isXXLarge) {
+        //     cardGroupSize.value = 19.5
+        // }
     })
 }
 
@@ -110,9 +117,15 @@ function setCardSize() {
         if (repoUI.isMedium) {
             cardSize.value = 12
         }
-        // if (repoUI.isXXLarge) {
-        //     cardSize.value = 6
-        // }
+        if (repoUI.isLarge) {
+            cardSize.value = 12
+        }
+        if (repoUI.isXLarge) {
+            cardSize.value = 8
+        }
+        if (repoUI.isXXLarge) {
+            // cardSize.value = 6
+        }
     })
 }
 async function getEventList() {
@@ -144,7 +157,6 @@ async function getEventList() {
 
 .form {
     z-index: 10;
-    background-color: rgba(255, 255, 255, 0.9);
 }
 
 .form--mobile {
@@ -153,21 +165,25 @@ async function getEventList() {
     top: 0px;
     left: 0px;
     padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
     border-bottom: 1px solid lightgrey;
 }
 
 .cardContainer {
     position: fixed;
+    width: 22vw;
+    max-width: 295px;
     // width: inherit;
-    max-width: inherit;
+    // max-width: inherit;
 
     .cardContainer__card {
-        width: calc(100% - 20px);
+        width: calc(100%);
+        z-index: 20;
     }
 }
 
 .index__row {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .footer__offer {
