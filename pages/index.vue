@@ -1,31 +1,40 @@
 <template>
-    <div class="index">
-        <FormSearchEvents v-model="form" ref="formRef" @change="getEventList()">
+    <el-row class="index" :gutter="20">
+        <FormSearchEvents v-if="!repoUI.isLarge" v-model="form" ref="formRef" class="form form--mobile"
+            @change="getEventList()">
         </FormSearchEvents>
+        <el-col v-else :span="6">
+            <el-card>
+                <FormSearchEvents v-model="form" ref="formRef" class="form form--desktop" @change="getEventList()">
+                </FormSearchEvents>
+            </el-card>
+        </el-col>
+        <el-col :span="repoUI.isLarge ? 18 : 24">
+            <el-row :gutter="20" class="index__eventList">
+                <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
+                    <MoleculeVenoniaCard class="index__card">
+                        <template #default>
+                            <NuxtLink :to="`/event/${item.id}`">
+                                <img :src="item.image" style="width: 100%" />
+                            </NuxtLink>
+                        </template>
+                        <template #footer>
+                            <span>
+                                台北市
+                            </span>
+                            <span>
+                                {{ item.name }}
+                            </span>
+                            <span class="footer__offer">
+                                NTD 250
+                            </span>
+                        </template>
+                    </MoleculeVenoniaCard>
+                </el-col>
+            </el-row>
+        </el-col>
         <!-- {{ eventList }} -->
-        <el-row :gutter="20" class="index__eventList" :class="{ 'mt--60': !repoUI.isMedium }">
-            <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
-                <MoleculeVenoniaCard class="index__card">
-                    <template #default>
-                        <NuxtLink :to="`/event/${item.id}`">
-                            <img :src="item.image" style="width: 100%" />
-                        </NuxtLink>
-                    </template>
-                    <template #footer>
-                        <span>
-                            台北市
-                        </span>
-                        <span>
-                            {{ item.name }}
-                        </span>
-                        <span class="footer__offer">
-                            NTD 250
-                        </span>
-                    </template>
-                </MoleculeVenoniaCard>
-            </el-col>
-        </el-row>
-    </div>
+    </el-row>
 </template>
 
 <script setup lang="ts">
@@ -95,33 +104,26 @@ async function getEventList() {
 </script>
 
 <style lang="scss" scoped>
-.index__eventList {
-    margin-top: 60px; // form height;
+.form {
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 1);
 }
 
-.index__form {
+.form--mobile {
+    width: calc(100vw - 40px);
     position: fixed;
     top: 0px;
-    left: 50%;
-    transform: translate(-50%);
-    width: calc(100vw - 40px); // -padding x2
-    z-index: 1;
-    // background-color: rgba(255, 255, 255, 0.5);
-    background-color: white;
+    left: 0px;
     padding: 20px;
-    padding-bottom: 0px;
-    // box-shadow: 0 4px 2px -2px gray;
     border-bottom: 1px solid lightgrey;
-    // border: 1px solid lightgray;
-    // max-width: 720px;
 }
 
 .margin--header {
-    margin-top: 60px;
+    // margin-top: 60px;
 }
 
 .mt--60 {
-    margin-top: 60px;
+    // margin-top: 60px;
 }
 
 .index__row {

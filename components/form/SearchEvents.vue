@@ -1,32 +1,33 @@
 <template>
     <el-form ref="formRef" class="index__form" :class="{ 'margin--header': repoUI.isLarge }" :model="form"
-        label-width="auto">
+        :rules="searchFormRules" label-width="auto">
         <el-row align="middle" justify="space-between">
-            <el-col :span="20">
+            <el-col :span="repoUI.isLarge ? 24 : 20">
                 <el-form-item label="搜尋">
                     <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字"
                         :maxlength="30"></el-input>
                 </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col v-if="!repoUI.isLarge" :span="4">
                 <div class="form__btnWrap">
                     <el-button :icon="Filter" text @click="openAdvanced = !openAdvanced">
 
                     </el-button>
                 </div>
             </el-col>
-            <el-row v-if="openAdvanced" align="middle" justify="space-between">
-                <el-col :span="12">
-                    <el-form-item label="開始" :required="true" prop="startDate">
+            <!-- <el-row v-if="openAdvanced" align="middle" justify="space-between"> -->
+            <template v-if="openAdvanced">
+                <el-col :span="whereFieldSpan">
+                    <el-form-item label="開始" prop="startDate">
                         <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="whereFieldSpan">
                     <el-form-item label="結束" prop="endDate">
                         <el-date-picker v-model="form.endDate" type="date" placeholder="結束日" :clearable="true" />
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="whereFieldSpan">
                     <el-form-item label="時段">
                         <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
@@ -34,7 +35,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="whereFieldSpan">
                     <el-form-item label="地點">
                         <el-select v-model="form.location" placeholder="請選擇">
                             <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
@@ -42,7 +43,8 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </template>
+            <!-- </el-row> -->
         </el-row>
     </el-form>
 </template>
@@ -52,7 +54,7 @@ const emit = defineEmits(['change'])
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
 const repoMeta = useRepoMeta()
-const openAdvanced = ref<boolean>(false)
+const openAdvanced = ref<boolean>(true)
 
 // Data
 const formRef = ref()
@@ -90,6 +92,10 @@ const periodOptions = ref([
     }
 ])
 
+const searchFormRules = {
+    startDate: { required: true, message: '開始為必填' }
+}
+
 // Hooks
 onMounted(() => {
     getMetaSelectById()
@@ -109,15 +115,17 @@ async function getMetaSelectById() {
     taiwanPlaces.value = result
 }
 
-const searchSpan = ref<number>(24)
+// const searchSpan = ref<number>(24)
 const whereFieldSpan = ref<number>(12)
 function setSearchFormSpan() {
     repoUI.debounce(`${id.value}-form`, () => {
-        searchSpan.value = 24
+        // searchSpan.value = 24
         whereFieldSpan.value = 24
         if (repoUI.isSmall) {
-            searchSpan.value = 9
-            whereFieldSpan.value = 7
+            whereFieldSpan.value = 12
+        }
+        if (repoUI.isLarge) {
+            whereFieldSpan.value = 24
         }
     })
 }
@@ -131,6 +139,11 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
+.index__form {
+    width: 100%;
+    // max-width: 720px;
+}
+
 .form__btnWrap {
     margin-bottom: 20px;
     margin-left: auto;
