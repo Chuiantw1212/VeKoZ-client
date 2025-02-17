@@ -76,12 +76,12 @@ function setColumnSpan() {
         if (repoUI.isSmall) {
             columnSpan.value = 12
         }
-        if (repoUI.isXLarge) {
-            columnSpan.value = 8
+        if (repoUI.isMedium) {
+            columnSpan.value = 12
         }
-        if (repoUI.isXXLarge) {
-            columnSpan.value = 6
-        }
+        // if (repoUI.isXXLarge) {
+        //     columnSpan.value = 6
+        // }
     })
 }
 async function getEventList() {
@@ -96,7 +96,7 @@ async function getEventList() {
             ...form.value,
             isPublic: true,
         })
-        eventList.value = result
+        eventList.value = [...result,...result,...result,...result]
     }, 500)
 }
 
