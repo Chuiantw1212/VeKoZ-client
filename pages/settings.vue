@@ -1,6 +1,14 @@
 <template>
     <el-row class="user" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
+            <div class="user__btnGroup">
+                <el-button class="btnGroup__btn">密碼變更</el-button>
+                <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
+                    @click="repoUser.setUserType('host')">切換為主辦方</el-button>
+                    <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
+                    @click="repoUser.setUserType('attendee')">切換為一般用戶</el-button>
+                <el-button class="btnGroup__btn">登出</el-button>
+            </div>
             <el-card class="user__card">
                 <el-form label-width="auto">
                     <el-row justify="center">
@@ -77,11 +85,6 @@
             <el-divider>
                 系統功能
             </el-divider>
-            <div class="user__btnGroup">
-                <el-button class="btnGroup__btn">密碼變更</el-button>
-                <el-button class="btnGroup__btn">切換為主辦方</el-button>
-                <el-button class="btnGroup__btn">登出</el-button>
-            </div>
             <div class="user__delete">
                 <el-button :style="{ 'width': '100%' }" type="danger">帳號註銷</el-button>
             </div>
@@ -97,6 +100,7 @@
 import { StarFilled } from '@element-plus/icons-vue';
 import type { IEvent } from '~/types/event';
 import type { IUser } from '~/types/user';
+const repoUser = useRepoUser()
 const eventList = ref<IEvent[]>([])
 const id = ref<string>(crypto.randomUUID())
 const userForm = ref<IUser>({
@@ -152,7 +156,7 @@ async function getEventList() {
     padding-bottom: 60px; // footer menu height
 
     .user__card {
-        margin-bottom: 20px;
+        margin-top: 20px;
 
         .card__avatar {
             display: block;

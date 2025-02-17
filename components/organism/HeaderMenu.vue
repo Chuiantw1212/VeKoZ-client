@@ -69,6 +69,10 @@ async function handleSignOut() {
 <style lang="scss" scoped>
 .headerMenu {
     justify-content: space-between;
+    position: fixed;
+    width: calc(100vw - 40px); // -padding x 2
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.4);
 
     .headerMenu__logo {
         margin: 0px;

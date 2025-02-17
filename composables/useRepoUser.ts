@@ -35,11 +35,13 @@ export default defineStore('user', () => {
             patchUserPreference('userType', newUserType)
         }
         if (newUserType === 'host') {
-            if (!route.path.includes('host')) {
+            if (route.name === 'signIn') {
                 router.push({
                     name: 'host-event'
                 })
             }
+            // if (!route.path.includes('host')) {
+            // }
         }
         if (newUserType === 'attendee') {
             if (route.name === 'signIn') {
