@@ -112,7 +112,7 @@ function setDefaultEndTime() {
 
 function convertIsoToDisplayTime(isoString: string, gap = 0) {
     const currentDate = new Date(isoString)
-    let hour = currentDate.getHours() + gap
+    let hour = currentDate.getHours()
     const minute = currentDate.getMinutes()
     let base = minute / 15
     base = Math.ceil(base)

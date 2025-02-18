@@ -230,16 +230,37 @@ async function getEventList() {
 
 function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
     const title = String(event.name || '未命名')
-    const todos = '1/2'
-    return {
+    // const todos = '1/2'
+    /**
+     * Event Object
+     * https://fullcalendar.io/docs/event-object
+     */
+    const iFullCalendarEvent: IFullCalendarEvent = {
         id: String(event.id),
-        title: `${title}(${todos})`,
-        start: String(event.startDate),
-        end: String(event.endDate),
-        startStr: String(event.startDate),
-        endStr: String(event.endDate),
+        title: `${title}`,
+        start: '',
+        end: '',
+        startStr: '',
+        endStr: '',
         editable,
     }
+    const startDate = event.startDate
+    if (startDate instanceof Date) {
+        iFullCalendarEvent.start = startDate
+        iFullCalendarEvent.startStr = startDate.toISOString()
+    } else {
+        iFullCalendarEvent.start = new Date(String(startDate))
+        iFullCalendarEvent.startStr = startDate
+    }
+    const endDate = event.endDate
+    if (endDate instanceof Date) {
+        iFullCalendarEvent.end = endDate
+        iFullCalendarEvent.startStr = endDate.toISOString()
+    } else {
+        iFullCalendarEvent.end = new Date(String(endDate))
+        iFullCalendarEvent.endStr = endDate
+    }
+    return iFullCalendarEvent
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
