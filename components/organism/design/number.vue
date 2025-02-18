@@ -2,7 +2,7 @@
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
         <el-input-number v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
-            :disabled="disabled"></el-input-number>
+            :disabled="disabled" :controls-position="'right'"></el-input-number>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -13,7 +13,7 @@
         </template>
         <template v-slot:default>
             <el-input-number :placeholder="placeholder" v-model="customDesign.mutable.value"
-                :disabled="disabled"></el-input-number>
+                :controls-position="'right'" :disabled="disabled"></el-input-number>
         </template>
     </MoleculeDesignToolbar>
 </template>

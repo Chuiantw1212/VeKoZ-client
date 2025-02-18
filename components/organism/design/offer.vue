@@ -4,16 +4,16 @@
         <div v-if="customDesign.mutable" class="offerList">
             <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                 <template v-if="!disabled">
-                    <el-input class="offer__name" placeholder="票券名稱" v-model="offer.name" :disabled="disabled"
+                    <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
-                        :disabled="disabled">
+                        :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
                         </template>
                     </el-input-number>
                     <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                        :disabled="disabled">
+                        :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>元</span>
                         </template>
@@ -30,10 +30,10 @@
                     </el-button>
                 </template>
                 <template v-if="disabled">
-                    <el-input placeholder="票券名稱" v-model="offer.name" :disabled="true" :maxlength="30"
+                    <el-input placeholder="票券名" v-model="offer.name" :disabled="true" :maxlength="30"
                         :show-word-limit="true"></el-input>
-                    <el-input placeholder="數量" :disabled="true"></el-input>
-                    <el-input placeholder="票價" :disabled="true"></el-input>
+                    <el-input placeholder="數量" :disabled="true" controls-position="right"></el-input>
+                    <el-input placeholder="票價" :disabled="true" controls-position="right"></el-input>
                 </template>
             </div>
         </div>
@@ -48,16 +48,16 @@
         <template v-slot:default>
             <div class="offerList">
                 <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
-                    <el-input v-if="!disabled" class="offer__name" placeholder="票券名稱" v-model="offer.name"
+                    <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
                         :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
-                        :disabled="disabled">
+                        :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
                         </template>
                     </el-input-number>
                     <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                        :disabled="disabled">
+                        :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>元</span>
                         </template>
