@@ -25,9 +25,10 @@ export interface ITemplateDesign {
         // 線下地點
         locationName?: string,
         locationAddress?: string,
+        locatoinRegion?: string,
         // 線上地點
-        name?: string,
-        url?: string,
+        virtualName?: string,
+        virtualUrl?: string,
         // 票券
         offers?: IOffer[]
     },

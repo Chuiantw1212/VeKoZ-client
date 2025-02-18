@@ -106,8 +106,9 @@ function setLocationAddress(locationName: string) {
             return item.name === locationName
         })
         if (selectedItem) {
-            if (customDesign.value) {
+            if (customDesign.value.mutable) {
                 customDesign.value.mutable.locationAddress = selectedItem.address
+                customDesign.value.mutable.locatoinRegion = selectedItem.addressRegion
             }
         }
     }

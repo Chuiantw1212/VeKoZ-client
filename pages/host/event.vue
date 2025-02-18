@@ -26,6 +26,9 @@
             <template #header>
                 <el-text size="large">
                     活動編輯
+                    <template v-if="currentEvent">
+                        ({{ currentEvent.id }})
+                    </template>
                 </el-text>
             </template>
             <template #headerUI>
@@ -104,7 +107,7 @@ onMounted(async () => {
 })
 watch((() => repoUser.userPreference), () => {
     setCalendarView()
-}, { immediate: true, deep:true })
+}, { immediate: true, deep: true })
 
 // Methods
 async function validiateForm() {
@@ -206,7 +209,7 @@ async function getEventList() {
 }
 
 function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
-    const title =  String(event.name || '未命名')
+    const title = String(event.name || '未命名')
     const todos = '1/2'
     return {
         id: String(event.id),
@@ -250,9 +253,11 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     currentEvent.value = eventClickInfo.event
+    isLoading.value = true
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     dialogTemplate.value.id = eventId // 用這行刪除
     Object.assign(dialogTemplate.value, eventTemplate)
+    isLoading.value = false
     eventDialogIsOpen.value = true
 }
 
