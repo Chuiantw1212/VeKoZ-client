@@ -57,8 +57,14 @@ const props = defineProps({
     }
 })
 
-// 附加預設值
-onMounted(() => {
+// 觸發更新
+watch(() => customDesign.value, (newValue) => {
+    setDefaultValue()
+    handleChange(newValue)
+}, { deep: true })
+
+// methods
+function setDefaultValue() {
     if (customDesign.value.mutable) {
         return
     }
@@ -70,14 +76,8 @@ onMounted(() => {
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
-})
+}
 
-// 觸發更新
-watch(() => customDesign.value, (newValue) => {
-    handleChange(newValue)
-}, { deep: true })
-
-// methods
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {

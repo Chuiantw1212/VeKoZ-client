@@ -85,9 +85,15 @@ const customDesign = computed({
     }
 })
 
-// 附加預設值
+// 觸發更新
 watch(() => customDesign.value, (newValue) => {
-    if (newValue.mutable) {
+    setDefaultValue()
+    handleChange(newValue)
+}, { deep: true })
+
+// methods
+function setDefaultValue() {
+    if (customDesign.value?.mutable) {
         return
     }
     const defaultValue = {
@@ -96,18 +102,10 @@ watch(() => customDesign.value, (newValue) => {
             label: '',
         }
     }
-    const mergedItem = Object.assign(defaultValue, newValue)
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
+}
 
-})
-
-
-// 觸發更新
-watch(() => customDesign.value, (newValue) => {
-    handleChange(newValue)
-}, { deep: true })
-
-// methods
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {

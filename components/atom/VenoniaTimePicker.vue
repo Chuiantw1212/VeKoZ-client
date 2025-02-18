@@ -50,16 +50,23 @@ function setEndDate() {
 }
 
 function setDiaplyTime() {
+    // console.log('modelValue.value', modelValue.value)
     const startDate = modelValue.value[0] as any
-    if (startDate instanceof Date) {
+    if (!startDate) {
+        setDefaultStarTime()
+    }
+    else if (startDate instanceof Date) {
         displayStart.value = convertIsoToDisplayTime(startDate.toISOString())
     } else {
         const startTime = String(modelValue.value[0])
         displayStart.value = convertIsoToDisplayTime(startTime)
     }
+    // console.log('displayStart.value', displayStart.value)
 
     const endDate = modelValue.value[1] as any
-    if (endDate instanceof Date) {
+    if (!endDate) {
+        setDefaultEndTime()
+    } else if (endDate instanceof Date) {
         displayEnd.value = convertIsoToDisplayTime(endDate.toISOString())
     } else {
         const endTime = String(modelValue.value[1])
@@ -67,42 +74,43 @@ function setDiaplyTime() {
     }
 }
 
-function setDefaultTime() {
-    if (!modelValue.value[0]) {
-        const currentDate = new Date()
-        let hour = currentDate.getHours()
-        const minute = currentDate.getMinutes()
-        let base = minute / 15
-        base = Math.ceil(base)
-        if (base === 4) {
-            hour += 1
-            base = 0
-        }
-        let hourString = String(hour).padStart(2, '0')
-        const minuteString = String(base * 15).padStart(2, '0')
-        displayStart.value = `${hourString}:${minuteString}`
-        currentDate.setHours(hour)
-        currentDate.setMinutes(base * 15)
-        modelValue.value[0] = currentDate.toISOString()
+function setDefaultStarTime() {
+    const currentDate = new Date()
+    let hour = currentDate.getHours()
+    const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
     }
-    if (!modelValue.value[1]) {
-        const currentDate = new Date()
-        let hour = currentDate.getHours() + 1
-        const minute = currentDate.getMinutes()
-        let base = minute / 15
-        base = Math.ceil(base)
-        if (base === 4) {
-            hour += 1
-            base = 0
-        }
-        let hourString = String(hour).padStart(2, '0')
-        const minuteString = String(base * 15).padStart(2, '0')
-        displayEnd.value = `${hourString}:${minuteString}`
-        currentDate.setHours(hour)
-        currentDate.setMinutes(base * 15)
-        modelValue.value[1] = currentDate.toISOString()
-    }
+    let hourString = String(hour).padStart(2, '0')
+    const minuteString = String(base * 15).padStart(2, '0')
+    displayStart.value = `${hourString}:${minuteString}`
+    currentDate.setHours(hour)
+    currentDate.setMinutes(base * 15)
+    modelValue.value[0] = currentDate.toISOString()
 }
+
+function setDefaultEndTime() {
+    const currentDate = new Date()
+    let hour = currentDate.getHours() + 1
+    const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    let hourString = String(hour).padStart(2, '0')
+    const minuteString = String(base * 15).padStart(2, '0')
+    displayEnd.value = `${hourString}:${minuteString}`
+    currentDate.setHours(hour)
+    currentDate.setMinutes(base * 15)
+    modelValue.value[1] = currentDate.toISOString()
+}
+
+
 
 function convertIsoToDisplayTime(isoString: string) {
     const currentDate = new Date(isoString)
@@ -137,8 +145,8 @@ function setHours() {
 
 onMounted(() => {
     setHours()
-    // setDiaplyTime()
     // setDefaultTime()
+    // setDiaplyTime()
 })
 </script>
 <style lang="scss" scoped>

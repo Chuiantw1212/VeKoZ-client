@@ -78,8 +78,21 @@ const props = defineProps({
 const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
-// 附加預設值
-onMounted(() => {
+watch(() => props.organizationId, (newValue) => {
+    getOrganizationMemberList(newValue)
+}, { immediate: true })
+
+watch(() => customDesign.value, (newValue) => {
+    setDefaultValue()
+    handleChange(newValue)
+}, { deep: true })
+
+const editPlaceHolder = computed(() => {
+    return props.organizationId ? '請選擇現有組織成員' : '請先選擇組織'
+})
+
+// methods
+function setDefaultValue() {
     if (customDesign.value.mutable) {
         return
     }
@@ -91,22 +104,8 @@ onMounted(() => {
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
-})
+}
 
-watch(() => props.organizationId, (newValue) => {
-    getOrganizationMemberList(newValue)
-}, { immediate: true })
-
-// 觸發更新
-watch(() => customDesign.value, (newValue) => {
-    handleChange(newValue)
-}, { deep: true })
-
-const editPlaceHolder = computed(() => {
-    return props.organizationId ? '請選擇現有組織成員' : '請先選擇組織'
-})
-
-// methods
 async function handleChange(templateDesign: any) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {

@@ -1,6 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <!-- {{ customDesign }} -->
+    <!-- customDesign: {{ customDesign }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
         <div class="dateTimeRange">
@@ -73,9 +73,16 @@ const props = defineProps({
     }
 })
 
-// 附加預設值
-onMounted(() => {
+// 觸發更新
+watch(() => customDesign.value, (newValue) => {
+    setDefaultValue()
+    handleChange(newValue)
+}, { deep: true })
+
+// methods
+function setDefaultValue() {
     if (customDesign.value?.mutable) {
+        // 防止無限迴圈
         return
     }
     delete customDesign.value.mutable // IMPORTANT: 刪掉會有不明的錯誤
@@ -92,66 +99,60 @@ onMounted(() => {
         alert('元件初始化失敗！') // 偵測不明的錯誤
     }
     customDesign.value = mergedItem
-})
+}
 
-// 觸發更新
-watch(() => customDesign.value, (newValue) => {
-    handleChange(newValue)
-}, { deep: true })
-
-// methods
 function setDefaultTime() {
     if (!customDesign.value.mutable) {
         return
     }
-    // get current
-    const newYear = date.value.getFullYear()
-    const newMonth = date.value.getMonth()
-    const newDate = date.value.getDate()
+    // // get current
+    // const newYear = date.value.getFullYear()
+    // const newMonth = date.value.getMonth()
+    // const newDate = date.value.getDate()
 
-    let newStartDate: Date = new Date()
-    let newEndDate: Date = new Date()
-    const dates: string[] = customDesign.value.mutable.value
-    if (!dates) {
-        newStartDate.setHours(0)
-        newStartDate.setMinutes(0)
-        newStartDate.setSeconds(0)
+    // let newStartDate: Date = new Date()
+    // let newEndDate: Date = new Date()
+    // const dates: string[] = customDesign.value.mutable.value
+    // if (!dates) {
+    //     newStartDate.setHours(0)
+    //     newStartDate.setMinutes(0)
+    //     newStartDate.setSeconds(0)
 
-        newEndDate.setHours(23)
-        newEndDate.setMinutes(0)
-        newEndDate.setSeconds(0)
-        customDesign.value.mutable.value = [newStartDate, newEndDate]
-        return
-    }
+    //     newEndDate.setHours(23)
+    //     newEndDate.setMinutes(0)
+    //     newEndDate.setSeconds(0)
+    //     customDesign.value.mutable.value = [newStartDate, newEndDate]
+    //     return
+    // }
 
-    // set startDate
-    if (dates[0]) {
-        const oldStartDate = dates[0] as any
-        if (oldStartDate instanceof Date) {
-            newStartDate = oldStartDate
-        } else {
-            newStartDate = new Date(dates[0])
-        }
-    }
-    newStartDate.setFullYear(newYear)
-    newStartDate.setFullYear(newMonth)
-    newStartDate.setDate(newDate)
+    // // set startDate
+    // if (dates[0]) {
+    //     const oldStartDate = dates[0] as any
+    //     if (oldStartDate instanceof Date) {
+    //         newStartDate = oldStartDate
+    //     } else {
+    //         newStartDate = new Date(dates[0])
+    //     }
+    // }
+    // newStartDate.setFullYear(newYear)
+    // newStartDate.setFullYear(newMonth)
+    // newStartDate.setDate(newDate)
 
-    // set endDate
-    if (dates[1]) {
-        const oldEndDate = dates[1] as any
-        if (oldEndDate instanceof Date) {
-            newEndDate = oldEndDate
-        } else {
-            newEndDate = new Date(dates[1])
-        }
-    }
-    newEndDate.setFullYear(newYear)
-    newEndDate.setFullYear(newMonth)
-    newEndDate.setDate(newDate)
+    // // set endDate
+    // if (dates[1]) {
+    //     const oldEndDate = dates[1] as any
+    //     if (oldEndDate instanceof Date) {
+    //         newEndDate = oldEndDate
+    //     } else {
+    //         newEndDate = new Date(dates[1])
+    //     }
+    // }
+    // newEndDate.setFullYear(newYear)
+    // newEndDate.setFullYear(newMonth)
+    // newEndDate.setDate(newDate)
 
-    // set dates
-    customDesign.value.mutable.value = [newStartDate, newEndDate]
+    // // set dates
+    // customDesign.value.mutable.value = [newStartDate, newEndDate]
 }
 
 async function handleChange(templateDesign: any) {

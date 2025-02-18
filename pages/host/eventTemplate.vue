@@ -204,6 +204,7 @@ async function addOnDropListener(isOn: boolean) {
 }
 async function clearOnDrop() {
     templateTemp.value.item.type = ''
+    templateTemp.value.item.id = ''
 }
 
 async function getPlaceList() {
