@@ -1,6 +1,6 @@
 <template>
     <div class="toolbar">
-        <div v-if="isDesigning" class="toolbar__draggable" draggable="true">
+        <div v-if="isDesigning" class="toolbar__draggable" draggable="true" @mouseout="emit('mouseout')">
             <el-icon class="toolbar__move" @dragstart="emit('dragstart')" @mouseenter="emit('mouseenter')">
                 <More />
             </el-icon>
@@ -61,6 +61,10 @@ const props = defineProps({
     .toolbar__move {
         transform: rotate(90deg);
         cursor: grab;
+
+        // &:hover {
+        //     outline: 1px dashed red;
+        // }
     }
 
     .toolbar__default {

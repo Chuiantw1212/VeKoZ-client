@@ -10,65 +10,74 @@
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignHeader1>
             <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignDateTimeRange>
             <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOrganization>
             <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 :organization-id="getOrganizationId()" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
-                @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
+                @mouseout="emit('mouseout')">
             </OrganismDesignOrganizationMember>
             <OrganismDesignTextarea v-if="item.type === 'textarea'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignTextarea>
             <!-- 非必填寫欄位 -->
             <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignInput>
             <OrganismDesignNumber v-if="item.type === 'number'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignNumber>
             <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignPlace>
             <OrganismDesignUrl v-if="item.type === 'url'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignUrl>
             <OrganismDesignDivider v-if="item.type === 'divider'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignDivider>
             <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignEditor>
             <OrganismDesignSingleSelect v-if="item.type === 'singleSelect'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignSingleSelect>
             <OrganismDesignOffer v-if="item.type === 'offer'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)">
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOffer>
             <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignBanner>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
@@ -80,7 +89,7 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
-const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter'])
+const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
 const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
     type: Array,
     default: function () {

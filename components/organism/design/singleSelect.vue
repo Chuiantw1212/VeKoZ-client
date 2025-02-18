@@ -8,7 +8,7 @@
     <!-- 樣板編輯專用 -->
     <template v-else-if="customDesign.mutable" :loading="isLoading">
         <MoleculeDesignToolbar @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')">
+            @moveDown="emit('moveDown')" @mouseenter="emit('mouseenter')" @mouseout="emit('mouseout')">
             <div class="design__item">
                 <label class="item__label">
                     <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
@@ -23,7 +23,7 @@
     </template>
 </template>
 <script setup lang="ts">
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const customDesign = defineModel('modelValue', {
