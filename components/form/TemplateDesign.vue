@@ -136,7 +136,7 @@ function handleRemove(index: number) {
 function handleDragStart(index: number) {
     const item = templateDesigns.value[index]
     emit('dragstart', {
-        item,
+        item: JSON.parse(JSON.stringify(item)),
         index,
     })
 }
