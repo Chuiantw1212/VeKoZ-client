@@ -138,14 +138,18 @@ const newOffer = ref<{
     price: null,
 })
 
+onMounted(() => {
+    setDefaultValue()
+})
+
 // 觸發更新
 watch(() => customDesign.value, (newValue) => {
-    setDefaultVaue()
+    setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
 // methods
-function setDefaultVaue() {
+function setDefaultValue() {
     if (customDesign?.value.mutable) {
         return
     }

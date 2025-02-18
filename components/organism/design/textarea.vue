@@ -60,7 +60,10 @@ const props = defineProps({
     }
 })
 
-// 觸發更新
+// Hooks
+onMounted(() => {
+    setDefaultValue()
+})
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
     handleChange(newValue)

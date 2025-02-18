@@ -68,6 +68,7 @@ const placeList = ref<IPlace[]>([])
 
 // Hooks
 onMounted(() => {
+    setDefaultValue()
     getPlaceList()
 })
 watch(() => customDesign.value, (newValue) => {

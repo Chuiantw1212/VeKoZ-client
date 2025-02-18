@@ -26,19 +26,18 @@
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: function () {
-            return {
-                type: 'singleSelect',
-                mutable: {
-                    label: ''
-                }
+const customDesign = defineModel('modelValue', {
+    type: Object,
+    default: function () {
+        return {
+            type: 'singleSelect',
+            mutable: {
+                label: ''
             }
         }
-    },
+    }
+})
+const props = defineProps({
     id: {
         type: String,
         default: crypto.randomUUID()
@@ -73,16 +72,8 @@ const props = defineProps({
 
 // Hooks
 onMounted(() => {
+    setDefaultValue()
     getSelectOptions()
-})
-
-const customDesign = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
-    }
 })
 
 // 觸發更新

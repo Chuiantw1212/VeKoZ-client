@@ -73,6 +73,10 @@ const props = defineProps({
     }
 })
 
+onMounted(() => {
+    setDefaultValue()
+})
+
 // 觸發更新
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()

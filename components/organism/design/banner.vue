@@ -69,9 +69,9 @@ const props = defineProps({
 
 // 附加預設值
 onMounted(() => {
+    setDefaultValue()
     handleResize()
     window.addEventListener('resize', handleResize)
-
 })
 onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize)

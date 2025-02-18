@@ -78,6 +78,10 @@ const props = defineProps({
 const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
+onMounted(() => {
+    setDefaultValue()
+})
+
 watch(() => props.organizationId, (newValue) => {
     getOrganizationMemberList(newValue)
 }, { immediate: true })

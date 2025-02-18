@@ -70,6 +70,7 @@ const organizationList = ref<IOrganization[]>([])
 
 // Hooks
 onMounted(() => {
+    setDefaultValue()
     getOrganizationList()
 })
 
