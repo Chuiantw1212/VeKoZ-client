@@ -282,16 +282,6 @@ async function getEventTemplate(templateId: string) {
 </script>
 <style lang="scss" scoped>
 .eventTemplate {
-    .eventTemplate__draggable {
-        * {
-            cursor: grab !important;
-        }
-
-        &:hover {
-            outline: 1px dashed red;
-        }
-    }
-
     .eventTemplate__designItem {
         max-width: 100%;
         min-height: 8px;

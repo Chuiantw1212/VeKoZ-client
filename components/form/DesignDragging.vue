@@ -75,3 +75,14 @@ function setTemplateType(event: any) {
     emit('mouseenter', event)
 }
 </script>
+<style lang="scss" scoped>
+.eventTemplate__draggable {
+    * {
+        cursor: grab !important;
+    }
+
+    &:hover {
+        outline: 1px dashed red;
+    }
+}
+</style>
