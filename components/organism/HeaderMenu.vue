@@ -7,7 +7,7 @@
         </el-menu-item> -->
         <NuxtLink to="/">
             <el-menu-item class="headerMenu__logo">
-                <img style="width: 40px" src="@/assets/logo.png" alt="Element logo" />
+                <img src="@/assets/1080_240.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
         <div v-if="repoUser.userType === 'attendee' && repoUI.isLarge" class="attendee__menu">
@@ -15,11 +15,7 @@
         </div>
         <div class="menu__endGroup">
             <el-menu-item>
-                <el-switch
-                v-model="isFullScreen"
-                active-text="全螢幕"
-                @change="patchUserPreference()"
-                />
+                <el-switch v-model="isFullScreen" active-text="全螢幕" @change="patchUserPreference()" />
             </el-menu-item>
             <NuxtLink v-if="repoUser.userType" to="/settings">
                 <el-menu-item index="1" class="headerMenu__firstItem">
@@ -44,14 +40,14 @@ const isFullScreen = ref<boolean>(false)
 
 // Hooks
 const router = useRouter()
-watch(()=>repoUser.userPreference.isFullScreen,(newValue)=>{
-    if(newValue){
+watch(() => repoUser.userPreference.isFullScreen, (newValue) => {
+    if (newValue) {
         isFullScreen.value = true
     }
 })
 
 // Methods
-function patchUserPreference(){
+function patchUserPreference() {
     repoUser.patchUserPreference('isFullScreen', isFullScreen.value)
 }
 
@@ -74,14 +70,19 @@ async function handleSignOut() {
 
     .headerMenu__logo {
         margin: 0px;
+        height: 100%;
+
+        .logo__image {
+            height: 100%;
+        }
     }
 
     .attendee__menu {
         display: flex;
     }
 
-    .menu__endGroup{
-        display:flex;
+    .menu__endGroup {
+        display: flex;
         align-items: center;
     }
 }
