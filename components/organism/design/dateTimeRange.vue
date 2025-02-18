@@ -18,8 +18,7 @@
         <template v-slot:default>
             <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()"
                 @blur="setDefaultTime()"></el-date-picker>
-            <el-time-picker v-model="customDesign.mutable.startDate" :placeholder="placeholder"></el-time-picker>
-            <el-time-picker v-model="customDesign.mutable.endDate" :placeholder="placeholder"></el-time-picker>
+            <AtomVenoniaTimePicker v-model="customDesign.mutable.value"></AtomVenoniaTimePicker>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -78,9 +77,7 @@ onMounted(() => {
         type: 'dateTimeRange',
         mutable: {
             label: '',
-            startDate: new Date(),
-            endDate: new Date(),
-            // value: [new Date(), new Date()]
+            value: [new Date(), new Date()]
         }
     }
     date.value = new Date()
