@@ -26,7 +26,7 @@
                         <template #footer>
                             <table class="card__footTable">
                                 <tr>
-                                    <td colspan="3">{{ new Date(String(item.startDate)).toLocaleString('zh-TW') }}</td>
+                                    <td colspan="3">{{ getDates(item) }}</td>
                                 </tr>
                                 <tr>
                                     <td>台北市</td>
@@ -102,6 +102,28 @@ onBeforeUnmount(() => {
 })
 
 // Methods
+
+function getDates(event: IEvent) {
+    // const { startDate, endDate } = event
+    let timeString = ''
+    if (event.startDate) {
+        const startDate: Date = new Date(event.startDate)
+        const date = startDate.toLocaleDateString('zh-TW')
+        const startTime = startDate.toLocaleTimeString('zh-TW', {
+            hour12: false,
+        })
+        timeString += `${date} ${startTime}`
+    }
+    if (event.endDate) {
+        const endDate: Date = new Date(event.endDate)
+        const endTime = endDate.toLocaleTimeString('zh-TW', {
+            hour12: false,
+        })
+        timeString += ` ~ ${endTime}`
+    }
+    return timeString
+}
+
 const searchFromSize = ref<number>(6)
 function setSearchFormSize() {
     repoUI.debounce(`${id.value}-searchForm`, () => {
@@ -216,7 +238,7 @@ async function getEventList() {
     margin-bottom: 8px;
 }
 
-.card__footTable{
+.card__footTable {
     width: 100%;
 }
 
