@@ -1,7 +1,7 @@
 <template>
     <div class="toolbar">
         <div v-if="isDesigning" class="toolbar__draggable" draggable="true">
-            <el-icon class="toolbar__move" @dragstart="emit('dragstart')">
+            <el-icon class="toolbar__move" @dragstart="emit('dragstart')" @mouseenter="emit('mouseenter')">
                 <More />
             </el-icon>
             <slot name="label"></slot>
@@ -29,7 +29,7 @@ import {
     More,
     Delete,
 } from '@element-plus/icons-vue'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'mouseenter', 'mouseout'])
 const props = defineProps({
     loading: {
         type: Boolean,

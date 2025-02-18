@@ -21,7 +21,7 @@
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
                         :onchange="handleDesignChanged" @remove="removeDesign($event)"
-                        @dragstart="setTemplateTemp($event)">
+                        @dragstart="setTemplateTemp($event)" @mouseenter="setTemplateType($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"
                                 @dragover="allowDrop($event)"
@@ -268,8 +268,8 @@ async function removeDesign(data: ITemplateDragSouce) {
 function allowDrop(ev: any) {
     ev.preventDefault();
 }
-function setTemplateType(ev: any) {
-    templateTemp.value.item.type = ev.target.dataset.type
+function setTemplateType(type: string) {
+    templateTemp.value.item.type = type
 }
 function cancelDragging() {
     templateTemp.value.item.type = ''

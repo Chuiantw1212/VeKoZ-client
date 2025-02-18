@@ -68,7 +68,7 @@
             <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)">
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)">
             </OrganismDesignBanner>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
-const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change'])
+const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter'])
 const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
     type: Array,
     default: function () {

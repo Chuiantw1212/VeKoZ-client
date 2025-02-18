@@ -9,7 +9,7 @@
         <!-- 樣板編輯專用 -->
         <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')">
+            @moveDown="emit('moveDown')" @mouseenter="emit('mouseenter')">
             <template v-slot:default>
                 <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="bannerHeight">
                 </AtomBannerUploader>
@@ -19,7 +19,7 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const bannerRef = ref()
