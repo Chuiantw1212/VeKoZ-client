@@ -23,9 +23,9 @@
                         :onchange="handleDesignChanged" @remove="removeDesign($event)"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
-                            <div class="eventTemplate__designItem"
-                                :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
-                                @drop="insertTemplate($event, defaultProps.index)" @dragover="allowDrop($event)">
+                            <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"
+                                @dragover="allowDrop($event)"
+                                :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
                             </div>
                         </template>
                     </FormTemplateDesign>
