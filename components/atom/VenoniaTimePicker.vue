@@ -60,7 +60,6 @@ function setDiaplyTime() {
         const startTime = String(modelValue.value[0])
         displayStart.value = convertIsoToDisplayTime(startTime)
     }
-    console.log('displayStart.value', displayStart.value)
 
     const endDate = modelValue.value[1] as any
     if (!endDate) {
@@ -150,9 +149,7 @@ function setHours() {
 
 onMounted(() => {
     setHours()
-    console.log('onMounted', modelValue.value)
     setDiaplyTime()
-    // setDefaultTime()
 })
 </script>
 <style lang="scss" scoped>
