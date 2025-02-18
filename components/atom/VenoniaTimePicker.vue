@@ -35,7 +35,7 @@ const props = defineProps({
 
 watch(() => modelValue.value, () => {
     setDiaplyTime()
-}, { immediate: true })
+}, { deep: true, immediate: true })
 
 
 // Methods
@@ -50,7 +50,6 @@ function setEndDate() {
 }
 
 function setDiaplyTime() {
-    // console.log('modelValue.value', modelValue.value)
     const startDate = modelValue.value[0] as any
     if (!startDate) {
         setDefaultStarTime()
@@ -61,16 +60,16 @@ function setDiaplyTime() {
         const startTime = String(modelValue.value[0])
         displayStart.value = convertIsoToDisplayTime(startTime)
     }
-    // console.log('displayStart.value', displayStart.value)
+    console.log('displayStart.value', displayStart.value)
 
     const endDate = modelValue.value[1] as any
     if (!endDate) {
         setDefaultEndTime()
     } else if (endDate instanceof Date) {
-        displayEnd.value = convertIsoToDisplayTime(endDate.toISOString())
+        displayEnd.value = convertIsoToDisplayTime(endDate.toISOString(), 1)
     } else {
         const endTime = String(modelValue.value[1])
-        displayEnd.value = convertIsoToDisplayTime(endTime)
+        displayEnd.value = convertIsoToDisplayTime(endTime, 1)
     }
 }
 
@@ -112,12 +111,18 @@ function setDefaultEndTime() {
 
 
 
-function convertIsoToDisplayTime(isoString: string) {
+function convertIsoToDisplayTime(isoString: string, gap = 0) {
     const currentDate = new Date(isoString)
-    const hour = currentDate.getHours()
+    let hour = currentDate.getHours() + gap
     const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
     const hourString = String(hour).padStart(2, '0')
-    const minuteString = String(minute).padStart(2, '0')
+    const minuteString = String(base * 15).padStart(2, '0')
     return `${hourString}:${minuteString}`
 }
 
@@ -145,8 +150,9 @@ function setHours() {
 
 onMounted(() => {
     setHours()
+    console.log('onMounted', modelValue.value)
+    setDiaplyTime()
     // setDefaultTime()
-    // setDiaplyTime()
 })
 </script>
 <style lang="scss" scoped>

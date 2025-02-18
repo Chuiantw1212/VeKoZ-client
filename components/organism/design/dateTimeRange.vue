@@ -5,7 +5,7 @@
         :prop="customDesign.formField">
         <div class="dateTimeRange">
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                @change="setDefaultTime()" @blur="setDefaultTime()" :disabled="disabled"></el-date-picker>
+                :disabled="disabled"></el-date-picker>
             <AtomVenoniaTimePicker v-if="customDesign.mutable" class="dateTimeRange__time"
                 v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaTimePicker>
@@ -20,8 +20,7 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
-                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                    @change="setDefaultTime()" @blur="setDefaultTime()"></el-date-picker>
+                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"></el-date-picker>
                 <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value">
                 </AtomVenoniaTimePicker>
             </div>
