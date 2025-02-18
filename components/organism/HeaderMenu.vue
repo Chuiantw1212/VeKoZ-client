@@ -71,6 +71,7 @@ async function handleSignOut() {
     .headerMenu__logo {
         margin: 0px;
         height: 100%;
+        padding: 0px;
 
         .logo__image {
             height: 100%;
