@@ -19,6 +19,9 @@ export interface ITemplateDesign {
         label?: string,
         // 多數欄位使用
         value?: any,
+        // 時間
+        startDate: Date,
+        endDate: Date,
         // 線下地點
         locationName?: string,
         locationAddress?: string,
