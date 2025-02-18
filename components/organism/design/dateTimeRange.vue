@@ -1,9 +1,12 @@
 <template>
     <!-- 檢視與編輯用 -->
+    <!-- {{ customDesign }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
-        <!-- <el-date-picker v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
-            type="datetimerange" :disabled="disabled"></el-date-picker> -->
+        <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()" @blur="setDefaultTime()"
+            :disabled="disabled"></el-date-picker>
+        <el-time-picker v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
+            is-range :disabled="disabled"></el-time-picker>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -13,8 +16,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            {{ customDesign.mutable.value }}
-            <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()"></el-date-picker>
+            <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()"
+                @blur="setDefaultTime()"></el-date-picker>
             <el-time-picker v-model="customDesign.mutable.value" :placeholder="placeholder" is-range></el-time-picker>
         </template>
     </MoleculeDesignToolbar>
@@ -26,20 +29,12 @@ const isLoading = ref(false)
 const repoUI = useRepoUI()
 const date = ref<Date>(new Date())
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
+    type: Object,
     default: () => {
-        const startDate = new Date()
-        startDate.setMinutes(0)
-        startDate.setSeconds(0)
-        const currentHour = startDate.getHours()
-        const endDate = new Date()
-        endDate.setHours(currentHour + 1)
-        endDate.setMinutes(0)
-        endDate.setSeconds(0)
         return {
             type: 'dateTimeRange',
             mutable: {
                 label: '時間日期',
-                value: [startDate, endDate]
             }
         }
     }
@@ -77,6 +72,7 @@ onMounted(() => {
     if (customDesign.value?.mutable) {
         return
     }
+    delete customDesign.value.mutable // IMPORTANT: 刪掉會有不明的錯誤
     const defaultValue = {
         type: 'dateTimeRange',
         mutable: {
@@ -84,7 +80,11 @@ onMounted(() => {
             value: [new Date(), new Date()]
         }
     }
+    date.value = new Date()
     const mergedItem = Object.assign(defaultValue, customDesign.value)
+    if (!mergedItem.mutable) {
+        alert('元件初始化失敗！') // 偵測不明的錯誤
+    }
     customDesign.value = mergedItem
 })
 
@@ -102,22 +102,30 @@ function setDefaultTime() {
     const newYear = date.value.getFullYear()
     const newMonth = date.value.getMonth()
     const newDate = date.value.getDate()
-    const newHour = date.value.getHours()
 
     let newStartDate: Date = new Date()
-    newStartDate.setMinutes(0)
-    newStartDate.setSeconds(0)
     let newEndDate: Date = new Date()
     const dates: string[] = customDesign.value.mutable.value
     if (!dates) {
-        newEndDate.setHours(newHour + 1)
+        newStartDate.setHours(0)
+        newStartDate.setMinutes(0)
+        newStartDate.setSeconds(0)
+
+        newEndDate.setHours(23)
+        newEndDate.setMinutes(0)
+        newEndDate.setSeconds(0)
         customDesign.value.mutable.value = [newStartDate, newEndDate]
         return
     }
 
     // set startDate
     if (dates[0]) {
-        newStartDate = new Date(dates[0])
+        const oldStartDate = dates[0] as any
+        if (oldStartDate instanceof Date) {
+            newStartDate = oldStartDate
+        } else {
+            newStartDate = new Date(dates[0])
+        }
     }
     newStartDate.setFullYear(newYear)
     newStartDate.setFullYear(newMonth)
@@ -125,39 +133,19 @@ function setDefaultTime() {
 
     // set endDate
     if (dates[1]) {
-        newEndDate = new Date(dates[1])
+        const oldEndDate = dates[1] as any
+        if (oldEndDate instanceof Date) {
+            newEndDate = oldEndDate
+        } else {
+            newEndDate = new Date(dates[1])
+        }
     }
     newEndDate.setFullYear(newYear)
     newEndDate.setFullYear(newMonth)
     newEndDate.setDate(newDate)
 
+    // set dates
     customDesign.value.mutable.value = [newStartDate, newEndDate]
-    // console.log({
-    //     dates
-    // })
-    // const startDate = dates[0]
-    // console.log(startDate instanceof Date)
-    // return
-    // const endDate = dates[1]
-    // if (!dates[0] && !dates[1]) {
-    //     const startDate = date.value
-    //     const currentHour = startDate.getHours()
-    //     const endDate = new Date()
-    //     endDate.setHours(currentHour + 1)
-    //     customDesign.value.mutable.value = [startDate, endDate]
-    //     return
-    // }
-
-    // if (dates[0]) {
-    //     customDesign.value.mutable.value[0].setFullYear(newYear)
-    //     customDesign.value.mutable.value[0].setMonth(newMonth)
-    //     customDesign.value.mutable.value[0].setDate(newDate)
-    // }
-    // if (dates[1]) {
-    //     customDesign.value.mutable.value[1].setFullYear(newYear)
-    //     customDesign.value.mutable.value[1].setMonth(newMonth)
-    //     customDesign.value.mutable.value[1].setDate(newDate)
-    // }
 }
 
 async function handleChange(templateDesign: any) {
