@@ -21,7 +21,10 @@
   <!-- <h2 content-position="left">擁有空間</h2>
   TODO：等待後台開發。 -->
 
-  <el-dialog v-model="placeDialog.visibility" title="空間設定" class="event__template">
+  <VenoniaDialog v-model="placeDialog.visibility" class="event__template">
+    <template #header>
+      地點設定
+    </template>
     <FormPlace v-if="placeDialog.visibility" v-model="form" :mode="placeDialog.mode">
     </FormPlace>
     <template #footer>
@@ -30,10 +33,11 @@
         確認
       </el-button>
     </template>
-  </el-dialog>
+  </VenoniaDialog>
 </template>
 
 <script lang="ts" setup>
+import VenoniaDialog from '~/components/atom/VenoniaDialog.vue'
 import type { IPlace } from '~/types/place'
 
 // Data

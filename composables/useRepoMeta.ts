@@ -12,6 +12,9 @@ export default defineStore('meta', () => {
      * @returns 
      */
     async function getMetaSelectById(id: string): Promise<ISelectOption[]> {
+        if (map.value[id]) {
+            return map.value[id]
+        }
         const response = await defaultApi.request(`/meta/select/${id}`, {
             method: 'GET',
         })
