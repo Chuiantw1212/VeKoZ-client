@@ -4,8 +4,8 @@
         <el-row align="middle" justify="space-between">
             <el-col :span="repoUI.isLarge ? 24 : 20">
                 <el-form-item label="搜尋">
-                    <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字"
-                        :maxlength="30"></el-input>
+                    <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
+                        :clearable="true"></el-input>
                 </el-form-item>
             </el-col>
             <el-col v-if="!repoUI.isLarge" :span="4">
@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="whereFieldSpan">
                     <el-form-item label="城市">
-                        <el-select v-model="form.addressRegion" placeholder="請選擇">
+                        <el-select v-model="form.addressRegion" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select>
