@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   app: {
     // head
     head: {
-      title: 'Venonia 微課室 - 串聯活動與空間',
+      title: 'Vekosse微課室 - 串聯活動與空間',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {

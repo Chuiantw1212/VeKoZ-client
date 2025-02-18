@@ -31,9 +31,10 @@ export default defineStore('event', () => {
         return response.json()
     }
     async function getEventList(params: IEvent): Promise<IEvent[]> {
+        const noUndefined = JSON.parse(JSON.stringify(params))
         const response = await defaultApi.request(`/event/list`, {
             method: 'GET',
-            params,
+            params: noUndefined,
         })
         return response.json()
     }
