@@ -40,7 +40,12 @@ export default defineStore('api', {
                     step()
                 })
                 if (auth && auth.currentUser) {
-                    this.token = await auth.currentUser.getIdToken()
+                    try {
+                        this.token = await auth.currentUser.getIdToken()
+                    } catch (error: any) {
+                        console.log(error.message)
+                        return
+                    }
                 }
             }
         },

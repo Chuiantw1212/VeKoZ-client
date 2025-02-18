@@ -28,19 +28,29 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
+                    <el-form-item label="時段">
+                        <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
+                            <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
+                                :value="item.value" />
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="whereFieldSpan">
                     <el-form-item label="城市">
-                        <el-select v-model="form.location" placeholder="請選擇">
+                        <el-select v-model="form.addressRegion" placeholder="請選擇">
                             <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="時段">
-                        <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
-                            <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
+                    <el-form-item label="線上活動">
+                        <!-- <el-select v-model="form.addressRegion" placeholder="請選擇">
+                            <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
-                        </el-select>
+                        </el-select> -->
+                        <el-switch v-model="form.includeVirtualLocation" inline-prompt active-text="包含"
+                            inactive-text="排除" />
                     </el-form-item>
                 </el-col>
             </template>
@@ -60,19 +70,7 @@ const openAdvanced = ref<boolean>(true)
 const formRef = ref()
 const form = defineModel('modelValue', {
     type: Object,
-    default: () => {
-        const startDate = new Date()
-        const currentMonth = new Date().getMonth()
-        const endDate = new Date()
-        endDate.setMonth(currentMonth + 1)
-        return {
-            keywords: '',
-            startDate: startDate,
-            endDate: endDate,
-            timeFrame: '',
-            location: '',
-        }
-    }
+    required: true,
 })
 
 // Search form data
@@ -144,7 +142,6 @@ defineExpose({
 <style lang="scss" scoped>
 .index__form {
     width: 100%;
-    // max-width: 720px;
 }
 
 .form__btnWrap {

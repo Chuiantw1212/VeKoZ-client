@@ -15,7 +15,8 @@
         </el-col>
         <el-col :span="cardGroupSize">
             <el-row :gutter="8">
-                <el-col v-for="(item, index) in eventList" :span="cardSize" class="index__row">
+                <el-col v-loading="isLoading" v-for="(item, index) in eventList" :span="cardSize"
+                    class="index__cardWrap">
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
@@ -46,6 +47,7 @@ import type { IEvent } from '~/types/event';
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
+const isLoading = ref<boolean>(false)
 
 // Data
 const eventList = ref<IEvent[]>([])
@@ -59,7 +61,8 @@ const form = ref({
     startDate: startDate,
     endDate: endDate,
     timeFrame: '',
-    location: '',
+    addressRegion: '',
+    includeVirtualLocation: true,
 })
 
 // Hooks
@@ -134,21 +137,27 @@ async function getEventList() {
         return
     }
 
+    isLoading.value = true
     repoUI.debounce(`${id.value}-search`, async () => {
-        eventList.value = []
+        // eventList.value = []
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result, ...result, ...result, ...result]
+        eventList.value = [...result, ...result, ...result, ...result, ...result, ...result]
+        isLoading.value = false
     }, 500)
 }
 </script>
 
 <style lang="scss" scoped>
 .events {
+
     // max-height: calc(100vh - 200px);
     // overflow-y: auto;
+    .events__cardContainer {
+        min-height: calc(100vh - 160px);
+    }
 }
 
 .index__eventList {
@@ -182,7 +191,7 @@ async function getEventList() {
     }
 }
 
-.index__row {
+.index__cardWrap {
     margin-bottom: 8px;
 }
 
