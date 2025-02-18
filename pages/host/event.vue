@@ -111,10 +111,30 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
+    if (!currentEvent.value) {
+        return
+    }
     try {
-        await formRef.value?.validate()
+        if (dialogTemplate.value.isPublic) {
+            const isValid = await formRef.value?.validate()
+            if (isValid) {
+                await repoEvent.patchEventCalendar({
+                    id: currentEvent.value.id,
+                    isPublic: true,
+                })
+            }
+        } else {
+            await repoEvent.patchEventCalendar({
+                id: currentEvent.value.id,
+                isPublic: false,
+            })
+        }
     } catch (error) {
         dialogTemplate.value.isPublic = false
+        await repoEvent.patchEventCalendar({
+            id: currentEvent.value.id,
+            isPublic: false,
+        })
     }
 }
 function trimOrganizationName(item: IOrganization) {

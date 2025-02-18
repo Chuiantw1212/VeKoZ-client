@@ -28,6 +28,10 @@
         padding: 0px;
     }
 
+    :deep(.el-card__footer) {
+        padding: 8px;
+    }
+
     .card__footer {
         display: flex;
         justify-content: space-between;

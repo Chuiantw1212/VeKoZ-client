@@ -24,7 +24,28 @@
                             </NuxtLink>
                         </template>
                         <template #footer>
-                            <span>
+                            <table class="card__footTable">
+                                <tr>
+                                    <td colspan="3">{{ new Date(String(item.startDate)).toLocaleString('zh-TW') }}</td>
+                                </tr>
+                                <tr>
+                                    <td>台北市</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>
+                                        <div class="footer__offer">
+                                            NTD 250
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>5</td>
+                                    <td>
+                                       
+                                    </td>
+                                    <td>6</td>
+                                </tr> -->
+                            </table>
+                            <!-- <span>
                                 台北市
                             </span>
                             <span>
@@ -32,7 +53,7 @@
                             </span>
                             <span class="footer__offer">
                                 NTD 250
-                            </span>
+                            </span> -->
                         </template>
                     </MoleculeVenoniaCard>
                 </el-col>
@@ -144,7 +165,7 @@ async function getEventList() {
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result, ...result, ...result, ...result, ...result, ...result]
+        eventList.value = [...result,]
         isLoading.value = false
     }, 500)
 }
@@ -195,7 +216,13 @@ async function getEventList() {
     margin-bottom: 8px;
 }
 
+.card__footTable{
+    width: 100%;
+}
+
 .footer__offer {
     white-space: nowrap;
+    text-align: right;
+    width: 100%;
 }
 </style>
