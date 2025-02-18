@@ -1,13 +1,14 @@
 <template>
-    <div class="timeRangePicker">
+    <div class="timeRangePicker" :class="{ 'timeRangePicker--disabled': props.disabled }">
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
-        <select v-model="displayStart" class="timeRangePicker__select" @change="setStatDate()">
+        <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
+            @change="setStatDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
         -
-        <select v-model="displayEnd" class="timeRangePicker__select" @change="setEndDate()">
+        <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
     </div>
@@ -24,6 +25,14 @@ const modelValue = defineModel<string[]>('modelValue', {
     required: true,
     default: []
 })
+
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false
+    }
+})
+
 watch(() => modelValue.value, () => {
     setDiaplyTime()
 }, { immediate: true })
@@ -158,9 +167,17 @@ onMounted(() => {
             outline: none;
         }
 
+        &:disabled {
+            background-color: rgb(245, 247, 250);
+        }
+
         .select__option {
             padding: 0 4px;
         }
     }
+}
+
+.timeRangePicker--disabled {
+    background-color: rgb(245, 247, 250);
 }
 </style>

@@ -3,10 +3,13 @@
     <!-- {{ customDesign }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
-        <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()" @blur="setDefaultTime()"
-            :disabled="disabled"></el-date-picker>
-        <el-time-picker v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
-            is-range :disabled="disabled"></el-time-picker>
+        <div class="dateTimeRange">
+            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+                @change="setDefaultTime()" @blur="setDefaultTime()" :disabled="disabled"></el-date-picker>
+            <AtomVenoniaTimePicker v-if="customDesign.mutable" class="dateTimeRange__time"
+                v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
+            </AtomVenoniaTimePicker>
+        </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -17,9 +20,10 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
-                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @change="setDefaultTime()"
-                    @blur="setDefaultTime()"></el-date-picker>
-                <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value"></AtomVenoniaTimePicker>
+                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+                    @change="setDefaultTime()" @blur="setDefaultTime()"></el-date-picker>
+                <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value">
+                </AtomVenoniaTimePicker>
             </div>
         </template>
     </MoleculeDesignToolbar>
@@ -161,6 +165,7 @@ async function handleChange(templateDesign: any) {
 <style lang="scss" scoped>
 .dateTimeRange {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
 
     .dateTimeRange__date {
