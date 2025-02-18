@@ -5,7 +5,7 @@
         :prop="customDesign.formField">
         <div class="dateTimeRange">
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                :disabled="disabled"></el-date-picker>
+                @blur="setDefaultTime()" :disabled="disabled"></el-date-picker>
             <AtomVenoniaTimePicker v-if="customDesign.mutable" class="dateTimeRange__time"
                 v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaTimePicker>
@@ -20,7 +20,8 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
-                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"></el-date-picker>
+                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+                    @blur="setDefaultTime()"></el-date-picker>
                 <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value">
                 </AtomVenoniaTimePicker>
             </div>
@@ -108,54 +109,43 @@ function setDefaultTime() {
     if (!customDesign.value.mutable) {
         return
     }
-    // // get current
-    // const newYear = date.value.getFullYear()
-    // const newMonth = date.value.getMonth()
-    // const newDate = date.value.getDate()
+    // get current
+    const newYear = date.value.getFullYear()
+    const newMonth = date.value.getMonth()
+    const newDate = date.value.getDate()
 
-    // let newStartDate: Date = new Date()
-    // let newEndDate: Date = new Date()
-    // const dates: string[] = customDesign.value.mutable.value
-    // if (!dates) {
-    //     newStartDate.setHours(0)
-    //     newStartDate.setMinutes(0)
-    //     newStartDate.setSeconds(0)
+    let newStartDate: Date = new Date()
+    let newEndDate: Date = new Date()
+    const dates: string[] = customDesign.value.mutable.value
 
-    //     newEndDate.setHours(23)
-    //     newEndDate.setMinutes(0)
-    //     newEndDate.setSeconds(0)
-    //     customDesign.value.mutable.value = [newStartDate, newEndDate]
-    //     return
-    // }
+    // set startDate
+    if (dates[0]) {
+        const oldStartDate = dates[0] as any
+        if (oldStartDate instanceof Date) {
+            newStartDate = oldStartDate
+        } else {
+            newStartDate = new Date(dates[0])
+        }
+    }
+    newStartDate.setFullYear(newYear)
+    newStartDate.setFullYear(newMonth)
+    newStartDate.setDate(newDate)
 
-    // // set startDate
-    // if (dates[0]) {
-    //     const oldStartDate = dates[0] as any
-    //     if (oldStartDate instanceof Date) {
-    //         newStartDate = oldStartDate
-    //     } else {
-    //         newStartDate = new Date(dates[0])
-    //     }
-    // }
-    // newStartDate.setFullYear(newYear)
-    // newStartDate.setFullYear(newMonth)
-    // newStartDate.setDate(newDate)
+    // set endDate
+    if (dates[1]) {
+        const oldEndDate = dates[1] as any
+        if (oldEndDate instanceof Date) {
+            newEndDate = oldEndDate
+        } else {
+            newEndDate = new Date(dates[1])
+        }
+    }
+    newEndDate.setFullYear(newYear)
+    newEndDate.setFullYear(newMonth)
+    newEndDate.setDate(newDate)
 
-    // // set endDate
-    // if (dates[1]) {
-    //     const oldEndDate = dates[1] as any
-    //     if (oldEndDate instanceof Date) {
-    //         newEndDate = oldEndDate
-    //     } else {
-    //         newEndDate = new Date(dates[1])
-    //     }
-    // }
-    // newEndDate.setFullYear(newYear)
-    // newEndDate.setFullYear(newMonth)
-    // newEndDate.setDate(newDate)
-
-    // // set dates
-    // customDesign.value.mutable.value = [newStartDate, newEndDate]
+    // set dates
+    customDesign.value.mutable.value = [newStartDate, newEndDate]
 }
 
 async function handleChange(templateDesign: any) {
