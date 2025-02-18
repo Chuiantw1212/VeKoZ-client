@@ -88,6 +88,6 @@ async function handleChange(templateDesign: any) {
 </script>
 <style lang="scss" scoped>
 .design__mt {
-    margin-top: 12px;
+    margin-top: 4px;
 }
 </style>

@@ -181,7 +181,7 @@ function removeOffer(index: number) {
 
 .offer {
     display: flex;
-    gap: 12px;
+    gap: 4px;
     width: 100%;
 
     .offer__name {

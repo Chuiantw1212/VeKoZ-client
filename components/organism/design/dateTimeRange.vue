@@ -16,9 +16,11 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-date-picker :placeholder="placeholder" v-model="date" @change="setDefaultTime()"
-                @blur="setDefaultTime()"></el-date-picker>
-            <AtomVenoniaTimePicker v-model="customDesign.mutable.value"></AtomVenoniaTimePicker>
+            <div class="dateTimeRange">
+                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @change="setDefaultTime()"
+                    @blur="setDefaultTime()"></el-date-picker>
+                <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value"></AtomVenoniaTimePicker>
+            </div>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -157,18 +159,16 @@ async function handleChange(templateDesign: any) {
 }
 </script>
 <style lang="scss" scoped>
-.design {
-    .design__item {
-        display: flex;
+.dateTimeRange {
+    display: flex;
+    gap: 4px;
 
-        .item__label {
-            display: flex;
-            padding-right: 12px;
+    .dateTimeRange__date {
+        flex: 1;
+    }
 
-            .label__input {
-                outline: none;
-            }
-        }
+    .dateTimeRange__time {
+        flex: 1;
     }
 }
 </style>

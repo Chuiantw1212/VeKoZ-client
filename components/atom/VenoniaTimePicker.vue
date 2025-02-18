@@ -3,12 +3,12 @@
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
-        <select v-model="displayStart" class="timeRangePicker__select">
-            <option v-for="time in times">{{ time }}</option>
+        <select v-model="displayStart" class="timeRangePicker__select" @change="setStatDate()">
+            <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
         -
-        <select v-model="displayEnd" class="timeRangePicker__select">
-            <option v-for="time in times">{{ time }}</option>
+        <select v-model="displayEnd" class="timeRangePicker__select" @change="setEndDate()">
+            <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
     </div>
 </template>
@@ -19,14 +19,47 @@ const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
 const displayEnd = ref<string>('')
 
-const modelValue = defineModel('modelValue', {
+const modelValue = defineModel<string[]>('modelValue', {
     type: Array,
     required: true,
     default: []
 })
+watch(() => modelValue.value, () => {
+    setDiaplyTime()
+}, { immediate: true })
+
+
+// Methods
+function setStatDate() {
+    const isoString = convertDisplayToIso(displayStart.value)
+    modelValue.value[0] = isoString
+}
+
+function setEndDate() {
+    const isoString = convertDisplayToIso(displayEnd.value)
+    modelValue.value[1] = isoString
+}
+
+function setDiaplyTime() {
+    const startDate = modelValue.value[0] as any
+    if (startDate instanceof Date) {
+        displayStart.value = convertIsoToDisplayTime(startDate.toISOString())
+    } else {
+        const startTime = String(modelValue.value[0])
+        displayStart.value = convertIsoToDisplayTime(startTime)
+    }
+
+    const endDate = modelValue.value[1] as any
+    if (endDate instanceof Date) {
+        displayEnd.value = convertIsoToDisplayTime(endDate.toISOString())
+    } else {
+        const endTime = String(modelValue.value[1])
+        displayEnd.value = convertIsoToDisplayTime(endTime)
+    }
+}
 
 function setDefaultTime() {
-    if (!modelValue[0]) {
+    if (!modelValue.value[0]) {
         const currentDate = new Date()
         let hour = currentDate.getHours()
         const minute = currentDate.getMinutes()
@@ -39,8 +72,11 @@ function setDefaultTime() {
         let hourString = String(hour).padStart(2, '0')
         const minuteString = String(base * 15).padStart(2, '0')
         displayStart.value = `${hourString}:${minuteString}`
+        currentDate.setHours(hour)
+        currentDate.setMinutes(base * 15)
+        modelValue.value[0] = currentDate.toISOString()
     }
-    if (!modelValue[1]) {
+    if (!modelValue.value[1]) {
         const currentDate = new Date()
         let hour = currentDate.getHours() + 1
         const minute = currentDate.getMinutes()
@@ -53,7 +89,31 @@ function setDefaultTime() {
         let hourString = String(hour).padStart(2, '0')
         const minuteString = String(base * 15).padStart(2, '0')
         displayEnd.value = `${hourString}:${minuteString}`
+        currentDate.setHours(hour)
+        currentDate.setMinutes(base * 15)
+        modelValue.value[1] = currentDate.toISOString()
     }
+}
+
+function convertIsoToDisplayTime(isoString: string) {
+    const currentDate = new Date(isoString)
+    const hour = currentDate.getHours()
+    const minute = currentDate.getMinutes()
+    const hourString = String(hour).padStart(2, '0')
+    const minuteString = String(minute).padStart(2, '0')
+    return `${hourString}:${minuteString}`
+}
+
+function convertDisplayToIso(display: string) {
+    const times = display.split(':')
+    const newHour = Number(times[0])
+    const newMinutes = Number(times[1])
+    let newDate: Date = new Date()
+    const dateString = String(modelValue.value[0])
+    newDate = new Date(dateString)
+    newDate.setHours(newHour)
+    newDate.setMinutes(newMinutes)
+    return newDate.toISOString()
 }
 
 function setHours() {
@@ -68,12 +128,13 @@ function setHours() {
 
 onMounted(() => {
     setHours()
-    setDefaultTime()
+    // setDiaplyTime()
+    // setDefaultTime()
 })
 </script>
 <style lang="scss" scoped>
 .timeRangePicker {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     height: 30px;
     border: 1px solid lightgray;
@@ -81,6 +142,8 @@ onMounted(() => {
     gap: 4px;
     width: fit-content;
     padding: 0 10px;
+    color: rgb(96, 98, 102);
+    // transform: translateY(2px);
 
     .timeRangePicker__select {
         border: 0px;
@@ -89,9 +152,14 @@ onMounted(() => {
         text-indent: 1px;
         text-overflow: '';
         padding: 0 10px;
+        color: rgb(96, 98, 102);
 
         &:focus {
             outline: none;
+        }
+
+        .select__option {
+            padding: 0 4px;
         }
     }
 }
