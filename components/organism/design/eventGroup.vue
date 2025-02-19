@@ -56,7 +56,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入活動群組 例：EN的8堂人生必修課'
+        default: '例：EN的理財八堂課，統一曝光'
     },
     onchange: {
         type: Function,

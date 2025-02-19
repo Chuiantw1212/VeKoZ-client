@@ -5,8 +5,8 @@
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
-                            <el-form-item label="模板名稱">
-                                <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱"
+                            <el-form-item>
+                                <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
                                     @change="patchTemplateName()"></el-input>
                             </el-form-item>
                             <div class="header__btnGroup">
@@ -44,7 +44,8 @@
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>
-                    <FormDesignDragging @mouseenter="setTemplateType($event)" @mouseout="cancelDragging()">
+                    <FormDesignDragging :designs="eventTemplate.designs" @mouseenter="setTemplateType($event)"
+                        @mouseout="cancelDragging()">
                     </FormDesignDragging>
                 </el-card>
             </el-col>

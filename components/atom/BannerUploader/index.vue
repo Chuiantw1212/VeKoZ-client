@@ -24,7 +24,6 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { Buffer } from 'buffer/'
 const localValue = defineModel('modelValue', {
-    type: String || Object,
     default: function () {
         return {
             type: '',
