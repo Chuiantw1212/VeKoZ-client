@@ -22,6 +22,9 @@ export interface ITemplateDesign {
         // organization
         organizationName?: string,
         organizationId?: string,
+        // organization members
+        memberIds?: string[],
+        memberNames?: string[],
         // 時間
         startDate: Date,
         endDate: Date,

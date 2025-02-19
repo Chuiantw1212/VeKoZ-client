@@ -37,7 +37,7 @@
             "label": "講者/主持"
         },
         "required": true,
-        "formField": "performer"
+        "formField": "performers"
     },
     {
         "type": "textarea",

@@ -2,8 +2,8 @@
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
-        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.organizationName" placeholder="請選擇現有組織"
-            :clearable="true" :disabled="disabled">
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.organizationId" placeholder="請選擇現有組織"
+            :clearable="true" :disabled="disabled" @change="setOrganizationName()">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
         </el-select>
     </el-form-item>
@@ -16,8 +16,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.mutable.organizationName" placeholder="請選擇現有組織" :clearable="true"
-                :disabled="disabled" @change="setOrganizationId()">
+            <el-select v-model="customDesign.mutable.organizationId" placeholder="請選擇現有組織" :clearable="true"
+                :disabled="disabled" @change="setOrganizationName()">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
         </template>
@@ -36,7 +36,8 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
         type: 'organization',
         mutable: {
             label: '組織', // 純瀏覽時使用
-            value: ''
+            organizationName: '',
+            organizationId: '',
         }
     }
 })
@@ -92,7 +93,8 @@ function setDefaultValue() {
         type: 'organization',
         mutable: {
             label: '組織',
-            value: '',
+            organizationName: '',
+            organizationId: '',
         }
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
@@ -107,12 +109,12 @@ async function handleChange(templateDesign: any) {
     })
 }
 
-function setOrganizationId() {
+function setOrganizationName() {
     const selectedItem = organizationList.value.find(item => {
-        return item.name === customDesign.value.mutable?.organizationName
+        return item.id === customDesign.value.mutable?.organizationId
     })
     if (customDesign.value.mutable) {
-        customDesign.value.mutable.organizationId = selectedItem?.id
+        customDesign.value.mutable.organizationName = selectedItem?.name
     }
 }
 
