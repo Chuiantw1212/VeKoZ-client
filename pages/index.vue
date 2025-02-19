@@ -31,9 +31,18 @@
                                     <tr>
                                         <td colspan="3">{{ getDates(item) }}</td>
                                     </tr>
-                                    <tr class="table__row">
-                                        <td>台北市</td>
-                                        <td>{{ item.name }}</td>
+                                    <tr>
+                                        <!-- <td>台北市</td> -->
+                                        <td colspan="3">{{ item.name }}</td>
+                                        <!-- <td>
+                                            <div class="footer__offer">
+                                                NTD 250
+                                            </div>
+                                        </td> -->
+                                    </tr>
+                                    <tr>
+                                        <td>{{ item.addressRegion }}</td>
+                                        <td></td>
                                         <td>
                                             <div class="footer__offer">
                                                 NTD 250
@@ -104,7 +113,6 @@ onBeforeUnmount(() => {
 
 // Methods
 function getDates(event: IEvent) {
-    // const { startDate, endDate } = event
     let timeString = ''
     if (event.startDate) {
         const startDate: Date = new Date(event.startDate)
@@ -182,7 +190,6 @@ async function getEventList() {
 
     isLoading.value = true
     repoUI.debounce(`${id.value}-search`, async () => {
-        // eventList.value = []
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
@@ -195,9 +202,6 @@ async function getEventList() {
 
 <style lang="scss" scoped>
 .events {
-
-    // max-height: calc(100vh - 200px);
-    // overflow-y: auto;
     .events__cardContainer {
         min-height: calc(100vh - 160px);
     }
@@ -225,8 +229,6 @@ async function getEventList() {
     position: fixed;
     width: 22vw;
     max-width: 295px;
-    // width: inherit;
-    // max-width: inherit;
 
     .cardContainer__card {
         width: calc(100%);
