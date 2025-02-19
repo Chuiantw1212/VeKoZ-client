@@ -31,11 +31,11 @@ export interface ITemplateDesign {
         // 線下地點
         placeId?: string, // entities
         placeName?: string,
-        placeAddressRegion?: string, // 第一級行政區
-        placeAddress?: string,
+        locationAddressRegion?: string, // 第一級行政區
+        locationAddress?: string,
         // 線上地點
-        virtualName?: string,
-        virtualUrl?: string,
+        virtualLocationName?: string,
+        virtualLocationUrl?: string,
         // 票券
         offers?: IOffer[]
     },

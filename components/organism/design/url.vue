@@ -1,9 +1,9 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.virtualName" placeholder="微課室"
+        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.virtualLocationName" placeholder="微課室"
             :disabled="disabled"></el-input>
-        <el-input v-if="customDesign.mutable" class="design__mt" v-model="customDesign.mutable.virtualUrl"
+        <el-input v-if="customDesign.mutable" class="design__mt" v-model="customDesign.mutable.virtualLocationUrl"
             placeholder="https://venonia.com" :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -15,8 +15,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input v-model="customDesign.mutable.virtualName" placeholder="微課室" :disabled="disabled"></el-input>
-            <el-input class="design__mt" v-model="customDesign.mutable.virtualUrl" placeholder="https://venonia.com"
+            <el-input v-model="customDesign.mutable.virtualLocationName" placeholder="微課室" :disabled="disabled"></el-input>
+            <el-input class="design__mt" v-model="customDesign.mutable.virtualLocationUrl" placeholder="https://venonia.com"
                 :disabled="disabled"></el-input>
         </template>
     </MoleculeDesignToolbar>
