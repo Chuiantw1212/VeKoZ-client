@@ -237,6 +237,9 @@ function setTemplateTemp(templateSource: ITemplateDragSouce) {
 }
 async function insertTemplate(ev: Event, destinationIndex = 0) {
     ev.preventDefault();
+    if (!templateTemp.value.item.type) {
+        alert('系統BUG, 元件類型遺失請重新拖曳。')
+    }
     // 插入元素
     const templateDesign: ITemplateDesign = JSON.parse(JSON.stringify(templateTemp.value.item)) // 必須深拷貝，不然會在清除站存資料時影響到模板
     // 先更新資料庫再更新畫面

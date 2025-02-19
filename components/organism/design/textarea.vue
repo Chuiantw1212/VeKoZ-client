@@ -23,12 +23,11 @@ import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'textarea',
         mutable: {
-            label: '多行文字'
+            label: 'SEO描述'
         }
     }
 })
@@ -52,7 +51,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入'
+        default: '請輸入SEO描述'
     },
     onchange: {
         type: Function,
