@@ -20,8 +20,8 @@ export interface ITemplateDesign {
         // 未定義欄位使用
         value?: any,
         // organization
-        organizationName?: string,
         organizationId?: string,
+        organizationName?: string,
         // organization members
         memberIds?: string[],
         memberNames?: string[],
@@ -29,9 +29,10 @@ export interface ITemplateDesign {
         startDate: Date,
         endDate: Date,
         // 線下地點
-        locationName?: string,
-        locationAddress?: string,
-        locatoinRegion?: string,
+        placeId?: string, // entities
+        placeName?: string,
+        placeAddressRegion?: string, // 第一級行政區
+        placeAddress?: string,
         // 線上地點
         virtualName?: string,
         virtualUrl?: string,

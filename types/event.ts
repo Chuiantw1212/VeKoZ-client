@@ -9,11 +9,7 @@ export interface IEventCreation {
 export interface IEvent {
     id?: string,
     name?: string,
-    // locationAddress?: string,
-    // locationName?: string,
-    addressRegion?: string,
-    // virtualLocationName?: string,
-    // virtualLocationUrl?: string,
+    addressRegion?: string, // event.location = PostalAddress
     dateDesignId?: string,
     startDate?: string | Date,
     endDate?: string | Date,

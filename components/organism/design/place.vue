@@ -1,12 +1,12 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.locationName" :placeholder="placeholder"
-            :clearable="true" :disabled="disabled" @change="setLocationAddress($event)">
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.placeId" :placeholder="placeholder"
+            :clearable="true" :disabled="disabled" @change="setLocationValues($event)">
             <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />
         </el-select>
         <el-input v-if="customDesign.mutable" class="design__mt" placeholder="地址"
-            :model-value="customDesign.mutable.locationAddress" :disabled="true"></el-input>
+            :model-value="customDesign.mutable.placeAddress" :disabled="true"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -17,12 +17,12 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.mutable.locationName" :placeholder="placeholder" :clearable="true"
-                :disabled="disabled" @change="setLocationAddress($event)">
+            <el-select v-model="customDesign.mutable.placeId" :placeholder="placeholder" :clearable="true"
+                :disabled="disabled" @change="setLocationValues($event)">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                     :value="String(item.name)" />
             </el-select>
-            <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
+            <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.placeAddress"
                 :disabled="true"></el-input>
         </template>
     </MoleculeDesignToolbar>
@@ -40,6 +40,10 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
         type: 'place',
         mutable: {
             label: '空間地點',
+            placeId: '',
+            placeName: '',
+            placeAddressRegion: '', // 第一級行政區
+            placeAddress: '',
         }
     }
 })
@@ -86,6 +90,10 @@ function setDefaultValue() {
         type: 'place',
         mutable: {
             label: '空間地點',
+            placeId: '',
+            placeName: '',
+            placeAddressRegion: '', // 第一級行政區
+            placeAddress: '',
         }
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
@@ -100,17 +108,17 @@ async function handleChange(templateDesign: any) {
     })
 }
 
-function setLocationAddress(locationName: string) {
-    if (locationName) {
-        const selectedItem = placeList.value.find(item => {
-            return item.name === locationName
-        })
-        if (selectedItem) {
-            if (customDesign.value.mutable) {
-                customDesign.value.mutable.locationAddress = selectedItem.address
-                customDesign.value.mutable.locatoinRegion = selectedItem.addressRegion
-            }
-        }
+function setLocationValues(placeId: string) {
+    if (!placeId) {
+        return
+    }
+    const selectedItem = placeList.value.find(item => {
+        return item.name === placeId
+    })
+    if (selectedItem && customDesign.value.mutable) {
+        customDesign.value.mutable.placeName = selectedItem.name
+        customDesign.value.mutable.placeAddress = selectedItem.address
+        customDesign.value.mutable.placeAddressRegion = selectedItem.addressRegion
     }
 }
 
