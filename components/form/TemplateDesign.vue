@@ -4,9 +4,10 @@
 
         </slot>
     </div>
+    {{ templateDesigns }}
     <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
-            <!-- 限制一個的SEO必要欄位，或是高階欄位 -->
+            <!-- 必填且限量的欄位 -->
             <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
@@ -43,6 +44,11 @@
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignTextarea>
+            <OrganismDesignEventGroup v-if="item.type === 'eventGroup'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignEventGroup>
             <!-- 非必填寫欄位 -->
             <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
@@ -132,7 +138,7 @@ function getOrganizationId() {
         return design.type === 'organization'
     })
     if (organization) {
-        return organization.mutable?.value
+        return organization.mutable?.organizationId
     }
 }
 function handleRemove(index: number) {

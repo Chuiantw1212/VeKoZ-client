@@ -29,7 +29,7 @@
         <el-icon>
           <Location />
         </el-icon>
-        <template #title>地點管理</template>
+        <template #title>空間地點管理</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/organization">

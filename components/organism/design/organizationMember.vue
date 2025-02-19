@@ -1,5 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
+    <!-- organizationId{{organizationId}} -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
@@ -90,7 +91,7 @@ onMounted(() => {
 
 watch(() => props.organizationId, (newValue) => {
     getOrganizationMemberList(newValue)
-}, { immediate: true })
+}, { immediate: true, deep: true, })
 
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()

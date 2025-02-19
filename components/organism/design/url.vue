@@ -31,7 +31,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'url',
         mutable: {
-            label: '超連結',
+            label: '網址',
             urlName: '',
             urlValue: '',
         }

@@ -289,9 +289,10 @@ function allowDrop(ev: any) {
     ev.preventDefault();
 }
 function setTemplateItem(itemMeta: ITemplateDesign) {
-    const { formField, type } = itemMeta
-    templateTemp.value.item.formField = formField
-    templateTemp.value.item.type = type
+    // const { formField, type } = itemMeta
+    Object.assign(templateTemp.value.item, itemMeta)
+    // templateTemp.value.item.formField = formField
+    // templateTemp.value.item.type = type
 }
 function cancelDragging() {
     templateTemp.value.item.type = ''

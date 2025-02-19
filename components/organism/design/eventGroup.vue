@@ -46,11 +46,11 @@ const props = defineProps({
     },
     required: {
         type: Boolean,
-        default: true
+        default: false
     },
     placeholder: {
         type: String,
-        default: '例：EN的理財八堂課，統一曝光'
+        default: '例：EN的理財八堂課，統一管理'
     },
     onchange: {
         type: Function,

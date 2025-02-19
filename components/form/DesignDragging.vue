@@ -3,37 +3,43 @@
         <!-- 這一個檔案要跟後端配合，全端工程師的含金量大概就在這邊了 -->
         <el-divider class="mt-0" content-position="left">必填且限量的欄位</el-divider>
         <OrganismDesignBanner v-if="isTypeLimited('banner')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateItem({ type: 'banner', formField: 'image' })" @mouseout="cancelDragging()"
-            :disabled="true" :isDesigning="false">
+            @mouseenter="setTemplateItem({ type: 'banner', formField: 'image', required: true, })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignBanner>
         <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
-            draggable="true" :isDesigning="false" @mouseenter="setTemplateItem({ type: 'header1', formField: 'name' })"
+            draggable="true" :isDesigning="false"
+            @mouseenter="setTemplateItem({ type: 'header1', formField: 'name', required: true, })"
             @mouseout="cancelDragging()">
         </OrganismDesignHeader1>
         <OrganismDesignTextarea v-if="isFormFieldLimited('descriptioin')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateItem({ type: 'textarea', formField: 'descriptioin' })"
+            draggable="true"
+            @mouseenter="setTemplateItem({ type: 'textarea', formField: 'descriptioin', required: true, })"
             placeholder="請輸入SEO描述" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignTextarea>
-        <OrganismDesignUrl v-if="isTypeLimited('virtualLocation')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateItem({ type: 'url', formField: 'virtualLocation' })" @mouseout="cancelDragging()"
+        <OrganismDesignOrganization v-if="isTypeLimited('organization')" class="eventTemplate__draggable"
+            draggable="true"
+            @mouseenter="setTemplateItem({ type: 'organization', formField: 'organizer', required: true, })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        </OrganismDesignOrganization>
+        <OrganismDesignOrganizationMember v-if="isTypeLimited('organizationMember')" class="eventTemplate__draggable"
+            draggable="true"
+            @mouseenter="setTemplateItem({ type: 'organizationMember', formField: 'performers', required: true, })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        </OrganismDesignOrganizationMember>
+        <el-divider class="mt-0" content-position="left">限量的欄位</el-divider>
+        <OrganismDesignPlace v-if="isTypeLimited('place')" class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'place', formField: 'location', })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
+        </OrganismDesignPlace>
+        <OrganismDesignUrl v-if="isFormFieldLimited('virtualLocation')" class="eventTemplate__draggable"
+            :model-value="virtualLocation" namePlaceholder="視訊會議連結" valuePlaceHolder="https://meet.google.com/ve-ko-ss"
+            draggable="true" @mouseenter="setTemplateItem({ type: 'url', formField: 'virtualLocation', })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignUrl>
         <OrganismDesignEventGroup v-if="isTypeLimited('eventGroup')" class="eventTemplate__draggable" draggable="true"
             @mouseenter="setTemplateItem({ type: 'eventGroup', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignEventGroup>
-        <OrganismDesignOrganization v-if="isTypeLimited('organization')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateItem({ type: 'organization', formField: 'organizer' })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignOrganization>
-        <OrganismDesignOrganizationMember v-if="isTypeLimited('organizationMember')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateItem({ type: 'organizationMember', formField: 'performers' })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignOrganizationMember>
-        <OrganismDesignPlace v-if="isTypeLimited('place')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateItem({ type: 'place', formField: 'location' })" @mouseout="cancelDragging()"
-            :disabled="true" :isDesigning="false">
-        </OrganismDesignPlace>
         <el-divider content-position="left">無限量供應欄位</el-divider>
         <OrganismDesignInput class="eventTemplate__draggable" :disabled="true" draggable="true" :isDesigning="false"
             @mouseenter="setTemplateItem({ type: 'input', })" @mouseout="cancelDragging()"></OrganismDesignInput>
@@ -65,6 +71,22 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['mouseout', 'mouseenter'])
+//
+const header1 = ref<ITemplateDesign>({
+    type: 'input',
+    formField: 'name',
+    mutable: {
+        label: '視訊連結',
+    }
+})
+
+const virtualLocation = ref<ITemplateDesign>({
+    type: 'url',
+    formField: 'virtualLocation',
+    mutable: {
+        label: '視訊連結',
+    }
+})
 
 const props = defineProps({
     designs: {
@@ -74,7 +96,7 @@ const props = defineProps({
         }
     }
 })
-
+//
 function isTypeLimited(type: string = '') {
     const isAvailable = props.designs.every((design) => {
         return design.type !== type
