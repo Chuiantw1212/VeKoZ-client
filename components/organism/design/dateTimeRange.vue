@@ -1,11 +1,11 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <!-- customDesign: {{ customDesign }} -->
+    <!-- customDesign.mutable.value: {{ customDesign.mutable?.value }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
         <div class="dateTimeRange">
-            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                @blur="setDefaultTime()" :disabled="disabled"></el-date-picker>
+            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
+                :disabled="disabled" @clear="clearDate()"></el-date-picker>
             <AtomVenoniaTimePicker v-if="customDesign.mutable" class="dateTimeRange__time"
                 v-model="customDesign.mutable.value" :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaTimePicker>
@@ -21,7 +21,7 @@
         <template v-slot:default>
             <div class="dateTimeRange">
                 <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                    @blur="setDefaultTime()"></el-date-picker>
+                    @blur="setDate()"></el-date-picker>
                 <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.mutable.value">
                 </AtomVenoniaTimePicker>
             </div>
@@ -95,11 +95,16 @@ function setDefaultValue() {
     }
     delete customDesign.value.mutable // IMPORTANT: 刪掉會有不明的錯誤
     date.value = new Date()
+
+    const startDate = new Date()
+    const endDate = new Date()
+    const currentHour = new Date().getHours()
+    endDate.setHours(currentHour + 1)
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         mutable: {
             label: '時間日期',
-            value: [new Date(), new Date()]
+            value: [startDate, endDate]
         }
     }
     if (props.formField) {
@@ -109,47 +114,73 @@ function setDefaultValue() {
     customDesign.value = mergedItem
 }
 
-function setDefaultTime() {
+function setDate() {
     if (!customDesign.value.mutable) {
         return
     }
-    // get current
+
     const newYear = date.value.getFullYear()
     const newMonth = date.value.getMonth()
     const newDate = date.value.getDate()
+    const defaultTime = getDefaultTime()
 
-    let newStartDate: Date = new Date()
-    let newEndDate: Date = new Date()
-    const dates: string[] = customDesign.value.mutable.value
+    const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
+    const newStartISO = newStartDate.toISOString()
 
-    // set startDate
-    if (dates[0]) {
-        const oldStartDate = dates[0] as any
-        if (oldStartDate instanceof Date) {
-            newStartDate = oldStartDate
-        } else {
-            newStartDate = new Date(dates[0])
-        }
+    const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
+    const newEndISO = newEndDate.toISOString()
+
+    customDesign.value.mutable.value = [newStartISO, newEndISO]
+}
+
+function clearDate() {
+    const startDate = new Date()
+    const endDate = new Date()
+    const currentHour = new Date().getHours()
+    endDate.setHours(currentHour + 1)
+    if (customDesign.value.mutable) {
+        customDesign.value.mutable.value = []
     }
-    newStartDate.setFullYear(newYear)
-    newStartDate.setFullYear(newMonth)
-    newStartDate.setDate(newDate)
+}
 
-    // set endDate
-    if (dates[1]) {
-        const oldEndDate = dates[1] as any
-        if (oldEndDate instanceof Date) {
-            newEndDate = oldEndDate
-        } else {
-            newEndDate = new Date(dates[1])
-        }
+function getDefaultTime(hourDelay: number = 0) {
+    const currentDate = new Date()
+    let hour = currentDate.getHours()
+    const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
     }
-    newEndDate.setFullYear(newYear)
-    newEndDate.setFullYear(newMonth)
-    newEndDate.setDate(newDate)
+    return {
+        hour,
+        minute: base * 15
+    }
+    // let hourString = String(hour).padStart(2, '0')
+    // const minuteString = String(base * 15).padStart(2, '0')
+    // displayStart.value = `${hourString}:${minuteString}`
+    // currentDate.setHours(hour)
+    // currentDate.setMinutes(base * 15)
+    // modelValue.value[0] = currentDate.toISOString()
+}
 
-    // set dates
-    customDesign.value.mutable.value = [newStartDate, newEndDate]
+function setDefaultEndTime() {
+    const currentDate = new Date()
+    let hour = currentDate.getHours() + 1
+    const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    // let hourString = String(hour).padStart(2, '0')
+    // const minuteString = String(base * 15).padStart(2, '0')
+    // displayEnd.value = `${hourString}:${minuteString}`
+    // currentDate.setHours(hour)
+    // currentDate.setMinutes(base * 15)
+    // modelValue.value[1] = currentDate.toISOString()
 }
 
 async function handleChange(templateDesign: any) {
