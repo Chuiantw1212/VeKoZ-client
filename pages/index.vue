@@ -10,7 +10,9 @@
                     </FormSearchEvents>
                 </el-card>
                 <br />
-                廣告合作徵求中
+                <div class="sideContainer__ads">
+                    廣告合作徵求中
+                </div>
             </div>
         </el-col>
         <el-col :span="cardGroupSize">
@@ -187,7 +189,7 @@ async function getEventList() {
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result,]
+        eventList.value = [...result, ...result,]
         isLoading.value = false
     }, 500)
 }
@@ -222,15 +224,18 @@ async function getEventList() {
 }
 
 .sideContainer {
+    z-index: 20;
     position: fixed;
-    width: 22vw;
-    max-width: 295px;
-    // width: inherit;
-    // max-width: inherit;
+    width: calc((100vw - 200px) / 4 - 8px);
+    // max-width: 295px;
 
     .cardContainer__card {
-        width: calc(100%);
-        z-index: 20;
+        width: 100%;
+    }
+
+    .sideContainer__ads {
+        border: 1px solid black;
+        height: calc(100vh - 460px);
     }
 
 }
