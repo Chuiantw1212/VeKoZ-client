@@ -1,5 +1,6 @@
 <template>
     <div class="inputGroup" :style="{ width: props.width, height: props.height, }">
+        <!-- {{ banner }} -->
         <div class="inputGroup__nameGroup">
             <div>
                 <span v-if="required" class="nameGroup__required">*</span>
@@ -23,7 +24,7 @@
 <script setup lang="ts">
 import { UploadFilled } from '@element-plus/icons-vue'
 import { Buffer } from 'buffer/'
-const localValue = defineModel('modelValue', {
+const banner = defineModel('modelValue', {
     default: function () {
         return {
             type: '',
@@ -55,25 +56,25 @@ const props = defineProps({
 })
 
 const isUploaded = computed(() => {
-    const isUrl = typeof localValue.value === 'string'
-    const isUploaded = (localValue.value as any).type !== ''
+    const isUrl = typeof banner.value === 'string'
+    const isUploaded = (banner.value as any).type !== ''
     return isUrl || isUploaded
 })
 
 // Methods
 function getImageSrc() {
-    if (!localValue.value) {
+    if (!banner.value) {
         return
     }
-    if (typeof localValue.value === "string") {
+    if (typeof banner.value === "string") {
         console.log('ttest')
         const expression = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
         const regex = new RegExp(expression)
-        if (String(localValue.value).match(regex)) {
-            return `url(${localValue.value})`
+        if (String(banner.value).match(regex)) {
+            return `url(${banner.value})`
         }
     }
-    const { type, buffer } = localValue.value as any
+    const { type, buffer } = banner.value as any
     let formatBuffer: any = buffer
     if (!(buffer instanceof Uint8Array)) {
         formatBuffer = Buffer.from(buffer)
@@ -102,7 +103,7 @@ async function handleFiles(event: any) {
         type,
         buffer,
     }
-    localValue.value = imageBlob
+    banner.value = imageBlob
 }
 </script>
 <style lang="scss" scoped>

@@ -21,6 +21,7 @@ export interface IEvent {
     isAfternoon?: boolean,
     isEvening?: boolean,
     image?: string,
+    organizerName?: string,
 }
 
 /**

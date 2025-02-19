@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   app: {
     // head
     head: {
-      title: 'Vekoss微課室 - 開課學習輕而易舉',
+      title: 'VeKoss微課室 - 開課學習輕而易舉',
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {

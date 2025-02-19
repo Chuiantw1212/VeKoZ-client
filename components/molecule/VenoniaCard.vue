@@ -37,7 +37,6 @@
         justify-content: space-between;
         gap: 8px;
         align-items: center;
-        height: 42px;
     }
 }
 </style>

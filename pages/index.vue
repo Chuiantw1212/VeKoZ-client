@@ -4,7 +4,7 @@
             @change="getEventList()">
         </FormSearchEvents>
         <el-col v-else :span="searchFromSize">
-            <div class="cardContainer">
+            <div class="sideContainer">
                 <el-card class="cardContainer__card">
                     <FormSearchEvents v-model="form" ref="formRef" class="form" @change="getEventList()">
                     </FormSearchEvents>
@@ -20,7 +20,9 @@
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
-                                <img :src="item.image" style="width: 100%" />
+                                <img v-if="item.image" class="card__image" :src="item.image" :alt="item.name"
+                                    onerror="this.onerror=null;this.src='/500x250.png'">
+                                <img v-else class="card__image" src="/500x250.png" :alt="item.name">
                             </NuxtLink>
                         </template>
                         <template #footer>
@@ -29,7 +31,7 @@
                                     <tr>
                                         <td colspan="3">{{ getDates(item) }}</td>
                                     </tr>
-                                    <tr>
+                                    <tr class="table__row">
                                         <td>台北市</td>
                                         <td>{{ item.name }}</td>
                                         <td>
@@ -40,11 +42,7 @@
                                     </tr>
                                 </tbody>
                                 <!-- <tr>
-                                    <td>5</td>
-                                    <td>
-                                       
-                                    </td>
-                                    <td>6</td>
+                                    <td colspan="3">{{ item.organizerName }}</td>
                                 </tr> -->
                             </table>
                             <!-- <span>
@@ -67,6 +65,7 @@
 
 <script setup lang="ts">
 import type { IEvent } from '~/types/event';
+// import placeholderImage from '@/assets/mock/eventImage.png'
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
@@ -104,7 +103,6 @@ onBeforeUnmount(() => {
 })
 
 // Methods
-
 function getDates(event: IEvent) {
     // const { startDate, endDate } = event
     let timeString = ''
@@ -223,7 +221,7 @@ async function getEventList() {
     border-bottom: 1px solid lightgrey;
 }
 
-.cardContainer {
+.sideContainer {
     position: fixed;
     width: 22vw;
     max-width: 295px;
@@ -234,6 +232,13 @@ async function getEventList() {
         width: calc(100%);
         z-index: 20;
     }
+
+}
+
+.card__image {
+    background-position: center;
+    width: 100%;
+    display: block;
 }
 
 .index__cardWrap {
@@ -242,6 +247,16 @@ async function getEventList() {
 
 .card__footTable {
     width: 100%;
+
+    .table__row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        *> {
+            width: 33%;
+        }
+    }
 }
 
 .footer__offer {
