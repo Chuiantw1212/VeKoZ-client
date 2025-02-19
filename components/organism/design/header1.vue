@@ -3,7 +3,7 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
-            :maxlength="30" :show-word-limit="true" size="large"></el-input>
+            :maxlength="30" :show-word-limit="true" size="large" :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
@@ -28,7 +28,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'header1',
         mutable: {
-            label: ''
+            label: '標題'
         }
     },
 })
@@ -43,6 +43,10 @@ const props = defineProps({
         default: false
     },
     required: {
+        type: Boolean,
+        default: false
+    },
+    disabled: {
         type: Boolean,
         default: false
     },

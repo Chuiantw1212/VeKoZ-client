@@ -1,55 +1,64 @@
 <template>
     <el-form label-width="auto">
+        <!-- 這一個檔案要跟後端配合，全端工程師的含金量大概就在這邊了 -->
         <el-divider content-position="left">限一個的高階欄位</el-divider>
-        <OrganismDesignBanner class="eventTemplate__draggable" formField="virtualLocation" draggable="true"
-            @mouseenter="setTemplateType('banner')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignBanner>
-        <OrganismDesignInput class="eventTemplate__draggable" :maxlength="30" :size="'large'" :disabled="true"
-            draggable="true" :isDesigning="false" @mouseenter="setTemplateType('input')" @mouseout="cancelDragging()">
-        </OrganismDesignInput>
-        <OrganismDesignUrl v-if="isDesignTypeAvailable('virtualLocation')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateType('virtualLocation')" @mouseout="cancelDragging()"
+        <OrganismDesignBanner class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'banner', formField: 'image' })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
+        </OrganismDesignBanner>
+        <OrganismDesignHeader1 class="eventTemplate__draggable" :disabled="true" draggable="true" :isDesigning="false"
+            @mouseenter="setTemplateItem({ type: 'header1', formField: 'name' })" @mouseout="cancelDragging()">
+        </OrganismDesignHeader1>
+        <OrganismDesignTextarea class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'textarea', formField: 'descriptioin' })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
+        </OrganismDesignTextarea>
+        <OrganismDesignUrl v-if="isDesignTypeAvailable('virtualLocation')" class="eventTemplate__draggable"
+            draggable="true" @mouseenter="setTemplateItem({ type: 'url', formField: 'virtualLocation' })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignUrl>
         <OrganismDesignEventGroup v-if="isDesignTypeAvailable('eventGroup')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateType('eventGroup')" @mouseout="cancelDragging()" :disabled="true"
-            :isDesigning="false">
+            draggable="true" @mouseenter="setTemplateItem({ type: 'eventGroup', })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
         </OrganismDesignEventGroup>
         <OrganismDesignOrganization v-if="isDesignTypeAvailable('organization')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateType('organization')" @mouseout="cancelDragging()" :disabled="true"
-            :isDesigning="false">
+            draggable="true" @mouseenter="setTemplateItem({ type: 'organization', formField: 'organizer' })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganization>
         <OrganismDesignOrganizationMember v-if="isDesignTypeAvailable('organizationMember')"
-            class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('organizationMember')"
+            class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'organizationMember', formField: 'performers' })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganizationMember>
         <OrganismDesignPlace v-if="isDesignTypeAvailable('place')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('place')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+            @mouseenter="setTemplateItem({ type: 'place', formField: 'location' })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
         </OrganismDesignPlace>
         <el-divider content-position="left">無限量供應欄位</el-divider>
         <OrganismDesignInput class="eventTemplate__draggable" :disabled="true" draggable="true" :isDesigning="false"
-            @mouseenter="setTemplateType('input')" @mouseout="cancelDragging()"></OrganismDesignInput>
-        <OrganismDesignNumber class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('number')"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false"></OrganismDesignNumber>
+            @mouseenter="setTemplateItem({ type: 'input', })" @mouseout="cancelDragging()"></OrganismDesignInput>
+        <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'number', })" @mouseout="cancelDragging()" :disabled="true"
+            :isDesigning="false"></OrganismDesignNumber>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('dateTimeRange')" @mouseout="cancelDragging()" :disabled="true"
+            @mouseenter="setTemplateItem({ type: 'dateTimeRange', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignDateTimeRange>
-        <OrganismDesignUrl class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('url')"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignUrl>
-        <OrganismDesignTextarea class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('textarea')" @mouseout="cancelDragging()" :disabled="true"
+        <OrganismDesignUrl class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'url', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
-        </OrganismDesignTextarea>
+        </OrganismDesignUrl>
         <OrganismDesignDivider class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('divider')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+            @mouseenter="setTemplateItem({ type: 'divider', })" @mouseout="cancelDragging()" :disabled="true"
+            :isDesigning="false">
         </OrganismDesignDivider>
-        <OrganismDesignEditor class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('editor')"
-            @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
+        <OrganismDesignEditor class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'editor', })" @mouseout="cancelDragging()" :isDesigning="false"
+            :disabled="true" placeholder="限制一個，內文上限2000字">
         </OrganismDesignEditor>
-        <OrganismDesignOffer class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('offer')"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'offer', })" @mouseout="cancelDragging()" :disabled="true"
+            :isDesigning="false">
         </OrganismDesignOffer>
     </el-form>
 </template>
@@ -76,7 +85,7 @@ function isDesignTypeAvailable(type: string = '') {
 function cancelDragging() {
     emit('mouseout')
 }
-function setTemplateType(event: any) {
+function setTemplateItem(event: any) {
     emit('mouseenter', event)
 }
 </script>

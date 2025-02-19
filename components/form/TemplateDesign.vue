@@ -6,17 +6,27 @@
     </div>
     <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
-            <!-- 必填寫欄位 -->
-            <OrganismDesignInput v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :maxlength="30" :size="'large'" :isDesigning="props.isDesigning"
+            <!-- 限制一個的SEO必要欄位，或是高階欄位 -->
+            <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignInput>
-            <!-- <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
+            </OrganismDesignBanner>
+            <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignHeader1> -->
+            </OrganismDesignHeader1>
+            <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
+                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignDateTimeRange>
+            <OrganismDesignUrl v-if="item.type === 'virtualLocation'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" form-field="virtualLocation" :isDesigning="props.isDesigning"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignUrl>
             <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
@@ -69,22 +79,6 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOffer>
-            <!-- 限制一個的SEO必要欄位，或是高階欄位 -->
-            <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignBanner>
-            <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
-                :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignDateTimeRange>
-            <OrganismDesignUrl v-if="item.type === 'virtualLocation'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" form-field="virtualLocation" :isDesigning="props.isDesigning"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignUrl>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 

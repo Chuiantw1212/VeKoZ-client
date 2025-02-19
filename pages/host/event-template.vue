@@ -33,7 +33,7 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    <div class="eventTemplate__designItem"
+                    <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳元件至 此位置
@@ -47,7 +47,7 @@
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>
-                    <FormDesignDragging :designs="eventTemplate.designs" @mouseenter="setTemplateType($event)"
+                    <FormDesignDragging :designs="eventTemplate.designs" @mouseenter="setTemplateItem($event)"
                         @mouseout="cancelDragging()">
                     </FormDesignDragging>
                 </el-card>
@@ -285,8 +285,9 @@ async function removeDesign(data: ITemplateDragSouce) {
 function allowDrop(ev: any) {
     ev.preventDefault();
 }
-function setTemplateType(type: string) {
-    console.log('setTemplateType', type)
+function setTemplateItem(itemMeta: ITemplateDesign) {
+    const { formField, type } = itemMeta
+    templateTemp.value.item.formField = formField
     templateTemp.value.item.type = type
 }
 function cancelDragging() {
