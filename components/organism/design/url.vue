@@ -96,7 +96,7 @@ function setDefaultValue() {
         }
     }
     if (props.formField) {
-        // defaultValue.
+        defaultValue.formField = props.formField
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem

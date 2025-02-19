@@ -95,6 +95,7 @@ function setDefaultValue() {
         return
     }
     delete customDesign.value.mutable // IMPORTANT: 刪掉會有不明的錯誤
+    date.value = new Date()
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         mutable: {
@@ -102,11 +103,10 @@ function setDefaultValue() {
             value: [new Date(), new Date()]
         }
     }
-    date.value = new Date()
-    const mergedItem = Object.assign(defaultValue, customDesign.value)
-    if (!mergedItem.mutable) {
-        alert('元件初始化失敗！') // 偵測不明的錯誤
+    if (props.formField) {
+        defaultValue.formField = props.formField
     }
+    const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
 }
 
