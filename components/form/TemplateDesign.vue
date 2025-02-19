@@ -4,15 +4,10 @@
 
         </slot>
     </div>
-    {{ templateDesigns }}
+    <!-- {{ templateDesigns }} -->
     <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
             <!-- 必填且限量的欄位 -->
-            <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignBanner>
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :required="item.required" :isDesigning="props.isDesigning"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
@@ -23,11 +18,6 @@
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignDateTimeRange>
-            <OrganismDesignUrl v-if="item.type === 'virtualLocation'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" form-field="virtualLocation" :isDesigning="props.isDesigning"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignUrl>
             <OrganismDesignOrganization v-if="item.type === 'organization'" v-model="templateDesigns[index]"
                 :id="item.id" :onchange="onchange" :isDesigning="props.isDesigning" :required="item.required"
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
@@ -44,6 +34,22 @@
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignTextarea>
+            <!-- 限量的欄位 -->
+            <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignBanner>
+            <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
+                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignPlace>
+            <OrganismDesignUrl v-if="item.type === 'virtualLocation'" v-model="templateDesigns[index]" :id="item.id"
+                :onchange="onchange" form-field="virtualLocation" :isDesigning="props.isDesigning"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            </OrganismDesignUrl>
             <OrganismDesignEventGroup v-if="item.type === 'eventGroup'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
@@ -60,11 +66,6 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignNumber>
-            <OrganismDesignPlace v-if="item.type === 'place'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
-            </OrganismDesignPlace>
             <OrganismDesignUrl v-if="item.type === 'url'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
@@ -119,7 +120,28 @@ const formRules = ref<{ [key: string]: any }>({})
 watch(() => templateDesigns.value, () => {
     templateDesigns.value.forEach(design => {
         if (design.formField) {
-            formModel.value[design.formField] = design.mutable?.value
+            switch (design.formField) {
+                // case 'date': {
+                //     break;
+                // }
+                // case 'description': {
+                //     break;
+                // }
+                case 'organizer': {
+                    formModel.value[design.formField] = design.mutable?.organizationId
+                    break;
+                }
+                case 'performers': {
+                    formModel.value[design.formField] = design.mutable?.memberIds
+                    break;
+                }
+                case 'date':
+                case 'name':
+                case 'image':
+                default: {
+                    formModel.value[design.formField] = design.mutable?.value
+                }
+            }
             formRules.value[design.formField] = {
                 required: true,
                 message: `${design.mutable?.label}為必填`

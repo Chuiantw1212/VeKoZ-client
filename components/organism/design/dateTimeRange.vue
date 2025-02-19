@@ -98,7 +98,7 @@ function setDefaultValue() {
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         mutable: {
-            label: '',
+            label: '時間日期',
             value: [new Date(), new Date()]
         }
     }

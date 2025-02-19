@@ -4,7 +4,6 @@
         "mutable": {
             "label": ""
         },
-        "required": true,
         "formField": "image"
     },
     {
@@ -24,6 +23,14 @@
         "formField": "date"
     },
     {
+        "type": "textarea",
+        "mutable": {
+            "label": "活動摘要"
+        },
+        "required": true,
+        "formField": "description"
+    },
+    {
         "type": "organization",
         "mutable": {
             "label": "主辦單位"
@@ -38,14 +45,6 @@
         },
         "required": true,
         "formField": "performers"
-    },
-    {
-        "type": "textarea",
-        "mutable": {
-            "label": "活動摘要"
-        },
-        "required": true,
-        "formField": "description"
     },
     {
         "type": "place",

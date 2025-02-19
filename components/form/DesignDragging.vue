@@ -2,20 +2,20 @@
     <el-form label-width="auto">
         <!-- 這一個檔案要跟後端配合，全端工程師的含金量大概就在這邊了 -->
         <el-divider class="mt-0" content-position="left">必填且限量的欄位</el-divider>
-        <OrganismDesignBanner v-if="isTypeLimited('banner')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateItem({ type: 'banner', formField: 'image', required: true, })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignBanner>
         <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
             draggable="true" :isDesigning="false"
             @mouseenter="setTemplateItem({ type: 'header1', formField: 'name', required: true, })"
             @mouseout="cancelDragging()">
         </OrganismDesignHeader1>
-        <OrganismDesignTextarea v-if="isFormFieldLimited('descriptioin')" class="eventTemplate__draggable"
+        <OrganismDesignTextarea v-if="isFormFieldLimited('description')" class="eventTemplate__draggable"
             draggable="true"
-            @mouseenter="setTemplateItem({ type: 'textarea', formField: 'descriptioin', required: true, })"
+            @mouseenter="setTemplateItem({ type: 'textarea', formField: 'description', required: true, })"
             placeholder="請輸入SEO描述" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignTextarea>
+        <OrganismDesignDateTimeRange v-if="isFormFieldLimited('date')" class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'dateTimeRange', formField: 'date', required: true, })"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        </OrganismDesignDateTimeRange>
         <OrganismDesignOrganization v-if="isTypeLimited('organization')" class="eventTemplate__draggable"
             draggable="true"
             @mouseenter="setTemplateItem({ type: 'organization', formField: 'organizer', required: true, })"
@@ -26,7 +26,12 @@
             @mouseenter="setTemplateItem({ type: 'organizationMember', formField: 'performers', required: true, })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganizationMember>
+
         <el-divider class="mt-0" content-position="left">限量的欄位</el-divider>
+        <OrganismDesignBanner v-if="isTypeLimited('banner')" class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'banner', formField: 'image', })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
+        </OrganismDesignBanner>
         <OrganismDesignPlace v-if="isTypeLimited('place')" class="eventTemplate__draggable" draggable="true"
             @mouseenter="setTemplateItem({ type: 'place', formField: 'location', })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
@@ -41,15 +46,12 @@
             :isDesigning="false">
         </OrganismDesignEventGroup>
         <el-divider content-position="left">無限量供應欄位</el-divider>
-        <OrganismDesignInput class="eventTemplate__draggable" :disabled="true" draggable="true" :isDesigning="false"
-            @mouseenter="setTemplateItem({ type: 'input', })" @mouseout="cancelDragging()"></OrganismDesignInput>
-        <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateItem({ type: 'number', })" @mouseout="cancelDragging()" :disabled="true"
-            :isDesigning="false"></OrganismDesignNumber>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @mouseenter="setTemplateItem({ type: 'dateTimeRange', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignDateTimeRange>
+        <OrganismDesignInput class="eventTemplate__draggable" :disabled="true" draggable="true" :isDesigning="false"
+            @mouseenter="setTemplateItem({ type: 'input', })" @mouseout="cancelDragging()"></OrganismDesignInput>
         <OrganismDesignUrl class="eventTemplate__draggable" draggable="true"
             @mouseenter="setTemplateItem({ type: 'url', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
@@ -66,6 +68,9 @@
             @mouseenter="setTemplateItem({ type: 'offer', })" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignOffer>
+        <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateItem({ type: 'number', })" @mouseout="cancelDragging()" :disabled="true"
+            :isDesigning="false"></OrganismDesignNumber>
     </el-form>
 </template>
 <script setup lang="ts">

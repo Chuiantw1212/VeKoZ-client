@@ -27,7 +27,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'textarea',
         mutable: {
-            label: 'SEO描述'
+            label: '描述'
         }
     }
 })
@@ -51,7 +51,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入SEO描述'
+        default: '請輸入描述'
     },
     onchange: {
         type: Function,
@@ -80,7 +80,7 @@ function setDefaultValue() {
     const defaultValue: ITemplateDesign = {
         type: 'textarea',
         mutable: {
-            label: '',
+            label: '描述',
         }
     }
     if (props.formField) {

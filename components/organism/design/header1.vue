@@ -82,7 +82,7 @@ function setDefaultValue() {
     const defaultValue: ITemplateDesign = {
         type: 'header1',
         mutable: {
-            label: '',
+            label: '活動名稱',
         }
     }
     if (props.formField) {
