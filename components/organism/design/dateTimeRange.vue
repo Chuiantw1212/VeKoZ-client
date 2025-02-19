@@ -95,7 +95,7 @@ function setDefaultValue() {
         return
     }
     delete customDesign.value.mutable // IMPORTANT: 刪掉會有不明的錯誤
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         mutable: {
             label: '',

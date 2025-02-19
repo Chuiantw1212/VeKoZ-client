@@ -158,7 +158,7 @@ function setDefaultValue() {
     if (customDesign?.value.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'offer',
         mutable: {
             label: '票券群組',

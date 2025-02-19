@@ -107,7 +107,7 @@ function setDefaultValue() {
     if (customDesign.value.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'organizationMember',
         mutable: {
             label: '組織成員',

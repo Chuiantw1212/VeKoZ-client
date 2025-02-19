@@ -76,7 +76,7 @@ function setDefaultValue() {
     if (customDesign.value?.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'header1',
         mutable: {
             label: '',

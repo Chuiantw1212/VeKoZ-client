@@ -17,18 +17,12 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-interface IModel {
-    type: 'eventGroup',
-    mutable: {
-        label: string,
-        value: string,
-    }
-}
 
-const customDesign = defineModel<IModel>('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'eventGroup',
         mutable: {
@@ -83,7 +77,7 @@ function setDefaultValue() {
     if (customDesign.value?.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'eventGroup',
         mutable: {
             label: '',

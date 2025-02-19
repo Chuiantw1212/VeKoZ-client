@@ -93,7 +93,7 @@ function setDefaultValue() {
     }
 
     // 新增時添加預設值
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'organization',
         mutable: {
             label: '組織',

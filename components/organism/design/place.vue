@@ -90,7 +90,7 @@ function setDefaultValue() {
     if (customDesign.value?.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'place',
         mutable: {
             label: '空間地點',
