@@ -17,8 +17,11 @@ export interface ITemplateDesign {
     required?: boolean,
     mutable?: {
         label?: string,
-        // 多數欄位使用
+        // 未定義欄位使用
         value?: any,
+        // organization
+        organizationName?: string,
+        organizationId?: string,
         // 時間
         startDate: Date,
         endDate: Date,

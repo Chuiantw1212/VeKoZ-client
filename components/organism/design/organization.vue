@@ -2,7 +2,7 @@
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
         :prop="customDesign.formField">
-        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.value" placeholder="請選擇現有組織"
+        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.organizationName" placeholder="請選擇現有組織"
             :clearable="true" :disabled="disabled">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
         </el-select>
@@ -16,8 +16,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.mutable.value" placeholder="請選擇現有組織" :clearable="true"
-                :disabled="disabled">
+            <el-select v-model="customDesign.mutable.organizationName" placeholder="請選擇現有組織" :clearable="true"
+                :disabled="disabled" @change="setOrganizationId()">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
         </template>
@@ -106,6 +106,16 @@ async function handleChange(templateDesign: any) {
         isLoading.value = false
     })
 }
+
+function setOrganizationId() {
+    const selectedItem = organizationList.value.find(item => {
+        return item.name === customDesign.value.mutable?.organizationName
+    })
+    if (customDesign.value.mutable) {
+        customDesign.value.mutable.organizationId = selectedItem?.id
+    }
+}
+
 async function getOrganizationList() {
     const result = await repoOrganization.getOrganizationList()
     organizationList.value = result

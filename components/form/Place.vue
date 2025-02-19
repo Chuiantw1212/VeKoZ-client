@@ -1,5 +1,9 @@
 <template>
     <el-form class="placeForm" :model="form" label-width="auto">
+        <el-form-item label="TODO">
+            搜尋系統中既存的地點，帶入資料。主講、主辦、場地持有方共用評價。
+            <!-- <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" /> -->
+        </el-form-item>
         <el-form-item label="名稱">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
