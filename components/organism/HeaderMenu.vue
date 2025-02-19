@@ -5,7 +5,12 @@
                 <More />
             </el-icon>
         </el-menu-item> -->
-        <NuxtLink to="/">
+        <NuxtLink v-if="repoUser.userType === 'host'" to="/host">
+            <el-menu-item class="headerMenu__logo">
+                <img src="@/assets/logo/480_320_admin.png" class="logo__image" alt="Element logo" />
+            </el-menu-item>
+        </NuxtLink>
+        <NuxtLink v-else to="/">
             <el-menu-item class="headerMenu__logo">
                 <img src="@/assets/logo/480_320.png" class="logo__image" alt="Element logo" />
             </el-menu-item>

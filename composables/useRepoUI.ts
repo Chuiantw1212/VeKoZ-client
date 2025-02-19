@@ -70,8 +70,8 @@ export default defineStore('ui', () => {
             clearTimeout(existedTimer);
         }
         const newTimer = setTimeout(() => {
-            func();
             delete debounceTimeout.value[id]
+            func();
         }, timeout);
         debounceTimeout.value[id] = newTimer
     }
