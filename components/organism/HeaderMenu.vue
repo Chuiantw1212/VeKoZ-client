@@ -1,5 +1,6 @@
 <template>
-    <el-menu class="headerMenu" mode="horizontal" :ellipsis="false" :menu-trigger="'click'">
+    <el-menu :default-active="activeIndex" class="headerMenu" mode="horizontal" :ellipsis="false"
+        :menu-trigger="'click'">
         <!-- <el-menu-item v-if="repoUser.userType === 'host'" class="headerMenu__toggle" @click="repoUI.toggleMenu()">
             <el-icon>
                 <More />
@@ -42,6 +43,7 @@ import { MoleculeAttendeeMenuItems } from '#components'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const isFullScreen = ref<boolean>(false)
+const activeIndex = ref('1')
 
 // Hooks
 const router = useRouter()
