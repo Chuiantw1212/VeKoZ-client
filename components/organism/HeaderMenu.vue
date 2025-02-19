@@ -7,7 +7,7 @@
         </el-menu-item> -->
         <NuxtLink to="/">
             <el-menu-item class="headerMenu__logo">
-                <img src="@/assets/1080_240.png" class="logo__image" alt="Element logo" />
+                <img src="@/assets/logo/480_320.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
         <div v-if="repoUser.userType === 'attendee' && repoUI.isLarge" class="attendee__menu">

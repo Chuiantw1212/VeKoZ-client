@@ -25,18 +25,20 @@
                         </template>
                         <template #footer>
                             <table class="card__footTable">
-                                <tr>
-                                    <td colspan="3">{{ getDates(item) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>台北市</td>
-                                    <td>{{ item.name }}</td>
-                                    <td>
-                                        <div class="footer__offer">
-                                            NTD 250
-                                        </div>
-                                    </td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3">{{ getDates(item) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>台北市</td>
+                                        <td>{{ item.name }}</td>
+                                        <td>
+                                            <div class="footer__offer">
+                                                NTD 250
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
                                 <!-- <tr>
                                     <td>5</td>
                                     <td>

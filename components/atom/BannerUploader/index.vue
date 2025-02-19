@@ -8,14 +8,15 @@
         </div>
         <label class="inputGroup__label">
             <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
-            <div v-if="!localValue.type && typeof localValue !== 'string'" class="label__content">
+            <div v-if="!isUploaded" class="label__content">
                 Banner上傳
                 <el-icon>
                     <UploadFilled></UploadFilled>
                 </el-icon>
             </div>
             <input v-show="false" :disabled="disabled" class="body__input" autocomplete="off" type="file"
-                accept="image/*" :data-required="required" :data-name="name" @change="handleFiles($event)" />
+                accept="image/*" :data-required="required" :data-name="name" @change="handleFiles($event)">
+            </input>
         </label>
     </div>
 </template>
@@ -23,6 +24,7 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { Buffer } from 'buffer/'
 const localValue = defineModel('modelValue', {
+    type: String || Object,
     default: function () {
         return {
             type: '',
@@ -53,19 +55,26 @@ const props = defineProps({
     }
 })
 
+const isUploaded = computed(() => {
+    const isUrl = typeof localValue.value === 'string'
+    const isUploaded = (localValue.value as any).type !== ''
+    return isUrl || isUploaded
+})
+
 // Methods
 function getImageSrc() {
     if (!localValue.value) {
         return
     }
     if (typeof localValue.value === "string") {
+        console.log('ttest')
         const expression = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
         const regex = new RegExp(expression)
         if (String(localValue.value).match(regex)) {
             return `url(${localValue.value})`
         }
     }
-    const { type, buffer } = localValue.value
+    const { type, buffer } = localValue.value as any
     let formatBuffer: any = buffer
     if (!(buffer instanceof Uint8Array)) {
         formatBuffer = Buffer.from(buffer)
