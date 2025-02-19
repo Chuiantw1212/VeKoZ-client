@@ -1,6 +1,5 @@
 <template>
     <div class="eventTemplate">
-        {{ eventTemplate }}
         <el-row :gutter="20">
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
@@ -34,12 +33,10 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    eventTemplate.designs: {{ eventTemplate.designs }}
-                    templateTemp.item.type:{{ templateTemp.item.type }}
                     <div class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
-                        請拖曳欄位至此
+                        請拖曳元件至 此位置
                     </div>
                 </el-card>
             </el-col>
@@ -179,6 +176,8 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
             break;
         }
         case 'blank': {
+            delete loadedTemplate.id
+            await postEventTemplate()
             break;
         }
         default: {

@@ -66,7 +66,11 @@
         "mutable": {
             "label": "公開票組",
             "offers": [
-                {}
+                {
+                    "name": "",
+                    "count": null,
+                    "price": null
+                }
             ]
         }
     },

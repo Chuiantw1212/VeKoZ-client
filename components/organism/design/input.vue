@@ -1,8 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
-            :disabled="disabled"></el-input>
+        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :maxlength="maxlength"
+            :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" :size="size"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
@@ -12,7 +12,8 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" :disabled="disabled"></el-input>
+            <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" :disabled="disabled"
+                :maxlength="maxlength" :show-word-limit="true" :size="size"></el-input>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -36,6 +37,14 @@ const props = defineProps({
         type: String,
         default: crypto.randomUUID()
     },
+    size: {
+        type: String as any, // 'large' | 'default' | 'small'
+        default: 'default',
+    },
+    maxlength: {
+        type: Number,
+        default: 8,
+    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -47,6 +56,10 @@ const props = defineProps({
     required: {
         type: Boolean,
         default: false
+    },
+    label: {
+        type: String,
+        default: '任意文字'
     },
     placeholder: {
         type: String,

@@ -55,7 +55,7 @@ async function selectTemplate(template: IEventTemplate) {
 }
 
 async function selectDefaultTemplate() {
-    const newTemplate = {
+    const newTemplate: IEventTemplate = {
         id: '',
         designs: defaultTemplateDesigns,
     }

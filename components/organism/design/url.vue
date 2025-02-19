@@ -1,6 +1,5 @@
 <template>
     <!-- 檢視與編輯用 -->
-    {{ formField }}
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.urlName" :placeholder="namePlaceholder"
             :disabled="disabled"></el-input>
