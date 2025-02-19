@@ -4,11 +4,13 @@
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
+        <!-- {{ displayStart }} -->
         <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
             @change="setStatDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
         -
+        <!-- {{ displayEnd }} -->
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
@@ -65,48 +67,6 @@ function setDiaplyTime() {
     }
 }
 
-function setDefaultTime() {
-    const currentDate = new Date()
-    let hour = currentDate.getHours()
-    const minute = currentDate.getMinutes()
-    let base = minute / 15
-    base = Math.ceil(base)
-    if (base === 4) {
-        hour += 1
-        base = 0
-    }
-    return {
-        hour,
-        minute: base * 15
-    }
-    // let hourString = String(hour).padStart(2, '0')
-    // const minuteString = String(base * 15).padStart(2, '0')
-    // displayStart.value = `${hourString}:${minuteString}`
-    // currentDate.setHours(hour)
-    // currentDate.setMinutes(base * 15)
-    // modelValue.value[0] = currentDate.toISOString()
-}
-
-// function setDefaultEndTime() {
-//     const currentDate = new Date()
-//     let hour = currentDate.getHours() + 1
-//     const minute = currentDate.getMinutes()
-//     let base = minute / 15
-//     base = Math.ceil(base)
-//     if (base === 4) {
-//         hour += 1
-//         base = 0
-//     }
-//     let hourString = String(hour).padStart(2, '0')
-//     const minuteString = String(base * 15).padStart(2, '0')
-//     displayEnd.value = `${hourString}:${minuteString}`
-//     currentDate.setHours(hour)
-//     currentDate.setMinutes(base * 15)
-//     modelValue.value[1] = currentDate.toISOString()
-// }
-
-
-
 function convertIsoToDisplayTime(isoString: string) {
     const currentDate = new Date(isoString)
     let hour = currentDate.getHours()
@@ -146,7 +106,6 @@ function setHours() {
 
 onMounted(() => {
     setHours()
-    // setDiaplyTime()
 })
 </script>
 <style lang="scss" scoped>
