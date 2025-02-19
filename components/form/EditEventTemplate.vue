@@ -18,7 +18,7 @@
                         使用中
                     </el-button>
                 </template>
-                <template v-else-if="row.id === 'default'">
+                <template v-else-if="['default', 'blank'].includes(row.id)">
                     <el-button size="small" @click="selectTemplate(row)">
                         建新板
                     </el-button>
@@ -32,7 +32,7 @@
         </el-table-column>
         <el-table-column prop="" label="刪除">
             <template #default="{ row }">
-                <el-button v-if="row.id !== 'default'" size="small" :icon="Delete"
+                <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
                     :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
                 </el-button>
             </template>
@@ -68,18 +68,29 @@ async function selectTemplate(template: IEventTemplate) {
     if (!template.id) {
         return
     }
-    if (template.id === 'default') {
-        // 刪除模板Id，觸發父層的Reset
-        eventTemplate.value.id = ''
-        eventTemplate.value.name = ''
-        emit('update:modelValue', eventTemplate.value)
-    } else {
-        isLoading.value = true
-        const result = await repoEventTemplate.getEventTemplate(template.id)
-        if (result) {
-            eventTemplate.value = result
+    switch (template.id) {
+        case 'default': {
+            eventTemplate.value.id = ''
+            eventTemplate.value.name = ''
+            emit('update:modelValue', eventTemplate.value)
+            break;
         }
-        isLoading.value = false
+        case 'blank': {
+            eventTemplate.value.id = 'blank'
+            eventTemplate.value.name = ''
+            eventTemplate.value.designs = []
+            emit('update:modelValue', eventTemplate.value)
+            break;
+        }
+        default: {
+            isLoading.value = true
+            const result = await repoEventTemplate.getEventTemplate(template.id)
+            if (result) {
+                eventTemplate.value = result
+            }
+            isLoading.value = false
+            break;
+        }
     }
 }
 
@@ -99,6 +110,10 @@ async function getEventTemplateList() {
     templateList.value.unshift({
         id: 'default',
         name: '系統預設',
+    })
+    templateList.value.unshift({
+        id: 'blank',
+        name: '空白模板',
     })
 
     if (templateList.value.length === 1) {

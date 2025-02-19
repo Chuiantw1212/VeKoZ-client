@@ -51,13 +51,15 @@
         "type": "place",
         "mutable": {
             "label": "線下空間"
-        }
+        },
+        "formField": "location"
     },
     {
         "type": "url",
         "mutable": {
             "label": "線上連結"
-        }
+        },
+        "formField": "virtualLocation"
     },
     {
         "type": "offer",

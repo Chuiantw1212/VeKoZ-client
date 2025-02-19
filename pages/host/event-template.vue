@@ -4,11 +4,15 @@
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
-                        <div class="venonia-card-header">
+                        <div class="venonia-card-header"> 
                             <el-form-item>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
-                                    @change="patchTemplateName()"></el-input>
+                                    @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
+                                </el-input>
                             </el-form-item>
+                            <div>
+                                {{ eventTemplate.id }}
+                            </div>
                             <div class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true">
                                     開啓模板
@@ -164,9 +168,20 @@ async function getRecentTemplate() {
 
 async function loadTemplate(loadedTemplate: IEventTemplate) {
     loadTemplateDialog.value.isOpen = false
-    if (!loadedTemplate.id) {
-        setDefaultTemplate()
-        await postEventTemplate()
+    switch (loadedTemplate.id) {
+        case '':
+        case 'default': {
+            delete loadedTemplate.id
+            setDefaultTemplate()
+            await postEventTemplate()
+            break;
+        }
+        case 'blank': {
+            break;
+        }
+        default: {
+            // Do nothing
+        }
     }
 }
 

@@ -25,27 +25,26 @@
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
         <el-divider content-position="left">限一個的高階欄位</el-divider>
-        <OrganismDesignUrl class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('virtualLocation')" formField="virtualLocation" @mouseout="cancelDragging()"
+        <OrganismDesignUrl v-if="isDesignTypeAvailable('virtualLocation')" class="eventTemplate__draggable"
+            draggable="true" @mouseenter="setTemplateType('virtualLocation')" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
         </OrganismDesignUrl>
-        <OrganismDesignBanner v-if="isDesignAvailable('banner')" class="eventTemplate__draggable"
-            formField="virtualLocation" draggable="true" @mouseenter="setTemplateType('banner')"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        <OrganismDesignBanner class="eventTemplate__draggable" formField="virtualLocation" draggable="true"
+            @mouseenter="setTemplateType('banner')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignBanner>
-        <OrganismDesignEventGroup v-if="isDesignAvailable('eventGroup')" class="eventTemplate__draggable"
+        <OrganismDesignEventGroup v-if="isDesignTypeAvailable('eventGroup')" class="eventTemplate__draggable"
             draggable="true" @mouseenter="setTemplateType('eventGroup')" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignEventGroup>
-        <OrganismDesignOrganization v-if="isDesignAvailable('organization')" class="eventTemplate__draggable"
+        <OrganismDesignOrganization v-if="isDesignTypeAvailable('organization')" class="eventTemplate__draggable"
             draggable="true" @mouseenter="setTemplateType('organization')" @mouseout="cancelDragging()" :disabled="true"
             :isDesigning="false">
         </OrganismDesignOrganization>
-        <OrganismDesignOrganizationMember v-if="isDesignAvailable('organizationMember')"
+        <OrganismDesignOrganizationMember v-if="isDesignTypeAvailable('organizationMember')"
             class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('organizationMember')"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganizationMember>
-        <OrganismDesignPlace v-if="isDesignAvailable('place')" class="eventTemplate__draggable" draggable="true"
+        <OrganismDesignPlace v-if="isDesignTypeAvailable('place')" class="eventTemplate__draggable" draggable="true"
             @mouseenter="setTemplateType('place')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignPlace>
 
@@ -64,9 +63,9 @@ const props = defineProps({
     }
 })
 
-function isDesignAvailable(formField: string = '') {
+function isDesignTypeAvailable(type: string = '') {
     const isAvailable = props.designs.every((design) => {
-        return design.formField !== formField
+        return design.type !== type
     })
     return isAvailable
 }
