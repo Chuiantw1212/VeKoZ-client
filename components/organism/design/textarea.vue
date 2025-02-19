@@ -58,7 +58,11 @@ const props = defineProps({
     onchange: {
         type: Function,
         default: async () => { }
-    }
+    },
+    formField: {
+        type: String,
+        default: '',
+    },
 })
 
 // Hooks
@@ -75,7 +79,7 @@ function setDefaultValue() {
     if (customDesign.value?.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'textarea',
         mutable: {
             label: '',

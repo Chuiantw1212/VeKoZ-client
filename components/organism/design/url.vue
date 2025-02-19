@@ -1,10 +1,10 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
-        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.virtualLocationName" placeholder="微課室"
+        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.urlName" :placeholder="namePlaceholder"
             :disabled="disabled"></el-input>
-        <el-input v-if="customDesign.mutable" class="design__mt" v-model="customDesign.mutable.virtualLocationUrl"
-            placeholder="https://venonia.com" :disabled="disabled"></el-input>
+        <el-input v-if="customDesign.mutable" class="design__mt" v-model="customDesign.mutable.urlValue"
+            :placeholder="valuePlaceHolder" :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -15,8 +15,9 @@
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input v-model="customDesign.mutable.virtualLocationName" placeholder="微課室" :disabled="disabled"></el-input>
-            <el-input class="design__mt" v-model="customDesign.mutable.virtualLocationUrl" placeholder="https://venonia.com"
+            <el-input v-model="customDesign.mutable.urlName" :placeholder="props.namePlaceholder"
+                :disabled="disabled"></el-input>
+            <el-input class="design__mt" v-model="customDesign.mutable.urlValue" :placeholder="valuePlaceHolder"
                 :disabled="disabled"></el-input>
         </template>
     </MoleculeDesignToolbar>
@@ -31,7 +32,9 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'url',
         mutable: {
-            label: '超連結'
+            label: '超連結',
+            urlName: '',
+            urlValue: '',
         }
     }
 })
@@ -52,10 +55,22 @@ const props = defineProps({
         type: String,
         default: '連結與文字僅在編輯時類似，在參加者看來會有所不同'
     },
+    namePlaceholder: {
+        type: String,
+        default: '微課室',
+    },
+    valuePlaceHolder: {
+        type: String,
+        default: 'https://venonia.com',
+    },
     onchange: {
         type: Function,
         default: async () => { }
-    }
+    },
+    formField: {
+        type: String,
+        default: '', // virtualLocation
+    },
 })
 
 // Hooks
@@ -72,11 +87,16 @@ function setDefaultValue() {
     if (customDesign.value.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'url',
         mutable: {
             label: '',
+            urlName: '',
+            urlValue: '',
         }
+    }
+    if (props.formField) {
+        // defaultValue.
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem

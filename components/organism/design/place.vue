@@ -6,7 +6,7 @@
             <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />
         </el-select>
         <el-input v-if="customDesign.mutable" class="design__mt" placeholder="地址"
-            :model-value="customDesign.mutable.locationAddress" :disabled="true"></el-input>
+            :model-value="customDesign.mutable.placeAddress" :disabled="true"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -22,7 +22,7 @@
                 <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
                     :value="String(item.name)" />
             </el-select>
-            <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.locationAddress"
+            <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.placeAddress"
                 :disabled="true"></el-input>
         </template>
     </MoleculeDesignToolbar>
@@ -42,8 +42,8 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
             label: '空間地點',
             placeId: '',
             placeName: '',
-            locationAddressRegion: '', // 第一級行政區
-            locationAddress: '',
+            placeAddressRegion: '', // 第一級行政區
+            placeAddress: '',
         }
     }
 })
@@ -67,7 +67,11 @@ const props = defineProps({
     onchange: {
         type: Function,
         default: async () => { }
-    }
+    },
+    formField: {
+        type: String,
+        default: '',
+    },
 })
 const placeList = ref<IPlace[]>([])
 
@@ -92,8 +96,8 @@ function setDefaultValue() {
             label: '空間地點',
             placeId: '',
             placeName: '',
-            locationAddressRegion: '', // 第一級行政區
-            locationAddress: '',
+            placeAddressRegion: '', // 第一級行政區
+            placeAddress: '',
         }
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
@@ -117,8 +121,8 @@ function setLocationValues(placeId: string) {
     })
     if (selectedItem && customDesign.value.mutable) {
         customDesign.value.mutable.placeName = selectedItem.name
-        customDesign.value.mutable.locationAddress = selectedItem.address
-        customDesign.value.mutable.locationAddressRegion = selectedItem.addressRegion
+        customDesign.value.mutable.placeAddress = selectedItem.address
+        customDesign.value.mutable.placeAddressRegion = selectedItem.addressRegion
     }
 }
 

@@ -25,8 +25,13 @@
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
         <el-divider content-position="left">限一個的高階欄位</el-divider>
-        <OrganismDesignBanner v-if="isDesignAvailable('banner')" class="eventTemplate__draggable" draggable="true"
-            @mouseenter="setTemplateType('banner')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+        <OrganismDesignUrl class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateType('virtualLocation')" formField="virtualLocation" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
+        </OrganismDesignUrl>
+        <OrganismDesignBanner v-if="isDesignAvailable('banner')" class="eventTemplate__draggable"
+            formField="virtualLocation" draggable="true" @mouseenter="setTemplateType('banner')"
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignBanner>
         <OrganismDesignEventGroup v-if="isDesignAvailable('eventGroup')" class="eventTemplate__draggable"
             draggable="true" @mouseenter="setTemplateType('eventGroup')" @mouseout="cancelDragging()" :disabled="true"
@@ -40,9 +45,8 @@
             class="eventTemplate__draggable" draggable="true" @mouseenter="setTemplateType('organizationMember')"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganizationMember>
-        <OrganismDesignPlace v-if="isDesignAvailable('place')" class="eventTemplate__draggable"
-            draggable="true" @mouseenter="setTemplateType('place')" @mouseout="cancelDragging()" :disabled="true"
-            :isDesigning="false">
+        <OrganismDesignPlace v-if="isDesignAvailable('place')" class="eventTemplate__draggable" draggable="true"
+            @mouseenter="setTemplateType('place')" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignPlace>
 
     </el-form>
@@ -60,9 +64,9 @@ const props = defineProps({
     }
 })
 
-function isDesignAvailable(type: string = '') {
+function isDesignAvailable(formField: string = '') {
     const isAvailable = props.designs.every((design) => {
-        return design.type !== type
+        return design.formField !== formField
     })
     return isAvailable
 }

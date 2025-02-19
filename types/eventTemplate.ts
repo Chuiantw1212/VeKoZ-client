@@ -26,16 +26,16 @@ export interface ITemplateDesign {
         memberIds?: string[],
         memberNames?: string[],
         // 時間
-        startDate: Date,
-        endDate: Date,
+        startDate?: Date,
+        endDate?: Date,
         // 線下地點
         placeId?: string, // entities
         placeName?: string,
-        locationAddressRegion?: string, // 第一級行政區
-        locationAddress?: string,
+        placeAddressRegion?: string, // 第一級行政區
+        placeAddress?: string,
         // 線上地點
-        virtualLocationName?: string,
-        virtualLocationUrl?: string,
+        urlName?: string,
+        urlValue?: string,
         // 票券
         offers?: IOffer[]
     },

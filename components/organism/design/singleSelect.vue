@@ -23,10 +23,11 @@
     </template>
 </template>
 <script setup lang="ts">
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-const customDesign = defineModel('modelValue', {
+const customDesign = defineModel<ITemplateDesign>('modelValue', {
     type: Object,
     default: function () {
         return {
@@ -67,7 +68,11 @@ const props = defineProps({
     onchange: {
         type: Function,
         default: async () => { }
-    }
+    },
+    formField: {
+        type: String,
+        default: '',
+    },
 })
 
 // Hooks
@@ -87,7 +92,7 @@ function setDefaultValue() {
     if (customDesign.value?.mutable) {
         return
     }
-    const defaultValue = {
+    const defaultValue: ITemplateDesign = {
         type: 'singleSelect',
         mutable: {
             label: '',
