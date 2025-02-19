@@ -258,7 +258,7 @@ async function getEventList() {
         justify-content: space-between;
         width: 100%;
 
-        *> {
+        * {
             width: 33%;
         }
     }

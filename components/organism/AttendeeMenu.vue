@@ -15,12 +15,13 @@
     align-items: center;
     background-color: white;
     border-top: 1px solid lightgrey;
+    max-width: 1280px;
 
     .footerMenu__logo {
         margin: 0px;
     }
 
-    > * {
+    >* {
         width: 25%;
     }
 }
