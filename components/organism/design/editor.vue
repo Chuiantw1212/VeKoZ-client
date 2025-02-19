@@ -9,7 +9,7 @@
         <!-- 樣板編輯專用 -->
         <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')" @mouseenter="emit('mouseenter')" @mouseout="emit('mouseout')">
+            @moveDown="emit('moveDown')">
             <template v-slot:default>
                 <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled" :placeholder="placeholder">
                 </AtomVenoniaEditor>
@@ -19,7 +19,7 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 

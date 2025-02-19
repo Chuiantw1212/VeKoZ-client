@@ -12,8 +12,7 @@
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
-        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')"
-        @mouseenter="emit('mouseenter')" @mouseout="emit('mouseout')">
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
                 placeholder="欄位名稱"></el-input>
@@ -31,7 +30,7 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOrganizationMember } from '~/types/organization'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const repoOrganizationMember = useRepoOrganization()
 const isLoading = ref(false)
 const repoUI = useRepoUI()

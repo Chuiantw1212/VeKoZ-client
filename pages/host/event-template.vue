@@ -1,10 +1,11 @@
 <template>
     <div class="eventTemplate">
+        {{ eventTemplate }}
         <el-row :gutter="20">
             <el-col :span="repoUI.isLarge ? 16 : 24">
                 <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
-                        <div class="venonia-card-header"> 
+                        <div class="venonia-card-header">
                             <el-form-item>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
                                     @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
@@ -33,8 +34,9 @@
                             </div>
                         </template>
                     </FormTemplateDesign>
-                    <div v-if="!eventTemplate.designs || !Array(eventTemplate.designs).length"
-                        class="eventTemplate__designItem"
+                    eventTemplate.designs: {{ eventTemplate.designs }}
+                    templateTemp.item.type:{{ templateTemp.item.type }}
+                    <div class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳欄位至此
@@ -285,6 +287,7 @@ function allowDrop(ev: any) {
     ev.preventDefault();
 }
 function setTemplateType(type: string) {
+    console.log('setTemplateType', type)
     templateTemp.value.item.type = type
 }
 function cancelDragging() {
