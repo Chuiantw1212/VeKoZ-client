@@ -1,7 +1,7 @@
 <template>
-  <el-menu :collapse="repoUI.isMenuCollapse">
+  <el-menu :default-active="activeIndex" :collapse="repoUI.isMenuCollapse">
     <NuxtLink to="/host/event">
-      <el-menu-item>
+      <el-menu-item index="1">
         <el-icon>
           <Calendar />
         </el-icon>
@@ -9,7 +9,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/event-template">
-      <el-menu-item>
+      <el-menu-item index="2">
         <el-icon>
           <Document />
         </el-icon>
@@ -17,7 +17,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/event-group">
-      <el-menu-item>
+      <el-menu-item index="3">
         <el-icon>
           <DocumentCopy />
         </el-icon>
@@ -25,7 +25,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/place">
-      <el-menu-item>
+      <el-menu-item index="4">
         <el-icon>
           <Location />
         </el-icon>
@@ -33,7 +33,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/organization">
-      <el-menu-item>
+      <el-menu-item index="5">
         <el-icon>
           <OfficeBuilding />
         </el-icon>
@@ -41,7 +41,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/offer">
-      <el-menu-item>
+      <el-menu-item index="6">
         <el-icon>
           <Ticket />
         </el-icon>
@@ -53,6 +53,7 @@
 <script setup lang="ts">
 import { Ticket, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
+const activeIndex = ref('1')
 </script>
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {

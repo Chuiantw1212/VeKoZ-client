@@ -223,6 +223,8 @@ async function getEventList() {
         return parseFullCalendarEvent(event, true)
     })
 
+    venoniaCalendarRef.value?.removeAllEvents()
+
     fullCalendarEventList.forEach(event => {
         venoniaCalendarRef.value?.addEvent(event)
     })
@@ -322,7 +324,9 @@ async function openCalendarEvent() {
     currentEvent.value = newEvent
     dialogTemplate.value.id = newEvent.id
     eventDialogIsOpen.value = true
-    await getEventList() // 在背景更新月曆事件
+    getEventList() // 在背景更新月曆事件
+    dialogTemplate.value.isPublic = true
+    validiateForm()
 }
 
 async function cancelEventEditing() {
