@@ -85,7 +85,7 @@ const form = ref({
     endDate: endDate,
     timeFrame: '',
     addressRegion: '',
-    includeVirtualLocation: true,
+    hasVirtualLocation: true,
 })
 
 // Hooks

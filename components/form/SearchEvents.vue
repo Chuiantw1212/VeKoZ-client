@@ -49,7 +49,7 @@
                             <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select> -->
-                        <el-switch v-model="form.includeVirtualLocation" inline-prompt active-text="包含"
+                        <el-switch v-model="form.hasVirtualLocation" inline-prompt active-text="包含"
                             inactive-text="排除" />
                     </el-form-item>
                 </el-col>
