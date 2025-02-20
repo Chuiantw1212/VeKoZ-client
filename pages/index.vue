@@ -182,9 +182,9 @@ async function getEventList() {
     isLoading.value = true
     repoUI.debounce(`${id.value}-search`, async () => {
         const startDate = form.value.startDate
+        startDate?.setHours(0, 0, 0, 0)
         const endDate = form.value.endDate
-        startDate.setHours(0, 0, 0, 0)
-        endDate.setHours(24, 0, 0, 0)
+        endDate?.setHours(24, 0, 0, 0)
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
