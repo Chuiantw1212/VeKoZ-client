@@ -46,8 +46,8 @@ export interface ITemplateDesign {
 
 interface IOffer {
     name: string,
-    count: number | null,
-    price: number | null,
+    count: number,
+    price: number,
 }
 
 export interface ITemplateDragSouce {

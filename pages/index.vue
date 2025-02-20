@@ -23,8 +23,8 @@
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
                                 <img v-if="item.image" class="card__image" :src="item.image" :alt="item.name"
-                                    onerror="this.onerror=null;this.src='/500x250.png'">
-                                <img v-else class="card__image" src="/500x250.png" :alt="item.name">
+                                    onerror="this.onerror=null;this.src='@/assets/logo/500_250.png'">
+                                <img v-else class="card__image" src="@/assets/logo/500_250.png" :alt="item.name">
                             </NuxtLink>
                         </template>
                         <template #footer>
