@@ -1,6 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
         <div v-if="customDesign.mutable" class="offerList">
             <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                 <template v-if="!disabled">

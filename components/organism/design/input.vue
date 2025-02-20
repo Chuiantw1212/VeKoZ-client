@@ -1,6 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :maxlength="maxlength"
             :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" :size="size"></el-input>
     </el-form-item>

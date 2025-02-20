@@ -2,7 +2,7 @@
     <!-- 檢視與編輯用 -->
     <!-- customDesign.mutable.value: {{ customDesign.mutable?.value }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
-        :prop="customDesign.formField">
+        :prop="customDesign.formField"  @dragstart="emit('dragstart')">
         <div class="dateTimeRange">
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
                 @change="setDate()" :disabled="disabled" @clear="checkClearDate()"></el-date-picker>

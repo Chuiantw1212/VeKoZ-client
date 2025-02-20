@@ -1,6 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
         <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.placeId" :placeholder="placeholder"
             :clearable="true" :disabled="disabled" @change="setLocationValues($event)">
             <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />

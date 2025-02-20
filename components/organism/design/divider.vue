@@ -1,6 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-divider v-if="!props.isDesigning">
+    <el-divider v-if="!props.isDesigning" @dragstart="emit('dragstart')">
         {{ customDesign.mutable?.label }}
     </el-divider>
     <!-- 樣板編輯專用 -->

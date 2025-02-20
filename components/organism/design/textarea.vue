@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
-        :prop="customDesign.formField">
+        :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" type="textarea" :rows="3"
             :maxlength="150" :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>

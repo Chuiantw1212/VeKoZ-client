@@ -3,7 +3,7 @@
     <!-- organizationId{{organizationId}} -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
-        :prop="customDesign.formField">
+        :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.memberIds" :placeholder="editPlaceHolder"
             :filterable="true" :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
             :disabled="disabled || !props.organizationId" @change="setMemberNames()">

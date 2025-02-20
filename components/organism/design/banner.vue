@@ -1,7 +1,7 @@
 <template>
     <div ref="bannerRef">
         <!-- 檢視與編輯用 -->
-        <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label">
+        <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
             <AtomBannerUploader v-if="customDesign.mutable" v-model="customDesign.mutable.value" :disabled="disabled"
                 :height="bannerHeight">
             </AtomBannerUploader>
