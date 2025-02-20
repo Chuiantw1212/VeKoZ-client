@@ -1,22 +1,23 @@
 <template>
     <el-form ref="formRef" class="index__form" :class="{ 'margin--header': repoUI.isLarge }" :model="form"
         :rules="searchFormRules" label-width="auto">
+        <!-- {{repoUI.isLarge}} -->
         <el-row align="middle" justify="space-between">
             <el-col :span="repoUI.isLarge ? 24 : 20">
-                <el-form-item label="搜尋">
+                <el-form-item label="搜尋" :class="{ 'mb-0': !showAdvanced }">
                     <el-input v-model="form.keywords" :prefix-icon="Search" placeholder="清輸入關鍵字" :maxlength="30"
                         :clearable="true"></el-input>
                 </el-form-item>
             </el-col>
             <el-col v-if="!repoUI.isLarge" :span="4">
-                <div class="form__btnWrap">
-                    <el-button :icon="Filter" text @click="openAdvanced = !openAdvanced">
+                <div class="form__btnWrap" :class="{ 'mb-0': !showAdvanced }">
+                    <el-button :icon="Filter" text @click="showAdvanced = !showAdvanced">
 
                     </el-button>
                 </div>
             </el-col>
-            <!-- <el-row v-if="openAdvanced" align="middle" justify="space-between"> -->
-            <template v-if="openAdvanced">
+            <!-- <el-row v-if="showAdvanced" align="middle" justify="space-between"> -->
+            <template v-if="showAdvanced">
                 <el-col :span="whereFieldSpan">
                     <el-form-item label="起始日" prop="startDate">
                         <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
@@ -64,7 +65,7 @@ const emit = defineEmits(['change'])
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
 const repoMeta = useRepoMeta()
-const openAdvanced = ref<boolean>(true)
+const showAdvanced = ref<boolean>(false)
 
 // Data
 const formRef = ref()
@@ -106,6 +107,13 @@ onBeforeUnmount(() => {
 watch(() => form.value, () => {
     emit('change')
 }, { deep: true })
+watch(() => repoUI.isLarge, (newValue) => {
+    if (newValue) {
+        showAdvanced.value = true
+    } else {
+        showAdvanced.value = false
+    }
+}, { immediate: true })
 
 // Methods
 async function getMetaSelectById() {
@@ -145,7 +153,7 @@ defineExpose({
 }
 
 .form__btnWrap {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     margin-left: auto;
     display: flex;
     justify-content: flex-end;

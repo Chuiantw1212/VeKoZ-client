@@ -16,7 +16,8 @@
             </div>
         </el-col>
         <el-col :span="cardGroupSize">
-            <el-row :gutter="8">
+            <el-row :gutter="8" class="events__mainContainer"
+                :class="{ 'events__mainContainer--mt-0': repoUI.isLarge }">
                 <el-col v-loading="isLoading" v-for="(item, index) in eventList" :span="cardSize"
                     class="index__cardWrap">
                     <MoleculeVenoniaCard class="index__card">
@@ -37,7 +38,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3">{{ item.name }}</td>
+                                        <td colspan="3">
+                                            <NuxtLink :to="`/event/${item.id}`">
+                                                {{ item.name }}
+                                            </NuxtLink>
+                                        </td>
                                         <!-- <td>
                                             <div class="footer__offer">
                                                 NTD 250
@@ -103,17 +108,32 @@ const form = ref({
 // Hooks
 onMounted(() => {
     getEventList()
-    window.addEventListener('resize', setSearchFormSize)
-    setSearchFormSize()
-    window.addEventListener('resize', setCardGroupSize)
-    setCardGroupSize()
-    window.addEventListener('resize', setCardSize)
-    setCardSize()
 })
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', setCardGroupSize)
-    window.removeEventListener('resize', setCardSize)
-})
+
+const searchFromSize = ref<number>(6)
+const cardGroupSize = ref<number>(6)
+const cardSize = ref<number>(8)
+watch(() => repoUI.isSmall, (isSmall) => {
+    if (!isSmall) {
+        searchFromSize.value = 6
+        cardGroupSize.value = 24
+        cardSize.value = 24
+    } else {
+        cardSize.value = 12
+    }
+}, { immediate: true, })
+
+watch(() => repoUI.isLarge, (isLarge) => {
+    if (isLarge) {
+        cardGroupSize.value = 18
+    }
+}, { immediate: true, })
+
+watch(() => repoUI.isXLarge, (isXLarge) => {
+    if (isXLarge) {
+        cardSize.value = 8
+    }
+}, { immediate: true, })
 
 // Methods
 function getDates(event: IEvent) {
@@ -136,56 +156,42 @@ function getDates(event: IEvent) {
     return timeString
 }
 
-const searchFromSize = ref<number>(6)
-function setSearchFormSize() {
-    repoUI.debounce(`${id.value}-searchForm`, () => {
-        searchFromSize.value = 6
-        if (repoUI.isXLarge) {
-            // searchFromSize.value = 5
-        }
-        // if (repoUI.isXXLarge) {
-        //     searchFromSize.value = 4.5
-        // }
-    })
-}
+// function setSearchFormSize() {
+//     repoUI.debounce(`${id.value}-searchForm`, () => {
+//         searchFromSize.value = 6
+//     })
+// }
 
-const cardGroupSize = ref<number>(6)
-function setCardGroupSize() {
-    repoUI.debounce(`${id.value}-cardGroup`, () => {
-        cardGroupSize.value = 24
-        if (repoUI.isLarge) {
-            cardGroupSize.value = 18
-        }
-        if (repoUI.isXLarge) {
-            // cardGroupSize.value = 19
-        }
-        // if (repoUI.isXXLarge) {
-        //     cardGroupSize.value = 19.5
-        // }
-    })
-}
+// function setCardGroupSize() {
+//     repoUI.debounce(`${id.value}-cardGroup`, () => {
+//         cardGroupSize.value = 24
+//         if (repoUI.isLarge) {
+//             cardGroupSize.value = 18
+//         }
+//     })
+// }
 
-const cardSize = ref<number>(8)
-function setCardSize() {
-    repoUI.debounce(`${id.value}-card`, () => {
-        cardSize.value = 24
-        if (repoUI.isSmall) {
-            cardSize.value = 12
-        }
-        if (repoUI.isMedium) {
-            cardSize.value = 12
-        }
-        if (repoUI.isLarge) {
-            cardSize.value = 12
-        }
-        if (repoUI.isXLarge) {
-            cardSize.value = 8
-        }
-        if (repoUI.isXXLarge) {
-            // cardSize.value = 6
-        }
-    })
-}
+
+// function setCardSize() {
+//     repoUI.debounce(`${id.value}-card`, () => {
+//         cardSize.value = 24
+//         if (repoUI.isSmall) {
+//             cardSize.value = 12
+//         }
+//         if (repoUI.isMedium) {
+//             cardSize.value = 12
+//         }
+//         if (repoUI.isLarge) {
+//             cardSize.value = 12
+//         }
+//         if (repoUI.isXLarge) {
+//             cardSize.value = 8
+//         }
+//         if (repoUI.isXXLarge) {
+//             // cardSize.value = 6
+//         }
+//     })
+// }
 async function getEventList() {
     const isValid = await formRef.value.validate()
     if (!isValid) {
@@ -233,7 +239,6 @@ async function getEventList() {
     z-index: 20;
     position: fixed;
     width: calc((100vw - 200px) / 4 - 8px);
-    // max-width: 295px;
 
     .cardContainer__card {
         width: 100%;
@@ -243,7 +248,14 @@ async function getEventList() {
         border: 1px solid black;
         height: calc(100vh - 460px);
     }
+}
 
+.events__mainContainer {
+    transform: translateY(70px);
+}
+
+.events__mainContainer--mt-0 {
+    transform: translateY(0px);
 }
 
 .card__image {

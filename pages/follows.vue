@@ -1,14 +1,17 @@
 <template>
     <div>
-        <ul>
+        <ol>
             <li>
                 追蹤與訂閱的講者或主辦
                 這邊會是個月例
             </li>
             <li>
+                追蹤自定義關鍵字
+            </li>
+            <li>
                 取消訂閱也在這
             </li>
             <li></li>
-        </ul>
+        </ol>
     </div>
 </template>

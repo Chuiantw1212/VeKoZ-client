@@ -4,6 +4,7 @@ import { ElLoading } from 'element-plus'
  * https://pinia.vuejs.org/cookbook/composables.html#Setup-Stores
  */
 export default defineStore('ui', () => {
+    const id = ref<string>()
     const isResizing = ref<boolean>(false)
     const isSmall = ref<boolean>(false) // 576px, 60%+
     const isMedium = ref<boolean>(false) // 768px, 1%+
@@ -48,10 +49,11 @@ export default defineStore('ui', () => {
 
     onMounted(() => {
         if (import.meta.client) {
+            id.value = crypto.randomUUID()
             setWidth()
             window.addEventListener('resize', () => {
                 isResizing.value = true
-                debounce('resize', () => {
+                debounce(`resize-${id.value}`, () => {
                     setWidth()
                 })
             })
