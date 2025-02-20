@@ -1,13 +1,13 @@
 <template>
-    <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">  
+    <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
         <HeaderMenu></HeaderMenu>
     </el-header>
-    <el-container class="defaultLayout" :class="{'defaultLayout__isStandard': !repoUser.userPreference.isFullScreen}">
+    <el-container class="defaultLayout" :class="{ 'defaultLayout__isStandard': !repoUser.userPreference.isFullScreen }">
         <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
             <SideMenu></SideMenu>
         </el-aside>
         <el-container>
-            <el-main >
+            <el-main class="scsrollable">
                 <NuxtPage />
             </el-main>
         </el-container>
@@ -25,6 +25,11 @@ const repoUser = useRepoUser()
 const repoUI = useRepoUI()
 </script>
 <style lang="scss" scoped>
+.scsrollable {
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
 .defaultLayout {
     font-family: "Noto Sans TC", serif;
     font-optical-sizing: auto;

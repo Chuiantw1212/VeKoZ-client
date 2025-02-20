@@ -237,7 +237,7 @@ async function getEventList() {
 }
 
 .events__mainContainer {
-    padding-top: 70px;
+    padding: 70px 0px;
 }
 
 .events__mainContainer--mt-0 {

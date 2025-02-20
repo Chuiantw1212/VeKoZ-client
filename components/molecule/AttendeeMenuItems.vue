@@ -2,17 +2,17 @@
     <NuxtLink to="/">
         <el-menu-item class="menu__item" index="1">
             <el-icon>
-                <Menu />
+                <Grid />
             </el-icon>
             <span v-if="repoUI.isMedium">
-                活動選單
+                活動探索
             </span>
         </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/follows">
         <el-menu-item class="menu__item" index="2">
             <el-icon>
-                <StarFilled />
+                <Collection />
             </el-icon>
             <span v-if="repoUI.isMedium">
                 追蹤訂閱
@@ -36,7 +36,7 @@
     </NuxtLink>
 </template>
 <script setup lang="ts">
-import { Menu, StarFilled, Setting, Ticket } from '@element-plus/icons-vue'
+import { Grid, Collection, Setting, Ticket } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 </script>
 <style lang="scss">
