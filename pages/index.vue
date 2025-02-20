@@ -1,8 +1,9 @@
 <template>
     <el-row class="events" :gutter="8">
-        <FormSearchEvents v-if="!repoUI.isLarge" v-model="form" ref="formRef" class="form form--mobile"
-            @change="getEventList()">
-        </FormSearchEvents>
+        <template v-if="!repoUI.isLarge">
+            <FormSearchEvents v-model="form" ref="formRef" class="form form--mobile" @change="getEventList()">
+            </FormSearchEvents>
+        </template>
         <el-col v-else :span="searchFromSize">
             <div class="sideContainer">
                 <el-card class="cardContainer__card">
@@ -32,7 +33,18 @@
                             <table class="card__footTable">
                                 <tbody>
                                     <tr>
-                                        <td colspan="2">{{ getDates(item) }}</td>
+                                        <td colspan="2">
+                                            <div class="table__time">
+                                                <span class="time__span">
+                                                    {{ getDate(item) }}
+                                                    <!-- cardSize: {{ cardSize }} -->
+                                                </span>
+
+                                                <span class="time__span">
+                                                    {{ getTimes(item) }}
+                                                </span>
+                                            </div>
+                                        </td>
                                         <td>
                                             <img class="table__logo" :src="item.organizerLogo">
                                         </td>
@@ -111,9 +123,10 @@ onMounted(() => {
 })
 
 const searchFromSize = ref<number>(6)
-const cardGroupSize = ref<number>(6)
+const cardGroupSize = ref<number>(24)
 const cardSize = ref<number>(8)
-watch(() => repoUI.isSmall, (isSmall) => {
+watch(() => repoUI, (ui) => {
+    const { isSmall, isMedium, isLarge, isXLarge } = ui
     if (!isSmall) {
         searchFromSize.value = 6
         cardGroupSize.value = 24
@@ -121,30 +134,35 @@ watch(() => repoUI.isSmall, (isSmall) => {
     } else {
         cardSize.value = 12
     }
-}, { immediate: true, })
-
-watch(() => repoUI.isLarge, (isLarge) => {
+    if (isMedium) {
+        cardSize.value = 8
+        cardGroupSize.value = 24
+    }
     if (isLarge) {
         cardGroupSize.value = 18
     }
-}, { immediate: true, })
-
-watch(() => repoUI.isXLarge, (isXLarge) => {
     if (isXLarge) {
         cardSize.value = 8
     }
-}, { immediate: true, })
+}, { immediate: true, deep: true })
 
 // Methods
-function getDates(event: IEvent) {
-    let timeString = ''
+function getDate(event: IEvent) {
     if (event.startDate) {
         const startDate: Date = new Date(event.startDate)
         const date = startDate.toLocaleDateString('zh-TW')
+        return date
+    }
+}
+
+function getTimes(event: IEvent) {
+    let timeString = ''
+    if (event.startDate) {
+        const startDate: Date = new Date(event.startDate)
         const startTime = startDate.toLocaleTimeString('zh-TW', {
             hour12: false,
         })
-        timeString += `${date} ${startTime.slice(0, 5)}`
+        timeString += `${startTime.slice(0, 5)}`
     }
     if (event.endDate) {
         const endDate: Date = new Date(event.endDate)
@@ -156,44 +174,8 @@ function getDates(event: IEvent) {
     return timeString
 }
 
-// function setSearchFormSize() {
-//     repoUI.debounce(`${id.value}-searchForm`, () => {
-//         searchFromSize.value = 6
-//     })
-// }
-
-// function setCardGroupSize() {
-//     repoUI.debounce(`${id.value}-cardGroup`, () => {
-//         cardGroupSize.value = 24
-//         if (repoUI.isLarge) {
-//             cardGroupSize.value = 18
-//         }
-//     })
-// }
-
-
-// function setCardSize() {
-//     repoUI.debounce(`${id.value}-card`, () => {
-//         cardSize.value = 24
-//         if (repoUI.isSmall) {
-//             cardSize.value = 12
-//         }
-//         if (repoUI.isMedium) {
-//             cardSize.value = 12
-//         }
-//         if (repoUI.isLarge) {
-//             cardSize.value = 12
-//         }
-//         if (repoUI.isXLarge) {
-//             cardSize.value = 8
-//         }
-//         if (repoUI.isXXLarge) {
-//             // cardSize.value = 6
-//         }
-//     })
-// }
 async function getEventList() {
-    const isValid = await formRef.value.validate()
+    const isValid = await formRef.value?.validate()
     if (!isValid) {
         return
     }
@@ -238,7 +220,8 @@ async function getEventList() {
 .sideContainer {
     z-index: 20;
     position: fixed;
-    width: calc((100vw - 200px) / 4 - 8px);
+    width: calc((100% - 64px) / 4);
+    max-width: 304px;
 
     .cardContainer__card {
         width: 100%;
@@ -251,11 +234,11 @@ async function getEventList() {
 }
 
 .events__mainContainer {
-    transform: translateY(70px);
+    padding-top: 70px;
 }
 
 .events__mainContainer--mt-0 {
-    transform: translateY(0px);
+    padding-top: 0px;
 }
 
 .card__image {
@@ -271,6 +254,7 @@ async function getEventList() {
 .card__footTable {
     width: 100%;
     min-height: 125px;
+    text-align: justify;
 
     .table__row {
         display: flex;
@@ -279,6 +263,17 @@ async function getEventList() {
 
         * {
             width: 33%;
+        }
+    }
+
+    .table__time {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+
+        .time__span {
+            text-wrap: nowrap;
         }
     }
 

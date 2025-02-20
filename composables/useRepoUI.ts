@@ -14,7 +14,12 @@ export default defineStore('ui', () => {
     const isMenuCollapse = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const loadingInstance = ref<any>(null)
-    const debounceTimeout = ref<{ [key: string]: NodeJS.Timeout }>({})
+    const debounceTemp = ref<{
+        [key: string]: {
+            timeoutId: NodeJS.Timeout,
+            func: Function,
+        }
+    }>({})
 
     function setWidth() {
         /**
@@ -51,9 +56,9 @@ export default defineStore('ui', () => {
         if (import.meta.client) {
             id.value = crypto.randomUUID()
             setWidth()
-            window.addEventListener('resize', () => {
+            window.addEventListener('resize', function () {
                 isResizing.value = true
-                debounce(`resize-${id.value}`, () => {
+                debounce(`resize-${id.value}`, function () {
                     setWidth()
                 })
             })
@@ -67,15 +72,18 @@ export default defineStore('ui', () => {
      * @param isLoading
      */
     function debounce(id: string, func: Function, timeout = 300) {
-        const existedTimer = debounceTimeout.value[id]
+        const existedTimer = debounceTemp.value[id]?.timeoutId
         if (existedTimer) {
             clearTimeout(existedTimer);
         }
         const newTimer = setTimeout(() => {
-            delete debounceTimeout.value[id]
-            func();
+            debounceTemp.value[id]?.func()
+            delete debounceTemp.value[id]
         }, timeout);
-        debounceTimeout.value[id] = newTimer
+        debounceTemp.value[id] = {
+            timeoutId: newTimer,
+            func,
+        }
     }
     function setLoading(isLoading: boolean) {
         if (isLoading) {
