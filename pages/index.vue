@@ -34,7 +34,6 @@
                                         <td colspan="3">{{ getDates(item) }}</td>
                                     </tr>
                                     <tr>
-                                        <!-- <td>台北市</td> -->
                                         <td colspan="3">{{ item.name }}</td>
                                         <!-- <td>
                                             <div class="footer__offer">
@@ -43,7 +42,7 @@
                                         </td> -->
                                     </tr>
                                     <tr>
-                                        <td>{{ item.addressRegion }}</td>
+                                        <td>{{ item.addressRegion || '地點待定' }}</td>
                                         <td></td>
                                         <td>
                                             <div class="footer__offer">
@@ -53,7 +52,7 @@
                                     </tr>
                                 </tbody>
                                 <!-- <tr>
-                                    <td colspan="3">{{ item.organizerName }}</td>
+                                    <td colspan="3">{{ item.organizerName }}</td> // 初期使用者不在意？
                                 </tr> -->
                             </table>
                             <!-- <span>
@@ -122,14 +121,14 @@ function getDates(event: IEvent) {
         const startTime = startDate.toLocaleTimeString('zh-TW', {
             hour12: false,
         })
-        timeString += `${date} ${startTime}`
+        timeString += `${date} ${startTime.slice(0, 5)}`
     }
     if (event.endDate) {
         const endDate: Date = new Date(event.endDate)
         const endTime = endDate.toLocaleTimeString('zh-TW', {
             hour12: false,
         })
-        timeString += ` ~ ${endTime}`
+        timeString += ` ~ ${endTime.slice(0, 5)}`
     }
     return timeString
 }
