@@ -18,17 +18,17 @@
             <!-- <el-row v-if="openAdvanced" align="middle" justify="space-between"> -->
             <template v-if="openAdvanced">
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="開始" prop="startDate">
+                    <el-form-item label="起始日" prop="startDate">
                         <el-date-picker v-model="form.startDate" type="date" placeholder="開始日" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="結束" prop="endDate">
+                    <el-form-item label="結束日" prop="endDate">
                         <el-date-picker v-model="form.endDate" type="date" placeholder="結束日" :clearable="true" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="時段">
+                    <el-form-item label="開始時間">
                         <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
                                 :value="item.value" />

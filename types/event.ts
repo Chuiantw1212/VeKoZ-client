@@ -20,7 +20,7 @@ export interface IEvent {
     isMorning?: boolean,
     isAfternoon?: boolean,
     isEvening?: boolean,
-    image?: string,
+    banner?: string,
     organizerName?: string,
 }
 

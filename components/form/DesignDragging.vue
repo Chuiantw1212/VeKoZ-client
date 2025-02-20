@@ -32,8 +32,8 @@
 
         <el-divider class="mt-0" content-position="left">限量的欄位</el-divider>
         <OrganismDesignBanner v-if="isTypeLimited('banner')" class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'banner', formField: 'image', })"
-            @mouseenter="setOnEnter({ type: 'banner', formField: 'image', })" @mouseout="cancelDragging()"
+            @dragstart="setOnDrag({ type: 'banner', formField: 'banner', })"
+            @mouseenter="setOnEnter({ type: 'banner', formField: 'banner', })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
         </OrganismDesignBanner>
         <OrganismDesignPlace v-if="isTypeLimited('place')" class="eventTemplate__draggable" draggable="true"

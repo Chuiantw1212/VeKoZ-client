@@ -22,7 +22,7 @@
                     <MoleculeVenoniaCard class="index__card">
                         <template #default>
                             <NuxtLink :to="`/event/${item.id}`">
-                                <img v-if="item.image" class="card__image" :src="item.image" :alt="item.name"
+                                <img v-if="item.banner" class="card__image" :src="item.banner" :alt="item.name"
                                     onerror="this.onerror=null;this.src='@/assets/logo/500_250.png'">
                                 <img v-else class="card__image" src="@/assets/logo/500_250.png" :alt="item.name">
                             </NuxtLink>
@@ -31,7 +31,7 @@
                             <table class="card__footTable">
                                 <tbody>
                                     <tr>
-                                        <td colspan="3">{{ getDates(item) }}</td>
+                                        <td colspan="2">{{ getDates(item) }}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">{{ item.name }}</td>

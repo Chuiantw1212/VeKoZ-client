@@ -137,7 +137,7 @@ watch(() => templateDesigns.value, () => {
                 }
                 case 'date':
                 case 'name':
-                case 'image':
+                case 'banner':
                 default: {
                     formModel.value[design.formField] = design.mutable?.value
                 }
