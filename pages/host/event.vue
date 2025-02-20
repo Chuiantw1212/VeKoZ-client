@@ -349,9 +349,14 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     currentEvent.value = eventClickInfo.event
     isLoading.value = true
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
-    dialogTemplate.value = eventTemplate
     isLoading.value = false
-    eventDialogIsOpen.value = true
+    if (eventTemplate) {
+        dialogTemplate.value = eventTemplate
+        eventDialogIsOpen.value = true
+    } else {
+        const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
+        calendarEvent?.remove()
+    }
 }
 
 async function openNewEventDialog(eventCreation: IEventCreation) {

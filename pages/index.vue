@@ -112,7 +112,7 @@ const form = ref({
     keywords: '',
     startDate: startDate,
     endDate: endDate,
-    startHour: 0,
+    startHour: '',
     locationAddressRegion: '',
     hasVirtualLocation: true,
 })

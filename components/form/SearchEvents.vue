@@ -29,7 +29,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="whereFieldSpan">
-                    <el-form-item label="開始時間">
+                    <el-form-item label="開始時段">
                         <el-select v-model="form.startHour" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
                                 :value="item.value" />
@@ -88,7 +88,7 @@ const periodOptions = ref([
     {
         label: '晚上',
         value: 'evening'
-    }
+    },
 ])
 
 const searchFormRules = {
