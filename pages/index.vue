@@ -258,6 +258,7 @@ async function getEventList() {
 
 .card__footTable {
     width: 100%;
+    min-height: 125px;
 
     .table__row {
         display: flex;
