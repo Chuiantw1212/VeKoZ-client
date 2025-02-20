@@ -7,7 +7,7 @@
                 {{ name }}
             </div>
         </div>
-        <label class="inputGroup__label">
+        <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled }">
             <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
             <div v-if="!isUploaded" class="label__content">
                 Banner上傳
@@ -161,6 +161,10 @@ async function handleFiles(event: any) {
             // width: 100%;
             height: 100%;
         }
+    }
+
+    .inputGroup__label--disabled {
+        cursor: unset;
     }
 }
 </style>

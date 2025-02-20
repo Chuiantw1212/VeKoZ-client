@@ -1,3 +1,5 @@
+import type { IEventTemplate } from "./eventTemplate"
+
 export interface IEventCreation {
     date: string,
 }
@@ -6,7 +8,7 @@ export interface IEventCreation {
  * 參考Schema，便於SEO使用
  * https://schema.org/Event
  */
-export interface IEvent {
+export interface IEvent extends IEventTemplate {
     id?: string,
     name?: string,
     addressRegion?: string, // event.location = PostalAddress
@@ -16,8 +18,8 @@ export interface IEvent {
     description?: string,
     lastmod?: any,
     isPublic?: boolean,
-    // 搜尋用Flag
     banner?: string,
+    organizerId?: string,
     organizerName?: string,
     organizerLogo?: string,
 }
