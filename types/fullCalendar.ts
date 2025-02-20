@@ -28,7 +28,7 @@ export interface IFullCalendarEvent {
     endStr?: string,
     title: string,
     url?: string,
-    classNames?: string[],
+    classNames?: string[] | string,
     editable?: boolean,
     startEditable?: boolean,
     durationEditable?: boolean,
@@ -41,4 +41,5 @@ export interface IFullCalendarEvent {
     textColor?: string,
     extendedProps?: object,
     source?: null,
+    color?: string,
 }

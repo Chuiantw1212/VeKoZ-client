@@ -11,13 +11,21 @@
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
-                    <el-divider content-position="left">篩選</el-divider>
-                    <el-checkbox-group v-model="selectedOrganizationIds">
-                        <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
-                            :value="item.id" />
-                    </el-checkbox-group>
-                    <el-divider content-position="left">Todo</el-divider>
-                    如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
+                    <el-form>
+                        <el-form-item label="事件狀態">
+                            <!-- <el-divider content-position="left">篩選</el-divider> -->
+                            <el-checkbox-group v-model="calendarStatus" @change="getEventList">
+                                <el-checkbox v-for="(item) in calendatPublicOptins" :label="item.label"
+                                    :value="item.value" />
+                            </el-checkbox-group>
+                        </el-form-item>
+                        <el-checkbox-group v-model="selectedOrganizationIds">
+                            <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
+                                :value="item.id" />
+                        </el-checkbox-group>
+                        <el-divider content-position="left">Todo</el-divider>
+                        如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
+                    </el-form>
                 </el-card>
             </el-col>
         </el-row>
@@ -79,6 +87,17 @@ const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
 const isLoading = ref<boolean>(false)
 // Data Calendar
+const calendatPublicOptins = ref([
+    {
+        label: '已公開',
+        value: 'public',
+    },
+    {
+        label: '未公開',
+        value: 'private',
+    }
+])
+const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>()
@@ -215,9 +234,19 @@ async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
 
-    calendarEventList.value = await repoEvent.getEventList({
+    const condition: IEvent = {
         startDate: startOfTheMonth,
-    })
+    }
+
+    const hasStatus = calendarStatus.value.length === 1
+    const selectedStatus: string = String(calendarStatus.value[0])
+    if (hasStatus && selectedStatus === 'public') {
+        condition.isPublic = true
+    }
+    if (hasStatus && selectedStatus === 'private') {
+        condition.isPublic = false
+    }
+    calendarEventList.value = await repoEvent.getEventList(condition)
 
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
         return parseFullCalendarEvent(event, true)
@@ -245,6 +274,12 @@ function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarE
         startStr: '',
         endStr: '',
         editable,
+        backgroundColor: 'lightblue',
+        classNames: ['grey-text-event']
+    }
+    if (event.isPublic) {
+        delete iFullCalendarEvent.backgroundColor
+        delete iFullCalendarEvent.classNames
     }
     const startDate = event.startDate
     if (startDate instanceof Date) {
@@ -351,5 +386,9 @@ async function deleteEvent() {
         display: flex;
         justify-content: space-between;
     }
+}
+
+:deep(.grey-text-event) {
+    color: lightblue;
 }
 </style>
