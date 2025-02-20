@@ -7,7 +7,7 @@
                     <div>
                         <slot name="header"></slot>
                     </div>
-                    <div>
+                    <div class="headerUI">
                         <slot name="headerUI"></slot>
                     </div>
                 </div>
@@ -83,6 +83,12 @@ const width = computed(() => {
                 cursor: pointer;
                 font-size: var(--el-message-close-size, 16px);
             }
+        }
+
+        .headerUI {
+            display: flex;
+            gap: 4px;
+            align-items: center;
         }
     }
 

@@ -18,10 +18,10 @@
                                     :value="item.value" />
                             </el-checkbox-group>
                         </el-form-item>
-                        <el-checkbox-group v-model="selectedOrganizationIds">
+                        <!-- <el-checkbox-group v-model="selectedOrganizationIds">
                             <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
                                 :value="item.id" />
-                        </el-checkbox-group>
+                        </el-checkbox-group> -->
                         <el-divider content-position="left">Todo</el-divider>
                         如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                     </el-form>
@@ -42,8 +42,11 @@
                 <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
-                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" size="small"
+                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic"
                     active-text="公開" inactive-text="非公開" @change="validiateForm()" />
+                <el-button :icon="View" text>
+
+                </el-button>
                 <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
@@ -70,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { Delete, Close, } from '@element-plus/icons-vue';
+import { Delete, Close, View } from '@element-plus/icons-vue';
 import type { IEvent, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/core/index.js';
