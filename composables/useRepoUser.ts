@@ -28,6 +28,11 @@ export default defineStore('user', () => {
         const user = await response.json() as IUser
         userInfo.value = user
         userPreference.value = user.preference as IUserPreference
+        if (String(route.name).includes('host')) {
+            setUserType('host')
+        } else {
+            setUserType('attendee')
+        }
         return userInfo.value
     }
     async function setUserType(newUserType: UserType) {

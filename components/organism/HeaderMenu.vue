@@ -24,7 +24,7 @@
                 <el-switch v-model="isFullScreen" active-text="全螢幕" @change="patchUserPreference()" />
             </el-menu-item>
             <NuxtLink v-if="repoUser.userType" to="/settings">
-                <el-menu-item index="1" class="headerMenu__firstItem">
+                <el-menu-item index="4" class="headerMenu__firstItem">
                     <OrganismUserAuth></OrganismUserAuth>
                 </el-menu-item>
             </NuxtLink>
