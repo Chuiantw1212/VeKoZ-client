@@ -32,6 +32,9 @@
                                 <tbody>
                                     <tr>
                                         <td colspan="2">{{ getDates(item) }}</td>
+                                        <td>
+                                            <img class="table__logo" :src="item.organizerLogo">
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td colspan="3">{{ item.name }}</td>
@@ -93,7 +96,7 @@ const form = ref({
     startDate: startDate,
     endDate: endDate,
     timeFrame: '',
-    addressRegion: '',
+    locationAddressRegion: '',
     hasVirtualLocation: true,
 })
 
@@ -264,6 +267,14 @@ async function getEventList() {
         * {
             width: 33%;
         }
+    }
+
+    .table__logo {
+        width: 40px;
+        border: 1px solid black;
+        border-radius: 50%;
+        display: block;
+        margin-left: auto;
     }
 }
 

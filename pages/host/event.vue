@@ -218,15 +218,24 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     }
     templateDesign.eventId = currentEvent.value.id
     await repoEvent.patchEventForm(templateDesign)
-    if (templateDesign.formField === 'date') {
-        const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
-        calendarEvent?.remove()
-        currentEvent.value.startDate = new Date(templateDesign.mutable?.value[0])
-        currentEvent.value.endDate = new Date(templateDesign.mutable?.value[1])
-        const newFullCalendarEvent = parseFullCalendarEvent(currentEvent.value)
-        venoniaCalendarRef.value.addEvent(newFullCalendarEvent)
-    }
     isDialogPatchLoading.value = false
+
+    // update fullcalendar event
+    const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
+    if (!calendarEvent || !templateDesign.mutable) {
+        return
+    }
+    switch (templateDesign.formField) {
+        case 'name': {
+            calendarEvent.setProp('title', templateDesign.mutable.value)
+            break;
+        }
+        case 'date': {
+            calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
+            break;
+        }
+    }
+
 }
 
 async function getEventList() {

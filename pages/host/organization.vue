@@ -30,13 +30,13 @@
             </el-table-column>
         </el-table>
 
-        <AtomVenoniaDialog v-model="organizationDialog.visibility" class="event__template">
+        <AtomVenoniaDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
             <template #header>
                 <el-text size="large">
                     組織設定
                 </el-text>
             </template>
-            <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
+            <FormOrganization v-model="organization"
                 :mode="organizationDialog.mode">
             </FormOrganization>
             <template #footer>
@@ -105,7 +105,6 @@ const organizationMemberDialog = reactive({
 // Methods
 async function hanelDialogConfirm() {
     isDialogLoading.value = true
-    return
     if (organizationDialog.mode === 'ADD') {
         await postOrganization()
     }

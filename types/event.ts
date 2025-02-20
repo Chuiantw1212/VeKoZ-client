@@ -22,6 +22,7 @@ export interface IEvent {
     isEvening?: boolean,
     banner?: string,
     organizerName?: string,
+    organizerLogo?: string,
 }
 
 /**

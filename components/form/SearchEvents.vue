@@ -37,7 +37,7 @@
                 </el-col>
                 <el-col :span="whereFieldSpan">
                     <el-form-item label="城市">
-                        <el-select v-model="form.addressRegion" placeholder="請選擇" :clearable="true">
+                        <el-select v-model="form.locationAddressRegion" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select>

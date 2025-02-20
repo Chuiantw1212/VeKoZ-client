@@ -8,7 +8,6 @@
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
         <el-form-item label="所在城市">
-            <!-- https://schema.org/PostalAddress 第一級行政區 -->
             <el-select v-model="form.addressRegion" placeholder="請選擇">
                 <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
                     :value="item.value" />
