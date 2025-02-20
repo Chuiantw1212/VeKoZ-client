@@ -129,11 +129,15 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
-    if (!currentEvent.value) {
+    if (!currentEvent.value || !venoniaCalendarRef.value) {
         return
     }
+    // console.log(calendarEvent)
+    const calendarEvent = venoniaCalendarRef.value.getEventById(String(currentEvent.value.id))
     try {
         if (dialogTemplate.value.isPublic) {
+            calendarEvent?.setProp('backgroundColor', '')
+            calendarEvent?.setProp('classNames', [])
             const isValid = await formRef.value?.validate()
             if (isValid) {
                 await repoEvent.patchEventCalendar({
@@ -141,6 +145,7 @@ async function validiateForm() {
                     isPublic: true,
                 })
             }
+            return
         } else {
             await repoEvent.patchEventCalendar({
                 id: currentEvent.value.id,
@@ -154,6 +159,9 @@ async function validiateForm() {
             isPublic: false,
         })
     }
+    // Fail fallback to private
+    calendarEvent?.setProp('backgroundColor', 'lightblue')
+    calendarEvent?.setProp('classNames', ['blue-text-event'])
 }
 function trimOrganizationName(item: IOrganization) {
     if (item.name.length >= 12) {
@@ -283,7 +291,7 @@ function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarE
         endStr: '',
         editable,
         backgroundColor: 'lightblue',
-        classNames: ['grey-text-event']
+        classNames: ['blue-text-event']
     }
     if (event.isPublic) {
         delete iFullCalendarEvent.backgroundColor
@@ -396,7 +404,7 @@ async function deleteEvent() {
     }
 }
 
-:deep(.grey-text-event) {
+:deep(.blue-text-event) {
     color: lightblue;
 }
 </style>
