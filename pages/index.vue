@@ -185,9 +185,6 @@ async function getEventList() {
         const endDate = form.value.endDate
         startDate.setHours(0, 0, 0, 0)
         endDate.setHours(24, 0, 0, 0)
-        console.log({
-            form
-        })
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
