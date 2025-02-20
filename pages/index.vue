@@ -112,7 +112,7 @@ const form = ref({
     keywords: '',
     startDate: startDate,
     endDate: endDate,
-    timeFrame: '',
+    startHour: 0,
     locationAddressRegion: '',
     hasVirtualLocation: true,
 })
@@ -179,14 +179,20 @@ async function getEventList() {
     if (!isValid) {
         return
     }
-
     isLoading.value = true
     repoUI.debounce(`${id.value}-search`, async () => {
+        const startDate = form.value.startDate
+        const endDate = form.value.endDate
+        startDate.setHours(0, 0, 0, 0)
+        endDate.setHours(24, 0, 0, 0)
+        console.log({
+            form
+        })
         const result = await repoEvent.getEventList({
             ...form.value,
             isPublic: true,
         })
-        eventList.value = [...result, ...result,]
+        eventList.value = [...result,]
         isLoading.value = false
     }, 500)
 }

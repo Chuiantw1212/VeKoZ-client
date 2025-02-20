@@ -30,7 +30,7 @@
                 </el-col>
                 <el-col :span="whereFieldSpan">
                     <el-form-item label="開始時間">
-                        <el-select v-model="form.timeFrame" placeholder="請選擇" :clearable="true">
+                        <el-select v-model="form.startHour" placeholder="請選擇" :clearable="true">
                             <el-option v-for="(item, index) in periodOptions" :key="index" :label="item.label"
                                 :value="item.value" />
                         </el-select>
@@ -79,15 +79,15 @@ const taiwanPlaces = ref<any[]>([])
 const periodOptions = ref([
     {
         label: '上午',
-        value: 'isMorning'
+        value: 6
     },
     {
         label: '下午',
-        value: 'isAfternoon',
+        value: 12,
     },
     {
         label: '晚上',
-        value: 'isEvening'
+        value: 18
     }
 ])
 
