@@ -48,9 +48,9 @@
                 </el-button>
             </template>
             <template #default>
-                <el-container v-loading.lock="isLoading">
-                    <!-- 用v-if避免更新請求重複派送 -->
-                    <FormTemplateDesign v-if="eventDialogIsOpen" ref="formRef" v-model="dialogTemplate.designs"
+                <!-- 用v-if避免更新請求重複派送 -->
+                <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
+                    <FormTemplateDesign ref="formRef" v-model="dialogTemplate.designs"
                         :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
@@ -349,8 +349,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     currentEvent.value = eventClickInfo.event
     isLoading.value = true
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
-    dialogTemplate.value.id = eventId // 用這行刪除
-    Object.assign(dialogTemplate.value, eventTemplate)
+    dialogTemplate.value = eventTemplate
     isLoading.value = false
     eventDialogIsOpen.value = true
 }

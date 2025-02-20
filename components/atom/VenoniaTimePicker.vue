@@ -95,7 +95,7 @@ function convertDisplayToIso(display: string) {
 }
 
 function setHours() {
-    for (let hour = 0; hour < 24; hour++) {
+    for (let hour = 6; hour <= 23; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute

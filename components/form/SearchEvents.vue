@@ -79,15 +79,15 @@ const taiwanPlaces = ref<any[]>([])
 const periodOptions = ref([
     {
         label: '上午',
-        value: 6
+        value: 'morning'
     },
     {
         label: '下午',
-        value: 12,
+        value: 'afternoon',
     },
     {
         label: '晚上',
-        value: 18
+        value: 'evening'
     }
 ])
 
