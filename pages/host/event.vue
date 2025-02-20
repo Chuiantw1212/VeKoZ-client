@@ -13,7 +13,6 @@
                 <el-card>
                     <el-form>
                         <el-form-item label="事件狀態">
-                            <!-- <el-divider content-position="left">篩選</el-divider> -->
                             <el-checkbox-group v-model="calendarStatus" @change="getEventList">
                                 <el-checkbox v-for="(item) in calendatPublicOptins" :label="item.label"
                                     :value="item.value" />
