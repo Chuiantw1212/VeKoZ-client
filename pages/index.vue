@@ -1,13 +1,14 @@
 <template>
     <el-row class="events" :gutter="8">
         <template v-if="!repoUI.isLarge">
-            <FormSearchEvents v-model="form" ref="formRef" class="form form--mobile" @change="getEventList()">
+            <FormSearchEvents v-model="form" ref="formRef" class="events__form events__form--mobile"
+                @change="getEventList()">
             </FormSearchEvents>
         </template>
         <el-col v-else :span="searchFromSize">
-            <div class="sideContainer">
-                <el-card class="cardContainer__card">
-                    <FormSearchEvents v-model="form" ref="formRef" class="form" @change="getEventList()">
+            <div class="events__sideContainer">
+                <el-card class="sideContainer__card">
+                    <FormSearchEvents v-model="form" ref="formRef" class="events__form" @change="getEventList()">
                     </FormSearchEvents>
                 </el-card>
                 <br />
@@ -187,7 +188,7 @@ async function getEventList() {
         const endDate = form.value.endDate
         endDate?.setHours(24, 0, 0, 0)
         const result = await repoEvent.getEventList(form.value)
-        eventList.value = [...result,]
+        eventList.value = [...result, ...result,]
         isLoading.value = false
     }, 500)
 }
@@ -195,51 +196,48 @@ async function getEventList() {
 
 <style lang="scss" scoped>
 .events {
-    .events__cardContainer {
-        min-height: calc(100vh - 160px);
-    }
-}
 
-.index__eventList {
-    max-height: calc(100vh - 160px);
-}
-
-.form {
-    z-index: 10;
-}
-
-.form--mobile {
-    width: calc(100vw - 40px);
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid lightgrey;
-}
-
-.sideContainer {
-    z-index: 20;
-    position: fixed;
-    width: calc((100% - 64px) / 4);
-    max-width: 304px;
-
-    .cardContainer__card {
-        width: 100%;
+    .events__form {
+        z-index: 10;
     }
 
-    .sideContainer__ads {
-        border: 1px solid black;
-        height: calc(100vh - 460px);
+    .events__form--mobile {
+        width: calc(100vw - 40px);
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid lightgrey;
     }
-}
 
-.events__mainContainer {
-    padding: 70px 0px;
-}
+    .events__sideContainer {
+        z-index: 20;
+        position: fixed;
+        width: calc((100% - 64px) / 4);
+        max-width: 304px;
 
-.events__mainContainer--mt-0 {
-    padding-top: 0px;
+        .sideContainer__card {
+            width: 100%;
+        }
+
+        .sideContainer__ads {
+            border: 1px solid black;
+            height: calc(100vh - 460px);
+        }
+    }
+
+
+
+    .events__mainContainer {
+        // padding: 70px 0px;
+        // max-height: calc(100vh - 100px);
+    }
+
+    .events__mainContainer--mt-0 {
+        padding: 0px;
+
+    }
 }
 
 .card__image {
@@ -285,11 +283,11 @@ async function getEventList() {
         display: block;
         margin-left: auto;
     }
-}
 
-.footer__offer {
-    white-space: nowrap;
-    text-align: right;
-    width: 100%;
+    .footer__offer {
+        white-space: nowrap;
+        text-align: right;
+        width: 100%;
+    }
 }
 </style>

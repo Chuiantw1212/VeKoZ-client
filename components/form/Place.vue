@@ -14,7 +14,7 @@
             </el-select>
         </el-form-item>
         <el-form-item label="詳細地址">
-            <el-input v-model="form.address" placeholder="建議輸入GoolgeMap可用地址" :show-word-limit="true"
+            <el-input v-model="form.address" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
                 :maxlength="150"></el-input>
         </el-form-item>
         <el-form-item label="描述">

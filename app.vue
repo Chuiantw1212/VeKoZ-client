@@ -1,6 +1,6 @@
 <template>
     <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
-        <HeaderMenu></HeaderMenu>
+        <HeaderMenu class="vekoz--header"></HeaderMenu>
     </el-header>
     <el-container class="defaultLayout" :class="{ 'defaultLayout__isStandard': !repoUser.userPreference.isFullScreen }">
         <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
@@ -25,9 +25,10 @@ const repoUser = useRepoUser()
 const repoUI = useRepoUI()
 </script>
 <style lang="scss" scoped>
-.scsrollable {
-    max-height: 100vh;
-    overflow-y: auto;
+.vekoz--header {
+    position: fixed;
+    opacity: 0.9;
+    z-index: 10;
 }
 
 .defaultLayout {
