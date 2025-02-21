@@ -79,11 +79,16 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGrid6Weeks,timeGridWeek,list30Days'
+            right: 'dayGridTwoMonths,timeGridWeek,list4Weeks'
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
         views: {
+            dayGridTwoMonths: {
+                type: 'dayGrid',
+                duration: { months: 2 },
+                buttonText: '月'
+            },
             dayGrid6Weeks: {
                 type: 'dayGrid',
                 duration: { week: 6 },
@@ -91,12 +96,12 @@ function initializeCalendar() {
             },
             timeGridWeek: {
                 type: 'timeGrid',
-                duration: { days: 7 },
+                duration: { week: 1 },
                 buttonText: '週'
             },
-            list30Days: {
+            list4Weeks: {
                 type: 'list',
-                duration: { day: 31 },
+                duration: { weeks: 4 },
                 buttonText: '列表'
             },
         }
