@@ -33,9 +33,7 @@
             <template #header>
                 <el-text size="large">
                     活動編輯
-                    <template v-if="currentEvent">
-                        ({{ currentEvent.id }})
-                    </template>
+                    ({{ dialogTemplate.id }})
                 </el-text>
             </template>
             <template #headerUI>
@@ -66,7 +64,7 @@
                     選擇模板
                 </el-text>
             </template>
-            <FormReadEventTemplate v-model="dialogTemplate" @update:modelValue="openCalendarEvent()">
+            <FormReadEventTemplate v-model="dialogTemplate" @update:modelValue="openNewCalendarEvent()">
             </FormReadEventTemplate>
         </AtomVenoniaDialog>
     </div>
@@ -110,7 +108,7 @@ const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
 const eventDialogIsOpen = ref<boolean>(false)
-const currentEvent = ref<IEvent>()
+const currentEvent = ref<IEvent>({})
 const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
@@ -132,39 +130,43 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
-    if (!currentEvent.value || !venoniaCalendarRef.value) {
+    if (!dialogTemplate.value || !venoniaCalendarRef.value) {
         return
     }
-    // console.log(calendarEvent)
-    const calendarEvent = venoniaCalendarRef.value.getEventById(String(currentEvent.value.id))
+    const calendarEvent = venoniaCalendarRef.value.getEventById(String(dialogTemplate.value.id))
+    if (!calendarEvent) {
+        return
+    }
     try {
         if (dialogTemplate.value.isPublic) {
-            calendarEvent?.setProp('backgroundColor', '')
-            calendarEvent?.setProp('classNames', [])
             const isValid = await formRef.value?.validate()
             if (isValid) {
                 await repoEvent.patchEventCalendar({
-                    id: currentEvent.value.id,
+                    id: dialogTemplate.value.id,
                     isPublic: true,
                 })
+                if (currentEvent.value) {
+                    calendarEvent.setProp('backgroundColor', '')
+                    calendarEvent.setProp('classNames', [])
+                }
+                return true // 回傳新增已公開月曆事件
             }
-            return
         } else {
             await repoEvent.patchEventCalendar({
-                id: currentEvent.value.id,
+                id: dialogTemplate.value.id,
                 isPublic: false,
             })
         }
     } catch (error) {
         dialogTemplate.value.isPublic = false
         await repoEvent.patchEventCalendar({
-            id: currentEvent.value.id,
+            id: dialogTemplate.value.id,
             isPublic: false,
         })
     }
     // Fail fallback to private
-    calendarEvent?.setProp('backgroundColor', 'lightblue')
-    calendarEvent?.setProp('classNames', ['blue-text-event'])
+    calendarEvent.setProp('backgroundColor', 'lightblue')
+    calendarEvent.setProp('classNames', ['blue-text-event'])
 }
 function trimOrganizationName(item: IOrganization) {
     if (item.name.length >= 12) {
@@ -367,7 +369,7 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
     loadTemplateDialogIsOpen.value = true
 }
 
-async function openCalendarEvent() {
+async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
     const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
         return design.type === 'dateTimeRange'
@@ -379,12 +381,18 @@ async function openCalendarEvent() {
     }
 
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
-    currentEvent.value = newEvent
+    currentEvent.value = newEvent // 繞過full calendar內部bug使用
     dialogTemplate.value.id = newEvent.id
+
+    const calendarEvent = parseFullCalendarEvent(newEvent, true)
+    venoniaCalendarRef.value?.addEvent(calendarEvent)
+
+    // dialog打開後才可以透過formRef檢核
     eventDialogIsOpen.value = true
-    getEventList() // 在背景更新月曆事件
-    dialogTemplate.value.isPublic = true
-    validiateForm()
+    nextTick(async () => {
+        dialogTemplate.value.isPublic = true
+        validiateForm()
+    })
 }
 
 async function cancelEventEditing() {

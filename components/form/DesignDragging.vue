@@ -1,7 +1,7 @@
 <template>
     <el-form label-width="auto">
         <!-- 這一個檔案要跟後端配合，全端工程師的含金量大概就在這邊了 -->
-        <el-divider class="mt-0" content-position="left">必填且限一個的欄位</el-divider>
+        <!-- <el-divider class="mt-0" content-position="left">必填且限一個的欄位</el-divider> -->
         <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
             draggable="true" :isDesigning="false"
             @dragstart="setOnDrag({ type: 'header1', formField: 'name', required: true, })"

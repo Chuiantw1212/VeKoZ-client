@@ -4,7 +4,7 @@
         "mutable": {
             "label": ""
         },
-        "formField": "image"
+        "formField": "banner"
     },
     {
         "type": "header1",
@@ -45,44 +45,5 @@
         },
         "required": true,
         "formField": "performers"
-    },
-    {
-        "type": "place",
-        "mutable": {
-            "label": "線下空間"
-        },
-        "formField": "location"
-    },
-    {
-        "type": "url",
-        "mutable": {
-            "label": "線上連結"
-        },
-        "formField": "virtualLocation"
-    },
-    {
-        "type": "offer",
-        "mutable": {
-            "label": "公開票組",
-            "offers": [
-                {
-                    "name": "",
-                    "count": null,
-                    "price": null
-                }
-            ]
-        }
-    },
-    {
-        "type": "divider",
-        "mutable": {
-            "label": "活動詳細內容"
-        }
-    },
-    {
-        "type": "editor",
-        "mutable": {
-            "label": ""
-        }
     }
 ]
