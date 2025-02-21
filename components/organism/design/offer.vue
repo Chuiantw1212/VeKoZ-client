@@ -6,7 +6,7 @@
                 <template v-if="!disabled">
                     <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
+                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.sku" :min="0"
                         :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
@@ -25,7 +25,7 @@
                     </el-button>
                     <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
                         <el-icon>
-                            <Minus />
+                            <Close />
                         </el-icon>
                     </el-button>
                 </template>
@@ -50,7 +50,7 @@
                 <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                     <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
                         :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__count" placeholder="數量" v-model="offer.count" :min="0"
+                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.sku" :min="0"
                         :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
@@ -69,7 +69,7 @@
                     </el-button>
                     <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
                         <el-icon>
-                            <Minus />
+                            <Close />
                         </el-icon>
                     </el-button>
                 </div>
@@ -78,7 +78,7 @@
     </MoleculeDesignToolbar>
 </template>
 <script setup lang="ts">
-import { Plus, Minus } from '@element-plus/icons-vue'
+import { Plus, Close } from '@element-plus/icons-vue'
 import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
@@ -92,7 +92,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
             offers: [
                 {
                     name: '',
-                    count: null,
+                    sku: null,
                     price: null,
                 }
             ]
@@ -134,11 +134,11 @@ const props = defineProps({
 // Hooks
 const newOffer = ref<{
     name: string,
-    count: any,
+    sku: any,
     price: any
 }>({
     name: '',
-    count: null,
+    sku: null,
     price: null,
 })
 
@@ -204,7 +204,7 @@ function removeOffer(index: number) {
         flex: 1;
     }
 
-    .offer__count {
+    .offer__sku {
         flex: 1;
     }
 

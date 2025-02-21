@@ -24,6 +24,14 @@
         <template #title>活動群組管理</template>
       </el-menu-item>
     </NuxtLink>
+    <NuxtLink to="/host/offer">
+      <el-menu-item index="6">
+        <el-icon>
+          <Tickets />
+        </el-icon>
+        <template #title>活動票券管理</template>
+      </el-menu-item>
+    </NuxtLink>
     <NuxtLink to="/host/place">
       <el-menu-item index="4">
         <el-icon>
@@ -40,18 +48,10 @@
         <template #title>組織管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/host/offer">
-      <el-menu-item index="6">
-        <el-icon>
-          <Ticket />
-        </el-icon>
-        <template #title>票券管理</template>
-      </el-menu-item>
-    </NuxtLink>
   </el-menu>
 </template>
 <script setup lang="ts">
-import { Ticket, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
+import { Tickets, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 const activeIndex = ref('1')
 </script>

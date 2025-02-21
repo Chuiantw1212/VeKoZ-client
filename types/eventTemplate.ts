@@ -46,7 +46,7 @@ export interface ITemplateDesign {
 
 interface IOffer {
     name: string,
-    count: number,
+    sku: number,
     price: number,
 }
 
