@@ -2,7 +2,7 @@
     <!-- 檢視與編輯用 -->
     <!-- customDesign.mutable.value: {{ customDesign.mutable?.value }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
-        :prop="customDesign.formField"  @dragstart="emit('dragstart')">
+        :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <div class="dateTimeRange">
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
                 @change="setDate()" :disabled="disabled" @clear="checkClearDate()"></el-date-picker>
@@ -122,18 +122,18 @@ function setDate() {
     if (!customDesign.value.mutable || !date.value) {
         return
     }
-
     const newYear = date.value.getFullYear()
     const newMonth = date.value.getMonth()
     const newDate = date.value.getDate()
     const defaultTime = getDefaultTime()
 
     const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
-    const newStartISO = newStartDate.toISOString()
-
     const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
+    if (!isNaN(newStartDate.getTime()) || !isNaN(newEndDate.getTime())) {
+        return
+    }
+    const newStartISO = newStartDate.toISOString()
     const newEndISO = newEndDate.toISOString()
-
     customDesign.value.mutable.value = [newStartISO, newEndISO]
 }
 

@@ -375,22 +375,12 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 
 async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
-    const seoDateTimeRange = dialogTemplate.value.designs.find((design) => {
-        return design.type === 'dateTimeRange'
-    })
-
-    if (seoDateTimeRange?.mutable && calendarEventCreation.value) {
-        const { date } = calendarEventCreation.value
-        seoDateTimeRange.mutable.value = [date, date]
-    }
-
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
     currentEvent.value = newEvent // 繞過full calendar內部bug使用
     dialogTemplate.value.id = newEvent.id
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
-
     eventDialogIsOpen.value = true
     // // dialog打開後才可以透過formRef檢核
     // nextTick(async () => { // 至少要設定時間，所以自動打開並不合理

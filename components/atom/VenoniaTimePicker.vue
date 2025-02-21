@@ -89,7 +89,7 @@ function convertDisplayToIso(display: string) {
     let newDate: Date = new Date()
     const dateString = String(modelValue.value[0])
     newDate = new Date(dateString)
-    newDate.setHours(newHour)
+    newDate.setHours(Math.max(newHour, 6))
     newDate.setMinutes(newMinutes)
     return newDate.toISOString()
 }
