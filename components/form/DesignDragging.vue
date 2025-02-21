@@ -1,7 +1,7 @@
 <template>
     <el-form label-width="auto">
         <!-- 這一個檔案要跟後端配合，全端工程師的含金量大概就在這邊了 -->
-        <el-divider class="mt-0" content-position="left">必填且限量的欄位</el-divider>
+        <el-divider class="mt-0" content-position="left">必填且限一個的欄位</el-divider>
         <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
             draggable="true" :isDesigning="false"
             @dragstart="setOnDrag({ type: 'header1', formField: 'name', required: true, })"
@@ -13,9 +13,9 @@
             @mouseenter="setOnEnter({ type: 'textarea', formField: 'description', required: true, })"
             placeholder="請輸入SEO描述" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignTextarea>
-        <OrganismDesignDateTimeRange v-if="isFormFieldLimited('date')" class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'dateTimeRange', formField: 'date', required: true, })"
-            @mouseenter="setOnEnter({ type: 'dateTimeRange', formField: 'date', required: true, })"
+        <OrganismDesignDateTimeRange v-if="isFormFieldLimited('dates')" class="eventTemplate__draggable" draggable="true"
+            @dragstart="setOnDrag({ type: 'dateTimeRange', formField: 'dates', required: true, })"
+            @mouseenter="setOnEnter({ type: 'dateTimeRange', formField: 'dates', required: true, })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignDateTimeRange>
         <OrganismDesignOrganization v-if="isTypeLimited('organization')" class="eventTemplate__draggable"
@@ -30,7 +30,7 @@
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignOrganizationMember>
 
-        <el-divider class="mt-0" content-position="left">限量的欄位</el-divider>
+        <el-divider class="mt-0" content-position="left">限一個的欄位</el-divider>
         <OrganismDesignBanner v-if="isTypeLimited('banner')" class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'banner', formField: 'banner', })"
             @mouseenter="setOnEnter({ type: 'banner', formField: 'banner', })" @mouseout="cancelDragging()"
@@ -51,7 +51,8 @@
             @dragstart="setOnDrag({ type: 'eventGroup', })" @mouseenter="setOnEnter({ type: 'eventGroup', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignEventGroup>
-        <el-divider content-position="left">無限量供應欄位</el-divider>
+
+        <el-divider content-position="left">無限供應欄位</el-divider>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'dateTimeRange', })" @mouseenter="setOnEnter({ type: 'dateTimeRange', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">

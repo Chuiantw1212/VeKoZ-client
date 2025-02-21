@@ -62,7 +62,7 @@
                                         </td> -->
                                     </tr>
                                     <tr>
-                                        <td>{{ item.addressRegion || '地點待定' }}</td>
+                                        <td>{{ item.locationAddressRegion || '地點待定' }}</td>
                                         <td></td>
                                         <td>
                                             <div class="footer__offer">
@@ -94,7 +94,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IEvent } from '~/types/event';
+import type { IEvent, IEventQuery } from '~/types/event';
 // import placeholderImage from '@/assets/mock/eventImage.png'
 const id = ref<string>(crypto.randomUUID())
 const repoUI = useRepoUI()
@@ -108,13 +108,14 @@ const currentMonth = new Date().getMonth()
 const endDate = new Date()
 endDate.setMonth(currentMonth + 1)
 const formRef = ref()
-const form = ref({
+const form = ref<IEventQuery>({
     keywords: '',
     startDate: startDate,
     endDate: endDate,
     startHour: '',
     locationAddressRegion: '',
     hasVirtualLocation: true,
+    isPublic: true,
 })
 
 // Hooks
@@ -185,10 +186,7 @@ async function getEventList() {
         startDate?.setHours(0, 0, 0, 0)
         const endDate = form.value.endDate
         endDate?.setHours(24, 0, 0, 0)
-        const result = await repoEvent.getEventList({
-            ...form.value,
-            isPublic: true,
-        })
+        const result = await repoEvent.getEventList(form.value)
         eventList.value = [...result,]
         isLoading.value = false
     }, 500)

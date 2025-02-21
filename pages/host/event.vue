@@ -42,8 +42,8 @@
                 <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
-                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic"
-                    active-text="公開" inactive-text="非公開" @change="validiateForm()" />
+                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" active-text="公開"
+                    inactive-text="非公開" @change="validiateForm()" />
                 <el-button :icon="View" text>
 
                 </el-button>
@@ -241,7 +241,7 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             calendarEvent.setProp('title', templateDesign.mutable.value)
             break;
         }
-        case 'date': {
+        case 'dates': {
             calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
             break;
         }

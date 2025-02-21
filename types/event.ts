@@ -1,4 +1,4 @@
-import type { IEventTemplate } from "./eventTemplate"
+import type { ITemplateDesign } from "./eventTemplate"
 
 export interface IEventCreation {
     date: string,
@@ -8,20 +8,27 @@ export interface IEventCreation {
  * 參考Schema，便於SEO使用
  * https://schema.org/Event
  */
-export interface IEvent extends IEventTemplate {
+export interface IEvent extends IEventQuery {
     id?: string,
     name?: string,
-    addressRegion?: string, // event.location = PostalAddress
     dateDesignId?: string,
-    startDate?: string | Date,
-    endDate?: string | Date,
     description?: string,
     lastmod?: any,
-    isPublic?: boolean,
     banner?: string,
     organizerId?: string,
     organizerName?: string,
     organizerLogo?: string,
+    designs?: ITemplateDesign[]
+}
+
+export interface IEventQuery {
+    startDate?: Date,
+    endDate?: Date,
+    startHour?: string,
+    locationAddressRegion?: string,
+    hasVirtualLocation?: boolean,
+    keywords?: string,
+    isPublic?: boolean,
 }
 
 /**

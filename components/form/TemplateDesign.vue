@@ -121,12 +121,6 @@ watch(() => templateDesigns.value, () => {
     templateDesigns.value.forEach(design => {
         if (design.formField) {
             switch (design.formField) {
-                // case 'date': {
-                //     break;
-                // }
-                // case 'description': {
-                //     break;
-                // }
                 case 'organizer': {
                     formModel.value[design.formField] = design.mutable?.organizationId
                     break;
@@ -135,7 +129,7 @@ watch(() => templateDesigns.value, () => {
                     formModel.value[design.formField] = design.mutable?.memberIds
                     break;
                 }
-                case 'date':
+                case 'dates':
                 case 'name':
                 case 'banner':
                 default: {

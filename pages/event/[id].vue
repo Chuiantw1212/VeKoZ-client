@@ -1,11 +1,12 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <el-row v-if="event" class="event" :gutter="20">
-        <el-col :span="18">
+        <el-col :span="mainSpan">
             <div class="event__main">
                 <img class="event__banner" :src="event.banner">
                 <el-card>
                     <h1>{{ event.name }}</h1>
+                    <p>{{ }}</p>
                     <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
                         }}
                         ~
@@ -22,7 +23,7 @@
                 </el-card>
             </div>
         </el-col>
-        <el-col :span="6">
+        <el-col v-if="repoUI.isSmall" :span="6">
             <el-card>
                 <img :src="event.organizerLogo">
                 <div>
@@ -32,8 +33,10 @@
         </el-col>
         <div class="event__actions">
             <div>
-                追蹤主辦
             </div>
+            <el-button :icon="CollectionTag">
+                追蹤
+            </el-button>
             <!-- <el-select v-model="form.ticket" placeholder="請選擇">
                 <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
@@ -45,9 +48,9 @@
     </el-row>
 </template>
 <script setup lang="ts">
-import { Money } from '@element-plus/icons-vue'
+import { CollectionTag, Money } from '@element-plus/icons-vue'
 import type { IEvent } from '~/types/event'
-
+const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const route = useRoute()
 const event = ref<IEvent>()
@@ -65,6 +68,16 @@ const ticketOptions = ref([
         value: ''
     },
 ])
+
+const mainSpan = ref<number>(24)
+
+// Hooks
+watch(() => repoUI, (ui) => {
+    mainSpan.value = 24
+    if (ui.isSmall) {
+        mainSpan.value = 18
+    }
+})
 
 onMounted(() => {
     getEvent()

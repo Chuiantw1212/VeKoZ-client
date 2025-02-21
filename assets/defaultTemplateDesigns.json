@@ -28,7 +28,7 @@
             "label": "活動時間"
         },
         "required": true,
-        "formField": "date"
+        "formField": "dates"
     },
     {
         "type": "organization",
