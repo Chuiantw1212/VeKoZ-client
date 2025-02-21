@@ -79,15 +79,25 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGridTwoMonths,listMonth,timeGridWeek'
+            right: 'dayGrid6Weeks,timeGridWeek,list30Days'
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
         views: {
-            dayGridTwoMonths: {
+            dayGrid6Weeks: {
                 type: 'dayGrid',
-                duration: { months: 2 },
+                duration: { week: 6 },
                 buttonText: '月'
+            },
+            timeGridWeek: {
+                type: 'timeGrid',
+                duration: { days: 7 },
+                buttonText: '週'
+            },
+            list30Days: {
+                type: 'list',
+                duration: { day: 31 },
+                buttonText: '列表'
             },
         }
     });
