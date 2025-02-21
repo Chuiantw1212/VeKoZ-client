@@ -81,7 +81,7 @@
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignEditor>
-            <OrganismDesignOffer v-if="item.type === 'offer'" v-model="templateDesigns[index]" :id="item.id"
+            <OrganismDesignOffer v-if="item.type === 'offers'" v-model="templateDesigns[index]" :id="item.id"
                 :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">

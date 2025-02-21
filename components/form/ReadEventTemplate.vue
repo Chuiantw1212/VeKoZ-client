@@ -65,10 +65,17 @@ async function selectDefaultTemplate() {
 
 async function getEventTemplateList() {
     isLoading.value = true
-    const result = await repoEventTemplate.getEventTemplateList()
+    const result: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
     templateList.value = result
     if (!templateList.value.length) {
         await selectDefaultTemplate()
+    }
+    if (templateList.value.length === 1) {
+        const templateId: string = String(templateList.value[0]?.id)
+        const template = await repoEventTemplate.getEventTemplate(templateId)
+        if (template) {
+            selectTemplate(template)
+        }
     }
     isLoading.value = false
 }

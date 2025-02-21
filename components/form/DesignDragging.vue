@@ -53,6 +53,11 @@
         </OrganismDesignEventGroup>
 
         <el-divider content-position="left">無限供應欄位</el-divider>
+        <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
+            @dragstart="setOnDrag({ type: 'offers', formField: 'offers', })"
+            @mouseenter="setOnEnter({ type: 'offers', formField: 'offers', })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
+        </OrganismDesignOffer>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'dateTimeRange', })" @mouseenter="setOnEnter({ type: 'dateTimeRange', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
@@ -72,11 +77,6 @@
             @dragstart="setOnDrag({ type: 'editor', })" @mouseenter="setOnEnter({ type: 'editor', })"
             @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
         </OrganismDesignEditor>
-        <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'offer', formField: 'offer', })"
-            @mouseenter="setOnEnter({ type: 'offer', formField: 'offer', })" @mouseout="cancelDragging()"
-            :disabled="true" :isDesigning="false">
-        </OrganismDesignOffer>
         <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'number', })" @mouseenter="setOnEnter({ type: 'number', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false"></OrganismDesignNumber>

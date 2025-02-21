@@ -391,8 +391,8 @@ async function openNewCalendarEvent() {
     const calendarEvent = parseFullCalendarEvent(newEvent, true)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
 
+    eventDialogIsOpen.value = true
     // // dialog打開後才可以透過formRef檢核
-    // eventDialogIsOpen.value = true
     // nextTick(async () => { // 至少要設定時間，所以自動打開並不合理
     //     dialogTemplate.value.isPublic = true
     //     validiateForm()

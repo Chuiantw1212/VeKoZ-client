@@ -86,7 +86,7 @@ const repoUI = useRepoUI()
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
-        type: 'offer',
+        type: 'offers',
         mutable: {
             label: '票券群組', // 此為必要欄位，且必須為空白，不然空間塞不下
             offers: [
@@ -158,7 +158,7 @@ function setDefaultValue() {
         return
     }
     const defaultValue: ITemplateDesign = {
-        type: 'offer',
+        type: 'offers',
         mutable: {
             label: '票券群組',
             offers: [

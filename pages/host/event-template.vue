@@ -47,7 +47,7 @@
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>
-                    <FormDesignDragging :designs="eventTemplate.designs" @dragstart="teest($event)"
+                    <FormDesignDragging :designs="eventTemplate.designs" @dragstart="setTemplateItem($event)"
                         @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()">
                     </FormDesignDragging>
                 </el-card>
@@ -287,10 +287,6 @@ async function removeDesign(data: ITemplateDragSouce) {
 
 function allowDrop(ev: any) {
     ev.preventDefault();
-}
-function teest(itemMeta: ITemplateDesign) {
-    Object.assign(templateTemp.value.item, itemMeta)
-    console.log('??', itemMeta, templateTemp.value.item.type)
 }
 
 function setTemplateItem(itemMeta: ITemplateDesign) {
