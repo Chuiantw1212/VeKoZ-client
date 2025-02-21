@@ -40,11 +40,15 @@
                 <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
+                |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" active-text="公開"
                     inactive-text="非公開" @change="validiateForm()" />
-                <el-button :icon="View" text>
+                |
+                <NuxtLink :to="`/event/${dialogTemplate.id}`" target="_blank">
+                    <el-button :icon="View" text :disabled="!dialogTemplate.isPublic">
 
-                </el-button>
+                    </el-button>
+                </NuxtLink>
                 <el-button :icon="Close" text @click="cancelEventEditing()">
                 </el-button>
             </template>
@@ -387,12 +391,12 @@ async function openNewCalendarEvent() {
     const calendarEvent = parseFullCalendarEvent(newEvent, true)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
 
-    // dialog打開後才可以透過formRef檢核
-    eventDialogIsOpen.value = true
-    nextTick(async () => {
-        dialogTemplate.value.isPublic = true
-        validiateForm()
-    })
+    // // dialog打開後才可以透過formRef檢核
+    // eventDialogIsOpen.value = true
+    // nextTick(async () => { // 至少要設定時間，所以自動打開並不合理
+    //     dialogTemplate.value.isPublic = true
+    //     validiateForm()
+    // })
 }
 
 async function cancelEventEditing() {

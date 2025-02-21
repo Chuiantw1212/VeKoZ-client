@@ -89,6 +89,7 @@ const width = computed(() => {
             display: flex;
             gap: 4px;
             align-items: center;
+            color: lightgray
         }
     }
 
