@@ -86,15 +86,15 @@ export default defineStore('api', {
                 const apiBase = useRuntimeConfig().public.apiBase
                 axiosResponse = await fetch(`${apiBase}${url}`, fetchConfig)
             } catch (error: any) {
-                // console.log('???', error)
                 // alert(error.message)
             } finally {
                 if (axiosResponse?.status === 500) {
                     const statusErrorMessage = axiosResponse.statusText
                     const serverThrowMessage = await axiosResponse.text()
-                    ElMessageBox.alert(serverThrowMessage, `${method} ${url}: ${statusErrorMessage}`, {
+                    await ElMessageBox.alert(serverThrowMessage, `${method} ${url}: ${statusErrorMessage}`, {
                         confirmButtonText: '確認',
                     })
+                    return
                 }
                 // console.log('axiosResponse', axiosResponse)
                 return axiosResponse as any
