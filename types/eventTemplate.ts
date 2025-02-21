@@ -1,3 +1,5 @@
+import type { IOffer } from "./offer"
+
 export interface IEventTemplate {
     uid?: string,
     id?: string,
@@ -44,11 +46,7 @@ export interface ITemplateDesign {
     [key: string]: any
 }
 
-interface IOffer {
-    name: string,
-    sku: number,
-    price: number,
-}
+
 
 export interface ITemplateDragSouce {
     index: number,

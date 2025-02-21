@@ -79,10 +79,17 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGridMonth,dayGridWeek,listWeek'
+            right: 'dayGridTwoMonths,listMonth,timeGridWeek'
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
+        views: {
+            dayGridTwoMonths: {
+                type: 'dayGrid',
+                duration: { months: 2 },
+                buttonText: '月'
+            },
+        }
     });
     calendar.render();
 

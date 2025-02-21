@@ -12,12 +12,12 @@
             <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
                     <el-form>
-                        <el-form-item label="事件狀態">
+                        <!-- <el-form-item label="事件狀態">
                             <el-checkbox-group v-model="calendarStatus" @change="getEventList">
                                 <el-checkbox v-for="(item) in calendatPublicOptins" :label="item.label"
                                     :value="item.value" />
                             </el-checkbox-group>
-                        </el-form-item>
+                        </el-form-item> -->
                         <!-- <el-checkbox-group v-model="selectedOrganizationIds">
                             <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
                                 :value="item.id" />

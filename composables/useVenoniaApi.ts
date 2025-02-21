@@ -58,8 +58,9 @@ export default defineStore('api', {
 
             let urlSearchParams: URLSearchParams = null as any
             if (options.params) {
+                const noUndefined = JSON.parse(JSON.stringify(options.params))
                 urlSearchParams = new URLSearchParams({
-                    ...options.params
+                    ...noUndefined
                 })
                 url += `?${urlSearchParams}`
             }
