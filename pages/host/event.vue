@@ -337,7 +337,10 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     const changedEvent = calendarEventList.value.find(event => {
         return event.id === eventId
     })
-    const oldEndDate = String(changedEvent?.endDate)
+    if (!changedEvent) {
+        return
+    }
+    const oldEndDate = String(changedEvent.endDate)
     const newStartDate: Date = changeInfo.event.start as Date
     const newYear = newStartDate.getFullYear()
     const newMonth = newStartDate.getMonth()
@@ -350,9 +353,10 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     // 送出請求
     await repoEvent.patchEventCalendar({
         id: eventId,
+        offerCategoryIds: changedEvent.offerCategoryIds,
         dateDesignId: changedEvent?.dateDesignId,
         startDate: newStartDate,
-        endDate: newEndDate
+        endDate: newEndDate,
     })
 }
 

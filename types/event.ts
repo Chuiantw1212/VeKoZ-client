@@ -11,7 +11,6 @@ export interface IEventCreation {
 export interface IEvent extends IEventQuery {
     id?: string,
     name?: string,
-    dateDesignId?: string,
     description?: string,
     lastmod?: any,
     banner?: string,
@@ -19,6 +18,9 @@ export interface IEvent extends IEventQuery {
     organizerName?: string,
     organizerLogo?: string,
     designs?: ITemplateDesign[]
+    // 便於更新用
+    dateDesignId?: string,
+    offerCategoryIds?: string[]
 }
 
 export interface IEventQuery {

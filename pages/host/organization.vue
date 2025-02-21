@@ -36,6 +36,7 @@
                     組織設定
                 </el-text>
             </template>
+            TODO：搜尋已註冊的組織並聯動資料。
             <FormOrganization v-model="organization"
                 :mode="organizationDialog.mode">
             </FormOrganization>

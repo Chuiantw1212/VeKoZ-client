@@ -3,4 +3,12 @@ export interface IOffer {
     inventoryMaxValue: number,
     inventoryValue: number,
     price: number,
+    sellerId: string,
+    sellerName: string,
+    offererId: string,
+    offererName: string,
+    eventId: string,
+    eventName: string,
+    validFrom: any,
+    validThrough: any,
 }
