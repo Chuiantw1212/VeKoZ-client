@@ -13,8 +13,8 @@
             @mouseenter="setOnEnter({ type: 'textarea', formField: 'description', required: true, })"
             placeholder="請輸入SEO描述" @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignTextarea>
-        <OrganismDesignDateTimeRange v-if="isFormFieldLimited('dates')" class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'dateTimeRange', formField: 'dates', required: true, })"
+        <OrganismDesignDateTimeRange v-if="isFormFieldLimited('dates')" class="eventTemplate__draggable"
+            draggable="true" @dragstart="setOnDrag({ type: 'dateTimeRange', formField: 'dates', required: true, })"
             @mouseenter="setOnEnter({ type: 'dateTimeRange', formField: 'dates', required: true, })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignDateTimeRange>
@@ -73,8 +73,9 @@
             @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
         </OrganismDesignEditor>
         <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'offer', })" @mouseenter="setOnEnter({ type: 'offer', })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
+            @dragstart="setOnDrag({ type: 'offer', formField: 'offer', })"
+            @mouseenter="setOnEnter({ type: 'offer', formField: 'offer', })" @mouseout="cancelDragging()"
+            :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
         <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'number', })" @mouseenter="setOnEnter({ type: 'number', })"
