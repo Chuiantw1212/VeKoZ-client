@@ -6,7 +6,7 @@
                 <template v-if="!disabled">
                     <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.sku" :min="0"
+                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
                         :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
@@ -50,7 +50,7 @@
                 <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
                     <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
                         :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.sku" :min="0"
+                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
                         :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
@@ -92,7 +92,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
             offers: [
                 {
                     name: '',
-                    sku: null,
+                    inventoryMaxValue: null,
                     price: null,
                 }
             ]
@@ -134,11 +134,11 @@ const props = defineProps({
 // Hooks
 const newOffer = ref<{
     name: string,
-    sku: any,
+    inventoryMaxValue: any,
     price: any
 }>({
     name: '',
-    sku: null,
+    inventoryMaxValue: null,
     price: null,
 })
 

@@ -42,7 +42,7 @@
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" inline-prompt
-                    active-text="已公開" inactive-text="未公開" @change="validiateForm()" />
+                    active-text="已公開" inactive-text="非公開" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogTemplate.isPublic">
@@ -151,6 +151,7 @@ async function validiateForm() {
                 })
                 if (currentEvent.value) {
                     calendarEvent.setProp('backgroundColor', '')
+                    // calendarEvent.setProp('textColor', '')
                     calendarEvent.setProp('classNames', [])
                 }
                 return true // 回傳新增已公開月曆事件
@@ -170,6 +171,7 @@ async function validiateForm() {
     }
     // Fail fallback to private
     calendarEvent.setProp('backgroundColor', 'lightblue')
+    // calendarEvent.setProp('textColor', 'lightblue')
     calendarEvent.setProp('classNames', ['blue-text-event'])
 }
 function trimOrganizationName(item: IOrganization) {
@@ -300,10 +302,12 @@ function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarE
         endStr: '',
         editable,
         backgroundColor: 'lightblue',
+        // textColor: 'lightblue',
         classNames: ['blue-text-event']
     }
     if (event.isPublic) {
         delete iFullCalendarEvent.backgroundColor
+        // delete iFullCalendarEvent.textColor
         delete iFullCalendarEvent.classNames
     }
     const startDate = event.startDate

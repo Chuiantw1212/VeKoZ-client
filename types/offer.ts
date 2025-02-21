@@ -1,5 +1,6 @@
 export interface IOffer {
     name: string,
-    sku: number,
+    inventoryMaxValue: number,
+    inventoryValue: number,
     price: number,
 }

@@ -25,15 +25,23 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/offer">
-      <el-menu-item index="6">
+      <el-menu-item index="4">
         <el-icon>
-          <Tickets />
+          <Promotion />
         </el-icon>
-        <template #title>活動票券管理</template>
+        <template #title>票券銷售分派</template>
+      </el-menu-item>
+    </NuxtLink>
+    <NuxtLink to="/host/order">
+      <el-menu-item index="5">
+        <el-icon>
+          <Ticket />
+        </el-icon>
+        <template #title>票券訂單管理</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/place">
-      <el-menu-item index="4">
+      <el-menu-item index="6">
         <el-icon>
           <Location />
         </el-icon>
@@ -41,7 +49,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/organization">
-      <el-menu-item index="5">
+      <el-menu-item index="7">
         <el-icon>
           <OfficeBuilding />
         </el-icon>
@@ -51,7 +59,7 @@
   </el-menu>
 </template>
 <script setup lang="ts">
-import { Tickets, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
+import { Ticket, Promotion, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 const activeIndex = ref('1')
 </script>
