@@ -41,8 +41,8 @@
                     @click="deleteEvent()">
                 </el-button>
                 |
-                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" active-text="公開"
-                    inactive-text="非公開" @change="validiateForm()" />
+                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" inline-prompt
+                    active-text="已公開" inactive-text="未公開" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogTemplate.isPublic">
