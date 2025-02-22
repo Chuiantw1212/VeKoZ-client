@@ -385,7 +385,7 @@ async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
     currentEvent.value = newEvent // 繞過full calendar內部bug使用
-    dialogTemplate.value.id = newEvent.id
+    dialogTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
