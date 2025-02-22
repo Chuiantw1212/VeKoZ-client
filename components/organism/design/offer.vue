@@ -178,7 +178,7 @@ async function handleChange(templateDesign: any) {
     repoUI.debounce(props.id, async function () {
         await props.onchange(templateDesign)
         isLoading.value = false
-    })
+    }, 1000)
 }
 function createOffer() {
     customDesign.value.mutable?.offers?.push(newOffer.value)
