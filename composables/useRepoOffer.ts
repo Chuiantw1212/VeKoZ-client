@@ -11,7 +11,17 @@ export default defineStore('offer', () => {
         })
         return response.json()
     }
+    async function patchOfferCategory(offer: IOffer): Promise<number> {
+        const response = await defaultApi.authRequest(`/offer/category/${offer.categoryId}`, {
+            method: 'PATCH',
+            body: {
+                showInventoryValue: offer.showInventoryValue ?? false
+            }
+        })
+        return response.text()
+    }
     return {
-        getOfferList
+        getOfferList,
+        patchOfferCategory,
     }
 })

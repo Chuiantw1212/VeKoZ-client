@@ -1,7 +1,7 @@
 <template>
     <div class="offer">
         <el-alert type="info" show-icon :closable="false">
-            欲調整票價、數量，請到活動管理。
+            欲調整公開狀態、票名、票價、數量，請到活動管理。
         </el-alert>
         <div class="offerList">
             <template v-for="(groupOffers, index) in offerGroups">
@@ -15,9 +15,9 @@
                                     <el-button :icon="Share" class="btnGroup__btn"
                                         @click="shareLink(groupOffers[0])">分享售票連結</el-button>
                                 </el-tooltip>
-                                <el-button :icon="Calendar" class="btnGroup__btn">
+                                <!-- <el-button :icon="Calendar" class="btnGroup__btn">
                                     在活動管理打開
-                                </el-button>
+                                </el-button> -->
                             </div>
                         </div>
                     </template>
@@ -47,7 +47,9 @@
                             </el-col>
                             <el-col :span="formFieldSpan">
                                 <el-form-item label="票券剩餘數量">
-                                    {{ groupOffers[0].eventIsPublic ? '顯示' : '隱藏' }}
+                                    <el-switch v-model="groupOffers[0].eventIsPublic" inline-prompt active-text="公開"
+                                        inactive-text="隱藏" @change="patchOfferCategory(groupOffers[0])" />
+                                    <!-- {{ groupOffers[0].eventIsPublic ? '顯示' : '隱藏' }} -->
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -81,19 +83,16 @@
 import { Calendar, Share } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
 const repoUI = useRepoUI()
-
-const shareTooltipVisible = ref(false)
-onMounted(() => {
-    getOfferList()
-})
-
 const repoOffer = useRepoOffer()
+const shareTooltipVisible = ref(false)
 const offers = ref<IOffer[]>()
 const offerGroups = ref<any>({})
-
 const formFieldSpan = ref<number>(24)
 
 // Hooks
+onMounted(() => {
+    getOfferList()
+})
 watch(() => repoUI, (ui) => {
     formFieldSpan.value = 24
     if (ui.isMedium) {
@@ -108,6 +107,10 @@ watch(() => repoUI, (ui) => {
 }, { immediate: true, deep: true, })
 
 // Methods
+async function patchOfferCategory(offer: IOffer,) {
+    await repoOffer.patchOfferCategory(offer)
+}
+
 async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
     offers.value = result

@@ -37,7 +37,7 @@
                 </el-text>
             </template>
             TODO：搜尋已註冊的組織並聯動資料。
-            <FormOrganization v-model="organization"
+            <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
                 :mode="organizationDialog.mode">
             </FormOrganization>
             <template #footer>
@@ -58,7 +58,7 @@
                 <el-button :icon="Close" text>
                 </el-button>
             </template>
-            <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="organization"
+            <FormOrganizationMember v-if="organizationMemberDialog.visibility"
                 :mode="organizationMemberDialog.mode">
             </FormOrganizationMember>
             <!-- <template #footer>
@@ -90,7 +90,7 @@ const organizationDialog = reactive({
     mode: ''
 })
 
-const organization = reactive<IOrganization>({
+const organization = ref<IOrganization>({
     name: '',
     description: '',
     logo: '',
@@ -116,30 +116,31 @@ async function hanelDialogConfirm() {
 }
 
 async function postOrganization() {
-    await repoOrganization.postOrganization(organization)
+    await repoOrganization.postOrganization(organization.value)
     getOrganizationList()
     organizationDialog.visibility = false
 }
 
 async function putOrganization() {
-    await repoOrganization.putOrganization(organization)
+    await repoOrganization.putOrganization(organization.value)
     getOrganizationList()
     organizationDialog.visibility = false
 }
 
 function openNewDialog() {
+    organization.value = { } as any
     organizationDialog.visibility = true
     organizationDialog.mode = 'ADD'
 }
 
 function editOrganizationDialog(item: IOrganization) {
-    Object.assign(organization, item)
+    Object.assign(organization.value, item)
     organizationDialog.visibility = true
     organizationDialog.mode = 'EDIT'
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {
-    Object.assign(organization, item)
+    Object.assign(organization.value, item)
     organizationMemberDialog.visibility = true
 }
 

@@ -97,8 +97,8 @@ const width = computed(() => {
         max-height: calc(100vh - 180px);
         overflow-y: auto;
         padding: 0 20px;
-        border-top: 1px solid lightgray;
-        border-bottom: 1px solid lightgray;
+        // border-top: 1px solid lightgray;
+        // border-bottom: 1px solid lightgray;
     }
 }
 </style>

@@ -15,7 +15,7 @@ interface requestOptions {
 export default defineStore('api', {
     state: () => {
         return {
-            token: ''
+            token: '',
         }
     },
     actions: {
@@ -39,9 +39,9 @@ export default defineStore('api', {
                     }
                     step()
                 })
-                if (auth && auth.currentUser) {
+                if (auth && auth.currentUser && !this.token) {
                     try {
-                        this.token = await auth.currentUser.getIdToken(true)
+                        this.token = await auth.currentUser.getIdToken()
                     } catch (error: any) {
                         console.log(error.message)
                         return

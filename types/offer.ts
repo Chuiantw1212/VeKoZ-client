@@ -2,6 +2,7 @@ export interface IOffer {
     name: string,
     inventoryMaxValue: number,
     inventoryValue: number,
+    showInventoryValue: boolean,
     price: number,
     sellerId: string,
     sellerName: string,
@@ -11,4 +12,6 @@ export interface IOffer {
     eventName: string,
     validFrom: any,
     validThrough: any,
+    categoryId: string,
+    categoryName: string,
 }
