@@ -397,6 +397,7 @@ async function openNewCalendarEvent() {
         return design.formField === 'dates'
     })
     if (dateDesign?.mutable) {
+        console.log(dateDesign.mutable.value)
         const startDate = new Date(dateDesign.mutable.startDate ?? '')
         startDate.setFullYear(selectedYear)
         startDate.setMonth(selectedMonth)
