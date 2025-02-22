@@ -104,7 +104,9 @@ const calendatPublicOptins = ref([
 const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
-const calendarEventCreation = ref<IEventCreation>()
+const calendarEventCreation = ref<IEventCreation>({
+    date: '',
+})
 const calendarEventList = ref<IEventFromList[]>([])
 // Data sidemenu
 const organizationList = ref<IOrganization[]>([])
@@ -384,6 +386,29 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 
 async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
+    const date = calendarEventCreation.value.date
+    const selectedDateInstance = new Date(date)
+    const selectedYear = selectedDateInstance.getFullYear()
+    const selectedMonth = selectedDateInstance.getMonth()
+    const selectedDate = selectedDateInstance.getDate()
+
+    // 給定新月曆所選擇的值
+    const dateDesign = dialogEventTemplate.value.designs.find(design => {
+        return design.formField === 'dates'
+    })
+    if (dateDesign?.mutable) {
+        const startDate = new Date(dateDesign.mutable.startDate ?? '')
+        startDate.setFullYear(selectedYear)
+        startDate.setMonth(selectedMonth)
+        startDate.setDate(selectedDate)
+        const endDate = new Date(dateDesign.mutable.endDate ?? '')
+        endDate.setFullYear(selectedYear)
+        endDate.setMonth(selectedMonth)
+        endDate.setDate(selectedDate)
+        dateDesign.mutable.value = [startDate.toISOString(), endDate.toISOString()]
+    }
+
+    // return
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 

@@ -15,6 +15,7 @@ export interface IEventFromList {
     isPublic?: boolean,
     offerCategoryIds?: string[],
     dateDesignId?: string,
+    name?: string,
 }
 
 /**
