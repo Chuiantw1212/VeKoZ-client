@@ -7,6 +7,11 @@
         <el-form-item label="名稱">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
+        <el-col>
+            <el-form-item :span="12" label="能見度">
+                
+            </el-form-item>
+        </el-col>
         <el-form-item label="所在城市">
             <el-select v-model="form.addressRegion" placeholder="請選擇">
                 <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"

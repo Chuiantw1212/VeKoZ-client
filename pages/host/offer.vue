@@ -9,7 +9,7 @@
                 <el-card class="offerList__item">
                     <template #header>
                         <div class="card__header">
-                            {{ groupOffers[0].eventName }}
+                            {{ getDate(groupOffers[0]) }} {{ groupOffers[0].eventName }}
                             <div class="header__btnGroup">
                                 <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                                     <el-button :icon="Share" class="btnGroup__btn"
@@ -24,8 +24,20 @@
                     <el-form>
                         <el-row>
                             <el-col :span="formFieldSpan">
+                                <el-form-item label="時間">
+                                    {{ getTimes(groupOffers[0]) }}
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="formFieldSpan">
                                 <el-form-item label="主辦單位">
                                     {{ groupOffers[0].offererName }}
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="活動公開狀態">
+                                    {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
                                 </el-form-item>
                             </el-col>
                             <el-col :span="formFieldSpan">
@@ -34,13 +46,8 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="formFieldSpan">
-                                <el-form-item label="公開狀態">
-                                    {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="formFieldSpan">
-                                <el-form-item label="日期時間">
-                                    {{ getDate(groupOffers[0]) }} {{ getTimes(groupOffers[0]) }}
+                                <el-form-item label="票券剩餘數量">
+                                    {{ groupOffers[0].eventIsPublic ? '顯示' : '隱藏' }}
                                 </el-form-item>
                             </el-col>
                         </el-row>
