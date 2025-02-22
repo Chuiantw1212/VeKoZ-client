@@ -112,7 +112,6 @@ const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
 const eventDialogIsOpen = ref<boolean>(false)
-const currentEvent = ref<IEvent>({})
 const dialogTemplate = ref<IEventTemplate>({
     designs: []
 })
@@ -134,6 +133,7 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
+    console.log('validiateForm')
     if (!dialogTemplate.value || !venoniaCalendarRef.value) {
         return
     }
@@ -149,11 +149,8 @@ async function validiateForm() {
                     id: dialogTemplate.value.id,
                     isPublic: true,
                 })
-                if (currentEvent.value) {
-                    calendarEvent.setProp('backgroundColor', '')
-                    // calendarEvent.setProp('textColor', '')
-                    calendarEvent.setProp('classNames', [])
-                }
+                calendarEvent.setProp('backgroundColor', '')
+                calendarEvent.setProp('classNames', [])
                 return true // 回傳新增已公開月曆事件
             }
         } else {
@@ -232,10 +229,9 @@ async function getOrganizationList() {
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
     isDialogPatchLoading.value = true
-    if (!currentEvent.value || !venoniaCalendarRef.value) {
+    if (!venoniaCalendarRef.value) {
         return
     }
-    templateDesign.eventId = currentEvent.value.id
     await repoEvent.patchEventForm(templateDesign)
     isDialogPatchLoading.value = false
 
@@ -334,12 +330,15 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
      * 疑似BUG，無法直接拿到endDateStr
      */
     const eventId = changeInfo.event.id
+
+    // 月曆拖曳用eventId找出對應的月曆資料
     const changedEvent = calendarEventList.value.find(event => {
         return event.id === eventId
     })
     if (!changedEvent) {
         return
     }
+    // console.log('changedEvent', changedEvent)
     const oldEndDate = String(changedEvent.endDate)
     const newStartDate: Date = changeInfo.event.start as Date
     const newYear = newStartDate.getFullYear()
@@ -357,13 +356,13 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
         dateDesignId: changedEvent?.dateDesignId,
         startDate: newStartDate,
         endDate: newEndDate,
+        // isPublic: changedEvent.isPublic,
     })
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
-    currentEvent.value = eventClickInfo.event
     isLoading.value = true
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     isLoading.value = false
@@ -384,7 +383,6 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
     const newEvent = await repoEvent.postEvent(dialogTemplate.value)
-    currentEvent.value = newEvent // 繞過full calendar內部bug使用
     dialogTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)

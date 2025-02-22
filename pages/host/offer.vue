@@ -1,7 +1,7 @@
 <template>
     <el-alert type="info" show-icon :closable="false">
         <p>
-            票價、數量請到活動管理調整。
+            欲調整票價、數量，請到活動管理。
         </p>
     </el-alert>
     <div class="offerList">

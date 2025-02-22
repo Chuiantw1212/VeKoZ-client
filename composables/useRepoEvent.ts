@@ -24,6 +24,9 @@ export default defineStore('event', () => {
         return response.json()
     }
     async function patchEventCalendar(body: IEvent) {
+        console.log({
+            body
+        })
         const response = await defaultApi.authRequest(`/event/calendar`, {
             method: 'PATCH',
             body,
