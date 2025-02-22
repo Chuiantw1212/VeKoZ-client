@@ -9,7 +9,9 @@
                 <el-card class="offerList__item">
                     <template #header>
                         <div class="card__header">
-                            {{ getDate(groupOffers[0]) }} {{ groupOffers[0].eventName }}
+                            {{ getDate(groupOffers[0]) }}
+                            {{ groupOffers[0].categoryName }}
+                            <!-- {{ trimLongString(groupOffers[0].eventName) }} -->
                             <div class="header__btnGroup">
                                 <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                                     <el-button :icon="Share" class="btnGroup__btn"
@@ -22,27 +24,35 @@
                         </div>
                     </template>
                     <el-form>
-                        <el-row>
+                        <el-row :gutter="20">
                             <el-col :span="formFieldSpan">
-                                <el-form-item label="時間">
+                                <el-form-item label="活動名稱">
+                                    {{ groupOffers[0].eventName }}
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="活動時間">
                                     {{ getTimes(groupOffers[0]) }}
                                 </el-form-item>
                             </el-col>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="公開狀態">
+                                    {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
                             <el-col :span="formFieldSpan">
                                 <el-form-item label="主辦單位">
                                     {{ groupOffers[0].offererName }}
                                 </el-form-item>
                             </el-col>
-                        </el-row>
-                        <el-row>
-                            <el-col :span="formFieldSpan">
-                                <el-form-item label="活動公開狀態">
-                                    {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
-                                </el-form-item>
-                            </el-col>
                             <el-col :span="formFieldSpan">
                                 <el-form-item label="售票單位">
-                                    {{ groupOffers[0].sellerName }}
+                                    <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇">
+                                        <el-option v-for="(item, index) in organizationList" :key="index"
+                                            :label="`${item.name}`" :value="item.id" />
+                                    </el-select>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="formFieldSpan">
@@ -82,16 +92,20 @@
 <script setup lang="ts">
 import { Calendar, Share } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
+import type { IOrganization } from '~/types/organization';
 const repoUI = useRepoUI()
 const repoOffer = useRepoOffer()
+const repoOrganization = useRepoOrganization()
 const shareTooltipVisible = ref(false)
 const offers = ref<IOffer[]>()
 const offerGroups = ref<any>({})
 const formFieldSpan = ref<number>(24)
+const organizationList = ref<IOrganization[]>([])
 
 // Hooks
 onMounted(() => {
     getOfferList()
+    getOrganizationList()
 })
 watch(() => repoUI, (ui) => {
     formFieldSpan.value = 24
@@ -101,12 +115,25 @@ watch(() => repoUI, (ui) => {
     if (ui.isLarge) {
         formFieldSpan.value = 8
     }
-    if (ui.isXLarge) {
-        formFieldSpan.value = 6
-    }
+    // if (ui.isXLarge) {
+    //     formFieldSpan.value = 6
+    // }
 }, { immediate: true, deep: true, })
 
 // Methods
+function trimLongString(text: string) {
+    if (text.length >= 12) {
+        return `${text.slice(0, 10)}......`
+    } else {
+        return text
+    }
+}
+
+async function getOrganizationList() {
+    const organizations = await repoOrganization.getOrganizationList()
+    organizationList.value = organizations
+}
+
 async function patchOfferCategory(offer: IOffer,) {
     await repoOffer.patchOfferCategory(offer)
 }
@@ -115,7 +142,7 @@ async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
     offers.value = result
 
-    offerGroups.value = Object.groupBy(result, ({ eventId }) => eventId)
+    offerGroups.value = Object.groupBy(result, ({ categoryId }) => categoryId)
 }
 
 async function shareLink(offer: IOffer) {
