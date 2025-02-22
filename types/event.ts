@@ -8,6 +8,19 @@ export interface IEventCreation {
  * 參考Schema，便於SEO使用
  * https://schema.org/Event
  */
+export interface IEventFromList {
+    id?: string,
+    startDate?: Date,
+    endDate?: Date,
+    isPublic?: boolean,
+    offerCategoryIds?: string[],
+    dateDesignId?: string,
+}
+
+/**
+ * 太雜了，要整理取代
+ * @deprecated
+ */
 export interface IEvent extends IEventQuery {
     id?: string,
     name?: string,

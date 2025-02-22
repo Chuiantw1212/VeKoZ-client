@@ -33,19 +33,19 @@
             <template #header>
                 <el-text size="large">
                     活動編輯
-                    ({{ dialogTemplate.id }})
+                    ({{ dialogEventTemplate.id }})
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
+                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
                     @click="deleteEvent()">
                 </el-button>
                 |
-                <el-switch v-loading="isDialogPatchLoading" v-model="dialogTemplate.isPublic" inline-prompt
+                <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
                     active-text="已公開" inactive-text="非公開" @change="validiateForm()" />
                 |
-                <NuxtLink :to="`/event/${dialogTemplate.id}`" target="_blank">
-                    <el-button :icon="View" text :disabled="!dialogTemplate.isPublic">
+                <NuxtLink :to="`/event/${dialogEventTemplate.id}`" target="_blank">
+                    <el-button :icon="View" text :disabled="!dialogEventTemplate.isPublic">
 
                     </el-button>
                 </NuxtLink>
@@ -55,7 +55,7 @@
             <template #default>
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
-                    <FormTemplateDesign ref="formRef" v-model="dialogTemplate.designs"
+                    <FormTemplateDesign ref="formRef" v-model="dialogEventTemplate.designs"
                         :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
@@ -68,7 +68,7 @@
                     選擇模板
                 </el-text>
             </template>
-            <FormReadEventTemplate v-model="dialogTemplate" @update:modelValue="openNewCalendarEvent()">
+            <FormReadEventTemplate v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
             </FormReadEventTemplate>
         </AtomVenoniaDialog>
     </div>
@@ -76,7 +76,7 @@
 
 <script setup lang="ts">
 import { Delete, Close, View } from '@element-plus/icons-vue';
-import type { IEvent, IEventCreation, } from '~/types/event';
+import type { IEventFromList, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
@@ -105,14 +105,14 @@ const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>()
-const calendarEventList = ref<IEvent[]>([])
+const calendarEventList = ref<IEventFromList[]>([])
 // Data sidemenu
 const organizationList = ref<IOrganization[]>([])
 const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
 const eventDialogIsOpen = ref<boolean>(false)
-const dialogTemplate = ref<IEventTemplate>({
+const dialogEventTemplate = ref<IEventTemplate>({
     designs: []
 })
 const loadTemplateDialogIsOpen = ref<boolean>(false)
@@ -134,19 +134,19 @@ watch((() => repoUser.userPreference), () => {
 // Methods
 async function validiateForm() {
     console.log('validiateForm')
-    if (!dialogTemplate.value || !venoniaCalendarRef.value) {
+    if (!dialogEventTemplate.value || !venoniaCalendarRef.value) {
         return
     }
-    const calendarEvent = venoniaCalendarRef.value.getEventById(String(dialogTemplate.value.id))
+    const calendarEvent = venoniaCalendarRef.value.getEventById(String(dialogEventTemplate.value.id))
     if (!calendarEvent) {
         return
     }
     try {
-        if (dialogTemplate.value.isPublic) {
+        if (dialogEventTemplate.value.isPublic) {
             const isValid = await formRef.value?.validate()
             if (isValid) {
                 await repoEvent.patchEventCalendar({
-                    id: dialogTemplate.value.id,
+                    id: dialogEventTemplate.value.id,
                     isPublic: true,
                 })
                 calendarEvent.setProp('backgroundColor', '')
@@ -155,14 +155,14 @@ async function validiateForm() {
             }
         } else {
             await repoEvent.patchEventCalendar({
-                id: dialogTemplate.value.id,
+                id: dialogEventTemplate.value.id,
                 isPublic: false,
             })
         }
     } catch (error) {
-        dialogTemplate.value.isPublic = false
+        dialogEventTemplate.value.isPublic = false
         await repoEvent.patchEventCalendar({
-            id: dialogTemplate.value.id,
+            id: dialogEventTemplate.value.id,
             isPublic: false,
         })
     }
@@ -211,7 +211,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     //         timeMin,
     //         timeMax,
     //     })
-    //     eventList.forEach((event: IEvent) => {
+    //     eventList.forEach((event: IEventFromList) => {
     //         const fullCalendarEvent = parseFullCalendarEvent(event)
     //         venoniaCalendarRef.value?.addEvent(fullCalendarEvent)
     //     })
@@ -257,7 +257,7 @@ async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
 
-    const condition: IEvent = {
+    const condition: IEventFromList = {
         startDate: startOfTheMonth,
     }
 
@@ -282,7 +282,7 @@ async function getEventList() {
     })
 }
 
-function parseFullCalendarEvent(event: IEvent, editable = false): IFullCalendarEvent {
+function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullCalendarEvent {
     const title = String(event.name || '未命名')
     // const todos = '1/2'
     /**
@@ -330,15 +330,17 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
      * 疑似BUG，無法直接拿到endDateStr
      */
     const eventId = changeInfo.event.id
-
-    // 月曆拖曳用eventId找出對應的月曆資料
     const changedEvent = calendarEventList.value.find(event => {
         return event.id === eventId
     })
     if (!changedEvent) {
         return
     }
-    // console.log('changedEvent', changedEvent)
+    if (dialogEventTemplate.value.eventId === eventId) {
+        // 如果符合，將部分屬性更新回eventList
+        changedEvent.isPublic = dialogEventTemplate.value.isPublic
+    }
+    // 用Event資料找出該Event的時間日期
     const oldEndDate = String(changedEvent.endDate)
     const newStartDate: Date = changeInfo.event.start as Date
     const newYear = newStartDate.getFullYear()
@@ -356,7 +358,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
         dateDesignId: changedEvent?.dateDesignId,
         startDate: newStartDate,
         endDate: newEndDate,
-        // isPublic: changedEvent.isPublic,
+        isPublic: changedEvent.isPublic,
     })
 }
 
@@ -367,7 +369,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
     isLoading.value = false
     if (eventTemplate) {
-        dialogTemplate.value = eventTemplate
+        dialogEventTemplate.value = eventTemplate
         eventDialogIsOpen.value = true
     } else {
         const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
@@ -382,27 +384,26 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 
 async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
-    const newEvent = await repoEvent.postEvent(dialogTemplate.value)
-    dialogTemplate.value = newEvent // 呈現給使用者編輯使用
+    const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
+    dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
     eventDialogIsOpen.value = true
-    // // dialog打開後才可以透過formRef檢核
-    // nextTick(async () => { // 至少要設定時間，所以自動打開並不合理
-    //     dialogTemplate.value.isPublic = true
-    //     validiateForm()
-    // })
 }
 
 async function cancelEventEditing() {
+    // 關閉時，清空資料
+    dialogEventTemplate.value = {
+        designs: []
+    }
     eventDialogIsOpen.value = false
 }
 
 async function deleteEvent() {
     isLoading.value = true
-    if (dialogTemplate.value.id) {
-        await repoEvent.deleteEvent(dialogTemplate.value.id)
+    if (dialogEventTemplate.value.id) {
+        await repoEvent.deleteEvent(dialogEventTemplate.value.id)
         venoniaCalendarRef.value?.removeAllEvents()
         await getEventList()
         eventDialogIsOpen.value = false
