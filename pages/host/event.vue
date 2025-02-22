@@ -401,10 +401,15 @@ async function openNewCalendarEvent() {
         startDate.setFullYear(selectedYear)
         startDate.setMonth(selectedMonth)
         startDate.setDate(selectedDate)
+        const originalStartHour = startDate.getHours()
+        const originalStartMinues = startDate.getMinutes()
+        const defaultStartHour = Math.max(originalStartHour, 6)
+        startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
         const endDate = new Date(dateDesign.mutable.endDate ?? '')
         endDate.setFullYear(selectedYear)
         endDate.setMonth(selectedMonth)
         endDate.setDate(selectedDate)
+        endDate.setHours(defaultStartHour + 1, originalStartMinues, 0, 0)
         dateDesign.mutable.value = [startDate.toISOString(), endDate.toISOString()]
     }
 
