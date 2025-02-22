@@ -5,7 +5,7 @@
                 <el-button class="btnGroup__btn" :disabled="true">密碼變更</el-button>
                 <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
                     @click="repoUser.setUserType('host')">切換為主辦方</el-button>
-                    <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
+                <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
                     @click="repoUser.setUserType('attendee')">切換為一般用戶</el-button>
                 <el-button class="btnGroup__btn">登出</el-button>
             </div>
@@ -82,6 +82,12 @@
                     </el-col>
                 </el-row>
             </el-card>
+            <el-divider>
+                許願與抱怨
+            </el-divider>
+            <p>VeKoZ為EN Chu獨立開發。</p>
+            <p>打開掃Line即可聯絡作者本人。</p>
+            <p>開發進度歡迎到Github查看。</p>
             <el-divider>
                 系統功能
             </el-divider>
