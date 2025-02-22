@@ -338,10 +338,10 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     if (!changedEvent) {
         return
     }
-    if (dialogEventTemplate.value.eventId === eventId) {
-        // 如果符合，將部分屬性更新回eventList
+    if (dialogEventTemplate.value.id === eventId) {
         changedEvent.isPublic = dialogEventTemplate.value.isPublic
     }
+
     // 用Event資料找出該Event的時間日期
     const oldEndDate = String(changedEvent.endDate)
     const newStartDate: Date = changeInfo.event.start as Date
