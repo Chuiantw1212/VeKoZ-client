@@ -1,7 +1,7 @@
 <template>
   <el-menu :default-active="activeIndex" :collapse="repoUI.isMenuCollapse">
     <NuxtLink to="/host/event">
-      <el-menu-item index="1">
+      <el-menu-item index="host-event">
         <el-icon>
           <Calendar />
         </el-icon>
@@ -9,7 +9,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/event-template">
-      <el-menu-item index="2">
+      <el-menu-item index="host-event-template">
         <el-icon>
           <Document />
         </el-icon>
@@ -17,7 +17,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/event-group">
-      <el-menu-item index="3">
+      <el-menu-item index="host-event-group">
         <el-icon>
           <DocumentCopy />
         </el-icon>
@@ -25,7 +25,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/offer">
-      <el-menu-item index="4">
+      <el-menu-item index="host-offer">
         <el-icon>
           <Promotion />
         </el-icon>
@@ -33,7 +33,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/order">
-      <el-menu-item index="5">
+      <el-menu-item index="host-order">
         <el-icon>
           <Ticket />
         </el-icon>
@@ -41,7 +41,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/place">
-      <el-menu-item index="6">
+      <el-menu-item index="host-place">
         <el-icon>
           <Location />
         </el-icon>
@@ -49,7 +49,7 @@
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/organization">
-      <el-menu-item index="7">
+      <el-menu-item index="host-organization">
         <el-icon>
           <OfficeBuilding />
         </el-icon>
@@ -61,7 +61,11 @@
 <script setup lang="ts">
 import { Ticket, Promotion, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
-const activeIndex = ref('1')
+const activeIndex = ref('event')
+const route = useRoute()
+onMounted(() => {
+  activeIndex.value = route.name
+})
 </script>
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {

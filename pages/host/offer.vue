@@ -4,66 +4,69 @@
             欲調整票價、數量，請到活動管理。
         </el-alert>
         <div class="offerList">
-            <el-card v-for="(groupOffers, index) in offerGroups" class="offerList__item">
-                <template #header>
-                    <div class="card__header">
-                        {{ groupOffers[0].eventName }}
-                        <div class="header__btnGroup">
-                            <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                                <el-button :icon="Share" class="btnGroup__btn"
-                                    @click="shareLink(groupOffers[0])">分享售票連結</el-button>
-                            </el-tooltip>
-                            <el-button :icon="Calendar" class="btnGroup__btn">
-                                在活動管理打開
-                            </el-button>
+            <template v-for="(groupOffers, index) in offerGroups">
+                <el-divider v-if="checkOfferIsOver(groupOffers[0])">已結束的活動</el-divider>
+                <el-card class="offerList__item">
+                    <template #header>
+                        <div class="card__header">
+                            {{ groupOffers[0].eventName }}
+                            <div class="header__btnGroup">
+                                <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                                    <el-button :icon="Share" class="btnGroup__btn"
+                                        @click="shareLink(groupOffers[0])">分享售票連結</el-button>
+                                </el-tooltip>
+                                <el-button :icon="Calendar" class="btnGroup__btn">
+                                    在活動管理打開
+                                </el-button>
+                            </div>
                         </div>
-                    </div>
-                </template>
-                <el-form>
-                    <el-row>
-                        <el-col :span="formFieldSpan">
-                            <el-form-item label="主辦單位">
-                                {{ groupOffers[0].offererName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="formFieldSpan">
-                            <el-form-item label="售票單位">
-                                {{ groupOffers[0].sellerName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="formFieldSpan">
-                            <el-form-item label="公開狀態">
-                                {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="formFieldSpan">
-                            <el-form-item label="日期時間">
-                                {{ getDate(groupOffers[0]) }} {{ getTimes(groupOffers[0]) }}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <el-table :data="groupOffers" style="width: 100%">
-                    <!-- <el-table-column prop="sellerName" label="售票">
+                    </template>
+                    <el-form>
+                        <el-row>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="主辦單位">
+                                    {{ groupOffers[0].offererName }}
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="售票單位">
+                                    {{ groupOffers[0].sellerName }}
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="公開狀態">
+                                    {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="formFieldSpan">
+                                <el-form-item label="日期時間">
+                                    {{ getDate(groupOffers[0]) }} {{ getTimes(groupOffers[0]) }}
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <el-table :data="groupOffers" style="width: 100%">
+                        <!-- <el-table-column prop="sellerName" label="售票">
             </el-table-column> -->
-                    <el-table-column prop="name" label="票券名稱">
-                    </el-table-column>
-                    <el-table-column prop="price" label="票價">
-                    </el-table-column>
-                    <el-table-column prop="inventoryValue" label="數量">
-                        <template #default="{ row }">
-                            {{ row.inventoryValue }} / {{ row.inventoryMaxValue }}
-                        </template>
-                    </el-table-column>
-                    <!-- <el-table-column prop="" label="說明">
+                        <el-table-column prop="name" label="票券名稱">
+                        </el-table-column>
+                        <el-table-column prop="price" label="票價">
+                        </el-table-column>
+                        <el-table-column prop="inventoryValue" label="數量">
+                            <template #default="{ row }">
+                                {{ row.inventoryValue }} / {{ row.inventoryMaxValue }}
+                            </template>
+                        </el-table-column>
+                        <!-- <el-table-column prop="" label="說明">
                     <template #default="{ row }">
                         <el-button :icon="Calendar">
                             在活動管理打開
                         </el-button>
                     </template>
                 </el-table-column> -->
-                </el-table>
-            </el-card>
+                    </el-table>
+                </el-card>
+            </template>
         </div>
     </div>
 </template>
@@ -150,6 +153,14 @@ function getTimes(offer: IOffer) {
         timeString += ` ~ ${endTime.slice(0, 5)}`
     }
     return timeString
+}
+
+const currentTime = new Date().getTime()
+function checkOfferIsOver(offer: IOffer) {
+    const endTime = new Date(offer.validThrough).getTime()
+    if (endTime < currentTime) {
+        return true
+    }
 }
 </script>
 <style lang="scss" scoped>
