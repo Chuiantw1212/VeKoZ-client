@@ -15,7 +15,9 @@ export default defineStore('offer', () => {
         const response = await defaultApi.authRequest(`/offer/category/${offer.categoryId}`, {
             method: 'PATCH',
             body: {
-                showInventoryValue: offer.showInventoryValue ?? false
+                showInventoryValue: offer.showInventoryValue ?? false,
+                sellerId: offer.sellerId,
+                sellerName: offer.sellerName,
             }
         })
         return response.text()

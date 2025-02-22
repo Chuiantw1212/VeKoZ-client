@@ -234,10 +234,12 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     if (!venoniaCalendarRef.value) {
         return
     }
-    await repoEvent.patchEventForm(templateDesign)
-    isDialogPatchLoading.value = false
+    // await repoEvent.patchEventForm(templateDesign)
+    // isDialogPatchLoading.value = false
 
-    // update fullcalendar event
+    /**
+     * Will trigger handleEventCalendarChange
+     */
     const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
     if (!calendarEvent || !templateDesign.mutable) {
         return
@@ -248,30 +250,45 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             break;
         }
         case 'dates': {
-            calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
+            /**
+             * 這邊這樣是因為calendarEvent.setDates會觸發補丁
+             */
+            const changedEvent = calendarEventList.value.find(event => {
+                return event.id === templateDesign.eventId
+            })
+            if (changedEvent) {
+                changedEvent.startDate = templateDesign.mutable.value[0]
+                changedEvent.endDate = templateDesign.mutable.value[1]
+                calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
+            }
             break;
         }
+        default: {
+            await repoEvent.patchEventForm(templateDesign)
+        }
     }
-
+    isDialogPatchLoading.value = false
 }
 
 async function getEventList() {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
 
-    const condition: IEventFromList = {
-        startDate: startOfTheMonth,
-    }
+    // const condition: IEventFromList = {
+    //     startDate: startOfTheMonth,
+    // }
 
-    const hasStatus = calendarStatus.value.length === 1
-    const selectedStatus: string = String(calendarStatus.value[0])
-    if (hasStatus && selectedStatus === 'public') {
-        condition.isPublic = true
-    }
-    if (hasStatus && selectedStatus === 'private') {
-        condition.isPublic = false
-    }
-    calendarEventList.value = await repoEvent.getEventList(condition)
+    // const hasStatus = calendarStatus.value.length === 1
+    // const selectedStatus: string = String(calendarStatus.value[0])
+    // if (hasStatus && selectedStatus === 'public') {
+    //     condition.isPublic = true
+    // }
+    // if (hasStatus && selectedStatus === 'private') {
+    //     condition.isPublic = false
+    // }
+    calendarEventList.value = await repoEvent.getEventList({
+        startDate: startOfTheMonth,
+    })
 
     const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
         return parseFullCalendarEvent(event, true)
@@ -281,6 +298,46 @@ async function getEventList() {
 
     fullCalendarEventList.forEach(event => {
         venoniaCalendarRef.value?.addEvent(event)
+    })
+}
+
+async function handleEventCalendarChange(changeInfo: IChangeInfo) {
+    // console.trace(changeInfo)
+    /**
+     * 1. 疑似BUG，無法直接拿到endDateStr
+     * 2. 從月曆與直接改form最終都會觸發這個function
+     */
+    const eventId = changeInfo.event.id
+    const changedEvent = calendarEventList.value.find(event => {
+        return event.id === eventId
+    })
+    if (!changedEvent) {
+        return
+    }
+    if (dialogEventTemplate.value.id === eventId) {
+        changedEvent.isPublic = dialogEventTemplate.value.isPublic
+    }
+
+    // 用Event資料找出該Event的時間日期，所以會找到舊的
+    const oldEndDate = String(changedEvent.endDate)
+    const newStartDate: Date = changeInfo.event.start as Date
+    const newYear = newStartDate.getFullYear()
+    const newMonth = newStartDate.getMonth()
+    const newDate = newStartDate.getDate()
+    const newEndDate = new Date(oldEndDate)
+    const originHour = newEndDate.getHours()
+    const originMinutes = newEndDate.getMinutes()
+    newEndDate.setFullYear(newYear, newMonth, newDate,)
+    newEndDate.setHours(originHour, originMinutes, 0, 0,)
+
+    // 送出請求
+    await repoEvent.patchEventCalendar({
+        id: eventId,
+        offerCategoryIds: changedEvent.offerCategoryIds,
+        dateDesignId: changedEvent?.dateDesignId,
+        startDate: newStartDate,
+        endDate: newEndDate,
+        isPublic: changedEvent.isPublic,
     })
 }
 
@@ -327,43 +384,6 @@ function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullC
     return iFullCalendarEvent
 }
 
-async function handleEventCalendarChange(changeInfo: IChangeInfo) {
-    /**
-     * 疑似BUG，無法直接拿到endDateStr
-     */
-    const eventId = changeInfo.event.id
-    const changedEvent = calendarEventList.value.find(event => {
-        return event.id === eventId
-    })
-    if (!changedEvent) {
-        return
-    }
-    if (dialogEventTemplate.value.id === eventId) {
-        changedEvent.isPublic = dialogEventTemplate.value.isPublic
-    }
-
-    // 用Event資料找出該Event的時間日期
-    const oldEndDate = String(changedEvent.endDate)
-    const newStartDate: Date = changeInfo.event.start as Date
-    const newYear = newStartDate.getFullYear()
-    const newMonth = newStartDate.getMonth()
-    const newDate = newStartDate.getDate()
-    const newEndDate = new Date(oldEndDate)
-    newEndDate.setFullYear(newYear)
-    newEndDate.setMonth(newMonth)
-    newEndDate.setDate(newDate)
-
-    // 送出請求
-    await repoEvent.patchEventCalendar({
-        id: eventId,
-        offerCategoryIds: changedEvent.offerCategoryIds,
-        dateDesignId: changedEvent?.dateDesignId,
-        startDate: newStartDate,
-        endDate: newEndDate,
-        isPublic: changedEvent.isPublic,
-    })
-}
-
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
@@ -397,7 +417,6 @@ async function openNewCalendarEvent() {
         return design.formField === 'dates'
     })
     if (dateDesign?.mutable) {
-        console.log(dateDesign.mutable.value)
         const startDate = new Date(dateDesign.mutable.startDate ?? '')
         startDate.setFullYear(selectedYear)
         startDate.setMonth(selectedMonth)

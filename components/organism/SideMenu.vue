@@ -29,7 +29,7 @@
         <el-icon>
           <Promotion />
         </el-icon>
-        <template #title>票券分銷曝光</template>
+        <template #title>票券群組分銷</template>
       </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/host/order">

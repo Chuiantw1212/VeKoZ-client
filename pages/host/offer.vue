@@ -3,6 +3,10 @@
         <el-alert type="info" show-icon :closable="false">
             欲調整公開狀態、票名、票價、數量，請到活動管理。
         </el-alert>
+        <el-card class="notFound">
+            <el-empty description="查無資料">
+            </el-empty>
+        </el-card>
         <div class="offerList">
             <template v-for="(groupOffers, index) in offerGroups">
                 <el-divider v-if="checkOfferIsOver(groupOffers[0])">已結束的活動</el-divider>
@@ -49,7 +53,8 @@
                             </el-col>
                             <el-col :span="formFieldSpan">
                                 <el-form-item label="售票單位">
-                                    <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇">
+                                    <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇"
+                                        @change="patchOfferCategory(groupOffers[0])">
                                         <el-option v-for="(item, index) in organizationList" :key="index"
                                             :label="`${item.name}`" :value="item.id" />
                                     </el-select>
@@ -90,7 +95,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Calendar, Share } from '@element-plus/icons-vue';
+import { Calendar, Share, FolderOpened } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
 import type { IOrganization } from '~/types/organization';
 const repoUI = useRepoUI()
@@ -135,6 +140,12 @@ async function getOrganizationList() {
 }
 
 async function patchOfferCategory(offer: IOffer,) {
+    const selectedSeller = organizationList.value.find(org => {
+        return org.id === offer.sellerId
+    })
+    if (selectedSeller) {
+        offer.sellerName = selectedSeller.name
+    }
     await repoOffer.patchOfferCategory(offer)
 }
 
@@ -201,6 +212,10 @@ function checkOfferIsOver(offer: IOffer) {
 }
 </script>
 <style lang="scss" scoped>
+.notFound {
+    margin-top: 20px;
+}
+
 .offer {
     max-height: calc(100vh - 100px);
     overflow-y: auto;

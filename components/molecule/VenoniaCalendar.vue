@@ -79,7 +79,7 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGridTwoMonths,timeGridWeek,list4Weeks'
+            right: 'dayGridTwoMonths,timeGridWeek,listTwoMonths'
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
@@ -99,9 +99,9 @@ function initializeCalendar() {
                 duration: { week: 1 },
                 buttonText: '週'
             },
-            list4Weeks: {
+            listTwoMonths: {
                 type: 'list',
-                duration: { weeks: 4 },
+                duration: { months: 2 },
                 buttonText: '列表'
             },
         }
