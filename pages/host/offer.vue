@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="offer">
         <el-alert type="info" show-icon :closable="false">
             欲調整票價、數量，請到活動管理。
         </el-alert>
@@ -8,8 +8,12 @@
                 <template #header>
                     <div class="card__header">
                         {{ groupOffers[0].eventName }}
-                        <div>
-                            <el-button :icon="Calendar">
+                        <div class="header__btnGroup">
+                            <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                                <el-button :icon="Share" class="btnGroup__btn"
+                                    @click="shareLink(groupOffers[0])">分享售票連結</el-button>
+                            </el-tooltip>
+                            <el-button :icon="Calendar" class="btnGroup__btn">
                                 在活動管理打開
                             </el-button>
                         </div>
@@ -17,29 +21,22 @@
                 </template>
                 <el-form>
                     <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="售票連結">
-                                <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                                    <el-button :icon="Share" @click="shareLink(groupOffers[0])">分享連結</el-button>
-                                </el-tooltip>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
-                            <el-form-item label="售票單位">
-                                {{ groupOffers[0].sellerName }}
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
+                        <el-col :span="formFieldSpan">
                             <el-form-item label="主辦單位">
                                 {{ groupOffers[0].offererName }}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="24">
+                        <el-col :span="formFieldSpan">
+                            <el-form-item label="售票單位">
+                                {{ groupOffers[0].sellerName }}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="formFieldSpan">
                             <el-form-item label="公開狀態">
                                 {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
                             </el-form-item>
                         </el-col>
-                        <el-col :span="24">
+                        <el-col :span="formFieldSpan">
                             <el-form-item label="日期時間">
                                 {{ getDate(groupOffers[0]) }} {{ getTimes(groupOffers[0]) }}
                             </el-form-item>
@@ -73,39 +70,34 @@
 <script setup lang="ts">
 import { Calendar, Share } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
+const repoUI = useRepoUI()
 
-// Tooltip
 const shareTooltipVisible = ref(false)
-// const position = ref({
-//     top: 0,
-//     left: 0,
-//     bottom: 0,
-//     right: 0,
-// } as DOMRect)
-// const triggerRef = ref({
-//     getBoundingClientRect: () => position.value,
-// })
-// const mousemoveHandler = ({ clientX, clientY }: MouseEvent) => {
-//     position.value = DOMRect.fromRect({
-//         x: clientX,
-//         y: clientY,
-//     })
-// }
 onMounted(() => {
-    if (import.meta.client) {
-        getOfferList()
-        // document.addEventListener('mousemove', mousemoveHandler)
-    }
-})
-
-onUnmounted(() => {
-    // document.removeEventListener('mousemove', mousemoveHandler)
+    getOfferList()
 })
 
 const repoOffer = useRepoOffer()
 const offers = ref<IOffer[]>()
 const offerGroups = ref<any>({})
 
+const formFieldSpan = ref<number>(24)
+
+// Hooks
+watch(() => repoUI, (ui) => {
+    formFieldSpan.value = 24
+    if (ui.isMedium) {
+        formFieldSpan.value = 12
+    }
+    if (ui.isLarge) {
+        formFieldSpan.value = 8
+    }
+    if (ui.isXLarge) {
+        formFieldSpan.value = 6
+    }
+}, { immediate: true, deep: true, })
+
+// Methods
 async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
     offers.value = result
@@ -161,10 +153,12 @@ function getTimes(offer: IOffer) {
 }
 </script>
 <style lang="scss" scoped>
+.offer {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
 .offerList {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
     margin-top: 20px;
 
     .offerList__item {
@@ -172,6 +166,43 @@ function getTimes(offer: IOffer) {
         .card__header {
             display: flex;
             justify-content: space-between;
+
+            .header__btnGroup {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                .btnGroup__btn {
+                    margin: 0px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .offerList {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+
+        .offerList__item {
+
+            .card__header {
+                display: flex;
+                justify-content: space-between;
+
+                .header__btnGroup {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 4px;
+
+                    .btnGroup__btn {
+                        margin: 0px;
+                    }
+                }
+            }
         }
     }
 }
