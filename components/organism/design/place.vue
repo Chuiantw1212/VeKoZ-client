@@ -23,6 +23,9 @@
             </el-select>
             <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.placeAddress"
                 :disabled="true"></el-input>
+            <el-form-item label="詳細地址">
+                購票前可見
+            </el-form-item>
         </template>
     </MoleculeDesignToolbar>
 </template>
