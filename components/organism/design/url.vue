@@ -3,15 +3,14 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
         <el-input v-if="customDesign" v-model="customDesign.urlName" :placeholder="namePlaceholder"
             :disabled="disabled"></el-input>
-        <el-input v-if="customDesign" class="design__mt" v-model="customDesign.urlValue"
-            :placeholder="valuePlaceHolder" :disabled="disabled"></el-input>
+        <el-input v-if="customDesign" class="design__mt" v-model="customDesign.urlValue" :placeholder="valuePlaceHolder"
+            :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-input v-model="customDesign.urlName" :placeholder="props.namePlaceholder"
@@ -30,11 +29,9 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'url',
-        mutable: {
-            label: '網址',
-            urlName: '',
-            urlValue: '',
-        }
+        label: '網址',
+        urlName: '',
+        urlValue: '',
     }
 })
 const props = defineProps({
@@ -88,11 +85,9 @@ function setDefaultValue() {
     }
     const defaultValue: ITemplateDesign = {
         type: 'url',
-        mutable: {
-            label: '',
-            urlName: '',
-            urlValue: '',
-        }
+        label: '',
+        urlName: '',
+        urlValue: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

@@ -2,8 +2,8 @@
     <div>
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
-            <AtomVenoniaEditor v-if="customDesign" v-model="customDesign.value"
-                :placeholder="placeholder" :disabled="disabled">
+            <AtomVenoniaEditor v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
+                :disabled="disabled">
             </AtomVenoniaEditor>
         </el-form-item>
         <!-- 樣板編輯專用 -->
@@ -26,9 +26,7 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'editor',
-        mutable: {
-            label: ''
-        }
+        label: ''
     }
 })
 
@@ -79,14 +77,13 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value.value) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'editor',
-        mutable: {
-            label: '',
-        }
+        label: '',
+        value: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

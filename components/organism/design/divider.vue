@@ -23,9 +23,7 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'divider',
-        mutable: {
-            label: '分隔線'
-        }
+        label: '分隔線'
     }
 })
 
@@ -68,14 +66,12 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'divider',
-        mutable: {
-            label: '',
-        }
+        label: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

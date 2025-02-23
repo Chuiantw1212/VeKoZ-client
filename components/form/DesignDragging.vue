@@ -85,21 +85,11 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 const emit = defineEmits(['mouseout', 'mouseenter', 'dragstart'])
-//
-const header1 = ref<ITemplateDesign>({
-    type: 'input',
-    formField: 'name',
-    mutable: {
-        label: '視訊連結',
-    }
-})
 
 const virtualLocation = ref<ITemplateDesign>({
     type: 'url',
     formField: 'virtualLocation',
-    mutable: {
-        label: '視訊連結',
-    }
+    label: '視訊連結',
 })
 
 const props = defineProps({

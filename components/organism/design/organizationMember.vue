@@ -15,12 +15,11 @@
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.memberIds" placeholder="請選擇現有組織成員" :filterable="true"
-                :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled"
+            <el-select v-model="customDesign.memberIds" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
+                :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled"
                 @change="setMemberNames()">
                 <el-option v-for="(item, index) in organizationMemberList" :key="index" :label="item.name"
                     :value="String(item.id)" />
@@ -39,11 +38,9 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'organizationMember',
-        mutable: {
-            label: '組織成員', // 純瀏覽時使用
-            memberIds: [],
-            memberNames: [],
-        }
+        label: '組織成員', // 純瀏覽時使用
+        memberIds: [],
+        memberNames: [],
     }
 })
 
@@ -109,11 +106,9 @@ function setDefaultValue() {
     }
     const defaultValue: ITemplateDesign = {
         type: 'organizationMember',
-        mutable: {
-            label: '組織成員',
-            memberIds: [],
-            memberNames: [],
-        }
+        label: '組織成員',
+        memberIds: [],
+        memberNames: [],
     }
     if (props.formField) {
         defaultValue.formField = props.formField

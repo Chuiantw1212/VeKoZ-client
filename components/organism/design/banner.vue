@@ -30,13 +30,11 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: () => {
         return {
             type: 'banner',
-            mutable: {
-                label: '',
-                value: {
-                    type: '',
-                    buffer: [],
-                }
-            }
+            label: '',
+            value: {
+                type: '',
+                buffer: [],
+            },
         }
     }
 })
@@ -90,18 +88,16 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value ?) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'banner',
-        mutable: {
-            label: '',
-            value: {
-                type: '',
-                buffer: [],
-            }
-        }
+        label: '',
+        value: {
+            type: '',
+            buffer: [],
+        },
     }
     if (props.formField) {
         defaultValue.formField = props.formField

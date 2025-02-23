@@ -6,8 +6,8 @@
         <div class="dateTimeRange">
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
                 @change="setDate()" :disabled="disabled" @clear="checkClearDate()"></el-date-picker>
-            <AtomVenoniaTimePicker v-if="customDesign" class="dateTimeRange__time"
-                v-model="customDesign.value" :placeholder="placeholder" :disabled="disabled">
+            <AtomVenoniaTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
+                :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaTimePicker>
         </div>
     </el-form-item>
@@ -15,8 +15,7 @@
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" :required="required" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
@@ -39,9 +38,7 @@ const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: () => {
         return {
             type: 'dateTimeRange',
-            mutable: {
-                label: '時間日期',
-            }
+            label: '時間日期',
         }
     }
 },)
@@ -89,16 +86,15 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value) {
         // 防止無限迴圈
-        if (customDesign.value.value) {
+        if (customDesign.value) {
             date.value = new Date(customDesign.value.value[0])
         } else {
             date.value = new Date()
         }
         return
     }
-    delete customDesign.value // IMPORTANT: 刪掉會有不明的錯誤
 
     const startDate = new Date()
     const endDate = new Date()
@@ -106,10 +102,8 @@ function setDefaultValue() {
     endDate.setHours(currentHour + 1)
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
-        mutable: {
-            label: '時間日期',
-            value: [startDate, endDate]
-        }
+        label: '時間日期',
+        value: [startDate, endDate]
     }
     if (props.formField) {
         defaultValue.formField = props.formField

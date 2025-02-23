@@ -2,19 +2,18 @@
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
-        <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
-            :maxlength="30" :show-word-limit="true" size="large" :disabled="disabled"></el-input>
+        <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder" :maxlength="30"
+            :show-word-limit="true" size="large" :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input :placeholder="placeholder" v-model="customDesign.value" :maxlength="30"
-                :show-word-limit="true" size="large"></el-input>
+            <el-input :placeholder="placeholder" v-model="customDesign.value" :maxlength="30" :show-word-limit="true"
+                size="large"></el-input>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -27,9 +26,7 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'header1',
-        mutable: {
-            label: '標題'
-        }
+        label: '標題',
     },
 })
 
@@ -76,14 +73,12 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value.value) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'header1',
-        mutable: {
-            label: '活動名稱',
-        }
+        label: '活動名稱',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

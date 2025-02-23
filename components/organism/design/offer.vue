@@ -42,8 +42,7 @@
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="群組名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="群組名稱"></el-input>
         </template>
         <template v-slot:default>
             <div class="offerList">
@@ -80,6 +79,7 @@
 <script setup lang="ts">
 import { Plus, Close } from '@element-plus/icons-vue'
 import type { ITemplateDesign } from '~/types/eventTemplate'
+import type { IOffer } from '~/types/offer'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
@@ -87,16 +87,14 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'offers',
-        mutable: {
-            label: '票券群組', // 此為必要欄位，且必須為空白，不然空間塞不下
-            offers: [
-                {
-                    name: '',
-                    inventoryMaxValue: null,
-                    price: null,
-                }
-            ]
-        }
+        label: '票券群組', // 此為必要欄位，且必須為空白，不然空間塞不下
+        offers: [
+            {
+                name: '',
+                inventoryMaxValue: null,
+                price: null,
+            }
+        ],
     }
 })
 
@@ -132,11 +130,7 @@ const props = defineProps({
 })
 
 // Hooks
-const newOffer = ref<{
-    name: string,
-    inventoryMaxValue: any,
-    price: any
-}>({
+const newOffer = ref<IOffer>({
     name: '',
     inventoryMaxValue: null,
     price: null,
@@ -159,12 +153,10 @@ function setDefaultValue() {
     }
     const defaultValue: ITemplateDesign = {
         type: 'offers',
-        mutable: {
-            label: '票券群組',
-            offers: [
-                newOffer.value,
-            ],
-        }
+        label: '票券群組',
+        offers: [
+            newOffer.value,
+        ],
     }
     if (props.formField) {
         defaultValue.formField = props.formField

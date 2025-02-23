@@ -8,12 +8,11 @@
     <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input-number :placeholder="placeholder" v-model="customDesign.value"
-                :controls-position="'right'" :disabled="disabled"></el-input-number>
+            <el-input-number :placeholder="placeholder" v-model="customDesign.value" :controls-position="'right'"
+                :disabled="disabled"></el-input-number>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -26,10 +25,8 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'number',
-        mutable: {
-            label: '數字',
-            value: 1000
-        }
+        label: '數字',
+        value: 1000
     }
 })
 
@@ -72,14 +69,12 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?) {
+    if (customDesign.value.value) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'number',
-        mutable: {
-            label: '',
-        }
+        label: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField
