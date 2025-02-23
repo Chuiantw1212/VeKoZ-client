@@ -1,12 +1,11 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <!-- date:{{ date }}
-    customDesign.value: {{ customDesign.value }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
-        :prop="customDesign.formField" @dragstart="emit('dragstart')">
+        :prop="customDesign.formField" @dragstart="emit('dragstart')" :model="customDesign">
         <div class="dateTimeRange">
-            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
-                @change="setDate()" :disabled="disabled" @clear="checkClearDate()"></el-date-picker>
+            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+                :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()" :disabled="disabled"
+                @clear="checkClearDate()"></el-date-picker>
             <AtomVenoniaTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
                 :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaTimePicker>
@@ -20,8 +19,9 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
-                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date" @blur="setDate()"
-                    @change="setDate()" @clear="checkClearDate()"></el-date-picker>
+                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+                    :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()"
+                    @clear="checkClearDate()"></el-date-picker>
                 <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.value">
                 </AtomVenoniaTimePicker>
             </div>
@@ -30,6 +30,7 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
+import { ElMessage } from 'element-plus';
 const emit = defineEmits(['remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
@@ -75,17 +76,24 @@ const props = defineProps({
     },
 })
 
+// Hooks
 onMounted(() => {
     setDefaultValue()
 })
 
-// 觸發更新
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
 // methods
+function disablePastDays(date: Date) {
+    if (date) {
+        const currentTime = new Date().getTime()
+        return currentTime >= date.getTime()
+    }
+}
+
 function setDefaultValue() {
     if (customDesign.value.hasOwnProperty('value')) {
         if (customDesign.value.value) {
@@ -120,10 +128,9 @@ function setDate() {
     const newMonth = date.value.getMonth()
     const newDate = date.value.getDate()
     const defaultTime = getDefaultTime()
-
     const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
     const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
-    if (!isNaN(newStartDate.getTime()) || !isNaN(newEndDate.getTime())) {
+    if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
         return
     }
     const newStartISO = newStartDate.toISOString()

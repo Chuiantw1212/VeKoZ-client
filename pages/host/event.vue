@@ -126,7 +126,6 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
-    console.log('validiateForm')
     if (!dialogEventTemplate.value || !venoniaCalendarRef.value) {
         return
     }
@@ -225,9 +224,6 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     if (!venoniaCalendarRef.value) {
         return
     }
-    // await repoEvent.patchEventForm(templateDesign)
-    // isDialogPatchLoading.value = false
-
     /**
      * Will trigger handleEventCalendarChange
      */
@@ -248,6 +244,11 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
                 return event.id === templateDesign.eventId
             })
             if (changedEvent) {
+                const startDate = new Date(templateDesign.value[0])
+                const nowTime = new Date().getTime()
+                if (nowTime >= startDate.getTime()) {
+                    return
+                }
                 changedEvent.startDate = templateDesign.value[0]
                 changedEvent.endDate = templateDesign.value[1]
                 calendarEvent.setDates(templateDesign.value[0], templateDesign.value[1])
