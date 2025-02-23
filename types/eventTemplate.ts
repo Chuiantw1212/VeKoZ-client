@@ -39,7 +39,7 @@ export interface ITemplateDesign {
         placeName?: string,
         placeAddressRegion?: string, // 第一級行政區
         placeAddress?: string,
-        placePublicAccess: boolean,
+        placePublicAccess?: boolean,
         // 線上地點
         urlName?: string,
         urlValue?: string,
