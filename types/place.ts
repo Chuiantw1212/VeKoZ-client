@@ -7,4 +7,5 @@ export interface IPlace {
     address: string,
     addressRegion: string,
     description: string,
+    publicBeforeOrder: boolean,
 }
