@@ -204,6 +204,18 @@ function toggleEventAddingBtn(event: Event) {
         return
     }
 
+    // 附加屬性與事件
+    const dateNumber = dayTop.querySelector('.fc-daygrid-day-number')
+    const dateLabelInChinese: string = dateNumber.ariaLabel
+    let formatLabel = dateLabelInChinese.replace('年', '-')
+    formatLabel = formatLabel.replace('月', '-')
+    formatLabel = formatLabel.replace('日', '')
+    const currentTime = new Date().getTime()
+    const dateInstance = new Date(formatLabel)
+    if (currentTime >= dateInstance.getTime()) {
+        return
+    }
+
     // 顯示新增按鈕上去
     const button = document.createElement("button")
     button.type = 'button'
@@ -215,16 +227,8 @@ function toggleEventAddingBtn(event: Event) {
     d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path>
     </svg></i>`
 
-    // 附加屬性與事件
-    const dateNumber = dayTop.querySelector('.fc-daygrid-day-number')
-    const dateLabelInChinese: string = dateNumber.ariaLabel
-    let formatLabel = dateLabelInChinese.replace('年', '-')
-    formatLabel = formatLabel.replace('月', '-')
-    formatLabel = formatLabel.replace('日', '')
-    const dateInstance = new Date(formatLabel)
-    const isoDateString = dateInstance.toISOString()
     const eventCreation: IEventCreation = {
-        date: isoDateString
+        date: dateInstance.toISOString()
     }
     button.onclick = async () => {
         emit('create', eventCreation)
