@@ -2,7 +2,7 @@
     <div class="eventTemplate">
         <el-row :gutter="20">
             <el-col :span="repoUI.isLarge ? 16 : 24">
-                <el-card v-loading="isLoading" class="venonia-card" body-class="card__body card__body--205">
+                <el-card v-loading="isCardLoading" class="venonia-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="venonia-card-header">
                             <el-form-item>
@@ -13,7 +13,7 @@
                             <div>
                                 {{ eventTemplate.id }}
                             </div>
-                            <div class="header__btnGroup">
+                            <div v-loading="isBtnLoading" class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true">
                                     開啓模板
                                 </el-button>
@@ -88,7 +88,8 @@ const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
-const isLoading = ref<boolean>(false)
+const isCardLoading = ref<boolean>(false)
+const isBtnLoading = ref<boolean>(false)
 
 // 主要的模板資料
 const eventTemplate = ref<IEventTemplate>({
@@ -120,7 +121,7 @@ const templateSavingDialog = ref({
 
 // Hooks
 onMounted(async () => {
-    isLoading.value = true
+    isCardLoading.value = true
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
@@ -129,7 +130,7 @@ onMounted(async () => {
         await setDefaultTemplate()
         await postEventTemplate()
     }
-    isLoading.value = false
+    isCardLoading.value = false
 })
 onBeforeUnmount(() => {
     addOnDropListener(false)
@@ -137,8 +138,10 @@ onBeforeUnmount(() => {
 
 // methods
 async function patchTemplateName() {
+    isBtnLoading.value = true
     repoUI.debounce('templateName', async () => {
         await repoEventTemplate.patchTemplateName(eventTemplate.value)
+        isBtnLoading.value = false
     })
 }
 
@@ -151,10 +154,10 @@ async function confirmSaveDialog() {
     if (!isValid) {
         return
     }
-    isLoading.value = true
+    isCardLoading.value = true
     await postEventTemplate(templateSavingDialog.value.name)
     templateSavingDialog.value.isOpen = false
-    isLoading.value = false
+    isCardLoading.value = false
 }
 
 async function getRecentTemplate() {
@@ -266,17 +269,17 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     templateTemp.value.item.id = '' // 用來判斷是否為新增的欄位
     templateTemp.value.item.type = '' // 用來判斷是否為拖曳中
     templateTemp.value.index = -1
-    isLoading.value = false
+    isCardLoading.value = false
 }
 
 async function removeDesign(data: ITemplateDragSouce) {
-    isLoading.value = true
+    isCardLoading.value = true
     // 更新資料庫
     await repoEventTemplate.deleteEventTemplateDesign(String(data.item.id))
     // 更新模板順序
     eventTemplate.value.designs.splice(data.index, 1)
     await repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
-    isLoading.value = false
+    isCardLoading.value = false
 }
 
 function allowDrop(ev: any) {
