@@ -416,7 +416,7 @@ async function openNewCalendarEvent() {
     const dateDesign = dialogEventTemplate.value.designs.find(design => {
         return design.formField === 'dates'
     })
-    if (dateDesign?) {
+    if (dateDesign && dateDesign.startDate && dateDesign.endDate) {
         const startDate = new Date(dateDesign.startDate ?? '')
         startDate.setFullYear(selectedYear)
         startDate.setMonth(selectedMonth)
