@@ -91,23 +91,13 @@ const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
 const isLoading = ref<boolean>(false)
 // Data Calendar
-const calendatPublicOptins = ref([
-    {
-        label: '已公開',
-        value: 'public',
-    },
-    {
-        label: '未公開',
-        value: 'private',
-    }
-])
 const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: '',
 })
-const calendarEventList = ref<IEventFromList[]>([])
+const vekozEventList = ref<IEventFromList[]>([])
 // Data sidemenu
 const organizationList = ref<IOrganization[]>([])
 const selectedOrganizationIds = ref<string[]>([])
@@ -253,7 +243,7 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             /**
              * 這邊這樣是因為calendarEvent.setDates會觸發補丁
              */
-            const changedEvent = calendarEventList.value.find(event => {
+            const changedEvent = vekozEventList.value.find(event => {
                 return event.id === templateDesign.eventId
             })
             if (changedEvent) {
@@ -286,11 +276,11 @@ async function getEventList() {
     // if (hasStatus && selectedStatus === 'private') {
     //     condition.isPublic = false
     // }
-    calendarEventList.value = await repoEvent.getEventList({
+    vekozEventList.value = await repoEvent.getEventList({
         startDate: startOfTheMonth,
     })
 
-    const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
+    const fullCalendarEventList: IFullCalendarEvent[] = vekozEventList.value.map(event => {
         return parseFullCalendarEvent(event, true)
     })
 
@@ -302,52 +292,23 @@ async function getEventList() {
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
-    // console.trace(changeInfo)
-    /**
-     * 1. 疑似BUG，無法直接拿到endDateStr
-     * 2. 從月曆與直接改form最終都會觸發這個function
-     * 3. 改動後Test1：新增後直接拖曳月曆會導致顯示日期不變動
-     */
+    const event: IFullCalendarEvent = changeInfo.event
     const eventId = changeInfo.event.id
-    const changedEvent = calendarEventList.value.find(event => {
+    const eventPatch: IEventFromList = {
+        id: event.id,
+        startDate: new Date(event.startStr ?? ''),
+        endDate: new Date(event.endStr ?? ''),
+    }
+    const vekozEvent = vekozEventList.value.find(event => {
         return event.id === eventId
     })
-    if (!changedEvent) {
-        return
+    if (vekozEvent) {
+        eventPatch.offerCategoryIds = vekozEvent.offerCategoryIds
+        eventPatch.isPublic = vekozEvent.isPublic
+        eventPatch.dateDesignId = vekozEvent?.dateDesignId
     }
-    if (dialogEventTemplate.value.id === eventId) {
-        changedEvent.isPublic = dialogEventTemplate.value.isPublic
-    }
-
-    // 用Event資料找出該Event的時間日期，所以會找到舊的
-    const oldEndDate = String(changedEvent.endDate)
-    const newStartDate: Date = changeInfo.event.start as Date
-    const newYear = newStartDate.getFullYear()
-    const newMonth = newStartDate.getMonth()
-    const newDate = newStartDate.getDate()
-    const newEndDate = new Date(oldEndDate)
-    const originHour = newEndDate.getHours()
-    const originMinutes = newEndDate.getMinutes()
-    newEndDate.setFullYear(newYear, newMonth, newDate,)
-    newEndDate.setHours(originHour, originMinutes, 0, 0,)
-
-    // 更新Dialog Template
-    dialogEventTemplate.value.designs.forEach(design => {
-        if (design.formField === 'dates') {
-            design.startDate = newStartDate.toISOString()
-            design.endDate = newEndDate.toISOString()
-        }
-    })
-
     // 送出請求
-    await repoEvent.patchEventCalendar({
-        id: eventId,
-        offerCategoryIds: changedEvent.offerCategoryIds,
-        dateDesignId: changedEvent?.dateDesignId,
-        startDate: newStartDate,
-        endDate: newEndDate,
-        isPublic: changedEvent.isPublic,
-    })
+    await repoEvent.patchEventCalendar(eventPatch)
 }
 
 function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullCalendarEvent {
