@@ -307,7 +307,6 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
         eventPatch.isPublic = vekozEvent.isPublic
         eventPatch.dateDesignId = vekozEvent?.dateDesignId
     }
-    // 送出請求
     await repoEvent.patchEventCalendar(eventPatch)
 }
 
@@ -355,6 +354,9 @@ function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullC
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
+    // dialogEventTemplate.value = {
+    //     designs: [],
+    // }
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
@@ -412,6 +414,7 @@ async function openNewCalendarEvent() {
     }
 
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
+    vekozEventList.value.push(newEvent)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)

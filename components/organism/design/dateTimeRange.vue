@@ -1,6 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <!-- customDesign.value: {{ customDesign.value }} -->
+    date:{{date}}
+    customDesign.value: {{ customDesign.value }}
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <div class="dateTimeRange">
