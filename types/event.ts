@@ -16,6 +16,7 @@ export interface IEventFromList {
     offerCategoryIds?: string[],
     dateDesignId?: string,
     name?: string,
+    eventStatus?: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
 }
 
 /**
@@ -45,7 +46,6 @@ export interface IEventQuery {
     hasVirtualLocation?: boolean,
     keywords?: string,
     isPublic?: boolean,
-    eventStatus: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
 }
 
 /**

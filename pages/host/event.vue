@@ -281,7 +281,7 @@ async function getEventList() {
     })
 
     const fullCalendarEventList: IFullCalendarEvent[] = vekozEventList.value.map(event => {
-        return parseFullCalendarEvent(event, true)
+        return parseFullCalendarEvent(event)
     })
 
     venoniaCalendarRef.value?.removeAllEvents()
@@ -310,13 +310,14 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     await repoEvent.patchEventCalendar(eventPatch)
 }
 
-function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullCalendarEvent {
+function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
     const title = String(event.name || '未命名')
     // const todos = '1/2'
     /**
      * Event Object
      * https://fullcalendar.io/docs/event-object
      */
+    const currentTime = new Date().getTime()
     const iFullCalendarEvent: IFullCalendarEvent = {
         id: String(event.id),
         title: `${title}`,
@@ -324,7 +325,7 @@ function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullC
         end: '',
         startStr: '',
         endStr: '',
-        editable,
+        // editable: event.eventStatus !== 'ended',
         backgroundColor: 'lightblue',
         // textColor: 'lightblue',
         classNames: ['blue-text-event']
@@ -349,6 +350,9 @@ function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullC
     } else {
         iFullCalendarEvent.end = new Date(String(endDate))
         iFullCalendarEvent.endStr = endDate
+    }
+    if (currentTime >= iFullCalendarEvent.end.getTime()) {
+        iFullCalendarEvent.editable = false
     }
     return iFullCalendarEvent
 }
