@@ -45,6 +45,7 @@ export interface IEventQuery {
     hasVirtualLocation?: boolean,
     keywords?: string,
     isPublic?: boolean,
+    eventStatus: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
 }
 
 /**

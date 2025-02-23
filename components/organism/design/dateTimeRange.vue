@@ -1,7 +1,7 @@
 <template>
     <!-- 檢視與編輯用 -->
-    date:{{date}}
-    customDesign.value: {{ customDesign.value }}
+    <!-- date:{{ date }}
+    customDesign.value: {{ customDesign.value }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <div class="dateTimeRange">
@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const emit = defineEmits(['remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const date = ref<Date>()

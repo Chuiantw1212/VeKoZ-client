@@ -18,6 +18,7 @@
 </template>
 <script setup lang="ts">
 import { Clock } from '@element-plus/icons-vue'
+// const emit = defineEmits(['update:modelValue',])
 const times = ref<string[]>([])
 const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
