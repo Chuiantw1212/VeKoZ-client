@@ -116,7 +116,6 @@ function setOrganizationName() {
     })
     if (customDesign.value) {
         customDesign.value.organizationName = selectedItem?.name
-        customDesign.value.organizationId = selectedItem?.id
     }
 }
 
