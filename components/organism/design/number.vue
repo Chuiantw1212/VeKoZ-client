@@ -1,19 +1,18 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
-        <el-input-number v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+        <el-input-number v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
             :disabled="disabled" :controls-position="'right'"></el-input-number>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input-number :placeholder="placeholder" v-model="customDesign.mutable.value"
-                :controls-position="'right'" :disabled="disabled"></el-input-number>
+            <el-input-number :placeholder="placeholder" v-model="customDesign.value" :controls-position="'right'"
+                :disabled="disabled"></el-input-number>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -26,10 +25,8 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'number',
-        mutable: {
-            label: '數字',
-            value: 1000
-        }
+        label: '數字',
+        value: 1000
     }
 })
 
@@ -72,14 +69,13 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value.hasOwnProperty('value')) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'number',
-        mutable: {
-            label: '',
-        }
+        label: '',
+        value: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

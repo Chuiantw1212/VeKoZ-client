@@ -91,23 +91,13 @@ const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
 const isLoading = ref<boolean>(false)
 // Data Calendar
-const calendatPublicOptins = ref([
-    {
-        label: '已公開',
-        value: 'public',
-    },
-    {
-        label: '未公開',
-        value: 'private',
-    }
-])
 const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const venoniaCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: '',
 })
-const calendarEventList = ref<IEventFromList[]>([])
+const vekozEventList = ref<IEventFromList[]>([])
 // Data sidemenu
 const organizationList = ref<IOrganization[]>([])
 const selectedOrganizationIds = ref<string[]>([])
@@ -241,25 +231,25 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
      * Will trigger handleEventCalendarChange
      */
     const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
-    if (!calendarEvent || !templateDesign.mutable) {
+    if (!calendarEvent || !templateDesign) {
         return
     }
     switch (templateDesign.formField) {
         case 'name': {
-            calendarEvent.setProp('title', templateDesign.mutable.value)
+            calendarEvent.setProp('title', templateDesign.value)
             break;
         }
         case 'dates': {
             /**
              * 這邊這樣是因為calendarEvent.setDates會觸發補丁
              */
-            const changedEvent = calendarEventList.value.find(event => {
+            const changedEvent = vekozEventList.value.find(event => {
                 return event.id === templateDesign.eventId
             })
             if (changedEvent) {
-                changedEvent.startDate = templateDesign.mutable.value[0]
-                changedEvent.endDate = templateDesign.mutable.value[1]
-                calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
+                changedEvent.startDate = templateDesign.value[0]
+                changedEvent.endDate = templateDesign.value[1]
+                calendarEvent.setDates(templateDesign.value[0], templateDesign.value[1])
             }
             break;
         }
@@ -286,11 +276,11 @@ async function getEventList() {
     // if (hasStatus && selectedStatus === 'private') {
     //     condition.isPublic = false
     // }
-    calendarEventList.value = await repoEvent.getEventList({
+    vekozEventList.value = await repoEvent.getEventList({
         startDate: startOfTheMonth,
     })
 
-    const fullCalendarEventList: IFullCalendarEvent[] = calendarEventList.value.map(event => {
+    const fullCalendarEventList: IFullCalendarEvent[] = vekozEventList.value.map(event => {
         return parseFullCalendarEvent(event, true)
     })
 
@@ -302,43 +292,22 @@ async function getEventList() {
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
-    // console.trace(changeInfo)
-    /**
-     * 1. 疑似BUG，無法直接拿到endDateStr
-     * 2. 從月曆與直接改form最終都會觸發這個function
-     */
+    const event: IFullCalendarEvent = changeInfo.event
     const eventId = changeInfo.event.id
-    const changedEvent = calendarEventList.value.find(event => {
+    const eventPatch: IEventFromList = {
+        id: event.id,
+        startDate: new Date(event.startStr ?? ''),
+        endDate: new Date(event.endStr ?? ''),
+    }
+    const vekozEvent = vekozEventList.value.find(event => {
         return event.id === eventId
     })
-    if (!changedEvent) {
-        return
+    if (vekozEvent) {
+        eventPatch.offerCategoryIds = vekozEvent.offerCategoryIds
+        eventPatch.isPublic = vekozEvent.isPublic
+        eventPatch.dateDesignId = vekozEvent?.dateDesignId
     }
-    if (dialogEventTemplate.value.id === eventId) {
-        changedEvent.isPublic = dialogEventTemplate.value.isPublic
-    }
-
-    // 用Event資料找出該Event的時間日期，所以會找到舊的
-    const oldEndDate = String(changedEvent.endDate)
-    const newStartDate: Date = changeInfo.event.start as Date
-    const newYear = newStartDate.getFullYear()
-    const newMonth = newStartDate.getMonth()
-    const newDate = newStartDate.getDate()
-    const newEndDate = new Date(oldEndDate)
-    const originHour = newEndDate.getHours()
-    const originMinutes = newEndDate.getMinutes()
-    newEndDate.setFullYear(newYear, newMonth, newDate,)
-    newEndDate.setHours(originHour, originMinutes, 0, 0,)
-
-    // 送出請求
-    await repoEvent.patchEventCalendar({
-        id: eventId,
-        offerCategoryIds: changedEvent.offerCategoryIds,
-        dateDesignId: changedEvent?.dateDesignId,
-        startDate: newStartDate,
-        endDate: newEndDate,
-        isPublic: changedEvent.isPublic,
-    })
+    await repoEvent.patchEventCalendar(eventPatch)
 }
 
 function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullCalendarEvent {
@@ -385,6 +354,9 @@ function parseFullCalendarEvent(event: IEventFromList, editable = false): IFullC
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
+    // dialogEventTemplate.value = {
+    //     designs: [],
+    // }
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
@@ -400,6 +372,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 }
 
 async function openNewEventDialog(eventCreation: IEventCreation) {
+    // 紀錄點擊的日期
     calendarEventCreation.value = eventCreation
     loadTemplateDialogIsOpen.value = true
 }
@@ -416,25 +389,32 @@ async function openNewCalendarEvent() {
     const dateDesign = dialogEventTemplate.value.designs.find(design => {
         return design.formField === 'dates'
     })
-    if (dateDesign?.mutable) {
-        const startDate = new Date(dateDesign.mutable.startDate ?? '')
-        startDate.setFullYear(selectedYear)
-        startDate.setMonth(selectedMonth)
-        startDate.setDate(selectedDate)
-        const originalStartHour = startDate.getHours()
-        const originalStartMinues = startDate.getMinutes()
-        const defaultStartHour = Math.max(originalStartHour, 6)
-        startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-        const endDate = new Date(dateDesign.mutable.endDate ?? '')
-        endDate.setFullYear(selectedYear)
-        endDate.setMonth(selectedMonth)
-        endDate.setDate(selectedDate)
-        endDate.setHours(defaultStartHour + 1, originalStartMinues, 0, 0)
-        dateDesign.mutable.value = [startDate.toISOString(), endDate.toISOString()]
+    if (dateDesign?.value) {
+        if (dateDesign.value[0]) {
+            const startDate = new Date(dateDesign.value[0] ?? '')
+            startDate.setFullYear(selectedYear)
+            startDate.setMonth(selectedMonth)
+            startDate.setDate(selectedDate)
+            const originalStartHour = startDate.getHours()
+            const originalStartMinues = startDate.getMinutes()
+            const defaultStartHour = Math.max(originalStartHour, 6)
+            startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
+            dateDesign.value[0] = startDate.toISOString()
+        }
+        if (dateDesign.value[1]) {
+            const endDate = new Date(dateDesign.value[1] ?? '')
+            const originalEndHour = endDate.getHours()
+            const originalEndMinues = endDate.getMinutes()
+            endDate.setFullYear(selectedYear)
+            endDate.setMonth(selectedMonth)
+            endDate.setDate(selectedDate)
+            endDate.setHours(originalEndHour, originalEndMinues, 0, 0)
+            dateDesign.value[1] = endDate.toISOString()
+        }
     }
 
-    // return
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
+    vekozEventList.value.push(newEvent)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent, true)

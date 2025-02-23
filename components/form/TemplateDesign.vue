@@ -122,23 +122,23 @@ watch(() => templateDesigns.value, () => {
         if (design.formField) {
             switch (design.formField) {
                 case 'organizer': {
-                    formModel.value[design.formField] = design.mutable?.organizationId
+                    formModel.value[design.formField] = design.organizationId
                     break;
                 }
                 case 'performers': {
-                    formModel.value[design.formField] = design.mutable?.memberIds
+                    formModel.value[design.formField] = design.memberIds
                     break;
                 }
                 case 'dates':
                 case 'name':
                 case 'banner':
                 default: {
-                    formModel.value[design.formField] = design.mutable?.value
+                    formModel.value[design.formField] = design.value
                 }
             }
             formRules.value[design.formField] = {
                 required: true,
-                message: `${design.mutable?.label}為必填`
+                message: `${design.label}為必填`
             }
         }
     })
@@ -154,7 +154,7 @@ function getOrganizationId() {
         return design.type === 'organization'
     })
     if (organization) {
-        return organization.mutable?.organizationId
+        return organization.organizationId
     }
 }
 function handleRemove(index: number) {

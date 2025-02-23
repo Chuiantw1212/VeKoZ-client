@@ -2,9 +2,9 @@
     <!-- 檢視與編輯用 -->
     <!-- organizationId{{organizationId}} -->
     <!-- 至少選擇自己作為講者，這樣才可以看到講師SEO頁面的效果 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
-        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.memberIds" :placeholder="editPlaceHolder"
+        <el-select v-if="customDesign" v-model="customDesign.memberIds" :placeholder="editPlaceHolder"
             :filterable="true" :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true"
             :disabled="disabled || !props.organizationId" @change="setMemberNames()">
             <el-option v-for="(item, index) in organizationMemberList" :key="index" :label="item.name"
@@ -12,15 +12,14 @@
         </el-select>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
-                placeholder="欄位名稱"></el-input>
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.mutable.memberIds" placeholder="請選擇現有組織成員" :filterable="true"
-                :multiple="true" :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled"
+            <el-select v-model="customDesign.memberIds" placeholder="請選擇現有組織成員" :filterable="true" :multiple="true"
+                :allow-create="true" :reserve-keyword="false" :clearable="true" :disabled="disabled"
                 @change="setMemberNames()">
                 <el-option v-for="(item, index) in organizationMemberList" :key="index" :label="item.name"
                     :value="String(item.id)" />
@@ -39,11 +38,9 @@ const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'organizationMember',
-        mutable: {
-            label: '組織成員', // 純瀏覽時使用
-            memberIds: [],
-            memberNames: [],
-        }
+        label: '組織成員', // 純瀏覽時使用
+        memberIds: [],
+        memberNames: [],
     }
 })
 
@@ -104,16 +101,14 @@ const editPlaceHolder = computed(() => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.mutable) {
+    if (customDesign.value.memberIds) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'organizationMember',
-        mutable: {
-            label: '組織成員',
-            memberIds: [],
-            memberNames: [],
-        }
+        label: '組織成員',
+        memberIds: [],
+        memberNames: [],
     }
     if (props.formField) {
         defaultValue.formField = props.formField
@@ -123,14 +118,14 @@ function setDefaultValue() {
 }
 
 function setMemberNames() {
-    const names = customDesign.value.mutable?.memberIds?.map(id => {
+    const names = customDesign.value.memberIds?.map(id => {
         const selectedItem = organizationMemberList.value.find(member => {
             return member.id === id
         })
         return selectedItem?.name ?? ''
     })
-    if (customDesign.value.mutable) {
-        customDesign.value.mutable.memberNames = names
+    if (customDesign.value) {
+        customDesign.value.memberNames = names
     }
 }
 

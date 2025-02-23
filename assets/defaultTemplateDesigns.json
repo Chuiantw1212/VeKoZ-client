@@ -1,48 +1,36 @@
 [
     {
         "type": "banner",
-        "mutable": {
-            "label": ""
-        },
+        "label": "",
         "formField": "banner"
     },
     {
         "type": "header1",
-        "mutable": {
-            "label": "活動名稱"
-        },
+        "label": "活動名稱",
         "required": true,
         "formField": "name"
     },
     {
         "type": "textarea",
-        "mutable": {
-            "label": "活動摘要"
-        },
+        "label": "活動摘要",
         "required": true,
         "formField": "description"
     },
     {
         "type": "dateTimeRange",
-        "mutable": {
-            "label": "活動時間"
-        },
+        "label": "活動時間",
         "required": true,
         "formField": "dates"
     },
     {
         "type": "organization",
-        "mutable": {
-            "label": "主辦單位"
-        },
+        "label": "主辦單位",
         "required": true,
         "formField": "organizer"
     },
     {
         "type": "organizationMember",
-        "mutable": {
-            "label": "講者/主持"
-        },
+        "label": "講者/主持",
         "required": true,
         "formField": "performers"
     }

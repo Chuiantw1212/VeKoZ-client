@@ -15,7 +15,7 @@
             <el-empty description="查無資料">
             </el-empty>
         </el-card>
-        <el-divider>已完成的活動</el-divider>
+        <el-divider>已結束的活動</el-divider>
         <div v-if="Object.keys(endedOfferGroups).length" class="offerList">
             <template v-for="(groupOffers, index) in endedOfferGroups">
                 <MoleculeOfferListItem :model-value="groupOffers" :organizationList="organizationList"
@@ -57,12 +57,12 @@ async function getOfferList() {
     const ongoingOffers = result.filter(offer => {
         return offer.validThrough >= currentDate
     })
-    ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => categoryId)
+    ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => String(categoryId))
 
     const endedOffers = result.filter(offer => {
         return offer.validThrough < currentDate
     })
-    endedOfferGroups.value = Object.groupBy(endedOffers, ({ categoryId }) => categoryId)
+    endedOfferGroups.value = Object.groupBy(endedOffers, ({ categoryId }) => String(categoryId))
 }
 
 async function patchOfferCategory(offer: IOffer,) {
