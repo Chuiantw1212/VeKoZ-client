@@ -351,9 +351,9 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         iFullCalendarEvent.end = new Date(String(endDate))
         iFullCalendarEvent.endStr = endDate
     }
-    if (currentTime >= iFullCalendarEvent.end.getTime()) {
-        iFullCalendarEvent.editable = false
-    }
+    // if (currentTime >= iFullCalendarEvent.end.getTime()) {
+    //     iFullCalendarEvent.editable = false
+    // }
     return iFullCalendarEvent
 }
 

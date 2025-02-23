@@ -20,6 +20,7 @@ const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventCl
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
+const viewTypes = ref<string[]>(['dayGridTwoMonths', 'timeGridWeek', 'listTwoMonths'])
 const props = defineProps({
     id: {
         type: String,
@@ -69,7 +70,7 @@ function initializeCalendar() {
     const idealHeight = window.innerHeight - 150
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
-        initialView: 'dayGridMonth',
+        initialView: 'dayGridTwoMonths',
         eventClick: handleEventClick,
         eventChange: handleEventChange,
         viewDidMount: handleViewDidMount,
@@ -79,7 +80,7 @@ function initializeCalendar() {
         headerToolbar: {
             left: 'today prev,next',
             center: 'title',
-            right: 'dayGridTwoMonths,timeGridWeek,listTwoMonths'
+            right: viewTypes.value.join(',')
         },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
@@ -89,20 +90,15 @@ function initializeCalendar() {
                 duration: { months: 2 },
                 buttonText: '月'
             },
-            dayGrid6Weeks: {
-                type: 'dayGrid',
-                duration: { week: 6 },
-                buttonText: '月'
-            },
-            timeGridWeek: {
-                type: 'timeGrid',
-                duration: { week: 1 },
-                buttonText: '週'
-            },
             listTwoMonths: {
                 type: 'list',
                 duration: { months: 2 },
                 buttonText: '列表'
+            },
+            timeGridWeek: {
+                type: 'timeGrid',
+                duration: { week: 1 },
+                buttonText: '未來一週'
             },
         }
     });
@@ -113,7 +109,9 @@ function initializeCalendar() {
 }
 
 function changeView(viewType: string) {
-    calendarInstance.value?.changeView(viewType)
+    if (viewTypes.value.includes(viewType)) {
+        calendarInstance.value?.changeView(viewType)
+    }
 }
 
 /**
