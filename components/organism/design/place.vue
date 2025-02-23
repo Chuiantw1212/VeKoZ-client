@@ -7,6 +7,11 @@
         </el-select>
         <el-input v-if="customDesign.mutable" class="design__mt" placeholder="地址"
             :model-value="customDesign.mutable.placeAddress" :disabled="true"></el-input>
+        <!-- <el-form-item label="詳細地址能見度"> -->
+        <!-- 購票前可見 -->
+        <el-switch v-if="customDesign.mutable" v-model="customDesign.mutable.placePublicAccess" inline-prompt
+            active-text="購票前可見詳細地址" inactive-text="購票前可見詳細地址" />
+        <!-- </el-form-item> -->
     </el-form-item>
     <!-- 樣板編輯專用 -->
     <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
@@ -23,9 +28,11 @@
             </el-select>
             <el-input class="design__mt" placeholder="地址" :model-value="customDesign.mutable.placeAddress"
                 :disabled="true"></el-input>
-            <el-form-item label="詳細地址">
-                購票前可見
-            </el-form-item>
+            <!-- <el-form-item label="詳細地址能見度"> -->
+            <!-- 購票前可見詳細地址 -->
+            <el-switch v-model="customDesign.mutable.placePublicAccess" inline-prompt active-text="購票前可見詳細地址"
+                inactive-text="購票前可見詳細地址" />
+            <!-- </el-form-item> -->
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -100,6 +107,7 @@ function setDefaultValue() {
             placeName: '',
             placeAddressRegion: '', // 第一級行政區
             placeAddress: '',
+            placePublicAccess: false,
         }
     }
     if (props.formField) {
