@@ -2,17 +2,17 @@
     <div ref="bannerRef">
         <!-- {{customDesign  }} -->
         <!-- 檢視與編輯用 -->
-        <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
-            <AtomBannerUploader v-if="customDesign.mutable" v-model="customDesign.mutable.value" :disabled="disabled"
+        <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+            <AtomBannerUploader v-if="customDesign" v-model="customDesign.value" :disabled="disabled"
                 :height="bannerHeight">
             </AtomBannerUploader>
         </el-form-item>
         <!-- 樣板編輯專用 -->
-        <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+        <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <AtomBannerUploader v-model="customDesign.mutable.value" :disabled="disabled" :height="bannerHeight">
+                <AtomBannerUploader v-model="customDesign.value" :disabled="disabled" :height="bannerHeight">
                 </AtomBannerUploader>
             </template>
         </MoleculeDesignToolbar>
@@ -90,7 +90,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value?) {
         return
     }
     const defaultValue: ITemplateDesign = {

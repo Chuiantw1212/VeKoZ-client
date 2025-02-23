@@ -1,8 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
-        <div v-if="customDesign.mutable" class="offerList">
-            <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+        <div v-if="customDesign" class="offerList">
+            <div v-for="(offer, index) in customDesign.offers" class="offer">
                 <template v-if="!disabled">
                     <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
@@ -39,15 +39,15 @@
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
                 placeholder="群組名稱"></el-input>
         </template>
         <template v-slot:default>
             <div class="offerList">
-                <div v-for="(offer, index) in customDesign.mutable.offers" class="offer">
+                <div v-for="(offer, index) in customDesign.offers" class="offer">
                     <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
                         :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
@@ -154,7 +154,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign?.value.mutable) {
+    if (customDesign?.value) {
         return
     }
     const defaultValue: ITemplateDesign = {
@@ -181,10 +181,10 @@ async function handleChange(templateDesign: any) {
     }, 1000)
 }
 function createOffer() {
-    customDesign.value.mutable?.offers?.push(newOffer.value)
+    customDesign.value.offers?.push(newOffer.value)
 }
 function removeOffer(index: number) {
-    customDesign.value.mutable?.offers?.splice(index, 1)
+    customDesign.value.offers?.splice(index, 1)
 }
 </script>
 <style lang="scss" scoped>

@@ -1,17 +1,17 @@
 <template>
     <div>
         <!-- 檢視與編輯用 -->
-        <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
-            <AtomVenoniaEditor v-if="customDesign.mutable" v-model="customDesign.mutable.value"
+        <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+            <AtomVenoniaEditor v-if="customDesign" v-model="customDesign.value"
                 :placeholder="placeholder" :disabled="disabled">
             </AtomVenoniaEditor>
         </el-form-item>
         <!-- 樣板編輯專用 -->
-        <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+        <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <AtomVenoniaEditor v-model="customDesign.mutable.value" :disabled="disabled" :placeholder="placeholder">
+                <AtomVenoniaEditor v-model="customDesign.value" :disabled="disabled" :placeholder="placeholder">
                 </AtomVenoniaEditor>
             </template>
         </MoleculeDesignToolbar>
@@ -79,7 +79,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value?) {
         return
     }
     const defaultValue: ITemplateDesign = {

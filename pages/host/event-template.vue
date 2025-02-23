@@ -197,7 +197,7 @@ async function handleDesignChanged(templateDesign: ITemplateDesign) {
     // 只需要必要欄位，其他建立時已給
     repoEventTemplate.patchEventTemplateDesign({
         id: templateDesign.id,
-        mutable: templateDesign.mutable,
+        mutable: templateDesign,
         type: templateDesign.type, // 處理blob時候用
         formField: templateDesign.formField
     })

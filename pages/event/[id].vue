@@ -16,7 +16,7 @@
                 <el-card>
                     <template v-for="(design) in event.designs">
                         <template v-if="design.type === 'editor'">
-                            <div v-if="design.mutable" v-html="design.mutable.value">
+                            <div v-if="design" v-html="design.value">
                             </div>
                         </template>
                     </template>

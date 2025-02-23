@@ -1,18 +1,18 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" @dragstart="emit('dragstart')">
-        <el-input v-if="customDesign.mutable" v-model="customDesign.mutable.value" :placeholder="placeholder"
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+        <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
             :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input :placeholder="placeholder" v-model="customDesign.mutable.value" :disabled="disabled"></el-input>
+            <el-input :placeholder="placeholder" v-model="customDesign.value" :disabled="disabled"></el-input>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -74,7 +74,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value?) {
         return
     }
     const defaultValue: ITemplateDesign = {

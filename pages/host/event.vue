@@ -241,12 +241,12 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
      * Will trigger handleEventCalendarChange
      */
     const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
-    if (!calendarEvent || !templateDesign.mutable) {
+    if (!calendarEvent || !templateDesign) {
         return
     }
     switch (templateDesign.formField) {
         case 'name': {
-            calendarEvent.setProp('title', templateDesign.mutable.value)
+            calendarEvent.setProp('title', templateDesign.value)
             break;
         }
         case 'dates': {
@@ -257,9 +257,9 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
                 return event.id === templateDesign.eventId
             })
             if (changedEvent) {
-                changedEvent.startDate = templateDesign.mutable.value[0]
-                changedEvent.endDate = templateDesign.mutable.value[1]
-                calendarEvent.setDates(templateDesign.mutable.value[0], templateDesign.mutable.value[1])
+                changedEvent.startDate = templateDesign.value[0]
+                changedEvent.endDate = templateDesign.value[1]
+                calendarEvent.setDates(templateDesign.value[0], templateDesign.value[1])
             }
             break;
         }
@@ -416,8 +416,8 @@ async function openNewCalendarEvent() {
     const dateDesign = dialogEventTemplate.value.designs.find(design => {
         return design.formField === 'dates'
     })
-    if (dateDesign?.mutable) {
-        const startDate = new Date(dateDesign.mutable.startDate ?? '')
+    if (dateDesign?) {
+        const startDate = new Date(dateDesign.startDate ?? '')
         startDate.setFullYear(selectedYear)
         startDate.setMonth(selectedMonth)
         startDate.setDate(selectedDate)
@@ -425,12 +425,12 @@ async function openNewCalendarEvent() {
         const originalStartMinues = startDate.getMinutes()
         const defaultStartHour = Math.max(originalStartHour, 6)
         startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-        const endDate = new Date(dateDesign.mutable.endDate ?? '')
+        const endDate = new Date(dateDesign.endDate ?? '')
         endDate.setFullYear(selectedYear)
         endDate.setMonth(selectedMonth)
         endDate.setDate(selectedDate)
         endDate.setHours(defaultStartHour + 1, originalStartMinues, 0, 0)
-        dateDesign.mutable.value = [startDate.toISOString(), endDate.toISOString()]
+        dateDesign.value = [startDate.toISOString(), endDate.toISOString()]
     }
 
     // return

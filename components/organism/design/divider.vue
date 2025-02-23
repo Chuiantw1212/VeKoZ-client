@@ -1,14 +1,14 @@
 <template>
     <!-- 檢視與編輯用 -->
     <el-divider v-if="!props.isDesigning" @dragstart="emit('dragstart')">
-        {{ customDesign.mutable?.label }}
+        {{ customDesign.label }}
     </el-divider>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" @dragstart="emit('dragstart')"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
         @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:default>
             <el-divider>
-                <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"
+                <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"
                     :disabled="disabled"></el-input>
             </el-divider>
         </template>
@@ -68,7 +68,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value?) {
         return
     }
     const defaultValue: ITemplateDesign = {

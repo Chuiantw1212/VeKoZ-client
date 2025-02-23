@@ -1,21 +1,21 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.mutable?.label" :required="required"
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
-        <el-select v-if="customDesign.mutable" v-model="customDesign.mutable.organizationId" placeholder="請選擇現有組織"
+        <el-select v-if="customDesign" v-model="customDesign.organizationId" placeholder="請選擇現有組織"
             :clearable="true" :disabled="disabled" @change="setOrganizationName()">
             <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
         </el-select>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign.mutable" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.mutable.label" :maxlength="8" :show-word-limit="true"
+            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-select v-model="customDesign.mutable.organizationId" placeholder="請選擇現有組織" :clearable="true"
+            <el-select v-model="customDesign.organizationId" placeholder="請選擇現有組織" :clearable="true"
                 :disabled="disabled" @change="setOrganizationName()">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
             </el-select>
@@ -87,7 +87,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value?.mutable) {
+    if (customDesign.value?) {
         return
     }
 
@@ -117,10 +117,10 @@ async function handleChange(templateDesign: any) {
 
 function setOrganizationName() {
     const selectedItem = organizationList.value.find(item => {
-        return item.id === customDesign.value.mutable?.organizationId
+        return item.id === customDesign.value.organizationId
     })
-    if (customDesign.value.mutable) {
-        customDesign.value.mutable.organizationName = selectedItem?.name
+    if (customDesign.value) {
+        customDesign.value.organizationName = selectedItem?.name
         customDesign.value.organizationId = selectedItem?.id
     }
 }
