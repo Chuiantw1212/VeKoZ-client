@@ -82,7 +82,8 @@ import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/c
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, } from 'element-plus';
+import { ElMessage } from 'element-plus';
 // Data Repo
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
@@ -293,11 +294,19 @@ async function getEventList() {
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     const event: IFullCalendarEvent = changeInfo.event
+    const startDate = new Date(event.startStr ?? '')
+    const endDate = new Date(event.endStr ?? '')
+    const nowTime = new Date().getTime()
+    if (nowTime >= startDate.getTime()) {
+        ElMessage('不可變更為過去事件。')
+        return
+    }
+
     const eventId = changeInfo.event.id
     const eventPatch: IEventFromList = {
         id: event.id,
-        startDate: new Date(event.startStr ?? ''),
-        endDate: new Date(event.endStr ?? ''),
+        startDate,
+        endDate,
     }
     const vekozEvent = vekozEventList.value.find(event => {
         return event.id === eventId
@@ -325,7 +334,7 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         end: '',
         startStr: '',
         endStr: '',
-        // editable: event.eventStatus !== 'ended',
+        editable: event.eventStatus !== 'ended',
         backgroundColor: 'lightblue',
         // textColor: 'lightblue',
         classNames: ['blue-text-event']
