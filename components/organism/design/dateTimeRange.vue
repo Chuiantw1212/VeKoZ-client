@@ -86,9 +86,9 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value) {
+    if (customDesign.value.label) {
         // 防止無限迴圈
-        if (customDesign.value) {
+        if (customDesign.value.value) {
             date.value = new Date(customDesign.value.value[0])
         } else {
             date.value = new Date()
