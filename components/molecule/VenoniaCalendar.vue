@@ -20,7 +20,7 @@ const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventCl
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
-const viewTypes = ref<string[]>(['dayGridTwoMonths', 'timeGridWeek', 'listTwoMonths'])
+const viewTypes = ref<string[]>(['dayGridMonth', 'timeGridWeek', 'listYear'])
 const props = defineProps({
     id: {
         type: String,
@@ -70,7 +70,7 @@ function initializeCalendar() {
     const idealHeight = window.innerHeight - 150
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, multiMonthPlugin],
-        initialView: 'dayGridTwoMonths',
+        initialView: 'dayGridMonth',
         eventClick: handleEventClick,
         eventChange: handleEventChange,
         viewDidMount: handleViewDidMount,
@@ -85,15 +85,10 @@ function initializeCalendar() {
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
         views: {
-            dayGridTwoMonths: {
-                type: 'dayGrid',
-                duration: { months: 2 },
-                buttonText: '月'
-            },
-            listTwoMonths: {
+            listYear: {
                 type: 'list',
-                duration: { months: 2 },
-                buttonText: '列表'
+                duration: { year: 1 },
+                buttonText: '全年列表'
             },
             timeGridWeek: {
                 type: 'timeGrid',
