@@ -8,7 +8,7 @@
                     <h1>{{ event.name }}</h1>
                     <p>{{ }}</p>
                     <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                        }}
+                    }}
                         ~
                         {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
                     <el-text>{{ event.description }}</el-text>
@@ -34,9 +34,9 @@
         <div class="event__actions">
             <div>
             </div>
-            <el-button :icon="CollectionTag">
+            <!-- <el-button :icon="CollectionTag">
                 追蹤
-            </el-button>
+            </el-button> -->
             <!-- <el-select v-model="form.ticket" placeholder="請選擇">
                 <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
@@ -49,15 +49,17 @@
 </template>
 <script setup lang="ts">
 import { CollectionTag, Money } from '@element-plus/icons-vue'
-import type { IEvent } from '~/types/event'
+import type { IEventFromList } from '~/types/event'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
+const repoOffer = useRepoOffer()
 const route = useRoute()
-const event = ref<IEvent>()
+const event = ref<IEventFromList>()
 
 const form = ref({
     ticket: ''
 })
+
 const ticketOptions = ref([
     {
         label: '早鳥票',
@@ -81,15 +83,23 @@ watch(() => repoUI, (ui) => {
 
 onMounted(() => {
     getEvent()
+    getOfferList()
 })
 // Methods
+async function getOfferList() {
+    const { id } = route.params as any
+    const result = await repoOffer.getOfferList({
+        eventId: id,
+    })
+}
+
 async function getEvent() {
-    const { id } = route.params
+    const { id } = route.params as any
     if (id) {
         const result = await repoEvent.getEvent(String(id))
-        console.log({
-            result
-        })
+        // console.log({
+        //     result
+        // })
         event.value = result
     }
 }

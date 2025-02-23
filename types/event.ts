@@ -19,6 +19,13 @@ export interface IEventFromList {
     eventStatus?: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
 }
 
+export interface IEventSingle {
+    id?: string,
+    name?: string,
+    description?: string,
+    organizerId?: string,
+}
+
 /**
  * 太雜了，要整理取代
  * @deprecated

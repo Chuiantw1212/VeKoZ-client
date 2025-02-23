@@ -7,7 +7,7 @@
                     <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
                         :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
-                        :disabled="disabled" controls-position="right">
+                        :max="60" :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
                         </template>
@@ -50,7 +50,7 @@
                     <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
                         :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
-                        :disabled="disabled" controls-position="right">
+                        :max="60" :disabled="disabled" controls-position="right">
                         <template #suffix>
                             <span>張</span>
                         </template>

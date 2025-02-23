@@ -134,6 +134,7 @@ async function validiateForm() {
         return
     }
     try {
+        console.log('isPublic', dialogEventTemplate.value.isPublic)
         if (dialogEventTemplate.value.isPublic) {
             const isValid = await formRef.value?.validate()
             if (isValid) {
@@ -319,7 +320,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     })
     if (vekozEvent) {
         eventPatch.offerCategoryIds = vekozEvent.offerCategoryIds
-        eventPatch.isPublic = vekozEvent.isPublic
+        // eventPatch.isPublic = vekozEvent.isPublic // 這會導致事件永遠打不開
         eventPatch.dateDesignId = vekozEvent?.dateDesignId
     }
     await repoEvent.patchEventCalendar(eventPatch)

@@ -16,30 +16,30 @@
         <template #title>活動模板管理</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/host/event-group">
+    <!-- <NuxtLink to="/host/event-group">
       <el-menu-item index="host-event-group">
         <el-icon>
           <DocumentCopy />
         </el-icon>
         <template #title>活動群組管理</template>
       </el-menu-item>
-    </NuxtLink>
+    </NuxtLink> -->
     <NuxtLink to="/host/offer">
       <el-menu-item index="host-offer">
         <el-icon>
-          <Promotion />
+          <Tickets />
         </el-icon>
-        <template #title>票券群組分銷</template>
+        <template #title>票券詳細設定</template>
       </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/host/order">
+    <!-- <NuxtLink to="/host/order">
       <el-menu-item index="host-order">
         <el-icon>
           <Ticket />
         </el-icon>
         <template #title>票券訂單管理</template>
       </el-menu-item>
-    </NuxtLink>
+    </NuxtLink> -->
     <NuxtLink to="/host/place">
       <el-menu-item index="host-place">
         <el-icon>
@@ -59,7 +59,7 @@
   </el-menu>
 </template>
 <script setup lang="ts">
-import { Ticket, Promotion, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
+import { Ticket, Tickets, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 const activeIndex = ref('event')
 const route = useRoute()
