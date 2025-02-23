@@ -294,15 +294,20 @@ async function getEventList() {
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     const event: IFullCalendarEvent = changeInfo.event
+    const eventId = changeInfo.event.id
     const startDate = new Date(event.startStr ?? '')
     const endDate = new Date(event.endStr ?? '')
     const nowTime = new Date().getTime()
     if (nowTime >= startDate.getTime()) {
         ElMessage('不可變更為過去事件。')
+        const oldEvent = changeInfo.oldEvent
+        const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
+        if (calendarEvent) {
+            calendarEvent.setDates(oldEvent.start, oldEvent.end)
+        }
         return
     }
 
-    const eventId = changeInfo.event.id
     const eventPatch: IEventFromList = {
         id: event.id,
         startDate,
@@ -430,7 +435,7 @@ async function openNewCalendarEvent() {
     vekozEventList.value.push(newEvent)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
-    const calendarEvent = parseFullCalendarEvent(newEvent, true)
+    const calendarEvent = parseFullCalendarEvent(newEvent)
     venoniaCalendarRef.value?.addEvent(calendarEvent)
     eventDialogIsOpen.value = true
 }
