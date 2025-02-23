@@ -306,6 +306,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     /**
      * 1. 疑似BUG，無法直接拿到endDateStr
      * 2. 從月曆與直接改form最終都會觸發這個function
+     * 3. 改動後Test1：新增後直接拖曳月曆會導致顯示日期不變動
      */
     const eventId = changeInfo.event.id
     const changedEvent = calendarEventList.value.find(event => {
@@ -329,6 +330,14 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     const originMinutes = newEndDate.getMinutes()
     newEndDate.setFullYear(newYear, newMonth, newDate,)
     newEndDate.setHours(originHour, originMinutes, 0, 0,)
+
+    // 更新Dialog Template
+    dialogEventTemplate.value.designs.forEach(design => {
+        if (design.formField === 'dates') {
+            design.startDate = newStartDate.toISOString()
+            design.endDate = newEndDate.toISOString()
+        }
+    })
 
     // 送出請求
     await repoEvent.patchEventCalendar({
@@ -400,6 +409,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
 }
 
 async function openNewEventDialog(eventCreation: IEventCreation) {
+    // 紀錄點擊的日期
     calendarEventCreation.value = eventCreation
     loadTemplateDialogIsOpen.value = true
 }
@@ -416,24 +426,30 @@ async function openNewCalendarEvent() {
     const dateDesign = dialogEventTemplate.value.designs.find(design => {
         return design.formField === 'dates'
     })
-    if (dateDesign && dateDesign.startDate && dateDesign.endDate) {
-        const startDate = new Date(dateDesign.startDate ?? '')
-        startDate.setFullYear(selectedYear)
-        startDate.setMonth(selectedMonth)
-        startDate.setDate(selectedDate)
-        const originalStartHour = startDate.getHours()
-        const originalStartMinues = startDate.getMinutes()
-        const defaultStartHour = Math.max(originalStartHour, 6)
-        startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-        const endDate = new Date(dateDesign.endDate ?? '')
-        endDate.setFullYear(selectedYear)
-        endDate.setMonth(selectedMonth)
-        endDate.setDate(selectedDate)
-        endDate.setHours(defaultStartHour + 1, originalStartMinues, 0, 0)
-        dateDesign.value = [startDate.toISOString(), endDate.toISOString()]
+    if (dateDesign?.value) {
+        if (dateDesign.value[0]) {
+            const startDate = new Date(dateDesign.value[0] ?? '')
+            startDate.setFullYear(selectedYear)
+            startDate.setMonth(selectedMonth)
+            startDate.setDate(selectedDate)
+            const originalStartHour = startDate.getHours()
+            const originalStartMinues = startDate.getMinutes()
+            const defaultStartHour = Math.max(originalStartHour, 6)
+            startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
+            dateDesign.value[0] = startDate.toISOString()
+        }
+        if (dateDesign.value[1]) {
+            const endDate = new Date(dateDesign.value[1] ?? '')
+            const originalEndHour = endDate.getHours()
+            const originalEndMinues = endDate.getMinutes()
+            endDate.setFullYear(selectedYear)
+            endDate.setMonth(selectedMonth)
+            endDate.setDate(selectedDate)
+            endDate.setHours(originalEndHour, originalEndMinues, 0, 0)
+            dateDesign.value[1] = endDate.toISOString()
+        }
     }
 
-    // return
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
