@@ -73,12 +73,13 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.value) {
+    if (customDesign.value.hasOwnProperty('value')) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'header1',
         label: '活動名稱',
+        value: '',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

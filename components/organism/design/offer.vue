@@ -148,7 +148,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign?.value) {
+    if (customDesign.value.offers) {
         return
     }
     const defaultValue: ITemplateDesign = {

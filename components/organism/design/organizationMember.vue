@@ -101,7 +101,7 @@ const editPlaceHolder = computed(() => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value) {
+    if (customDesign.value.memberIds) {
         return
     }
     const defaultValue: ITemplateDesign = {

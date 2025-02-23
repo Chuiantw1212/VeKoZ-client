@@ -66,12 +66,12 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.value) {
+    if (customDesign.value.hasOwnProperty('label')) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'divider',
-        label: '',
+        label: '分隔主題',
     }
     if (props.formField) {
         defaultValue.formField = props.formField

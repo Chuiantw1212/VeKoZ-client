@@ -84,7 +84,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.organizationId) {
+    if (customDesign.value.hasOwnProperty('organizationId')) {
         return
     }
 

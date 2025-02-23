@@ -80,7 +80,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value) {
+    if (customDesign.value.hasOwnProperty('urlValue')) {
         return
     }
     const defaultValue: ITemplateDesign = {
@@ -96,7 +96,7 @@ function setDefaultValue() {
     customDesign.value = mergedItem
 }
 
-async function handleChange(templateDesign: any) {
+async function handleChange(templateDesign: ITemplateDesign) {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
         await props.onchange(templateDesign)

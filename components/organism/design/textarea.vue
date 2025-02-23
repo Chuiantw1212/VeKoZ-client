@@ -71,7 +71,7 @@ watch(() => customDesign.value, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.value) {
+    if (customDesign.value.hasOwnProperty('value')) {
         return
     }
     const defaultValue: ITemplateDesign = {
