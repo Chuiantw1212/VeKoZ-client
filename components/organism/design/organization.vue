@@ -121,6 +121,7 @@ function setOrganizationName() {
     })
     if (customDesign.value.mutable) {
         customDesign.value.mutable.organizationName = selectedItem?.name
+        customDesign.value.organizationId = selectedItem?.id
     }
 }
 

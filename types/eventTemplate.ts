@@ -13,8 +13,12 @@ export interface IEventTemplate {
 
 export interface ITemplateDesign {
     id?: string,
+    // 連動用id
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
     templateId?: string,
+    organizationId?: string,
+    placeId?: string,
+    // 其他欄位
     type?: string,
     required?: boolean,
     mutable?: {

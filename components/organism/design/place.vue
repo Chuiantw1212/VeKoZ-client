@@ -10,7 +10,7 @@
         <!-- <el-form-item label="詳細地址能見度"> -->
         <!-- 購票前可見 -->
         <el-switch v-if="customDesign.mutable" v-model="customDesign.mutable.placePublicAccess" inline-prompt
-            active-text="購票前可見詳細地址" inactive-text="購票前可見詳細地址" />
+            active-text="購票前可見" inactive-text="購票前可見" />
         <!-- </el-form-item> -->
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -30,8 +30,8 @@
                 :disabled="true"></el-input>
             <!-- <el-form-item label="詳細地址能見度"> -->
             <!-- 購票前可見詳細地址 -->
-            <el-switch v-model="customDesign.mutable.placePublicAccess" inline-prompt active-text="購票前可見詳細地址"
-                inactive-text="購票前可見詳細地址" />
+            <el-switch v-model="customDesign.mutable.placePublicAccess" inline-prompt active-text="購票前可見"
+                inactive-text="購票前可見" />
             <!-- </el-form-item> -->
         </template>
     </MoleculeDesignToolbar>
@@ -136,6 +136,7 @@ function setLocationValues(placeId: string) {
         customDesign.value.mutable.placeName = selectedItem.name
         customDesign.value.mutable.placeAddress = selectedItem.address
         customDesign.value.mutable.placeAddressRegion = selectedItem.addressRegion
+        customDesign.value.placeId = selectedItem.id
     }
 }
 
