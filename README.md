@@ -1,5 +1,7 @@
 # VeKoZ 微課室
 
+VeKoZ 微課室前端架構基於 Nuxt.js，結合 TypeScript、Pinia、Firebase、CKEditor 5、Element Plus 與 FullCalendar，提供高效能、SEO 友好的單頁應用程式 (SPA) 與伺服器端渲染 (SSR) 支援。系統具備豐富的身份認證、數據同步、內容編輯與課程管理功能，透過拖放式日曆視圖輕鬆安排課程，並支援多語系與響應式設計，確保在桌面與行動裝置上皆有優異的使用體驗，實現「讓分享輕而易舉」的產品宗旨。
+
 ## 🚀 Nuxt.js
 
 VeKoZ 微課室的前端架構基於 **Nuxt.js**，這是一個強大的 **Vue.js** 全域應用框架，專為建立現代化、SEO 友好且效能卓越的應用程式而設計。Nuxt.js 支援單頁應用程式 (SPA) 和伺服器端渲染 (SSR)，適合高互動性與快速響應的學習平台。
