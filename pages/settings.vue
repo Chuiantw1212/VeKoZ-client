@@ -2,21 +2,21 @@
     <el-row class="user" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
             <div class="user__btnGroup">
-                <el-button class="btnGroup__btn" :disabled="true">密碼變更</el-button>
+                <el-button class="btnGroup__btn" :disabled="true">變更密碼</el-button>
+                <el-button class="btnGroup__btn">登出</el-button>
                 <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
                     @click="repoUser.setUserType('host')">切換為主辦方</el-button>
                 <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
                     @click="repoUser.setUserType('attendee')">切換為一般用戶</el-button>
-                <el-button class="btnGroup__btn">登出</el-button>
             </div>
             <el-card class="user__card">
                 <template #header>
                     <div class="card__header">
-                        <el-button :icon="View">
+                        <el-button v-loading="isLoading" :icon="View">
                             預覽
                         </el-button>
                         <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                            <el-button :icon="Share" @click="shareLink()">
+                            <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
                                 分享網址
                             </el-button>
                         </el-tooltip>
@@ -132,11 +132,13 @@
 import { Share, StarFilled, View } from '@element-plus/icons-vue';
 import type { IEvent } from '~/types/event';
 import type { IUser } from '~/types/user';
+const isLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const eventList = ref<IEvent[]>([])
 const shareTooltipVisible = ref(false)
 const id = ref<string>(crypto.randomUUID())
 const userForm = ref<IUser>({
+    id: '',
     name: 'EN Chu',
     description: '',
     seoName: 'en-chu',
@@ -150,17 +152,27 @@ const columnSpan = ref<number>(8)
 const repoEvent = useRepoEvent()
 
 // Hooks
-onMounted(() => {
+onMounted(async () => {
+    isLoading.value = true
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
     eventForm.value.startDate = startOfTheMonth
-    getEventList()
+    await getEventList()
     window.addEventListener('resize', setColumnSpan)
     setColumnSpan()
+    isLoading.value = false
 })
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
+watch(() => userForm.value, () => {
+    updateUserInfo()
+}, { deep: true, })
+watch(() => repoUser.userInfo, (newValue) => {
+    const copy = JSON.parse(JSON.stringify(newValue))
+    delete copy.preference
+    userForm.value = copy
+},)
 
 // Methods
 function setColumnSpan() {
@@ -179,20 +191,29 @@ async function getEventList() {
     eventList.value = result
 }
 
-async function updateUserInfo() {
-
+function updateUserInfo() {
+    isLoading.value = true
+    repoUI.debounce('patchUser', async () => {
+        await repoUser.patchUser(userForm.value)
+        isLoading.value = false
+    })
 }
 
 async function shareLink() {
     const { origin } = window.location
     const openInLineExternalBrowser = `openExternalBrowser=1`
-    const { userInfo } = repoUser
-    const seoId = userInfo.seoName || userInfo.id
+    const {
+        id,
+        seoName,
+        seoTitle,
+        description
+    } = userForm.value
+    const seoId = seoName || id
     const url = `${origin}/${seoId}?${openInLineExternalBrowser}`
     if (!navigator.share) {
         await navigator.share({
-            title: userInfo.seoTitle,
-            text: userInfo.description,
+            title: seoTitle,
+            text: description,
             url,
         });
     } else {
