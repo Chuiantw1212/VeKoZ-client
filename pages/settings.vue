@@ -16,14 +16,16 @@
                             個人資料與名片頁
                         </div>
                         <div>
-                            <el-button v-loading="isLoading" :icon="View">
-                                預覽
-                            </el-button>
-                            <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                            <NuxtLink :to="getPersonalLink()" target="_blank">
+                                <el-button v-loading="isLoading" :icon="View">
+                                    瀏覽
+                                </el-button>
+                            </NuxtLink>
+                            <!-- <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                                 <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
                                     分享網址
                                 </el-button>
-                            </el-tooltip>
+                            </el-tooltip> -->
                         </div>
                     </div>
                 </template>
@@ -191,6 +193,12 @@ watch(() => repoUser.userInfo, (newValue) => {
 }, { immediate: true, })
 
 // Methods
+function getPersonalLink() {
+    const { origin } = window.location
+    const openInLineExternal = `openExternalBrowser=1`
+    return `${origin}/${seoName.value}?${openInLineExternal}`
+}
+
 function setColumnSpan() {
     repoUI.debounce(id.value, () => {
         columnSpan.value = 24
@@ -230,7 +238,7 @@ async function patchSeoName() {
 
 async function shareLink() {
     const { origin } = window.location
-    const openInLineExternalBrowser = `openExternalBrowser=1`
+    const openInLineExternal = `openExternalBrowser=1`
     const {
         id,
         seoName,
@@ -238,7 +246,7 @@ async function shareLink() {
         description
     } = userForm.value
     const seoId = seoName || id
-    const url = `${origin}/${seoId}?${openInLineExternalBrowser}`
+    const url = `${origin}/${seoId}?${openInLineExternal}`
     if (!navigator.share) {
         await navigator.share({
             title: seoTitle,
