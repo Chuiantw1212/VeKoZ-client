@@ -144,10 +144,10 @@ const shareTooltipVisible = ref(false)
 const id = ref<string>(crypto.randomUUID())
 const userForm = ref<IUser>({
     id: '',
-    name: 'EN Chu',
+    name: '',
     description: '',
-    seoName: 'en-chu',
-    seoTitle: 'EN Chu 一個擅長理財的工程師',
+    seoName: '',
+    seoTitle: '',
 })
 const eventForm = ref<IEvent>({
     startDate: new Date(),
@@ -174,10 +174,12 @@ watch(() => userForm.value, () => {
     updateUserInfo()
 }, { deep: true, })
 watch(() => repoUser.userInfo, (newValue) => {
-    const copy = JSON.parse(JSON.stringify(newValue))
-    delete copy.preference
-    userForm.value = copy
-},)
+    if (newValue.id) {
+        const copy = JSON.parse(JSON.stringify(newValue))
+        delete copy.preference
+        userForm.value = copy
+    }
+}, { immediate: true, })
 
 // Methods
 function setColumnSpan() {
