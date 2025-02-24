@@ -30,7 +30,7 @@
             <el-col :span="24">
                 <el-form-item label="名片頁網址">
                     <el-input v-model="seoName" :maxlength="30" placeholder="例：en-chu" :show-word-limit="true"
-                        @change="emit('seoName', seoName)">
+                        @change="patchSeoName">
                         <template #prefix>
                             https://venonia.com/
                         </template>
@@ -65,21 +65,13 @@
     </el-form>
 </template>
 <script setup lang="ts">
-import { Share, StarFilled, CircleCheck, View, CircleClose } from '@element-plus/icons-vue';
-import type { IEventFromList } from '~/types/event';
+import { CircleCheck, CircleClose } from '@element-plus/icons-vue';
 import type { IUser } from '~/types/user';
-const emit = defineEmits(['seoName',])
-const isLoading = ref<boolean>(false)
 const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
-const eventList = ref<IEventFromList[]>([])
-const shareTooltipVisible = ref(false)
-const id = ref<string>(crypto.randomUUID())
 const seoName = ref<string>('')
 const isSeoNameValid = ref<boolean>(false)
 const repoUI = useRepoUI()
-const columnSpan = ref<number>(8)
-const repoEvent = useRepoEvent()
 const userForm = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
@@ -90,6 +82,23 @@ const userForm = defineModel<IUser>('modelValue', {
         seoTitle: '',
     }
 })
+watch(() => userForm.value, (newValue) => {
+    isSeoNameLoading.value = true
+    seoName.value = String(newValue.seoName)
+})
+
+// Methods
+async function patchSeoName() {
+    isSeoNameLoading.value = true
+    repoUI.debounce('patchUserSeoName', async () => {
+        const result = await repoUser.patchUserSeoName({
+            seoName: seoName.value,
+            id: userForm.value.id
+        })
+        isSeoNameValid.value = result.status === 200
+        isSeoNameLoading.value = false
+    })
+}
 </script>
 <style lang="scss" scoped>
 .card {

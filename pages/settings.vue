@@ -21,15 +21,10 @@
                                     瀏覽
                                 </el-button>
                             </NuxtLink>
-                            <!-- <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                                <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
-                                    分享網址
-                                </el-button>
-                            </el-tooltip> -->
                         </div>
                     </div>
                 </template>
-                <FormUserProfile :model-value="userForm" @seo-name="patchSeoName($event)">
+                <FormUserProfile :model-value="userForm">
 
                 </FormUserProfile>
             </el-card>
@@ -84,11 +79,10 @@
     </el-row>
 </template>
 <script setup lang="ts">
-import { Share, StarFilled, CircleCheck, View, CircleClose } from '@element-plus/icons-vue';
+import { StarFilled, View } from '@element-plus/icons-vue';
 import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 const isLoading = ref<boolean>(false)
-const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const eventList = ref<IEventFromList[]>([])
 const shareTooltipVisible = ref(false)
@@ -161,41 +155,6 @@ function updateUserInfo() {
         await repoUser.patchUser(userForm.value)
         isLoading.value = false
     })
-}
-
-async function patchSeoName(seoName: string) {
-    isSeoNameLoading.value = true
-    repoUI.debounce('patchUserSeoName', async () => {
-        const result = await repoUser.patchUserSeoName({
-            seoName,
-            id: userForm.value.id
-        })
-        isSeoNameValid.value = result.status === 200
-        isSeoNameLoading.value = false
-    })
-}
-
-async function shareLink() {
-    const { origin } = window.location
-    const openInLineExternal = `openExternalBrowser=1`
-    const {
-        id,
-        seoName,
-        seoTitle,
-        description
-    } = userForm.value
-    const seoId = seoName || id
-    const url = `${origin}/${seoId}?${openInLineExternal}`
-    if (!navigator.share) {
-        await navigator.share({
-            title: seoTitle,
-            text: description,
-            url,
-        });
-    } else {
-        await navigator.clipboard.writeText(url)
-        shareTooltipVisible.value = true
-    }
 }
 
 </script>
