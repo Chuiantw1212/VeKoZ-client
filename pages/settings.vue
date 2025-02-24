@@ -12,14 +12,19 @@
             <el-card class="user__card">
                 <template #header>
                     <div class="card__header">
-                        <el-button v-loading="isLoading" :icon="View">
-                            預覽
-                        </el-button>
-                        <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                            <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
-                                分享網址
+                        <div>
+                            個人資料與名片頁
+                        </div>
+                        <div>
+                            <el-button v-loading="isLoading" :icon="View">
+                                預覽
                             </el-button>
-                        </el-tooltip>
+                            <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                                <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
+                                    分享網址
+                                </el-button>
+                            </el-tooltip>
+                        </div>
                     </div>
                 </template>
                 <el-form label-width="auto">
@@ -232,7 +237,8 @@ async function shareLink() {
 
         .card__header {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .card__avatar {
