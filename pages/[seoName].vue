@@ -1,12 +1,11 @@
 <template>
     <div>
-        <h1>{{ userForm.seoTitle }}</h1>
+        <!-- <h1>{{ userForm.seoTitle }}</h1> -->
         <el-card class="venonia-card">
             <template #header>
                 <div class="venonia-card-header">
                     <div></div>
                     <div>
-
                         <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                             <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
                                 分享網址
@@ -23,7 +22,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-    layout: 'nomenu'
+    layout: false
 })
 import { Share } from '@element-plus/icons-vue';
 import { FormUserProfile } from '#components';
