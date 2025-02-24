@@ -11,7 +11,8 @@
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <AtomVenoniaEditor v-model="customDesign.value" :disabled="disabled" :placeholder="placeholder">
+                <AtomVenoniaEditor v-model="customDesign.value" :disabled="disabled" :placeholder="placeholder"
+                    @dragstart="emit('dragstart')">
                 </AtomVenoniaEditor>
             </template>
         </MoleculeDesignToolbar>
@@ -19,7 +20,7 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
-const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart'])
+const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 

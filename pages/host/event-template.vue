@@ -10,9 +10,9 @@
                                     @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
                                 </el-input>
                             </el-form-item>
-                            <div>
+                            <!-- <div>
                                 {{ eventTemplate.id }}
-                            </div>
+                            </div> -->
                             <div v-loading="isBtnLoading" class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true">
                                     開啓模板
@@ -287,10 +287,15 @@ function allowDrop(ev: any) {
 }
 
 function setTemplateItem(itemMeta: ITemplateDesign) {
+    console.log({
+        itemMeta
+    })
     Object.assign(templateTemp.value.item, itemMeta)
 }
 function cancelDragging() {
+    console.log('cancelDragging', templateTemp.value)
     templateTemp.value.item.type = ''
+
 }
 
 async function getEventTemplate(templateId: string) {

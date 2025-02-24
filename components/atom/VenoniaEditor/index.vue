@@ -1,6 +1,6 @@
 <template>
     <ClientOnly>
-        <div class="ckeditor">
+        <div class="ckeditor" >
             <div :id="`editor-${id}`" ref="editorRef">
             </div>
         </div>
@@ -13,7 +13,7 @@ import type { EditorConfig, } from 'ckeditor5';
 
 const editorRef = ref()
 const editorInstance = ref()
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue',])
 
 const localValue = defineModel<String>('modelValue', {
     type: String,
