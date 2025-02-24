@@ -24,6 +24,9 @@ export interface IEventSingle {
     name?: string,
     description?: string,
     organizerId?: string,
+    organizerName?: string,
+    organizerLogo?: string,
+    actorIds?: string[],
 }
 
 /**

@@ -38,11 +38,11 @@
             </template>
             <template #headerUI>
                 <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
-                    :disabled="deleteDisabled" @click="deleteEvent()">
+                    :disabled="eventEnded" @click="deleteEvent()">
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
-                    active-text="已公開" inactive-text="非公開" :disabled="deleteDisabled" @change="validiateForm()" />
+                    active-text="已公開" inactive-text="非公開" :disabled="eventEnded" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogEventTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogEventTemplate.isPublic">
@@ -55,7 +55,7 @@
             <template #default>
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
-                    <FormTemplateDesign ref="formRef" v-model="dialogEventTemplate.designs"
+                    <FormTemplateDesign ref="formRef" v-model="dialogEventTemplate.designs" :disabled="eventEnded"
                         :onchange="handleEventFormChange">
                     </FormTemplateDesign>
                 </el-container>
@@ -108,7 +108,7 @@ const eventDialogIsOpen = ref<boolean>(false)
 const dialogEventTemplate = ref<IEventTemplate>({
     designs: []
 })
-const deleteDisabled = ref<boolean>(false)
+const eventEnded = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 // Hooks
@@ -382,9 +382,9 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
             const startTime = new Date(designDates.value[0]).getTime()
             const currentTime = new Date().getTime()
             if (currentTime >= startTime) {
-                deleteDisabled.value = true
+                eventEnded.value = true
             } else {
-                deleteDisabled.value = false
+                eventEnded.value = false
             }
         }
         eventDialogIsOpen.value = true
@@ -401,7 +401,7 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 }
 
 async function openNewCalendarEvent() {
-    deleteDisabled.value = false
+    eventEnded.value = false
     loadTemplateDialogIsOpen.value = false
     const date = calendarEventCreation.value.date
     const selectedDateInstance = new Date(date)
