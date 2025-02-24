@@ -10,10 +10,12 @@ export interface IUser {
     providerId?: string,
     uid?: string,
     preference?: IUserPreference,
-    // SEO使用
+    // 通用
     name?: string,
     description?: string,
+    // SEO使用
     seoName?: string,
+    seoTitle?: string,
 }
 
 export interface IUserPreference {

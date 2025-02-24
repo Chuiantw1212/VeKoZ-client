@@ -7,7 +7,6 @@ export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
     const route = useRoute()
     const router = useRouter()
-    // const userInfo = ref<IUser>()
     const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     const userInfo = ref<IUser>({})
     const userPreference = ref<IUserPreference>({
@@ -73,10 +72,10 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function patchUserProfile(body: any) {
-        const response = await defaultApi.authRequest(`/user`, {
+    async function patchUser(user: IUser) {
+        const response = await defaultApi.authRequest(`/user/${user.id}`, {
             method: 'PATCH',
-            body
+            body: user,
         })
         return response
     }
@@ -105,6 +104,13 @@ export default defineStore('user', () => {
         })
         return response.body
     }
+    // async function patchUser(user: IUser) {
+    //     const response = await defaultApi.authRequest(`/user/${user.id}`, {
+    //         method: 'PATCH',
+    //         body: user,
+    //     })
+    //     return response.body
+    // }
     return {
         userType,
         userInfo,
@@ -113,7 +119,7 @@ export default defineStore('user', () => {
         setUserType,
         deleteUser,
         postUser,
-        patchUserProfile,
+        patchUser,
         putUserPhoto,
         // User preference
         patchUserPreference,

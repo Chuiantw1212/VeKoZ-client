@@ -10,6 +10,18 @@
                 <el-button class="btnGroup__btn">登出</el-button>
             </div>
             <el-card class="user__card">
+                <template #header>
+                    <div class="card__header">
+                        <el-button :icon="View">
+                            預覽
+                        </el-button>
+                        <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                            <el-button :icon="Share" @click="shareLink()">
+                                分享網址
+                            </el-button>
+                        </el-tooltip>
+                    </div>
+                </template>
                 <el-form label-width="auto">
                     <el-row justify="center">
                         <el-col :span="6">
@@ -18,16 +30,30 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row justify="space-between" :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="Email">
-                                <el-input v-model="userForm.email" placeholder="請輸入講者Email" :disabled="true" />
+                            <el-form-item label="註冊Email">
+                                <el-input v-model="userForm.email" placeholder="請輸入Email" :disabled="true">
+                                    <template #suffix>
+                                        (僅主辦方可見)
+                                    </template>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="網址">
+                            <el-form-item label="暱稱/姓名">
+                                <el-input v-model="userForm.name" placeholder="請輸入暱稱或姓名" :maxlength="30"
+                                    :show-word-limit="true">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <!-- <el-divider>個人名片頁資訊</el-divider> -->
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="名片頁網址">
                                 <el-input v-model="userForm.seoName" :maxlength="30" placeholder="例：en-chu"
                                     :show-word-limit="true">
                                     <template #prefix>
@@ -39,8 +65,8 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="標題">
-                                <el-input v-model="userForm.name" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
+                            <el-form-item label="名片頁標題">
+                                <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
                                     :show-word-limit="true" />
                             </el-form-item>
                         </el-col>
@@ -49,7 +75,7 @@
                         <el-col :span="24">
                             <el-form-item label="描述">
                                 <el-input v-model="userForm.description" type="textarea" :rows="3" :maxlength="150"
-                                    placeholder="請輸入講者介紹" :show-word-limit="true" />
+                                    placeholder="請輸入簡介" :show-word-limit="true" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -103,17 +129,18 @@
     </el-row>
 </template>
 <script setup lang="ts">
-import { StarFilled } from '@element-plus/icons-vue';
+import { Share, StarFilled, View } from '@element-plus/icons-vue';
 import type { IEvent } from '~/types/event';
 import type { IUser } from '~/types/user';
 const repoUser = useRepoUser()
 const eventList = ref<IEvent[]>([])
+const shareTooltipVisible = ref(false)
 const id = ref<string>(crypto.randomUUID())
 const userForm = ref<IUser>({
-    name: '',
-    email: 'chuiantw1212@gmail.com',
+    name: 'EN Chu',
     description: '',
     seoName: 'en-chu',
+    seoTitle: 'EN Chu 一個擅長理財的工程師',
 })
 const eventForm = ref<IEvent>({
     startDate: new Date(),
@@ -121,6 +148,8 @@ const eventForm = ref<IEvent>({
 const repoUI = useRepoUI()
 const columnSpan = ref<number>(8)
 const repoEvent = useRepoEvent()
+
+// Hooks
 onMounted(() => {
     const startOfTheMonth = new Date()
     startOfTheMonth.setDate(0)
@@ -132,21 +161,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
+
+// Methods
 function setColumnSpan() {
     repoUI.debounce(id.value, () => {
         columnSpan.value = 24
-        // if (repoUI.isSmall) {
-        //     columnSpan.value = 12
-        // }
         if (repoUI.isMedium) {
             columnSpan.value = 12
         }
-        // if (repoUI.isXLarge) {
-        //     columnSpan.value = 8
-        // }
-        // if (repoUI.isXXLarge) {
-        //     columnSpan.value = 6
-        // }
     })
 }
 async function getEventList() {
@@ -156,6 +178,29 @@ async function getEventList() {
     })
     eventList.value = result
 }
+
+async function updateUserInfo() {
+
+}
+
+async function shareLink() {
+    const { origin } = window.location
+    const openInLineExternalBrowser = `openExternalBrowser=1`
+    const { userInfo } = repoUser
+    const seoId = userInfo.seoName || userInfo.id
+    const url = `${origin}/${seoId}?${openInLineExternalBrowser}`
+    if (!navigator.share) {
+        await navigator.share({
+            title: userInfo.seoTitle,
+            text: userInfo.description,
+            url,
+        });
+    } else {
+        await navigator.clipboard.writeText(url)
+        shareTooltipVisible.value = true
+    }
+}
+
 </script>
 <style lang="scss" scoped>
 .user {
@@ -163,6 +208,11 @@ async function getEventList() {
 
     .user__card {
         margin-top: 20px;
+
+        .card__header {
+            display: flex;
+            justify-content: flex-end;
+        }
 
         .card__avatar {
             display: block;
