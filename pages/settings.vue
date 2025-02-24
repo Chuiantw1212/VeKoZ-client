@@ -194,9 +194,11 @@ watch(() => repoUser.userInfo, (newValue) => {
 
 // Methods
 function getPersonalLink() {
-    const { origin } = window.location
-    const openInLineExternal = `openExternalBrowser=1`
-    return `${origin}/${seoName.value}?${openInLineExternal}`
+    if (import.meta.client) {
+        const { origin } = window.location
+        const openInLineExternal = `openExternalBrowser=1`
+        return `${origin}/${seoName.value}?${openInLineExternal}`
+    }
 }
 
 function setColumnSpan() {
