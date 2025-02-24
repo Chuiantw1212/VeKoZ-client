@@ -1,6 +1,6 @@
 <template>
     <ClientOnly>
-        <div class="ckeditor" >
+        <div class="ckeditor">
             <div :id="`editor-${id}`" ref="editorRef">
             </div>
         </div>

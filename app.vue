@@ -7,7 +7,7 @@
             <SideMenu></SideMenu>
         </el-aside>
         <el-container>
-            <el-main class="scsrollable">
+            <el-main>
                 <NuxtPage />
             </el-main>
         </el-container>

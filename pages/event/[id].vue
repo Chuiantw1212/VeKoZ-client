@@ -1,52 +1,51 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
-    <el-row v-if="event" class="event" :gutter="20">
-        <el-col :span="mainSpan" class="event__main">
-            <img class="event__banner" :src="event.banner">
-            <el-card>
-                <h1>{{ event.name }}</h1>
-                <p>{{ }}</p>
-                <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                    }}
-                    ~
-                    {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
-                <el-text>{{ event.description }}</el-text>
-            </el-card>
-        </el-col>
-        <el-col :span="sideSpan" class="event__side">
-            <el-card class="side__card">
-                <img class="card__logo" :src="event.organizerLogo">
-                <div class="card__name">
-                    {{ event.organizerName }}
-                </div>
-            </el-card>
-        </el-col>
-        <el-card>
-            <template v-for="(design) in event.designs">
-                <template v-if="!design.formField">
-                    {{ design }}
-                </template>
-                <template v-if="design.type === 'editor'">
-                    <div v-if="design" v-html="design.value">
+    <div v-if="event" class="event" :gutter="20">
+        <img class="event__banner" :src="event.banner">
+        <el-main>
+            <el-row>
+                <el-col :span="mainSpan" class="event__main">
+                    <el-card>
+                        <h1>{{ event.name }}</h1>
+                        <p>{{ }}</p>
+                        <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
+                            }}
+                            ~
+                            {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
+                        <el-text>{{ event.description }}</el-text>
+                    </el-card>
+                </el-col>
+                <el-col :span="sideSpan" class="event__side">
+                    <el-card class="side__card">
+                        <img class="card__logo" :src="event.organizerLogo">
+                        <div class="card__name">
+                            {{ event.organizerName }}
+                        </div>
+                    </el-card>
+                </el-col>
+                <el-col>
+                    <el-card>
+                        <template v-for="(design) in event.designs">
+                            <template v-if="!design.formField">
+                                {{ design }}
+                            </template>
+                            <template v-if="design.type === 'editor'">
+                                <div v-if="design" v-html="design.value">
+                                </div>
+                            </template>
+                        </template>
+                    </el-card>
+                </el-col>
+                <div class="event__actions">
+                    <div>
+                        <el-button :icon="Money">
+                            購票
+                        </el-button>
                     </div>
-                </template>
-            </template>
-        </el-card>
-        <div class="event__actions">
-            <div>
-            </div>
-            <!-- <el-button :icon="CollectionTag">
-                追蹤
-            </el-button> -->
-            <!-- <el-select v-model="form.ticket" placeholder="請選擇">
-                <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
-                    :value="item.value" />
-            </el-select> -->
-            <el-button :icon="Money">
-                購票
-            </el-button>
-        </div>
-    </el-row>
+                </div>
+            </el-row>
+        </el-main>
+    </div>
 </template>
 <script setup lang="ts">
 import { CollectionTag, Money } from '@element-plus/icons-vue'
@@ -109,6 +108,8 @@ async function getEvent() {
 </script>
 <style lang="scss" scoped>
 .event {
+    margin: -20px;
+
     .event__main {
         display: flex;
         flex-direction: column;
