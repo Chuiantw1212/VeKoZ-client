@@ -94,12 +94,12 @@ export default defineStore('api', {
                 if (axiosResponse?.status === 500) {
                     const statusErrorMessage = axiosResponse.statusText
                     const serverThrowMessage = await axiosResponse.text()
-                    await ElMessageBox.alert(serverThrowMessage, `${method} ${url}: ${statusErrorMessage}`, {
+                    const test = `${method} ${url}`
+                    await ElMessageBox.alert(serverThrowMessage, statusErrorMessage, {
                         confirmButtonText: '確認',
                     })
-                    return
+                    return axiosResponse as any
                 }
-                // console.log('axiosResponse', axiosResponse)
                 return axiosResponse as any
             }
         },

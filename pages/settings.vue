@@ -16,7 +16,7 @@
                             個人資料與名片頁
                         </div>
                         <div>
-                            <el-button v-loading="isLoading" :icon="View">
+                            <el-button v-loading="isLoading" :icon="View" type="danger">
                                 預覽
                             </el-button>
                             <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
@@ -55,14 +55,21 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <!-- <el-divider>個人名片頁資訊</el-divider> -->
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="名片頁網址">
-                                <el-input v-model="userForm.seoName" :maxlength="30" placeholder="例：en-chu"
-                                    :show-word-limit="true">
+                                <el-input v-model="seoName" :maxlength="30" placeholder="例：en-chu"
+                                    :show-word-limit="true" @change="patchSeoName()">
                                     <template #prefix>
                                         https://venonia.com/
+                                    </template>
+                                    <template #suffix>
+                                        <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
+                                            <CircleCheck></CircleCheck>
+                                        </el-icon>
+                                        <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
+                                            <CircleClose></CircleClose>
+                                        </el-icon>
                                     </template>
                                 </el-input>
                             </el-form-item>
@@ -134,10 +141,11 @@
     </el-row>
 </template>
 <script setup lang="ts">
-import { Share, StarFilled, View } from '@element-plus/icons-vue';
+import { Share, StarFilled, CircleCheck, View, CircleClose } from '@element-plus/icons-vue';
 import type { IEvent } from '~/types/event';
 import type { IUser } from '~/types/user';
 const isLoading = ref<boolean>(false)
+const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const eventList = ref<IEvent[]>([])
 const shareTooltipVisible = ref(false)
@@ -149,6 +157,8 @@ const userForm = ref<IUser>({
     seoName: '',
     seoTitle: '',
 })
+const seoName = ref<string>('')
+const isSeoNameValid = ref<boolean>(false)
 const eventForm = ref<IEvent>({
     startDate: new Date(),
 })
@@ -174,10 +184,12 @@ watch(() => userForm.value, () => {
     updateUserInfo()
 }, { deep: true, })
 watch(() => repoUser.userInfo, (newValue) => {
-    if (newValue.id) {
-        const copy = JSON.parse(JSON.stringify(newValue))
+    if (newValue.id && !userForm.value.id) {
+        const copy: IUser = JSON.parse(JSON.stringify(newValue))
         delete copy.preference
         userForm.value = copy
+        isSeoNameValid.value = true
+        seoName.value = copy.seoName ?? ''
     }
 }, { immediate: true, })
 
@@ -203,6 +215,18 @@ function updateUserInfo() {
     repoUI.debounce('patchUser', async () => {
         await repoUser.patchUser(userForm.value)
         isLoading.value = false
+    })
+}
+
+async function patchSeoName() {
+    isSeoNameLoading.value = true
+    repoUI.debounce('patchUserSeoName', async () => {
+        const result = await repoUser.patchUserSeoName({
+            seoName: seoName.value,
+            id: userForm.value.id
+        })
+        isSeoNameValid.value = result.status === 200
+        isSeoNameLoading.value = false
     })
 }
 
@@ -253,6 +277,17 @@ async function shareLink() {
 
         .card__editor {
             margin-top: 20px;
+        }
+
+        .item__body {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+
+            >:first-child {
+                width: 100%;
+            }
         }
     }
 

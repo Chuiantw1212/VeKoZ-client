@@ -72,12 +72,19 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function patchUser(user: IUser) {
+    async function patchUser(user: IUser): Promise<boolean> {
         const response = await defaultApi.authRequest(`/user/${user.id}`, {
             method: 'PATCH',
             body: user,
         })
         return response
+    }
+    async function patchUserSeoName(user: IUser): Promise<any> {
+        const result = await defaultApi.authRequest(`/user/${user.id}/seo-name`, {
+            method: 'PATCH',
+            body: user,
+        })
+        return result
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
         if (!userPreference.value || !userInfo.value.id) {
@@ -119,6 +126,7 @@ export default defineStore('user', () => {
         setUserType,
         deleteUser,
         postUser,
+        patchUserSeoName,
         patchUser,
         putUserPhoto,
         // User preference

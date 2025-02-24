@@ -63,7 +63,7 @@
                                         </td> -->
                                     </tr>
                                     <tr>
-                                        <td>{{ item.locationAddressRegion || '地點待定' }}</td>
+                                        <td>{{ item.locationAddressRegion || '地點未定' }}</td>
                                         <td></td>
                                         <td>
                                             <div class="footer__offer">
