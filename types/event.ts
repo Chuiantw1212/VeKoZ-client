@@ -10,6 +10,7 @@ export interface IEventCreation {
  */
 export interface IEventFromList {
     id?: string,
+    banner?: string,
     startDate?: Date,
     endDate?: Date,
     isPublic?: boolean,
@@ -56,6 +57,7 @@ export interface IEventQuery {
     hasVirtualLocation?: boolean,
     keywords?: string,
     isPublic?: boolean,
+    limit: number,
 }
 
 /**

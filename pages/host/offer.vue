@@ -67,7 +67,6 @@ async function getOfferList() {
 }
 
 async function patchOffer(offer: IOffer,) {
-    console.log('offer')
     repoUI.debounce(`patchOffer${offer.id}`, async () => {
         await repoOffer.patchOffer({
             id: offer.id,

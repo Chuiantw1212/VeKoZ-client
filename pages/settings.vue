@@ -92,34 +92,32 @@
                         </el-col>
                     </el-row>
                 </el-form>
-                <el-divider>
-                    近期主辦(2場)與評價
-                </el-divider>
-                <!-- <el-card class="user__card"> -->
-                <el-row :gutter="20" class="index__eventList">
-                    <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
-                        <MoleculeVenoniaCard class="index__card">
-                            <template #default>
-                                <NuxtLink to="/event/123">
-                                    <img src="https://storage.googleapis.com/public.venonia.com/eventTemplateDesign%2FimKB1tyxFBlthb4fBbaG%2Fbanner.png"
-                                        style="width: 100%" />
-                                </NuxtLink>
-                            </template>
-                            <template #footer>
-                                <span>
-                                    2024/11/01
-                                </span>
-                                <span>
-                                    7.8
-                                    <el-icon>
-                                        <StarFilled />
-                                    </el-icon>
-                                </span>
-                            </template>
-                        </MoleculeVenoniaCard>
-                    </el-col>
-                </el-row>
             </el-card>
+            <el-divider>
+                歷史活動紀錄
+            </el-divider>
+            <el-row :gutter="20" class="index__eventList">
+                <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
+                    <MoleculeVenoniaCard class="index__card">
+                        <template #default>
+                            <NuxtLink to="/event/123">
+                                <img v-if="item.banner" :src="item.banner" style="width: 100%" />
+                            </NuxtLink>
+                        </template>
+                        <template #footer>
+                            <span>
+                                2024/11/01
+                            </span>
+                            <span>
+                                7.8
+                                <el-icon>
+                                    <StarFilled />
+                                </el-icon>
+                            </span>
+                        </template>
+                    </MoleculeVenoniaCard>
+                </el-col>
+            </el-row>
             <el-divider>
                 許願與抱怨
             </el-divider>
@@ -134,20 +132,25 @@
             </div>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
-            <el-card>
-                模板設計系統
+            <el-card class="venonia-card" body-class="card__body card__body--205">
+                <template #header>
+                    <div class="venonia-card-header">
+                        請拖曳以下元件 到 指定位置
+                    </div>
+                </template>
+                <FormDesignDragging></FormDesignDragging>
             </el-card>
         </el-col>
     </el-row>
 </template>
 <script setup lang="ts">
 import { Share, StarFilled, CircleCheck, View, CircleClose } from '@element-plus/icons-vue';
-import type { IEvent } from '~/types/event';
+import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 const isLoading = ref<boolean>(false)
 const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
-const eventList = ref<IEvent[]>([])
+const eventList = ref<IEventFromList[]>([])
 const shareTooltipVisible = ref(false)
 const id = ref<string>(crypto.randomUUID())
 const userForm = ref<IUser>({
@@ -159,9 +162,6 @@ const userForm = ref<IUser>({
 })
 const seoName = ref<string>('')
 const isSeoNameValid = ref<boolean>(false)
-const eventForm = ref<IEvent>({
-    startDate: new Date(),
-})
 const repoUI = useRepoUI()
 const columnSpan = ref<number>(8)
 const repoEvent = useRepoEvent()
@@ -169,9 +169,6 @@ const repoEvent = useRepoEvent()
 // Hooks
 onMounted(async () => {
     isLoading.value = true
-    const startOfTheMonth = new Date()
-    startOfTheMonth.setDate(0)
-    eventForm.value.startDate = startOfTheMonth
     await getEventList()
     window.addEventListener('resize', setColumnSpan)
     setColumnSpan()
@@ -204,8 +201,9 @@ function setColumnSpan() {
 }
 async function getEventList() {
     const result = await repoEvent.getEventList({
-        ...eventForm.value,
+        startDate: new Date(),
         isPublic: true,
+        limit: 4,
     })
     eventList.value = result
 }
