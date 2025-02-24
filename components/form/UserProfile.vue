@@ -21,7 +21,8 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="暱稱/姓名">
-                    <el-input v-model="userForm.name" placeholder="請輸入暱稱或姓名" :maxlength="30" :show-word-limit="true">
+                    <el-input v-model="userForm.name" placeholder="請輸入暱稱或姓名" :maxlength="30" :show-word-limit="true"
+                        :disabled="disabled">
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -30,7 +31,7 @@
             <el-col :span="24">
                 <el-form-item label="名片頁網址">
                     <el-input v-model="seoName" :maxlength="30" placeholder="例：en-chu" :show-word-limit="true"
-                        @change="patchSeoName">
+                        :disabled="disabled" @change="patchSeoName">
                         <template #prefix>
                             https://venonia.com/
                         </template>
@@ -50,7 +51,7 @@
             <el-col :span="24">
                 <el-form-item label="名片頁標題">
                     <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
-                        :show-word-limit="true" />
+                        :show-word-limit="true" :disabled="disabled" />
                 </el-form-item>
             </el-col>
         </el-row>
@@ -58,7 +59,7 @@
             <el-col :span="24">
                 <el-form-item label="描述">
                     <el-input v-model="userForm.description" type="textarea" :rows="3" :maxlength="150"
-                        placeholder="請輸入簡介" :show-word-limit="true" />
+                        placeholder="請輸入簡介" :show-word-limit="true" :disabled="disabled" />
                 </el-form-item>
             </el-col>
         </el-row>
@@ -70,7 +71,7 @@ import type { IUser } from '~/types/user';
 const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const seoName = ref<string>('')
-const isSeoNameValid = ref<boolean>(false)
+const isSeoNameValid = ref<boolean>(true)
 const repoUI = useRepoUI()
 const userForm = defineModel<IUser>('modelValue', {
     type: Object,
@@ -82,10 +83,16 @@ const userForm = defineModel<IUser>('modelValue', {
         seoTitle: '',
     }
 })
-watch(() => userForm.value, (newValue) => {
-    isSeoNameLoading.value = true
-    seoName.value = String(newValue.seoName)
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        defualt: false,
+    }
 })
+
+watch(() => userForm.value, (newValue) => {
+    seoName.value = String(newValue.seoName)
+}, { deep: true, immediate: true, })
 
 // Methods
 async function patchSeoName() {

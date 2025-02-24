@@ -57,7 +57,7 @@ export interface IEventQuery {
     hasVirtualLocation?: boolean,
     keywords?: string,
     isPublic?: boolean,
-    limit: number,
+    limit?: number,
 }
 
 /**

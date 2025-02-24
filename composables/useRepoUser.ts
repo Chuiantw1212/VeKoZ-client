@@ -34,6 +34,12 @@ export default defineStore('user', () => {
         }
         return userInfo.value
     }
+    async function getPublicUser(seoName: string) {
+        const response = await defaultApi.authRequest(`/user/${seoName}`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function setUserType(newUserType: UserType) {
         userType.value = newUserType
         if (newUserType) {
@@ -111,18 +117,12 @@ export default defineStore('user', () => {
         })
         return response.body
     }
-    // async function patchUser(user: IUser) {
-    //     const response = await defaultApi.authRequest(`/user/${user.id}`, {
-    //         method: 'PATCH',
-    //         body: user,
-    //     })
-    //     return response.body
-    // }
     return {
         userType,
         userInfo,
         userPreference,
         getUser,
+        getPublicUser,
         setUserType,
         deleteUser,
         postUser,

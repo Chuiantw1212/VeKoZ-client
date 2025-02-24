@@ -95,6 +95,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    layout: 'default'
+})
 import type { IEvent, IEventQuery } from '~/types/event';
 // import placeholderImage from '@/assets/mock/eventImage.png'
 const id = ref<string>(crypto.randomUUID())
