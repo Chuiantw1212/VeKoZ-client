@@ -33,5 +33,9 @@
         "label": "講者/主持",
         "required": true,
         "formField": "performers"
+    },
+    {
+        "type": "editor",
+        "required": true
     }
 ]

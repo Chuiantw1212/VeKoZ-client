@@ -30,7 +30,7 @@
                     </el-button>
                 </template>
                 <template v-if="disabled">
-                    <el-input placeholder="票券名" v-model="offer.name" :disabled="true"2:maxlength="30"
+                    <el-input placeholder="票券名" v-model="offer.name" :disabled="true" :maxlength="30"
                         :show-word-limit="true"></el-input>
                     <el-input placeholder="數量" :disabled="true" controls-position="right"></el-input>
                     <el-input placeholder="票價" :disabled="true" controls-position="right"></el-input>

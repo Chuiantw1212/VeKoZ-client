@@ -77,7 +77,7 @@
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignDivider>
             <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]" :id="item.id"
-                :onchange="onchange" :isDesigning="props.isDesigning" @dragstart="handleDragStart(index)"
+                :onchange="onchange" :isDesigning="props.isDesigning" placeholder="請輸入活動詳細內容" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignEditor>

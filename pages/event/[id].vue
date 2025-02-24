@@ -1,36 +1,37 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <el-row v-if="event" class="event" :gutter="20">
-        <el-col :span="mainSpan">
-            <div class="event__main">
-                <img class="event__banner" :src="event.banner">
-                <el-card>
-                    <h1>{{ event.name }}</h1>
-                    <p>{{ }}</p>
-                    <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                        }}
-                        ~
-                        {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
-                    <el-text>{{ event.description }}</el-text>
-                </el-card>
-                <el-card>
-                    <template v-for="(design) in event.designs">
-                        <template v-if="design.type === 'editor'">
-                            <div v-if="design" v-html="design.value">
-                            </div>
-                        </template>
-                    </template>
-                </el-card>
-            </div>
-        </el-col>
-        <el-col v-if="repoUI.isSmall" :span="6">
+        <el-col :span="mainSpan" class="event__main">
+            <img class="event__banner" :src="event.banner">
             <el-card>
-                <img :src="event.organizerLogo">
-                <div>
+                <h1>{{ event.name }}</h1>
+                <p>{{ }}</p>
+                <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
+                    }}
+                    ~
+                    {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
+                <el-text>{{ event.description }}</el-text>
+            </el-card>
+        </el-col>
+        <el-col :span="sideSpan" class="event__side">
+            <el-card class="side__card">
+                <img class="card__logo" :src="event.organizerLogo">
+                <div class="card__name">
                     {{ event.organizerName }}
                 </div>
             </el-card>
         </el-col>
+        <el-card>
+            <template v-for="(design) in event.designs">
+                <template v-if="!design.formField">
+                    {{ design }}
+                </template>
+                <template v-if="design.type === 'editor'">
+                    <div v-if="design" v-html="design.value">
+                    </div>
+                </template>
+            </template>
+        </el-card>
         <div class="event__actions">
             <div>
             </div>
@@ -72,12 +73,14 @@ const ticketOptions = ref([
 ])
 
 const mainSpan = ref<number>(24)
+const sideSpan = ref<number>(24)
 
 // Hooks
 watch(() => repoUI, (ui) => {
     mainSpan.value = 24
     if (ui.isSmall) {
         mainSpan.value = 18
+        sideSpan.value = 6
     }
 })
 
@@ -134,6 +137,14 @@ async function getEvent() {
         >* {
             width: 50%;
         }
+    }
+
+    .side__card {
+        .card__logo {
+            width: 40px;
+        }
+
+        .card__name {}
     }
 }
 </style>
