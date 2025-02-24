@@ -1,46 +1,64 @@
-# Element Plus with Nuxt 3 Minimal Starter
+# VeKoZ 微課室
 
-- SSR Preview: <https://element-plus-nuxt.vercel.app/>
-- SSG Preview: <https://nuxt-starter.element-plus.org/>
+## 🚀 Nuxt.js
 
-We recommend to look at the [Nuxt 3 Docs](https://nuxt.com/) and [Element Plus Docs](https://element-plus.org/).
+VeKoZ 微課室的前端架構基於 **Nuxt.js**，這是一個強大的 **Vue.js** 全域應用框架，專為建立現代化、SEO 友好且效能卓越的應用程式而設計。Nuxt.js 支援單頁應用程式 (SPA) 和伺服器端渲染 (SSR)，適合高互動性與快速響應的學習平台。
 
-> If you are looking for a Vite + Vue + Element Plus starter, check out [element-plus-vite-starter](https://github.com/element-plus/element-plus-vite-starter/).
+**核心特點**：
 
-## Setup
+- **伺服器端渲染 (SSR)**：提升首屏加載速度與 SEO 表現，特別適合 VeKoZ 微課室 的課程展示頁面。
+- **靜態網站生成 (SSG)**：將靜態內容預渲染，提供更高的頁面加載速度與穩定性。
+- **動態路由與資料預取**：讓課程列表、個人資料頁面實現無縫加載，增強用戶體驗。
+- **模組化架構**：豐富的 Nuxt.js 模組生態系統，例如 PWA 支援、API 代理與圖片優化，讓前端開發更高效。
 
-Make sure to install the dependencies
+## 🛠️ 其他核心套件
 
-```bash
-pnpm install
-```
+### 🧠 **TypeScript**  
 
-## Development
+VeKoZ 微課室 前端專案全程採用 **TypeScript**，提供 **強型別系統** 與 **型別推導**，讓開發過程更加安全與順暢：
 
-Start the development server on `http://localhost:3000`
+- **編譯時錯誤捕捉**：減少運行時期錯誤，提升系統穩定性。
+- **自動補全與型別推導**：在 Vue 組件與狀態管理中顯著提升開發效率。
+- **與 Nuxt.js 的深度整合**：保持前後端技術棧的一致性，讓專案維護更加容易。
 
-```bash
-pnpm dev
-```
+### 📦 **Pinia**  
 
-More info about [nuxt deployment](https://nuxt.com/docs/getting-started/deployment#presets).
+作為 Vue.js 官方推薦的 **狀態管理** 工具，**Pinia** 提供了高效且模組化的數據管理解決方案：
 
-Run `npm run generate` to generate static html in `.output/public`.
+- **類型安全與模組化架構**：與 TypeScript 無縫結合，支援大規模應用的狀態管理。
+- **靈活且簡單的 API**：與 Vue 3 深度整合，讓組件之間的數據共享變得更簡單。
+- **支援伺服器端渲染 (SSR)**：在 Nuxt.js 中運行流暢，確保數據預取與 SEO 最佳化。
 
-## Production
+### 🔥 **Firebase**  
 
-Build the application for production:
+Firebase 為 VeKoZ 微課室 提供了完整的 **身份認證** 與 **數據同步** 功能：
 
-```bash
-pnpm build
-```
+- **Firebase Authentication**：多元的登入選項 (Google、Email)，讓用戶能夠快速安全地進入平台。
+- **Firestore 資料庫**：即時數據存取，支援課程資料、用戶資料、即時聊天訊息的存取與同步。
+- **Firebase Storage**：與 CKEditor 5 結合，實現安全的圖片與文件上傳與管理。
 
-Checkout the [deployment documentation](https://nuxt.com/docs/getting-started/deployment).
+### ✍️ **CKEditor 5**  
 
-## Deploy
+VeKoZ 微課室 選用 **CKEditor 5** 作為 **富文本編輯器**，讓課程內容的編輯和展示更具彈性：
 
-You need set `NITRO_PRESET=vercel-edge`, see [Nuxt on Vercel](https://vercel.com/docs/frameworks/nuxt#edge-functions).
+- **豐富的文本編輯功能**：支援 Markdown、圖片插入、數學公式、代碼高亮等。
+- **可擴展的插件系統**：自定義插件讓課程內容更有吸引力，例如多媒體內容和互動式教材。
+- **與 Firebase Storage 整合**：提供便捷的圖片和文件上傳體驗。
 
-## Ref
+### 🎨 **Element Plus**  
 
-- [vitesse-nuxt3](https://github.com/antfu/vitesse-nuxt3)
+**Element Plus** 作為 UI 組件庫，為 VeKoZ 微課室 提供了現代化、易於使用的界面設計工具：
+
+- **豐富的 UI 元件**：如表單、彈窗、日曆、表格，能夠快速構建各種功能頁面。
+- **靈活的樣式自訂**：支援平台主題風格的設定，確保持續一致的視覺效果。
+- **易用的響應式設計**：確保在桌面與行動裝置上都有良好的使用體驗。
+
+### 📅 **FullCalendar**  
+
+在 VeKoZ 微課室 中，課程預約與行事曆管理是重要的功能，**FullCalendar** 提供了優異的日曆解決方案：
+
+- **多視圖日曆** (月視圖、週視圖、日視圖)：幫助用戶直觀管理課程時間。
+- **拖放操作**：允許用戶輕鬆調整課程安排，增強系統的交互性。
+- **與 Google Calendar API 整合**：課程自動同步，提供行事曆提醒，避免遺漏重要課程。
+
+這樣的技術選擇讓 VeKoZ 微課室 在前端架構上達到 **高效能**、**高安全性** 與 **優異的使用者體驗**。Nuxt.js 與多個核心套件的搭配，確保系統從 **身份認證**、**內容編輯**、**課程管理** 到 **數據同步** 都能夠提供流暢且可靠的服務，真正實現 VeKoZ 微課室 **「讓分享輕而易舉」** 的宗旨。
