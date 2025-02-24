@@ -29,7 +29,7 @@
         <el-icon>
           <Tickets />
         </el-icon>
-        <template #title>票券詳細設定</template>
+        <template #title>票券銷售設定</template>
       </el-menu-item>
     </NuxtLink>
     <!-- <NuxtLink to="/host/order">
