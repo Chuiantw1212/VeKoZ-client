@@ -38,11 +38,11 @@
             </template>
             <template #headerUI>
                 <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
-                    @click="deleteEvent()">
+                    :disabled="deleteDisabled" @click="deleteEvent()">
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
-                    active-text="已公開" inactive-text="非公開" @change="validiateForm()" />
+                    active-text="已公開" inactive-text="非公開" :disabled="deleteDisabled" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogEventTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogEventTemplate.isPublic">
@@ -108,6 +108,7 @@ const eventDialogIsOpen = ref<boolean>(false)
 const dialogEventTemplate = ref<IEventTemplate>({
     designs: []
 })
+const deleteDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 // Hooks
@@ -163,13 +164,6 @@ async function validiateForm() {
     calendarEvent.setProp('backgroundColor', 'lightblue')
     // calendarEvent.setProp('textColor', 'lightblue')
     calendarEvent.setProp('classNames', ['blue-text-event'])
-}
-function trimOrganizationName(item: IOrganization) {
-    if (item.name.length >= 12) {
-        return `${item.name.slice(0, 10)}...`
-    } else {
-        return item.name
-    }
 }
 
 function setCalendarView() {
@@ -374,9 +368,6 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
 }
 
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
-    // dialogEventTemplate.value = {
-    //     designs: [],
-    // }
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
@@ -384,6 +375,18 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     isLoading.value = false
     if (eventTemplate) {
         dialogEventTemplate.value = eventTemplate
+        const designDates = eventTemplate.designs.find(design => {
+            return design.formField === 'dates'
+        })
+        if (designDates) {
+            const startTime = new Date(designDates.value[0]).getTime()
+            const currentTime = new Date().getTime()
+            if (currentTime >= startTime) {
+                deleteDisabled.value = true
+            } else {
+                deleteDisabled.value = false
+            }
+        }
         eventDialogIsOpen.value = true
     } else {
         const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
@@ -398,6 +401,7 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 }
 
 async function openNewCalendarEvent() {
+    deleteDisabled.value = false
     loadTemplateDialogIsOpen.value = false
     const date = calendarEventCreation.value.date
     const selectedDateInstance = new Date(date)
