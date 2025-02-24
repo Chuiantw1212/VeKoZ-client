@@ -57,33 +57,25 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+            <!-- <el-row :gutter="20">
+                <el-col :span="formFieldSpan">
+                    <el-form-item label="退票方法">
+                        <el-input v-model="groupOffers[0].merchantReturnPolicy" placeholder="將顯示在購票畫面" :maxlength="150"
+                        :show-word-limit="true" type="textarea" :rows="3"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row> -->
         </el-form>
-        <el-table :data="groupOffers" style="width: 100%">
-            <el-table-column prop="name" label="票券名稱">
-            </el-table-column>
-            <el-table-column prop="price" label="票價">
-            </el-table-column>
-            <el-table-column prop="inventoryValue" label="數量">
-                <template #default="{ row }">
-                    {{ row.inventoryValue }} / {{ row.inventoryMaxValue }}
-                </template>
-            </el-table-column>
-            <el-table-column type="expand">
-                <template #default="props">
-                    <el-form>
-                        <el-form-item label="詳細描述">
-                            <el-input v-model="props.row.description" placeholder="將顯示在購票畫面" :maxlength="150"
-                                :show-word-limit="true" type="textarea" :rows="3"></el-input>
-                        </el-form-item>
-                    </el-form>
-                </template>
-            </el-table-column>
-            <!-- <el-table-column prop="description" label="詳細描述">
-                <template #default="{ row }">
-                    <el-input v-model="row.description" placeholder="將顯示在購票畫面" :maxlength="150" :show-word-limit="true"></el-input>
-                </template>
-            </el-table-column> -->
-        </el-table>
+        <el-divider>票券個別設定</el-divider>
+        <el-descriptions v-for="offer in groupOffers" :title="offer.name" :column="2" label-width="auto">
+            <el-descriptions-item label="票價">{{ offer.price }}</el-descriptions-item>
+            <el-descriptions-item label="數量">{{ offer.inventoryValue }} / {{ offer.inventoryMaxValue
+            }}</el-descriptions-item>
+            <el-descriptions-item :colspan="2" label="描述">
+                <el-input v-model="offer.description" placeholder="將顯示在購票畫面" :maxlength="150" :show-word-limit="true"
+                    type="textarea" :rows="3" @change="patchOffer(offer)"></el-input>
+            </el-descriptions-item>
+        </el-descriptions>
     </el-card>
 </template>
 
@@ -93,7 +85,7 @@ import { Calendar, Share, FolderOpened } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
 import type { IOrganization } from '~/types/organization';
 import type { CollapseModelValue } from 'element-plus'
-const emit = defineEmits(['change'])
+const emit = defineEmits(['category', 'offer'])
 const repoUI = useRepoUI()
 const formFieldSpan = ref<number>(24)
 const shareTooltipVisible = ref(false)
@@ -129,8 +121,12 @@ watch(() => repoUI, (ui) => {
 }, { immediate: true, deep: true, })
 
 // Methods
+function patchOffer(offer: IOffer) {
+    emit('offer', offer)
+}
+
 function patchOfferCategory(offer: IOffer) {
-    emit('change', offer)
+    emit('category', offer)
 }
 
 async function shareLink(offer: IOffer) {

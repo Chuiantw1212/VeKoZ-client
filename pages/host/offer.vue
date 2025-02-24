@@ -7,7 +7,7 @@
         <div v-if="Object.keys(ongoingOfferGroups).length" class="offerList">
             <template v-for="(groupOffers, index) in ongoingOfferGroups">
                 <MoleculeOfferListItem :model-value="groupOffers" :organizationList="organizationList"
-                    @change="patchOfferCategory($event)">
+                    @category="patchOfferCategory($event)" @offer="patchOffer($event)">
                 </MoleculeOfferListItem>
             </template>
         </div>
@@ -19,7 +19,7 @@
         <div v-if="Object.keys(endedOfferGroups).length" class="offerList">
             <template v-for="(groupOffers, index) in endedOfferGroups">
                 <MoleculeOfferListItem :model-value="groupOffers" :organizationList="organizationList"
-                    @change="patchOfferCategory($event)">
+                    @category="patchOfferCategory($event)" @offer="patchOffer($event)">
                 </MoleculeOfferListItem>
             </template>
         </div>
@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import type { IOffer } from '~/types/offer';
 import type { IOrganization } from '~/types/organization';
+const repoUI = useRepoUI()
 const repoOffer = useRepoOffer()
 const repoOrganization = useRepoOrganization()
 const ongoingOfferGroups = ref<any>({})
@@ -65,6 +66,16 @@ async function getOfferList() {
     endedOfferGroups.value = Object.groupBy(endedOffers, ({ categoryId }) => String(categoryId))
 }
 
+async function patchOffer(offer: IOffer,) {
+    console.log('offer')
+    repoUI.debounce(`patchOffer${offer.id}`, async () => {
+        await repoOffer.patchOffer({
+            id: offer.id,
+            description: offer.description,
+        })
+    })
+}
+
 async function patchOfferCategory(offer: IOffer,) {
     const selectedSeller = organizationList.value.find(org => {
         return org.id === offer.sellerId
@@ -72,7 +83,9 @@ async function patchOfferCategory(offer: IOffer,) {
     if (selectedSeller) {
         offer.sellerName = selectedSeller.name
     }
-    await repoOffer.patchOfferCategory(offer)
+    repoUI.debounce(`patchOffersOf${offer.categoryId}`, async () => {
+        await repoOffer.patchOfferCategory(offer)
+    })
 }
 
 </script>
