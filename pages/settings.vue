@@ -1,17 +1,23 @@
 <template>
-    <el-row class="user" :gutter="20">
+    <el-row>
+        <div class="user__btnGroup">
+            <el-button class="btnGroup__btn" :icon="WarnTriangleFilled">註銷帳號</el-button>
+            <el-button class="btnGroup__btn" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
+            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
+            @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
+            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
+            @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
+            <el-button class="btnGroup__btn" :icon="User">登出</el-button>
+            <el-button class="btnGroup__btn" :icon="Message">許願&抱怨</el-button>
+            <el-button class="btnGroup__btn" :icon="Cpu">開放原始碼</el-button>
+
+        </div>
+    </el-row>
+    <el-row class="userTemplate" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
-            <div class="user__btnGroup">
-                <el-button class="btnGroup__btn" :disabled="true">變更密碼</el-button>
-                <el-button class="btnGroup__btn">登出</el-button>
-                <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
-                    @click="repoUser.setUserType('host')">切換為主辦方</el-button>
-                <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
-                    @click="repoUser.setUserType('attendee')">切換為一般用戶</el-button>
-            </div>
-            <el-card class="user__card">
+            <el-card class="venonia-card" body-class="card__body card__body--205">
                 <template #header>
-                    <div class="card__header">
+                    <div class="venonia-card-header">
                         <div>
                             個人資料與名片頁
                         </div>
@@ -24,11 +30,20 @@
                         </div>
                     </div>
                 </template>
+                <FormTemplateDesign v-model="designs" :isDesigning="true">
+                    <template #default="defaultProps">
+                        <div class="user__card__designItem">
+                        </div>
+                    </template>
+                </FormTemplateDesign>
+            </el-card>
+
+            <!-- <el-card class="user__card">
                 <FormUserProfile :model-value="userForm">
 
                 </FormUserProfile>
-            </el-card>
-            <el-divider>
+            </el-card> -->
+            <!-- <el-divider>
                 歷史活動紀錄
             </el-divider>
             <el-row :gutter="20" class="index__eventList">
@@ -52,19 +67,7 @@
                         </template>
                     </MoleculeVenoniaCard>
                 </el-col>
-            </el-row>
-            <el-divider>
-                許願與抱怨
-            </el-divider>
-            <p>VeKoZ為EN Chu獨立開發。</p>
-            <p>打開掃Line即可聯絡作者本人。</p>
-            <p>開發進度歡迎到Github查看。</p>
-            <el-divider>
-                系統功能
-            </el-divider>
-            <div class="user__delete">
-                <el-button :style="{ 'width': '100%' }" type="danger">帳號註銷</el-button>
-            </div>
+            </el-row> -->
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
             <el-card class="venonia-card" body-class="card__body card__body--205">
@@ -77,11 +80,67 @@
             </el-card>
         </el-col>
     </el-row>
+    <!-- <el-card>
+        <el-divider>
+            許願與抱怨
+        </el-divider>
+        <p>VeKoZ為EN Chu獨立開發。</p>
+        <p>打開掃Line即可聯絡作者本人。</p>
+        <p>開發進度歡迎到Github查看。</p>
+        <el-divider>
+            系統功能
+        </el-divider>
+        <div class="user__delete">
+            <el-button :style="{ 'width': '100%' }" type="danger">帳號註銷</el-button>
+        </div>
+    </el-card> -->
 </template>
 <script setup lang="ts">
-import { StarFilled, View } from '@element-plus/icons-vue';
+import { Cpu, User, View, Message, WarnTriangleFilled, Switch } from '@element-plus/icons-vue';
 import type { IEventFromList } from '~/types/event';
+import type { ITemplateDesign } from '~/types/eventTemplate';
 import type { IUser } from '~/types/user';
+const designs = ref<ITemplateDesign[]>([
+    {
+        "type": "banner",
+        "label": "",
+        "formField": "banner"
+    },
+    {
+        "type": "header1",
+        "label": "活動名稱",
+        "required": true,
+        "formField": "name"
+    },
+    {
+        "type": "textarea",
+        "label": "活動摘要",
+        "required": true,
+        "formField": "description"
+    },
+    {
+        "type": "dateTimeRange",
+        "label": "活動時間",
+        "required": true,
+        "formField": "dates"
+    },
+    {
+        "type": "organization",
+        "label": "主辦單位",
+        "required": true,
+        "formField": "organizer"
+    },
+    {
+        "type": "organizationMember",
+        "label": "講者/主持",
+        "required": true,
+        "formField": "performers"
+    },
+    {
+        "type": "editor",
+        "required": true
+    }
+])
 const isLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const eventList = ref<IEventFromList[]>([])
@@ -159,25 +218,29 @@ function updateUserInfo() {
 
 </script>
 <style lang="scss" scoped>
-.user {
-    padding-bottom: 60px; // footer menu height
+.userTemplate {
+    margin-top: 20px;
+    // padding-bottom: 60px; // footer menu height
 
     .user__card {
-        margin-top: 20px;
+
+        .user__card__designItem {
+            max-width: 100%;
+            min-height: 8px;
+            line-height: 44px;
+            font-size: 20px;
+            text-align: center;
+            margin: 2px 0px;
+        }
+
+        .user__card__designItem--outline {
+            outline: 1px dashed red;
+        }
 
         .card__header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-    }
-
-    .user__btnGroup {
-        display: flex;
-        gap: 8px;
-
-        .btnGroup__btn {
-            width: 100%;
         }
     }
 
@@ -188,5 +251,15 @@ function updateUserInfo() {
 
 .index__row {
     margin-bottom: 20px;
+}
+
+.user__btnGroup {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+
+    .btnGroup__btn {
+        width: 100%;
+    }
 }
 </style>
