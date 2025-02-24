@@ -8,7 +8,7 @@
                 <div class="header__btnGroup">
                     <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                         <el-button :icon="Share" class="btnGroup__btn"
-                            @click="shareLink(groupOffers[0])">分享售票連結</el-button>
+                            @click="shareLink(groupOffers[0])">分享專屬售票連結</el-button>
                     </el-tooltip>
                     <!-- <el-button :icon="Calendar" class="btnGroup__btn">
                                     在活動管理打開
@@ -29,7 +29,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="formFieldSpan">
-                    <el-form-item label="公開狀態">
+                    <el-form-item label="活動是否公開">
                         {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
                     </el-form-item>
                 </el-col>
@@ -68,6 +68,21 @@
                     {{ row.inventoryValue }} / {{ row.inventoryMaxValue }}
                 </template>
             </el-table-column>
+            <el-table-column type="expand">
+                <template #default="props">
+                    <el-form>
+                        <el-form-item label="詳細描述">
+                            <el-input v-model="props.row.description" placeholder="將顯示在購票畫面" :maxlength="150"
+                                :show-word-limit="true" type="textarea" :rows="3"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </template>
+            </el-table-column>
+            <!-- <el-table-column prop="description" label="詳細描述">
+                <template #default="{ row }">
+                    <el-input v-model="row.description" placeholder="將顯示在購票畫面" :maxlength="150" :show-word-limit="true"></el-input>
+                </template>
+            </el-table-column> -->
         </el-table>
     </el-card>
 </template>
@@ -77,10 +92,17 @@
 import { Calendar, Share, FolderOpened } from '@element-plus/icons-vue';
 import type { IOffer } from '~/types/offer';
 import type { IOrganization } from '~/types/organization';
+import type { CollapseModelValue } from 'element-plus'
 const emit = defineEmits(['change'])
 const repoUI = useRepoUI()
 const formFieldSpan = ref<number>(24)
 const shareTooltipVisible = ref(false)
+
+const activeNames = ref(['1'])
+const handleChange = (val: CollapseModelValue) => {
+    console.log(val)
+}
+
 const groupOffers = defineModel('modelValue', {
     type: Object,
     required: true,

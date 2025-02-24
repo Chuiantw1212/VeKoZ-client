@@ -40,7 +40,7 @@ const organizationList = ref<IOrganization[]>([])
 // Hooks
 onMounted(() => {
     getOrganizationList()
-    // getOfferList()
+    getOfferList()
 })
 
 
@@ -54,15 +54,15 @@ async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
     const currentDate = new Date().toISOString()
 
-    // const ongoingOffers = result.filter(offer => {
-    //     return offer.validThrough >= currentDate
-    // })
-    // ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => String(categoryId))
+    const ongoingOffers = result.filter(offer => {
+        return offer.validThrough >= currentDate
+    })
+    ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => String(categoryId))
 
-    // const endedOffers = result.filter(offer => {
-    //     return offer.validThrough < currentDate
-    // })
-    // endedOfferGroups.value = Object.groupBy(endedOffers, ({ categoryId }) => String(categoryId))
+    const endedOffers = result.filter(offer => {
+        return offer.validThrough < currentDate
+    })
+    endedOfferGroups.value = Object.groupBy(endedOffers, ({ categoryId }) => String(categoryId))
 }
 
 async function patchOfferCategory(offer: IOffer,) {

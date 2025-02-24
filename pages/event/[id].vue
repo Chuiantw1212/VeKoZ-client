@@ -8,7 +8,7 @@
                     <h1>{{ event.name }}</h1>
                     <p>{{ }}</p>
                     <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                    }}
+                        }}
                         ~
                         {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
                     <el-text>{{ event.description }}</el-text>
@@ -49,12 +49,12 @@
 </template>
 <script setup lang="ts">
 import { CollectionTag, Money } from '@element-plus/icons-vue'
-import type { IEventFromList } from '~/types/event'
+import type { IEvent } from '~/types/event'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
 const route = useRoute()
-const event = ref<IEventFromList>()
+const event = ref<IEvent>()
 
 const form = ref({
     ticket: ''

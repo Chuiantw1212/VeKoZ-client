@@ -5,7 +5,7 @@
             <div v-for="(offer, index) in customDesign.offers" class="offer">
                 <template v-if="!disabled">
                     <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
-                        :maxlength="30" :show-word-limit="true"></el-input>
+                        :maxlength="20" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
                         :max="60" :disabled="disabled" controls-position="right">
                         <template #suffix>
@@ -30,7 +30,7 @@
                     </el-button>
                 </template>
                 <template v-if="disabled">
-                    <el-input placeholder="票券名" v-model="offer.name" :disabled="true" :maxlength="30"
+                    <el-input placeholder="票券名" v-model="offer.name" :disabled="true"2:maxlength="30"
                         :show-word-limit="true"></el-input>
                     <el-input placeholder="數量" :disabled="true" controls-position="right"></el-input>
                     <el-input placeholder="票價" :disabled="true" controls-position="right"></el-input>
@@ -48,7 +48,7 @@
             <div class="offerList">
                 <div v-for="(offer, index) in customDesign.offers" class="offer">
                     <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
-                        :disabled="disabled" :maxlength="30" :show-word-limit="true"></el-input>
+                        :disabled="disabled" :maxlength="20" :show-word-limit="true"></el-input>
                     <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
                         :max="60" :disabled="disabled" controls-position="right">
                         <template #suffix>
