@@ -16,7 +16,7 @@
                             個人資料與名片頁
                         </div>
                         <div>
-                            <el-button v-loading="isLoading" :icon="View" type="danger">
+                            <el-button v-loading="isLoading" :icon="View">
                                 預覽
                             </el-button>
                             <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">

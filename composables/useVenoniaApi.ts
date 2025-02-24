@@ -43,6 +43,7 @@ export default defineStore('api', {
                     try {
                         this.token = await auth.currentUser.getIdToken(true)
                         setTimeout(() => {
+                            this.token = ''
                             this.setToken()
                         }, 3500 * 1000)
                     } catch (error: any) {

@@ -2,7 +2,7 @@
     <NuxtLink to="/">
         <el-menu-item class="menu__item" index="1">
             <el-icon>
-                <Grid />
+                <Search />
             </el-icon>
             <span v-if="repoUI.isMedium">
                 活動探索
@@ -36,7 +36,7 @@
     </NuxtLink>
 </template>
 <script setup lang="ts">
-import { Grid, Collection, Setting, Ticket } from '@element-plus/icons-vue'
+import { Search, Collection, Setting, Ticket } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 </script>
 <style lang="scss">
