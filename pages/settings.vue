@@ -29,9 +29,9 @@
     </el-row>
     <el-row class="userTemplate" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
-            <el-card class="user__card venonia-card" body-class="card__body card__body--265">
+            <el-card class="user__card vekoz-card" body-class="card__body card__body--265">
                 <template #header>
-                    <div class="venonia-card-header">
+                    <div class="vekoz-card-header">
                         <div>
                             個人資料與名片頁
                         </div>
@@ -44,6 +44,7 @@
                         </div>
                     </div>
                 </template>
+                <OrganismDesignProfile></OrganismDesignProfile>
                 <FormTemplateDesign v-model="designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -55,9 +56,9 @@
             </el-card>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
-            <el-card class="venonia-card" body-class="card__body card__body--265">
+            <el-card class="vekoz-card" body-class="card__body card__body--265">
                 <template #header>
-                    <div class="venonia-card-header">
+                    <div class="vekoz-card-header">
                         請拖曳以下元件 到 指定位置
                     </div>
                 </template>

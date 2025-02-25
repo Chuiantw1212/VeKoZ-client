@@ -2,9 +2,9 @@
     <div class="eventTemplate">
         <el-row :gutter="20">
             <el-col :span="repoUI.isLarge ? 16 : 24">
-                <el-card v-loading="isCardLoading" class="venonia-card" body-class="card__body card__body--205">
+                <el-card v-loading="isCardLoading" class="vekoz-card" body-class="card__body card__body--205">
                     <template #header>
-                        <div class="venonia-card-header">
+                        <div class="vekoz-card-header">
                             <el-form-item>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
                                     @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
@@ -41,9 +41,9 @@
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="8">
-                <el-card class="venonia-card" body-class="card__body card__body--205">
+                <el-card class="vekoz-card" body-class="card__body card__body--205">
                     <template #header>
-                        <div class="venonia-card-header">
+                        <div class="vekoz-card-header">
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>

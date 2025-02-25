@@ -1,7 +1,7 @@
 <template>
     <!-- 這一個檔案要跟後端充分配合，全端工程師的含金量大概就在這邊了 -->
     <el-form label-width="auto">
-        <template v-if="props.type === 'attendee'">
+        <template v-if="props.type === 'host'">
             <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
                 draggable="true" :isDesigning="false"
                 @dragstart="setOnDrag({ type: 'header1', formField: 'name', required: true, })"
@@ -115,14 +115,14 @@ const props = defineProps({
 
 // Methods
 function isTypeLimited(type: string = '') {
-    const isAvailable = designs.every((design) => {
+    const isAvailable = designs.value.every((design) => {
         return design.type !== type
     })
     return isAvailable
 }
 
 function isFormFieldLimited(formField: string = '') {
-    const isAvailable = designs.every((design) => {
+    const isAvailable = designs.value.every((design) => {
         return design.formField !== formField
     })
     return isAvailable

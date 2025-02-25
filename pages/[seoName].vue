@@ -1,9 +1,9 @@
 <template>
     <div>
         <!-- <h1>{{ userForm.seoTitle }}</h1> -->
-        <el-card class="venonia-card">
+        <el-card class="vekoz-card">
             <template #header>
-                <div class="venonia-card-header">
+                <div class="vekoz-card-header">
                     <div></div>
                     <div>
                         <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">

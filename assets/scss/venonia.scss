@@ -4,16 +4,16 @@
   justify-content: space-between;
 }
 
-.venonia-card {
-  .venonia-card-header {
+.vekoz-card {
+  .vekoz-card-header {
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: space-between;
-    height: 32px;
+    height: 32px; // template共同高度
 
     >* {
-      margin-bottom: 0px;
+      margin-bottom: 0px; // 除掉form-item的maargon-bottom
     }
   }
 
