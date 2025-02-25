@@ -1,22 +1,21 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" class="formItem"
-        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :label="customDesign.label"
-        :required="required" :prop="customDesign.formField" @dragstart="emit('dragstart')">
-        <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder" :maxlength="30"
-            :show-word-limit="true" size="large" :disabled="disabled"></el-input>
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+        <div class="avatar__wrapper">
+            <AtomAvatarUploader v-if="customDesign" v-model="customDesign.value"></AtomAvatarUploader>
+        </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign" class="formItem"
-        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-if="props.showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
+            <el-input v-if="showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
                 placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
-            <el-input :placeholder="placeholder" v-model="customDesign.value" :maxlength="30" :show-word-limit="true"
-                size="large" type="textarea" :rows="1"></el-input>
+            <div class="avatar__wrapper">
+                <AtomAvatarUploader v-model="customDesign.value"></AtomAvatarUploader>
+            </div>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -28,9 +27,9 @@ const repoUI = useRepoUI()
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
-        type: 'header1',
-        label: '標題',
-    },
+        type: 'input',
+        label: '任意文字'
+    }
 })
 
 const props = defineProps({
@@ -38,11 +37,15 @@ const props = defineProps({
         type: String,
         default: crypto.randomUUID()
     },
-    isDesigning: {
-        type: Boolean,
-        default: false
+    size: {
+        type: String as any, // 'large' | 'default' | 'small'
+        default: 'default',
     },
-    required: {
+    maxlength: {
+        type: Number,
+        default: 8,
+    },
+    isDesigning: {
         type: Boolean,
         default: false
     },
@@ -50,9 +53,17 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    required: {
+        type: Boolean,
+        default: false
+    },
+    label: {
+        type: String,
+        default: '任意文字'
+    },
     placeholder: {
         type: String,
-        default: '請輸入主標題'
+        default: '請輸入任意文字'
     },
     onchange: {
         type: Function,
@@ -65,7 +76,7 @@ const props = defineProps({
     showLabel: {
         type: Boolean,
         default: true,
-    },
+    }
 })
 
 onMounted(() => {
@@ -84,8 +95,8 @@ function setDefaultValue() {
         return
     }
     const defaultValue: ITemplateDesign = {
-        type: 'header1',
-        label: '活動名稱',
+        type: 'input',
+        label: '',
         value: '',
     }
     if (props.formField) {
@@ -104,9 +115,8 @@ async function handleChange(templateDesign: any) {
 }
 </script>
 <style lang="scss" scoped>
-.formItem--center {
-    :deep(.el-textarea__inner) {
-        text-align: center;
-    }
+.avatar__wrapper {
+    display: flex;
+    justify-content: center;
 }
 </style>

@@ -58,7 +58,7 @@
                     </div>
                 </template>
                 <div>
-                    <OrganismDesignProfile></OrganismDesignProfile>
+                    <OrganismDesignProfile v-model="userTemplate"></OrganismDesignProfile>
                 </div>
                 <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
@@ -93,7 +93,28 @@ import type { IUserDesign } from '~/types/userDesign';
 // 主要的模板資料
 const userTemplate = ref<IUser>({
     id: '',
-    designs: []
+    designs: [
+        {
+            type: 'avatar',
+            value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
+            // alignment: 'center',
+        },
+        {
+            type: 'header1',
+            value: 'EN Chu',
+            alignment: 'center',
+        },
+        {
+            type: 'textarea',
+            value: '',
+            alignment: 'center',
+        },
+        {
+            type: 'socialMedia',
+            urls: [],
+            alignment: '',
+        }
+    ]
 })
 const isLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
@@ -155,10 +176,12 @@ function cancelDragging() {
 }
 
 function getPersonalLink() {
+    return '/'
     if (import.meta.client) {
         const { origin } = window.location
         const openInLineExternal = `openExternalBrowser=1`
         return `${origin}/${seoName.value}?${openInLineExternal}`
+    } else {
     }
 }
 
@@ -225,6 +248,10 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     // templateTemp.value.item.type = '' // 用來判斷是否為拖曳中
     // templateTemp.value.index = -1
     // isCardLoading.value = false
+}
+
+function allowDrop(ev: any) {
+    ev.preventDefault();
 }
 
 </script>

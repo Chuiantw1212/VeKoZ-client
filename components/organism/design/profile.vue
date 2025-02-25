@@ -17,11 +17,16 @@
                 </el-button>
             </div>
         </template>
-        <img class="profile__avatar" src="@/assets/mock/user.jpg">
+        <!-- <AtomAvatarUploader></AtomAvatarUploader> -->
+        <!-- <img class="profile__avatar" src="@/assets/mock/user.jpg"> -->
         <!-- <h1 class="profile__name">EN Chu</h1> -->
         <div v-if="user.designs">
             <template v-for="(design, index) in user.designs">
                 <!-- {{ design }} -->
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+
+                </OrganismDesignAvatarUploader>
                 <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="user.designs[index]"
                     :isDesigning="true" :show-label="false">
 
@@ -44,23 +49,7 @@ const user = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
         seoName: '',
-        designs: [
-            {
-                type: 'header1',
-                value: 'EN Chu',
-                alignment: 'center',
-            },
-            {
-                type: 'textarea',
-                value: '',
-                alignment: 'center',
-            },
-            {
-                type: 'socialMedia',
-                urls: [],
-                alignment: '',
-            }
-        ],
+        designs: [],
     }
 })
 

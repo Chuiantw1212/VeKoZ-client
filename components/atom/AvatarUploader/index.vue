@@ -131,6 +131,7 @@ async function handleFiles(event: any) {
             background-repeat: no-repeat;
             border-radius: 50%;
             border: 1px solid rgb(239, 239, 239);
+            // margin: auto;
         }
     }
 }

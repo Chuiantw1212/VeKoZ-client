@@ -65,10 +65,6 @@ const props = defineProps({
     .toolbar__move {
         transform: rotate(90deg);
         cursor: grab;
-
-        // &:hover {
-        //     outline: 1px dashed red;
-        // }
     }
 
     .toolbar__default {
