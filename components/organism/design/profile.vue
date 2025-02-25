@@ -20,28 +20,15 @@
         <img class="profile__avatar" src="@/assets/mock/user.jpg">
         <h1 class="profile__name">EN Chu</h1>
         <div>
-            <OrganismDesignTextarea v-model="user.descriptionDesign" :isDesigning="true" :show-label="false">
-            </OrganismDesignTextarea>
-        </div>
-        <div class="profile__socialLinks">
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/email.svg">
-            </el-button>
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/facebook-circle.svg">
-            </el-button>
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/instagram.svg">
-            </el-button>
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/line-logo.svg">
-            </el-button>
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/youtube.svg">
-            </el-button>
-            <el-button class="socialLinks__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/web.svg">
-            </el-button>
+            <template v-for="(design, index) in user.designs">
+                {{ design }}
+                <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+                </OrganismDesignTextarea>
+                <!-- <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+                </OrganismDesignSocialMedia> -->
+            </template>
         </div>
     </el-card>
 </template>
@@ -49,15 +36,22 @@
 import QrCode from '@/assets/icon/qr-code-sharp.svg'
 import { Share, CollectionTag } from '@element-plus/icons-vue';
 import type { IUser } from '~/types/user';
-const user = defineModel('modelValue', {
+const user = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
         seoName: '',
-        descriptionDesign: {
-            type: 'textarea',
-            value: '',
-            alignment: 'center',
-        },
+        designs: [
+            {
+                type: 'textarea',
+                value: '',
+                alignment: 'center',
+            },
+            {
+                type: 'socialMedia',
+                urls: [],
+                alignment: '',
+            }
+        ],
     }
 })
 
@@ -97,26 +91,6 @@ const user = defineModel('modelValue', {
     .profile__name {
         text-align: center;
         margin: 1.25rem 0px;
-    }
-
-    .profile__socialLinks {
-        display: flex;
-        margin: auto;
-        gap: 8px;
-        justify-content: center;
-
-        .socialLinks__icon {
-            width: 40px;
-            height: 40px;
-        }
-
-        .link__icon {
-            width: 24px;
-            height: 24px;
-            // border-radius: 50%;
-            margin: auto;
-            display: block;
-        }
     }
 }
 </style>

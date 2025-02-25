@@ -32,9 +32,9 @@
             <el-card class="user__card vekoz-card" body-class="card__body card__body--265">
                 <template #header>
                     <div class="vekoz-card-header">
-                        <div>
+                        <!-- <div>
                             個人資料與名片頁
-                        </div>
+                        </div> -->
                         <div>
                             <el-button>
                                 變更基本資料
@@ -89,10 +89,9 @@ import { Cpu, User, View, Message, WarnTriangleFilled, Switch } from '@element-p
 import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 import type { ITemplateDragSouce } from '~/types/eventTemplate';
-import type { IUserTemplate } from '~/types/usetTemplate';
 import type { IUserDesign } from '~/types/userDesign';
 // 主要的模板資料
-const userTemplate = ref<IUserTemplate>({
+const userTemplate = ref<IUser>({
     id: '',
     designs: []
 })

@@ -39,12 +39,14 @@ export interface ITemplateDesign {
     placeAddressRegion?: string, // 第一級行政區
     placeAddress?: string,
     placePublicAccess?: boolean,
-    // 線上地點
-    urlName?: string,
-    urlValue?: string,
     // 票券
     offers?: IOffer[]
     formField?: string,
+    // 線上地點
+    urlName?: string,
+    urlValue?: string,
+    // 社群媒體連結
+    urls?: string[],
 }
 
 

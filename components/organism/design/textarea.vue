@@ -105,21 +105,9 @@ async function handleChange(templateDesign: any) {
 }
 </script>
 <style lang="scss" scoped>
-.formItem {
-    .alignment--center {
-        :dee(.el-textarea__inner) {
-            text-align: center;
-        }
-    }
-}
-
 .formItem--center {
-
-    // .alignment--center {
     :deep(.el-textarea__inner) {
         text-align: center;
     }
-
-    // }
 }
 </style>

@@ -12,7 +12,7 @@
             <img v-else class="label__image" :style="{ width: size, height: size, }" :src="placeholder">
             <img class="label__placeholder" :style="{ width: size, height: size, }" src="./Rectangle1348.png">
             <input v-show="false" class="body__input" autocomplete="off" type="file" accept="image/*"
-                :data-required="required" :data-name="name" @change="handleFiles($event)" />
+                :data-required="required" :data-name="name" @change="handleFiles($event)"></input>
         </label>
     </div>
 </template>
