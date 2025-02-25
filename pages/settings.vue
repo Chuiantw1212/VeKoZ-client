@@ -1,20 +1,31 @@
 <template>
-    <el-row>
-        <div class="user__btnGroup">
+    <el-row class="user__btnGroup" :gutter="20">
+        <el-col :span="4">
             <el-button class="btnGroup__btn" :icon="WarnTriangleFilled">註銷帳號</el-button>
+        </el-col>
+        <el-col :span="4">
             <el-button class="btnGroup__btn" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
+        </el-col>
+        <el-col :span="4">
             <el-button class="btnGroup__btn" :icon="User">登出</el-button>
+        </el-col>
+        <el-col :span="4">
             <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
                 @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
             <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
                 @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
+        </el-col>
+        <el-col :span="4">
             <el-button class="btnGroup__btn" :icon="Message">許願&抱怨</el-button>
+        </el-col>
+        <el-col :span="4">
             <NuxtLink class="btnGroup__btn" to="https://github.com/VeKoZ-tw" target="_blank">
-                <el-button :icon="Cpu">
+                <el-button class="btn__content" :icon="Cpu">
                     開放原始碼
                 </el-button>
             </NuxtLink>
-        </div>
+        </el-col>
+        <!-- </div> -->
     </el-row>
     <el-row class="userTemplate" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
@@ -276,9 +287,6 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 }
 
 .user__btnGroup {
-    display: flex;
-    gap: 8px;
-    width: 100%;
 
     .btnGroup__btn {
         width: 100%;
