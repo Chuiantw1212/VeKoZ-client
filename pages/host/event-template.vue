@@ -24,7 +24,7 @@
                         </div>
                     </template>
                     <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
-                        :onchange="handleDesignChanged" @remove="removeDesign($event)"
+                        :onchange="handleDesignChanged" type="host" @remove="removeDesign($event)"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -47,7 +47,7 @@
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>
-                    <FormDesignDragging :designs="eventTemplate.designs" @dragstart="setTemplateItem($event)"
+                    <FormDesignDragging :model-value="eventTemplate.designs" @dragstart="setTemplateItem($event)"
                         @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()">
                     </FormDesignDragging>
                 </el-card>

@@ -44,7 +44,7 @@
                         </div>
                     </div>
                 </template>
-                <FormTemplateDesign v-model="designs" :isDesigning="true">
+                <FormTemplateDesign v-model="designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
                             @dragover="allowDrop($event)"
@@ -61,8 +61,8 @@
                         請拖曳以下元件 到 指定位置
                     </div>
                 </template>
-                <FormDesignDragging @dragstart="setTemplateItem($event)" @mouseenter="setTemplateItem($event)"
-                    @mouseout="cancelDragging()"></FormDesignDragging>
+                <FormDesignDragging :model-value="designs" type="attendee" @dragstart="setTemplateItem($event)"
+                    @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
         </el-col>
     </el-row>

@@ -191,7 +191,7 @@ async function getEventList() {
         const endDate = form.value.endDate
         endDate?.setHours(24, 0, 0, 0)
         const result = await repoEvent.getEventList(form.value)
-        eventList.value = [...result, ...result,]
+        eventList.value = result
         isLoading.value = false
     }, 500)
 }
