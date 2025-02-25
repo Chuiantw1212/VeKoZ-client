@@ -56,7 +56,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '1. 輸入連結後可新增 2. 點擊icon可刪除'
+        default: '1.輸入社群連結後可新增對應社群的Logo 2.點擊Logo可刪除該連結'
     },
     onchange: {
         type: Function,

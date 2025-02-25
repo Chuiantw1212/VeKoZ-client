@@ -35,20 +35,28 @@
                         <!-- <div>
                             個人資料與名片頁
                         </div> -->
-                        <div>
-                            <el-button>
-                                變更基本資料
-                            </el-button>
-                            <el-button>
+                        <!-- <div> -->
+                        <!-- <el-button>
+                                變更SEO資料
+                            </el-button> -->
+                        <!-- <el-button>
                                 變更背景
                             </el-button>
                             <el-button>
                                 變更文字顏色
-                            </el-button>
-                        </div>
-                        <div>
-                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開"
-                                inactive-text="關閉" />
+                            </el-button> -->
+                        <!-- </div> -->
+                        <el-button>
+                            變更基本資料
+                        </el-button>
+                        <div class="header__ui">
+                            <el-input placeholder="個人化網址">
+                                <template #prefix>
+                                    https://vekoz.org/
+                                </template>
+                            </el-input>
+                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開" inactive-text="關閉"
+                                size="large" />
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">
                                     瀏覽
@@ -57,9 +65,7 @@
                         </div>
                     </div>
                 </template>
-                <div>
-                    <OrganismDesignProfile v-model="userTemplate"></OrganismDesignProfile>
-                </div>
+                <OrganismDesignProfile v-model="userTemplate"></OrganismDesignProfile>
                 <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -256,6 +262,12 @@ function allowDrop(ev: any) {
 
 </script>
 <style lang="scss" scoped>
+.header__ui {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .userTemplate {
     margin-top: 20px;
 

@@ -4,12 +4,8 @@
             <div class="profile__header">
                 <div>
                     <el-button :icon="Share" text circle :disabled="true">
-                        <!-- <el-icon size="32">
-                            <Share />
-                        </el-icon> -->
                     </el-button>
-                    <el-button text circle :disabled="true">
-                        <img class="icon" :src="QrCode">
+                    <el-button text circle :disabled="true" :icon="Menu">
                     </el-button>
                 </div>
                 <el-button :icon="CollectionTag" :disabled="true">
@@ -17,12 +13,8 @@
                 </el-button>
             </div>
         </template>
-        <!-- <AtomAvatarUploader></AtomAvatarUploader> -->
-        <!-- <img class="profile__avatar" src="@/assets/mock/user.jpg"> -->
-        <!-- <h1 class="profile__name">EN Chu</h1> -->
         <div v-if="user.designs">
             <template v-for="(design, index) in user.designs">
-                <!-- {{ design }} -->
                 <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="user.designs[index]"
                     :isDesigning="true" :show-label="false">
 
@@ -42,8 +34,7 @@
     </el-card>
 </template>
 <script setup lang="ts">
-import QrCode from '@/assets/icon/qr-code-sharp.svg'
-import { Share, CollectionTag } from '@element-plus/icons-vue';
+import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { IUser } from '~/types/user';
 const user = defineModel<IUser>('modelValue', {
     type: Object,
