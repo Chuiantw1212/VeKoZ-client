@@ -18,10 +18,14 @@
             </div>
         </template>
         <img class="profile__avatar" src="@/assets/mock/user.jpg">
-        <h1 class="profile__name">EN Chu</h1>
+        <!-- <h1 class="profile__name">EN Chu</h1> -->
         <div v-if="user.designs">
             <template v-for="(design, index) in user.designs">
                 <!-- {{ design }} -->
+                <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+
+                </OrganismDesignHeader1>
                 <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="user.designs[index]"
                     :isDesigning="true" :show-label="false">
                 </OrganismDesignTextarea>
@@ -41,6 +45,11 @@ const user = defineModel<IUser>('modelValue', {
     default: {
         seoName: '',
         designs: [
+            {
+                type: 'header1',
+                value: 'EN Chu',
+                alignment: 'center',
+            },
             {
                 type: 'textarea',
                 value: '',

@@ -91,7 +91,7 @@ function pushNewMedia() {
     renderKey.value = crypto.randomUUID()
 }
 function setDefaultValue() {
-    if (customDesign.value.hasOwnProperty('value')) {
+    if (customDesign.value.hasOwnProperty('urls')) {
         return
     }
     const defaultValue: ITemplateDesign = {

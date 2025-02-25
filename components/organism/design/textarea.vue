@@ -1,7 +1,8 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" class="formItem" :label="customDesign.label" :required="required"
-        :prop="customDesign.formField" @dragstart="emit('dragstart')">
+    <el-form-item v-if="!props.isDesigning" class="formItem"
+        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :label="customDesign.label"
+        :required="required" :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <el-input v-if="customDesign" v-model="customDesign.value" type="textarea" :rows="3" :maxlength="150"
             :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
