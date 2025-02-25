@@ -1,58 +1,70 @@
 <template>
-    <div>
-        <!-- 檢視與編輯用 -->
-        <el-form-item v-if="!props.isDesigning" class="formItem" :label="customDesign.label" :required="required"
-            :prop="customDesign.formField" @dragstart="emit('dragstart')">
-            <!-- <el-input v-if="customDesign" v-model="customDesign.value" type="textarea" :rows="3" :maxlength="150"
-            :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" /> -->
-        </el-form-item>
-        <!-- 樣板編輯專用 -->
-        <MoleculeDesignToolbar v-else-if="customDesign" class="formItem"
-            :class="{ 'formItem--center': customDesign.alignment === 'center' }" :loading="isLoading"
-            :required="required" @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
-            @moveDown="emit('moveDown')">
-            <template v-slot:label>
-                <el-input v-if="props.showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
-                    placeholder="欄位名稱"></el-input>
-            </template>
-            <template v-slot:default>
-                <div class="profile__socialMedia">
-                    <el-button class="socialMedia__icon" text circle>
-                        <img class="link__icon" src="@/assets/icon/email.svg">
-                    </el-button>
-                    <el-button class="socialMedia__icon" text circle>
-                        <img class="link__icon" src="@/assets/icon/facebook-circle.svg">
-                    </el-button>
-                    <el-button class="socialMedia__icon" text circle>
-                        <img class="link__icon" src="@/assets/icon/instagram.svg">
-                    </el-button>
-                    <el-button class="socialMedia__icon" text circle>
-                        <img class="link__icon" src="@/assets/icon/line-logo.svg">
-                    </el-button>
-                    <el-button class="socialMedia__icon" text circle>
+    <!-- 檢視與編輯用 -->
+    <el-form-item v-if="!isDesigning" :label="customDesign.label" :required="required" :prop="customDesign.formField">
+    </el-form-item>
+    <!-- 樣板編輯專用 -->
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required">
+        <template v-slot:label>
+            <el-input v-if="props.showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
+                placeholder="欄位名稱"></el-input>
+        </template>
+        <template v-slot:default>
+            <div class="profile__socialMedia" :key="renderKey">
+                <template v-for="(url, index) in customDesign.urls">
+                    <el-button v-if="url.includes('youtube.com/')" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
                         <img class="link__icon" src="@/assets/icon/youtube.svg">
                     </el-button>
-                    <el-button class="socialMedia__icon" text circle>
+                    <el-button v-else-if="url.includes('facebook.com/')" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
+                        <img class="link__icon" src="@/assets/icon/facebook-circle.svg">
+                    </el-button>
+                    <el-button v-else-if="url.includes('instagram.com/')" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
+                        <img class="link__icon" src="@/assets/icon/instagram.svg">
+                    </el-button>
+                    <el-button v-else-if="url.includes('line.me/ti/')" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
+                        <img class="link__icon" src="@/assets/icon/line-logo.svg">
+                    </el-button>
+                    <el-button v-else-if="url.includes('github.com/')" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
+                        <img class="link__icon" src="@/assets/icon/github.svg">
+                    </el-button>
+                    <el-button v-else-if="validateEmail(url)" class="socialMedia__icon" text circle
+                        @click="removeUrl(index)">
+                        <img class="link__icon" src="@/assets/icon/email.svg">
+                    </el-button>
+                    <el-button v-else class="socialMedia__icon" text circle @click="removeUrl(index)">
                         <img class="link__icon" src="@/assets/icon/web.svg">
                     </el-button>
-                </div>
-                <!-- <el-input v-model="customDesign.value" type="textarea" :rows="3" :maxlength="150" :show-word-limit="true"
-                :placeholder="placeholder" :disabled="disabled" /> -->
-            </template>
-        </MoleculeDesignToolbar>
-    </div>
+                </template>
+            </div>
+
+            <div class="profile__inputGroup">
+                <el-input v-model="socialMediaUrl" :placeholder="placeholder"></el-input>
+                <el-button :icon="Plus" @click="pushNewMedia()">
+
+                </el-button>
+            </div>
+        </template>
+    </MoleculeDesignToolbar>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue'
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import { defineEmits, defineModel, defineProps } from 'vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
+const renderKey = ref<string>(crypto.randomUUID())
 // const repoUI = useRepoUI()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
+    required: true,
     default: {
         type: 'socialMedia',
     }
 })
+const socialMediaUrl = ref<string>('')
 
 const props = defineProps({
     id: {
@@ -73,7 +85,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入描述'
+        default: '1. 輸入連結後可新增 2. 點擊icon可刪除'
     },
     onchange: {
         type: Function,
@@ -90,23 +102,49 @@ const props = defineProps({
 })
 
 // Hooks
-onMounted(() => {
-    setDefaultValue()
-})
-watch(() => customDesign.urls, (newValue) => {
-    setDefaultValue()
-    handleChange(newValue)
-}, { deep: true })
+// onMounted(() => {
+//     setDefaultValue()
+// })
+// watch(() => customDesign.value, (newValue) => {
+//     setDefaultValue()
+//     handleChange(newValue)
+// }, { deep: true })
 
 // Methods
+function removeUrl(index: number) {
+    if (customDesign.value.urls) {
+        console.log({
+            index
+        })
+        customDesign.value.urls.splice(index, 1)
+        // customDesign.value.urls = []
+        renderKey.value = crypto.randomUUID()
+        console.log(customDesign.value.urls)
+    }
+}
+function validateEmail(email: string) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+function pushNewMedia() {
+    if (!customDesign.value.urls) {
+        customDesign.value.urls = []
+    }
+    customDesign.value.urls.push(socialMediaUrl.value)
+    socialMediaUrl.value = ''
+    // const newSocialMedia = socialMediaUrl.value
+    // if (newSocialMedia.includes('instagram.com/')) {
+    // }
+}
+
 function setDefaultValue() {
-    if (customDesign?.value.hasOwnProperty('value')) {
+    if (customDesign.value.hasOwnProperty('value')) {
         return
     }
     const defaultValue: ITemplateDesign = {
         type: 'socialMedia',
         label: '',
-        value: '',
+        urls: [],
     }
     if (props.formField) {
         defaultValue.formField = props.formField
@@ -142,5 +180,11 @@ async function handleChange(templateDesign: any) {
         margin: auto;
         display: block;
     }
+}
+
+.profile__inputGroup {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 </style>

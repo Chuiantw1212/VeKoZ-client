@@ -19,15 +19,15 @@
         </template>
         <img class="profile__avatar" src="@/assets/mock/user.jpg">
         <h1 class="profile__name">EN Chu</h1>
-        <div>
+        <div v-if="user.designs">
             <template v-for="(design, index) in user.designs">
-                {{ design }}
+                <!-- {{ design }} -->
                 <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="user.designs[index]"
                     :isDesigning="true" :show-label="false">
                 </OrganismDesignTextarea>
-                <!-- <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="user.designs[index]"
+                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" :model-value="user.designs[index]"
                     :isDesigning="true" :show-label="false">
-                </OrganismDesignSocialMedia> -->
+                </OrganismDesignSocialMedia>
             </template>
         </div>
     </el-card>

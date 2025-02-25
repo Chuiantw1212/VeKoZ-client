@@ -12,6 +12,8 @@ export interface IEventTemplate {
 }
 
 export interface ITemplateDesign {
+    // 社群媒體連結
+    urls?: string[],
     id?: string,
     // 連動用id
     eventId?: string, // 已公開的event才會有, 編輯中或是樣板不會有
@@ -45,8 +47,6 @@ export interface ITemplateDesign {
     // 線上地點
     urlName?: string,
     urlValue?: string,
-    // 社群媒體連結
-    urls?: string[],
 }
 
 

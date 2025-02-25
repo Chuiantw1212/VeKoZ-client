@@ -4,8 +4,8 @@ export interface IPatchOffer {
 }
 
 export interface IOffer {
-    id: string,
-    description: string,
+    id?: string,
+    description?: string,
     name: string,
     inventoryMaxValue: any,
     price: any,

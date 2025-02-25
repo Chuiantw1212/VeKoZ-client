@@ -35,8 +35,8 @@ import type { IOrganization } from '~/types/organization';
 const repoUI = useRepoUI()
 const repoOffer = useRepoOffer()
 const repoOrganization = useRepoOrganization()
-const ongoingOfferGroups = ref<{ [key: string]: IOffer[] }>({})
-const endedOfferGroups = ref<{ [key: string]: IOffer[] }>({})
+const ongoingOfferGroups = ref<any>({})
+const endedOfferGroups = ref<any>({})
 const organizationList = ref<IOrganization[]>([])
 // Hooks
 onMounted(() => {
