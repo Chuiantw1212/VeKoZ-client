@@ -287,15 +287,10 @@ function allowDrop(ev: any) {
 }
 
 function setTemplateItem(itemMeta: ITemplateDesign) {
-    console.log({
-        itemMeta
-    })
     Object.assign(templateTemp.value.item, itemMeta)
 }
 function cancelDragging() {
-    console.log('cancelDragging', templateTemp.value)
     templateTemp.value.item.type = ''
-
 }
 
 async function getEventTemplate(templateId: string) {

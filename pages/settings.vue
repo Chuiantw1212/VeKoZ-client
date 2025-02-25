@@ -3,19 +3,22 @@
         <div class="user__btnGroup">
             <el-button class="btnGroup__btn" :icon="WarnTriangleFilled">註銷帳號</el-button>
             <el-button class="btnGroup__btn" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
-            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
-            @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
-            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
-            @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
             <el-button class="btnGroup__btn" :icon="User">登出</el-button>
+            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
+                @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
+            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
+                @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
             <el-button class="btnGroup__btn" :icon="Message">許願&抱怨</el-button>
-            <el-button class="btnGroup__btn" :icon="Cpu">開放原始碼</el-button>
-
+            <NuxtLink class="btnGroup__btn" to="https://github.com/VeKoZ-tw" target="_blank">
+                <el-button :icon="Cpu">
+                    開放原始碼
+                </el-button>
+            </NuxtLink>
         </div>
     </el-row>
     <el-row class="userTemplate" :gutter="20">
         <el-col :span="repoUI.isMedium ? 16 : 24">
-            <el-card class="venonia-card" body-class="card__body card__body--205">
+            <el-card class="user__card venonia-card" body-class="card__body card__body--265">
                 <template #header>
                     <div class="venonia-card-header">
                         <div>
@@ -32,74 +35,33 @@
                 </template>
                 <FormTemplateDesign v-model="designs" :isDesigning="true">
                     <template #default="defaultProps">
-                        <div class="user__card__designItem">
+                        <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
+                            @dragover="allowDrop($event)"
+                            :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
                         </div>
                     </template>
                 </FormTemplateDesign>
             </el-card>
-
-            <!-- <el-card class="user__card">
-                <FormUserProfile :model-value="userForm">
-
-                </FormUserProfile>
-            </el-card> -->
-            <!-- <el-divider>
-                歷史活動紀錄
-            </el-divider>
-            <el-row :gutter="20" class="index__eventList">
-                <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
-                    <MoleculeVenoniaCard class="index__card">
-                        <template #default>
-                            <NuxtLink to="/event/123">
-                                <img v-if="item.banner" :src="item.banner" style="width: 100%" />
-                            </NuxtLink>
-                        </template>
-                        <template #footer>
-                            <span>
-                                2024/11/01
-                            </span>
-                            <span>
-                                7.8
-                                <el-icon>
-                                    <StarFilled />
-                                </el-icon>
-                            </span>
-                        </template>
-                    </MoleculeVenoniaCard>
-                </el-col>
-            </el-row> -->
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
-            <el-card class="venonia-card" body-class="card__body card__body--205">
+            <el-card class="venonia-card" body-class="card__body card__body--265">
                 <template #header>
                     <div class="venonia-card-header">
                         請拖曳以下元件 到 指定位置
                     </div>
                 </template>
-                <FormDesignDragging></FormDesignDragging>
+                <FormDesignDragging @dragstart="setTemplateItem($event)" @mouseenter="setTemplateItem($event)"
+                    @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
         </el-col>
     </el-row>
-    <!-- <el-card>
-        <el-divider>
-            許願與抱怨
-        </el-divider>
-        <p>VeKoZ為EN Chu獨立開發。</p>
-        <p>打開掃Line即可聯絡作者本人。</p>
-        <p>開發進度歡迎到Github查看。</p>
-        <el-divider>
-            系統功能
-        </el-divider>
-        <div class="user__delete">
-            <el-button :style="{ 'width': '100%' }" type="danger">帳號註銷</el-button>
-        </div>
-    </el-card> -->
 </template>
 <script setup lang="ts">
 import { Cpu, User, View, Message, WarnTriangleFilled, Switch } from '@element-plus/icons-vue';
 import type { IEventFromList } from '~/types/event';
-import type { ITemplateDesign } from '~/types/eventTemplate';
+import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate';
 import type { IUser } from '~/types/user';
+import type { ITemplateDragSouce } from '~/types/eventTemplate';
 const designs = ref<ITemplateDesign[]>([
     {
         "type": "banner",
@@ -158,6 +120,19 @@ const userForm = ref<IUser>({
     seoName: '',
     seoTitle: '',
 })
+const templateTemp = ref<ITemplateDragSouce>({
+    item: {
+        type: '', // 拖曳中的判斷欄位
+        id: '', // 是否為新增的判斷欄位
+    },
+    index: -1
+})
+// 主要的模板資料
+const userTemplate = ref<IEventTemplate>({
+    id: '',
+    designs: [] as ITemplateDesign[]
+})
+
 // Hooks
 onMounted(async () => {
     isLoading.value = true
@@ -183,6 +158,14 @@ watch(() => repoUser.userInfo, (newValue) => {
 }, { immediate: true, })
 
 // Methods
+function setTemplateItem(itemMeta: ITemplateDesign) {
+    Object.assign(templateTemp.value.item, itemMeta)
+}
+
+function cancelDragging() {
+    templateTemp.value.item.type = ''
+}
+
 function getPersonalLink() {
     if (import.meta.client) {
         const { origin } = window.location
@@ -216,11 +199,50 @@ function updateUserInfo() {
     })
 }
 
+async function insertTemplate(ev: Event, destinationIndex = 0) {
+    ev.preventDefault();
+    if (!templateTemp.value.item.type) {
+        alert('系統BUG, 元件類型遺失請重新拖曳。')
+    }
+    // 插入元素
+    const templateDesign: ITemplateDesign = JSON.parse(JSON.stringify(templateTemp.value.item)) // 必須深拷貝，不然會在清除站存資料時影響到模板
+    // 先更新資料庫再更新畫面
+    const hasSource = templateTemp.value.index !== -1
+    const sourceIndex = Number(templateTemp.value.index)
+    if (hasSource) {
+        // 屬於原有模板拖曳
+        userTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
+        // return
+        // 刪除原本位置的的模板
+        if (destinationIndex < sourceIndex) {
+            userTemplate.value.designs.splice(sourceIndex + 1, 1)
+        } else {
+            userTemplate.value.designs.splice(sourceIndex, 1)
+        }
+    } else {
+        // 屬於新增的模板設計
+        const designId = await repoEventTemplate.postEventTemplateDesign({
+            ...templateDesign,
+            templateId: userTemplate.value.id,
+        })
+        templateDesign.id = designId
+        userTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
+    }
+    // return
+    // 更新模板順序
+    repoEventTemplate.patchTemplateDesignIds(userTemplate.value)
+
+    // Reset flags
+    templateTemp.value.item.id = '' // 用來判斷是否為新增的欄位
+    templateTemp.value.item.type = '' // 用來判斷是否為拖曳中
+    templateTemp.value.index = -1
+    isCardLoading.value = false
+}
+
 </script>
 <style lang="scss" scoped>
 .userTemplate {
     margin-top: 20px;
-    // padding-bottom: 60px; // footer menu height
 
     .user__card {
 
