@@ -16,6 +16,7 @@ export interface IUser {
     // SEO使用
     seoName?: string,
     seoTitle?: string,
+    isPublic: false,
 }
 
 export interface IUserPreference {

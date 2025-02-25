@@ -36,6 +36,19 @@
                             個人資料與名片頁
                         </div>
                         <div>
+                            <el-button>
+                                變更基本資料
+                            </el-button>
+                            <el-button>
+                                變更背景
+                            </el-button>
+                            <el-button>
+                                變更文字顏色
+                            </el-button>
+                        </div>
+                        <div>
+                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開"
+                                inactive-text="關閉" />
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">
                                     瀏覽
@@ -44,9 +57,9 @@
                         </div>
                     </div>
                 </template>
-                <OrganismDesignBackground>
+                <div>
                     <OrganismDesignProfile></OrganismDesignProfile>
-                </OrganismDesignBackground>
+                </div>
                 <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -99,6 +112,7 @@ const userForm = ref<IUser>({
     description: '',
     seoName: '',
     seoTitle: '',
+    isPublic: false,
 })
 const templateTemp = ref<ITemplateDragSouce>({
     item: {

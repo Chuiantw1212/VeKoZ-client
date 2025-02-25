@@ -1,15 +1,17 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
+    <el-form-item v-if="!props.isDesigning" class="formItem" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <el-input v-if="customDesign" v-model="customDesign.value" type="textarea" :rows="3" :maxlength="150"
             :show-word-limit="true" :placeholder="placeholder" :disabled="disabled" />
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" class="formItem"
+        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
-            <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
+            <el-input v-if="props.showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"
+                placeholder="欄位名稱"></el-input>
         </template>
         <template v-slot:default>
             <el-input v-model="customDesign.value" type="textarea" :rows="3" :maxlength="150" :show-word-limit="true"
@@ -58,6 +60,14 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    // alignment: {
+    //     type: String,
+    //     defualt: 'left'
+    // },
+    showLabel: {
+        type: Boolean,
+        default: true,
+    }
 })
 
 // Hooks
@@ -94,3 +104,22 @@ async function handleChange(templateDesign: any) {
     })
 }
 </script>
+<style lang="scss" scoped>
+.formItem {
+    .alignment--center {
+        :dee(.el-textarea__inner) {
+            text-align: center;
+        }
+    }
+}
+
+.formItem--center {
+
+    // .alignment--center {
+    :deep(.el-textarea__inner) {
+        text-align: center;
+    }
+
+    // }
+}
+</style>

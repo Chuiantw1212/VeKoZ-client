@@ -1,12 +1,13 @@
 <template>
-    <label class="background" :style="{ 'background-image': getImageSrc() }">
+    <label class="background" :style="{ 'background-image': getImageSrc() }" :for="id">
+        <input :id="id" autocomplete="off" type="file" accept="image/*" @change="handleFiles($event)">
         <slot></slot>
-        <input v-show="false" autocomplete="off" type="file" accept="image/*" @change="handleFiles($event)">
     </label>
 </template>
 <script setup lang="ts">
 import { Buffer } from 'buffer/'
 import placeholderImage from './placeholder.png'
+const id = ref<string>(crypto.randomUUID())
 const localValue = defineModel('modelValue', {
     default: function () {
         return {
@@ -59,7 +60,5 @@ async function handleFiles(event: any) {
 }
 </script>
 <style lang="scss" scoped>
-.background {
-    
-}
+.background {}
 </style>

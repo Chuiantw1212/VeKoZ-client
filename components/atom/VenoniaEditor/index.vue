@@ -64,7 +64,14 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false,
-    }
+    },
+    /**
+     * https://ckeditor.com/docs/ckeditor5/latest/features/text-alignment.html#common-api
+     */
+    alignment: {
+        type: String,
+        default: 'justify' as 'left' | 'right' | 'center' | 'justtify'
+    },
 })
 
 watch(() => props.disabled, (newValue) => {
@@ -110,6 +117,12 @@ async function initializeCKEditor() {
         let newValue = editor.getData()
         localValue.value = newValue
     })
+
+    // 附加預設align
+    if (props.alignment) {
+        editor.execute('alignment', { value: props.alignment });
+    }
+
 
     // 紀錄instance
     editorInstance.value = markRaw(editor)

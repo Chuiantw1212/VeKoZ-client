@@ -42,6 +42,10 @@ const props = defineProps({
     required: {
         type: Boolean,
         default: false
+    },
+    showLabel: {
+        type: Boolean,
+        default: true
     }
 })
 </script>

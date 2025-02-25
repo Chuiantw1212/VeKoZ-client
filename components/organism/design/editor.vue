@@ -3,7 +3,7 @@
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
             <AtomVenoniaEditor v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
-                :disabled="disabled">
+                :alignment="alignment" :disabled="disabled">
             </AtomVenoniaEditor>
         </el-form-item>
         <!-- 樣板編輯專用 -->
@@ -12,7 +12,7 @@
             @moveDown="emit('moveDown')">
             <template v-slot:default>
                 <AtomVenoniaEditor v-model="customDesign.value" :disabled="disabled" :placeholder="placeholder"
-                    @dragstart="emit('dragstart')">
+                    :alignment="alignment" @dragstart="emit('dragstart')">
                 </AtomVenoniaEditor>
             </template>
         </MoleculeDesignToolbar>
@@ -63,6 +63,13 @@ const props = defineProps({
     formField: {
         type: String,
         default: '',
+    },
+    /**
+     * https://ckeditor.com/docs/ckeditor5/latest/features/text-alignment.html#common-api
+     */
+    alignment: {
+        type: String,
+        default: 'justify' as 'left' | 'right' | 'center' | 'justify'
     },
 })
 
