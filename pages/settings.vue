@@ -1,26 +1,26 @@
 <template>
     <el-row class="user__btnGroup" :gutter="20">
         <el-col :span="4">
-            <el-button class="btnGroup__btn" :icon="WarnTriangleFilled">註銷帳號</el-button>
+            <el-button class="btnGroup__item" :icon="WarnTriangleFilled">註銷帳號</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button class="btnGroup__btn" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
+            <el-button class="btnGroup__item" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button class="btnGroup__btn" :icon="User">登出</el-button>
+            <el-button class="btnGroup__item" :icon="User">登出</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__btn"
+            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__item"
                 @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
-            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__btn"
+            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__item"
                 @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
         </el-col>
         <el-col :span="4">
-            <el-button class="btnGroup__btn" :icon="Message">許願&抱怨</el-button>
+            <el-button class="btnGroup__item" :icon="Message">許願&抱怨</el-button>
         </el-col>
         <el-col :span="4">
-            <NuxtLink class="btnGroup__btn" to="https://github.com/VeKoZ-tw" target="_blank">
-                <el-button class="btn__content" :icon="Cpu">
+            <NuxtLink class="btnGroup__item" to="https://github.com/VeKoZ-tw" target="_blank">
+                <el-button class="item__btn" :icon="Cpu">
                     開放原始碼
                 </el-button>
             </NuxtLink>
@@ -288,8 +288,13 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 
 .user__btnGroup {
 
-    .btnGroup__btn {
+    .btnGroup__item {
         width: 100%;
+        display: flex;
+
+        .item__btn {
+            width: 100%;
+        }
     }
 }
 </style>
