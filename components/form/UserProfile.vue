@@ -13,25 +13,26 @@
                 </el-button>
             </div>
         </template>
-        <div v-if="user.designs">
-            <template v-for="(design, index) in user.designs">
-                <!-- <OrganismDesignBanner v-if="design.type === 'banner'" v-model="user.designs[index]" :isDesigning="true"
-                    :show-label="false"></OrganismDesignBanner> -->
-                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'">
-
+        <div v-if="userTemplate.designs">
+            <template v-for="(design, index) in userTemplate.designs">
+                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'" :onchange="onchange"
+                    :required="design.required" :isDesigning="props.isDesigning" :disabled="props.disabled"
+                    :show-label="false" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
+                    @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
                 </OrganismDesignEventHistory>
-                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="user.designs[index]"
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
                     :isDesigning="true" :show-label="false">
                 </OrganismDesignAvatarUploader>
-                <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="user.designs[index]"
+                <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="userTemplate.designs[index]"
                     :isDesigning="true" :show-label="false">
 
                 </OrganismDesignHeader1>
-                <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="user.designs[index]"
+                <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="userTemplate.designs[index]"
                     :isDesigning="true" :show-label="false">
                 </OrganismDesignTextarea>
-                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" :model-value="user.designs[index]"
-                    :isDesigning="true" :show-label="false">
+                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'"
+                    :model-value="userTemplate.designs[index]" :isDesigning="true" :show-label="false">
                 </OrganismDesignSocialMedia>
             </template>
         </div>
@@ -39,17 +40,120 @@
 </template>
 <script setup lang="ts">
 import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
+import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
-const user = defineModel<IUser>('modelValue', {
+
+const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
+const userTemplate = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
         seoName: '',
         designs: [],
-    }
+    },
 })
 
+const props = defineProps({
+    isDesigning: {
+        type: Boolean,
+        default: false
+    },
+    onchange: {
+        type: Function,
+        default: () => { }
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+})
+
+const formRef = ref<FormInstance>()
+const formModel = ref<{ [key: string]: any }>({})
+const formRules = ref<{ [key: string]: any }>({})
+
+// // Hooks
+// watch(() => templateDesigns.value, () => {
+//     templateDesigns.value.forEach(design => {
+//         if (design.formField) {
+//             switch (design.formField) {
+//                 case 'organizer': {
+//                     formModel.value[design.formField] = design.organizationId
+//                     break;
+//                 }
+//                 case 'performers': {
+//                     formModel.value[design.formField] = design.memberIds
+//                     break;
+//                 }
+//                 case 'dates':
+//                 case 'name':
+//                 case 'banner':
+//                 default: {
+//                     formModel.value[design.formField] = design.value
+//                 }
+//             }
+//             formRules.value[design.formField] = {
+//                 required: true,
+//                 message: `${design.label}為必填`
+//             }
+//         }
+//     })
+// }, { immediate: true, deep: true })
+
+// methods
+async function validate() {
+    return await formRef.value?.validate()
+}
+function handleRemove(index: number) {
+    if (!userTemplate.value.designs) {
+        return
+    }
+    const item = userTemplate.value.designs[index]
+    emit('remove', {
+        item,
+        index,
+    })
+}
+function handleDragStart(index: number) {
+    if (!userTemplate.value.designs) {
+        return
+    }
+    const item = userTemplate.value.designs[index]
+    emit('dragstart', {
+        item: JSON.parse(JSON.stringify(item)),
+        index,
+    })
+}
+function handleUp(index: number) {
+    if (!userTemplate.value.designs) {
+        return
+    }
+    const removedElements = userTemplate.value.designs.splice(index, 1)
+    const target = removedElements[0]
+    if (target) {
+        const newIndex = Math.max(0, index - 1)
+        userTemplate.value.designs.splice(newIndex, 0, target)
+    }
+}
+function handleDown(index: number) {
+    if (!userTemplate.value.designs) {
+        return
+    }
+    const removedElements = userTemplate.value.designs.splice(index, 1)
+    const target = removedElements[0]
+    if (target) {
+        const newIndex = Math.min(userTemplate.value.designs.length, index + 1)
+        userTemplate.value.designs.splice(newIndex, 0, target)
+    }
+}
+defineExpose({
+    validate,
+})
 </script>
 <style lang="scss" scoped>
+.designForm {
+    width: 100%;
+}
+
 .icon {
     height: 24px;
     width: 24px;
