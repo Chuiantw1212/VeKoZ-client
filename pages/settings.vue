@@ -87,7 +87,7 @@
                     @dragstart="setTemplateItem($event)" @mouseenter="setTemplateItem($event)"
                     @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
-        </el-col>
+        </el-col> 
     </el-row>
 </template>
 <script setup lang="ts">
@@ -100,11 +100,6 @@ import type { IUserDesign } from '~/types/userDesign';
 const userTemplate = ref<IUser>({
     id: '',
     designs: [
-        {
-            type: 'banner',
-            value: '',
-            required: true,
-        },
         {
             type: 'avatar',
             value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
@@ -127,7 +122,12 @@ const userTemplate = ref<IUser>({
             urls: [],
             alignment: '',
             required: true,
-        }
+        },
+        {
+            type: 'eventHostHistory',
+            value: 4,
+            // required: true,
+        },
     ]
 })
 const isLoading = ref<boolean>(false)

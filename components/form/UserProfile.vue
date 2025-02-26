@@ -15,8 +15,11 @@
         </template>
         <div v-if="user.designs">
             <template v-for="(design, index) in user.designs">
-                <OrganismDesignBanner v-if="design.type === 'banner'" v-model="user.designs[index]" :isDesigning="true"
-                    :show-label="false"></OrganismDesignBanner>
+                <!-- <OrganismDesignBanner v-if="design.type === 'banner'" v-model="user.designs[index]" :isDesigning="true"
+                    :show-label="false"></OrganismDesignBanner> -->
+                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'">
+
+                </OrganismDesignEventHistory>
                 <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="user.designs[index]"
                     :isDesigning="true" :show-label="false">
                 </OrganismDesignAvatarUploader>
