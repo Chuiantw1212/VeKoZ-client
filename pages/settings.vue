@@ -96,14 +96,14 @@
             </el-card>
         </el-col>
     </el-row>
-    <AtomVekozDialog v-model="isDialogOpen">
+    <AtomVekozDialog v-model="isPrivateInfoOpen">
         <template #header>
             基本資料
         </template>
-        <FormUserPrivateInfo v-if="isDialogOpen" :model-value="userForm">
+        <FormUserPrivateInfo v-if="isPrivateInfoOpen" v-model="userPrivateInfo">
         </FormUserPrivateInfo>
         <template #footer>
-            <el-button @click="updateUserPrivateInfo">
+            <el-button v-loading="isLoading" @click="confirmUserPrivateInfo">
                 確認
             </el-button>
         </template>
@@ -116,7 +116,7 @@ import type { IUser } from '~/types/user';
 import type { ITemplateDragSouce } from '~/types/eventTemplate';
 import type { IUserDesign } from '~/types/userDesign';
 
-const isDialogOpen = ref<boolean>(false)
+const isPrivateInfoOpen = ref<boolean>(false)
 
 // 主要的模板資料
 const userForm = ref<IUser>({
@@ -162,7 +162,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
 // watch(() => userForm.value, () => {
-//     updateUserPrivateInfo()
+//     confirmUserPrivateInfo()
 // }, { deep: true, })
 
 watch(() => repoUser.userInfo, (newValue) => {
@@ -172,14 +172,29 @@ watch(() => repoUser.userInfo, (newValue) => {
 
 // Methods
 const userPrivateInfo = ref<{
+    id?: string,
     email?: string,
     name?: string,
 }>({})
 
 function openPrivateInfo() {
-    isDialogOpen.value = true
+    isPrivateInfoOpen.value = true
+    userPrivateInfo.value.id = userForm.value.id ?? ''
     userPrivateInfo.value.email = userForm.value.email ?? ''
     userPrivateInfo.value.name = userForm.value.name ?? ''
+}
+
+async function confirmUserPrivateInfo() {
+    isLoading.value = true
+    delete userPrivateInfo.value.email
+    await repoUser.patchUser(userPrivateInfo.value)
+    Object.assign(userForm.value, userPrivateInfo.value)
+    const header1Design = userForm.value.designs?.find(design => design.formField === 'name')
+    if (header1Design) {
+        header1Design.value = userPrivateInfo.value.name
+    }
+    isLoading.value = false
+    isPrivateInfoOpen.value = false
 }
 
 function initializeUserForm(newValue: IUser) {
@@ -200,6 +215,7 @@ function initializeUserForm(newValue: IUser) {
                 value: 'EN Chu',
                 alignment: 'center',
                 required: true,
+                formField: 'name',
             },
             {
                 type: 'textarea',
@@ -265,13 +281,6 @@ async function getEventList() {
         limit: 4,
     })
     eventList.value = result
-}
-
-async function updateUserPrivateInfo() {
-    isLoading.value = true
-    delete userPrivateInfo.value.email
-    await repoUser.patchUser(userPrivateInfo.value)
-    isLoading.value = false
 }
 
 async function insertTemplate(ev: Event, destinationIndex = 0) {

@@ -1,29 +1,27 @@
 <template>
-    <div>
-        <el-dialog class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
-            :show-close="showClose" :lock-scroll="true" :align-center="true">
-            <template #header>
-                <div class="venonia-dialog-header">
-                    <div>
-                        <slot name="header"></slot>
-                    </div>
-                    <div class="headerUI">
-                        <slot name="headerUI"></slot>
-                    </div>
+    <el-dialog v-loading="loading" class="venonia-dialog" v-model="dialogVisible" :title="props.title" :width="width"
+        :show-close="showClose" :lock-scroll="true" :align-center="true">
+        <template #header>
+            <div class="venonia-dialog-header">
+                <div>
+                    <slot name="header"></slot>
                 </div>
-            </template>
-            <template #default>
-                <div class="venonia-dialog-body">
-                    <slot name="default"></slot>
+                <div class="headerUI">
+                    <slot name="headerUI"></slot>
                 </div>
-            </template>
-            <template #footer>
-                <div class="venonia-dialog-footer">
-                    <slot name="footer"></slot>
-                </div>
-            </template>
-        </el-dialog>
-    </div>
+            </div>
+        </template>
+        <template #default>
+            <div class="venonia-dialog-body">
+                <slot name="default"></slot>
+            </div>
+        </template>
+        <template #footer>
+            <div class="venonia-dialog-footer">
+                <slot name="footer"></slot>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 <script setup lang="ts">
 const repoUI = useRepoUI()
@@ -39,10 +37,6 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
-    loading: {
-        type: Boolean,
-        default: false,
-    }
 })
 const width = computed(() => {
     /**

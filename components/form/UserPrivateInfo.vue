@@ -34,7 +34,6 @@
     </el-form>
 </template>
 <script setup lang="ts">
-import { CircleCheck, CircleClose } from '@element-plus/icons-vue';
 import type { IUser } from '~/types/user';
 const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
