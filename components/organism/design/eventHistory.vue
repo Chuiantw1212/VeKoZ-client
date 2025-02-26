@@ -6,13 +6,14 @@
     <MoleculeDesignToolbar>
         <el-row :gutter="20" class="index__eventList">
             <el-col v-for="(item) in eventList" :span="columnSpan" class="index__row">
-                <MoleculeVenoniaCard class="index__card">
+                <MoleculeEventCard :model-value="item">
+
+                </MoleculeEventCard>
+                <!-- <MoleculeVenoniaCard class="index__card">
                     <template #default>
-                        <!-- <NuxtLink :to="`/event/${item.id}`" :disbaled="true"> -->
                         <img :src="item.banner" style="width: 100%" />
-                        <!-- </NuxtLink> -->
                     </template>
-                    <template #footer>
+<template #footer>
                         <span>
                             2024/11/01
                         </span>
@@ -23,7 +24,7 @@
                             </el-icon>
                         </span>
                     </template>
-                </MoleculeVenoniaCard>
+</MoleculeVenoniaCard> -->
             </el-col>
         </el-row>
     </MoleculeDesignToolbar>
@@ -31,10 +32,12 @@
 <script setup lang="ts">
 import type { IEventFromList } from '~/types/event'
 import type { ITemplateDesign } from '~/types/eventTemplate'
+
+const emit = defineEmits(['dragstart'])
 const isLoading = ref<boolean>(false)
 const repoEvent = useRepoEvent()
 const eventList = ref<IEventFromList[]>([])
-const columnSpan = ref<number>(8)
+const columnSpan = ref<number>(24)
 const repoUI = useRepoUI()
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
