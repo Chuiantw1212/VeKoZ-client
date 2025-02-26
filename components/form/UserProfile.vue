@@ -15,24 +15,36 @@
         </template>
         <div v-if="userTemplate.designs">
             <template v-for="(design, index) in userTemplate.designs">
-                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'" :onchange="onchange"
-                    :required="design.required" :isDesigning="props.isDesigning" :disabled="props.disabled"
-                    :show-label="false" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
-                    @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
+                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'"
+                    v-model="userTemplate.designs[index]" :onchange="onchange" :required="design.required"
+                    :isDesigning="props.isDesigning" :disabled="props.disabled" :show-label="false"
+                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
+                    @mouseout="emit('mouseout')">
                 </OrganismDesignEventHistory>
                 <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
-                    :isDesigning="true" :show-label="false">
+                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
                 </OrganismDesignAvatarUploader>
                 <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="userTemplate.designs[index]"
-                    :isDesigning="true" :show-label="false">
-
+                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
                 </OrganismDesignHeader1>
                 <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="userTemplate.designs[index]"
-                    :isDesigning="true" :show-label="false">
+                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
                 </OrganismDesignTextarea>
-                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'"
-                    :model-value="userTemplate.designs[index]" :isDesigning="true" :show-label="false">
+                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
+                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
                 </OrganismDesignSocialMedia>
             </template>
         </div>
