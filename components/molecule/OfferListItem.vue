@@ -60,7 +60,7 @@
             <!-- <el-row :gutter="20">
                 <el-col :span="formFieldSpan">
                     <el-form-item label="退票方法">
-                        <el-input v-model="groupOffers[0].merchantReturnPolicy" placeholder="將顯示在購票畫面" :maxlength="150"
+                        <el-input v-model="groupOffers[0].merchantReturnPolicy" placeholder="將顯示在購票畫面" :maxlength="90"
                         :show-word-limit="true" type="textarea" :rows="3"></el-input>
                     </el-form-item>
                 </el-col>
@@ -72,7 +72,7 @@
             <el-descriptions-item label="數量">{{ offer.inventoryValue }} / {{ offer.inventoryMaxValue
             }}</el-descriptions-item>
             <el-descriptions-item :colspan="2" label="描述">
-                <el-input v-model="offer.description" placeholder="將顯示在購票畫面" :maxlength="150" :show-word-limit="true"
+                <el-input v-model="offer.description" placeholder="將顯示在購票畫面" :maxlength="90" :show-word-limit="true"
                     type="textarea" :rows="3" @change="patchOffer(offer)"></el-input>
             </el-descriptions-item>
         </el-descriptions>

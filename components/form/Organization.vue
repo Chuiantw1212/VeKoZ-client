@@ -38,7 +38,7 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="描述">
-                    <el-input v-model="organization.description" :maxlength="150" :rows="3" type="textarea"
+                    <el-input v-model="organization.description" :maxlength="90" :rows="3" type="textarea"
                         :show-word-limit="true" placeholder="請輸入"></el-input>
                 </el-form-item>
             </el-col>
@@ -61,7 +61,7 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="Google 日曆">
-                    <ElInput v-model="organization.googleCalendarId" :maxlength="150" :show-word-limit="true"
+                    <ElInput v-model="organization.googleCalendarId" :maxlength="90" :show-word-limit="true"
                         placeholder="請輸入你為這個組織建立的 Google 日曆 ID">
                     </ElInput>
                 </el-form-item>

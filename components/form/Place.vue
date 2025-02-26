@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item label="詳細地址">
             <el-input v-model="form.address" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
-                :maxlength="150"></el-input>
+                :maxlength="90"></el-input>
         </el-form-item>
         <!-- <el-col>
             <el-form-item :span="12" label="地址能見度">

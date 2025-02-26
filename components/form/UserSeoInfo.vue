@@ -34,7 +34,7 @@
         <!-- <el-row>
             <el-col :span="24">
                 <el-form-item label="名片頁描述">
-                    <el-input v-model="userForm.description" :maxlength="150" :show-word-limit="true" :disabled="true">
+                    <el-input v-model="userForm.description" :maxlength="90" :show-word-limit="true" :disabled="true">
                         <template #prefix>
                             請到樣板編輯修改文字~~
                         </template>
