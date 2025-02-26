@@ -80,14 +80,14 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUser(user: IUser): Promise<boolean> {
-        const response = await defaultApi.authRequest(`/user/${user.id}`, {
+        const response = await defaultApi.authRequest(`/user`, {
             method: 'PATCH',
             body: user,
         })
         return response
     }
     async function patchUserSeoName(user: IUser): Promise<any> {
-        const result = await defaultApi.authRequest(`/user/${user.id}/seo-name`, {
+        const result = await defaultApi.authRequest(`/user/seo-name`, {
             method: 'PATCH',
             body: user,
         })
