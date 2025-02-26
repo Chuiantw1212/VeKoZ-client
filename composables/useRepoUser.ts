@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
 import useVenoniaApi from './useVenoniaApi'
 import type { IUser, IUserPreference, UserType } from '~/types/user'
+import type { IUserDesign } from '~/types/userDesign'
 
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
@@ -117,6 +118,13 @@ export default defineStore('user', () => {
         })
         return response.body
     }
+    async function patchUserDesign(design: IUserDesign) {
+        const response = await defaultApi.authRequest(`/user/design/${design.id}`, {
+            method: 'PATCH',
+            body: design,
+        })
+        return response.body
+    }
     return {
         userType,
         userInfo,
@@ -131,5 +139,7 @@ export default defineStore('user', () => {
         putUserPhoto,
         // User preference
         patchUserPreference,
+        // User Template & Designs
+        patchUserDesign,
     }
 })

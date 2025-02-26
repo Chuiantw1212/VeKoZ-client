@@ -1,12 +1,5 @@
 <template>
-    <el-form label-width="auto" class="card">
-        <!-- <el-row justify="center">
-            <el-col :span="6">
-                <el-form-item>
-                    <img class="card__avatar" src="@/assets/mock/user.jpg">
-                </el-form-item>
-            </el-col>
-        </el-row> -->
+    <el-form label-width="auto">
         <el-row justify="space-between" :gutter="20">
             <el-col :span="24">
                 <el-form-item label="註冊Email">
@@ -35,11 +28,6 @@
 </template>
 <script setup lang="ts">
 import type { IUser } from '~/types/user';
-const isSeoNameLoading = ref<boolean>(false)
-const repoUser = useRepoUser()
-const seoName = ref<string>('')
-const isSeoNameValid = ref<boolean>(true)
-const repoUI = useRepoUI()
 const userForm = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
@@ -56,48 +44,4 @@ const props = defineProps({
         defualt: false,
     }
 })
-
-watch(() => userForm.value, (newValue) => {
-    seoName.value = String(newValue.seoName)
-}, { deep: true, immediate: true, })
-
-// Methods
-async function patchSeoName() {
-    isSeoNameLoading.value = true
-    repoUI.debounce('patchUserSeoName', async () => {
-        const result = await repoUser.patchUserSeoName({
-            seoName: seoName.value,
-            id: userForm.value.id
-        })
-        isSeoNameValid.value = result.status === 200
-        isSeoNameLoading.value = false
-    })
-}
 </script>
-<style lang="scss" scoped>
-.card {
-
-    .card__avatar {
-        display: block;
-        width: 118px;
-        height: 118px;
-        border-radius: 50%;
-        margin: auto;
-    }
-
-    .card__editor {
-        margin-top: 20px;
-    }
-
-    .item__body {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-
-        >:first-child {
-            width: 100%;
-        }
-    }
-}
-</style>

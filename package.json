@@ -19,7 +19,7 @@
     "start": "node .output/server/index.mjs",
     "generate": "nuxi generate",
     "prepare": "nuxi prepare",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit --build --force"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-vue": "^7.3.0",
