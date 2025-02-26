@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </template>
-                <FormUserProfile v-model="userTemplate"></FormUserProfile>
+                <FormUserProfile v-model="userTemplate" :is-designing="true"></FormUserProfile>
                 <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -87,7 +87,7 @@
                     @dragstart="setTemplateItem($event)" @mouseenter="setTemplateItem($event)"
                     @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
-        </el-col> 
+        </el-col>
     </el-row>
 </template>
 <script setup lang="ts">
