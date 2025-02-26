@@ -91,7 +91,7 @@
         <template #header>
             SEO資料
         </template>
-        <FormUserSeoInfo v-if="isSeoInfoOpen">
+        <FormUserSeoInfo v-if="isSeoInfoOpen" :model-value="userSeoInfo">
 
         </FormUserSeoInfo>
         <template #footer>
@@ -139,6 +139,7 @@ const userTemplate = ref<IUser>({
     seoName: '',
     seoTitle: '',
     isPublic: false,
+    avatar: '',
     designs: [],
 })
 
@@ -157,6 +158,7 @@ const userSeoInfo = ref<{
     avatar?: any,
     seoName?: string,
     seoTitle?: string,
+    description?: string,
 }>({})
 const seoName = ref<string>('')
 const isSeoNameValid = ref<boolean>(false)
@@ -186,6 +188,7 @@ function openSeoInfo() {
     userSeoInfo.value.id = userTemplate.value.id ?? ''
     userSeoInfo.value.seoName = userTemplate.value.seoName ?? ''
     userSeoInfo.value.seoTitle = userTemplate.value.seoTitle ?? ''
+    userSeoInfo.value.description = userTemplate.value.description
     isSeoInfoOpen.value = true
 }
 

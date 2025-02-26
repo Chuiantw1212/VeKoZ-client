@@ -7,7 +7,7 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="名片頁網址">
-                    <el-input v-model="seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true"
+                    <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true"
                         @change="patchSeoName()">
                         <template #prefix>
                             https://vekoz.org/
@@ -32,19 +32,19 @@
                 </el-form-item>
             </el-col>
         </el-row>
-        <el-divider>Google Search Engine</el-divider>
+        <el-divider>Google 搜尋預覽</el-divider>
         <div class="gooogleCard">
             <div class="card__header">
+                <!-- <div> -->
+                <img class="header__avatar" src="@/assets/logo/160_160.png">
+                <!-- </div> -->
                 <div>
-                    圖
+                    <div class="header__name">VeKoZ</div>
+                    <div class="header__uirl">https://vekoz.org › {{ userForm.seoName }}</div>
                 </div>
-                <div>
-                    <div>名稱</div>
-                    <div>網址</div>
-                </div>
-                <div>Page Title</div>
-                <div>Page Description</div>
             </div>
+            <div class="card__title">{{ userForm.seoTitle }}</div>
+            <div class="card__desc">{{ userForm.description }}</div>
         </div>
         <el-divider>Line App Share</el-divider>
     </el-form>
@@ -67,23 +67,64 @@ const userForm = defineModel<IUser>('modelValue', {
         seoTitle: '',
     }
 })
+/**
+ * https://developers.google.com/search/docs/appearance/favicon-in-search
+ */
+// const seoName = ref<string>('')
 
-const seoName = ref<string>('')
+// watch(() => userForm.value, (newValue) => {
+//     seoName.value = String(newValue.seoName)
+// }, { deep: true, immediate: true, })
 
-watch(() => userForm.value, (newValue) => {
-    seoName.value = String(newValue.seoName)
-}, { deep: true, immediate: true, })
-
-// Methods
-async function patchSeoName() {
-    isSeoNameLoading.value = true
-    repoUI.debounce('patchUserSeoName', async () => {
-        const result = await repoUser.patchUserSeoName({
-            seoName: seoName.value,
-            id: userForm.value.id
-        })
-        // isSeoNameValid.value = result.status === 200
-        isSeoNameLoading.value = false
-    })
-}
+// // Methods
+// async function patchSeoName() {
+//     isSeoNameLoading.value = true
+//     repoUI.debounce('patchUserSeoName', async () => {
+//         const result = await repoUser.patchUserSeoName({
+//             seoName: seoName.value,
+//             id: userForm.value.id
+//         })
+//         // isSeoNameValid.value = result.status === 200
+//         isSeoNameLoading.value = false
+//     })
+// }
 </script>
+<style lang="scss" scoped>
+.card__header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .header__avatar {
+        display: block;
+        width: 28px;
+        height: 28px;
+        margin-right: 12px;
+    }
+
+    .header__name {
+        // color: #dadce0;
+        font-size: 14px;
+        display: block;
+        line-height: 20px;
+        white-space: nowrap;
+    }
+
+    .header__uirl {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+}
+
+.card__title {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 18px;
+}
+
+.card__desc {
+    max-width: 600px;
+}
+</style>

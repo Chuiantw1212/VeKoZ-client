@@ -7,14 +7,14 @@ import type { IUserDesign } from '~/types/userDesign'
 export default defineStore('userDesign', () => {
     const defaultApi = useVenoniaApi()
     async function postUserDesigns(designs: IUserDesign[]) {
-        const response = await defaultApi.authRequest(`/userDesign/list`, {
+        const response = await defaultApi.authRequest(`/user-design/list`, {
             method: 'POST',
             body: designs,
         })
         return response.body
     }
     async function patchUserDesign(design: IUserDesign) {
-        const response = await defaultApi.authRequest(`/userDesign/${design.id}`, {
+        const response = await defaultApi.authRequest(`/user-design/${design.id}`, {
             method: 'PATCH',
             body: design,
         })
