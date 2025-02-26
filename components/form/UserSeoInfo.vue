@@ -7,8 +7,7 @@
         <el-row>
             <el-col :span="24">
                 <el-form-item label="名片頁網址">
-                    <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true"
-                        @change="patchSeoName()">
+                    <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true">
                         <template #prefix>
                             https://vekoz.org/
                         </template>
@@ -32,6 +31,21 @@
                 </el-form-item>
             </el-col>
         </el-row>
+        <!-- <el-row>
+            <el-col :span="24">
+                <el-form-item label="名片頁描述">
+                    <el-input v-model="userForm.description" :maxlength="150" :show-word-limit="true" :disabled="true">
+                        <template #prefix>
+                            請到樣板編輯修改文字~~
+                        </template>
+                    </el-input>
+                </el-form-item>
+            </el-col>
+        </el-row> -->
+        <el-alert type="info" show-icon :closable="false">
+            文字描述請到樣板編輯修改。
+        </el-alert>
+
         <el-divider>Google 搜尋預覽</el-divider>
         <div class="gooogleCard">
             <div class="card__header">
@@ -39,7 +53,7 @@
                 <img class="header__avatar" src="@/assets/logo/160_160.png">
                 <!-- </div> -->
                 <div>
-                    <div class="header__name">VeKoZ</div>
+                    <div class="header__name">VeKoZ 微課室</div>
                     <div class="header__uirl">https://vekoz.org › {{ userForm.seoName }}</div>
                 </div>
             </div>
