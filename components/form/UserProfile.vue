@@ -1,136 +1,86 @@
 <template>
-    <el-form label-width="auto" class="card">
-        <el-row justify="center">
-            <el-col :span="6">
-                <el-form-item>
-                    <img class="card__avatar" src="@/assets/mock/user.jpg">
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row justify="space-between" :gutter="20">
-            <el-col :span="24">
-                <el-form-item label="註冊Email">
-                    <el-input v-model="userForm.email" placeholder="請輸入Email" :disabled="true">
-                        <template #suffix>
-                            (僅主辦方可見)
-                        </template>
-                    </el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="暱稱/姓名">
-                    <el-input v-model="userForm.name" placeholder="請輸入暱稱或姓名" :maxlength="30" :show-word-limit="true"
-                        :disabled="disabled">
-                    </el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁網址">
-                    <el-input v-model="seoName" :maxlength="30" placeholder="例：en-chu" :show-word-limit="true"
-                        :disabled="disabled" @change="patchSeoName">
-                        <template #prefix>
-                            https://venonia.com/
-                        </template>
-                        <template #suffix>
-                            <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
-                                <CircleCheck></CircleCheck>
-                            </el-icon>
-                            <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
-                                <CircleClose></CircleClose>
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁標題">
-                    <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
-                        :show-word-limit="true" :disabled="disabled" />
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="描述">
-                    <el-input v-model="userForm.description" type="textarea" :rows="3" :maxlength="150"
-                        placeholder="請輸入簡介" :show-word-limit="true" :disabled="disabled" />
-                </el-form-item>
-            </el-col>
-        </el-row>
-    </el-form>
+    <el-card class="profile">
+        <template #header>
+            <div class="profile__header">
+                <div>
+                    <el-button :icon="Share" text circle :disabled="true">
+                    </el-button>
+                    <el-button text circle :disabled="true" :icon="Menu">
+                    </el-button>
+                </div>
+                <el-button :icon="CollectionTag" :disabled="true">
+                    訂閱
+                </el-button>
+            </div>
+        </template>
+        <div v-if="user.designs">
+            <template v-for="(design, index) in user.designs">
+                <OrganismDesignBanner v-if="design.type === 'banner'" v-model="user.designs[index]" :isDesigning="true"
+                    :show-label="false"></OrganismDesignBanner>
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+                </OrganismDesignAvatarUploader>
+                <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+
+                </OrganismDesignHeader1>
+                <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+                </OrganismDesignTextarea>
+                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" :model-value="user.designs[index]"
+                    :isDesigning="true" :show-label="false">
+                </OrganismDesignSocialMedia>
+            </template>
+        </div>
+    </el-card>
 </template>
 <script setup lang="ts">
-import { CircleCheck, CircleClose } from '@element-plus/icons-vue';
+import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { IUser } from '~/types/user';
-const isSeoNameLoading = ref<boolean>(false)
-const repoUser = useRepoUser()
-const seoName = ref<string>('')
-const isSeoNameValid = ref<boolean>(true)
-const repoUI = useRepoUI()
-const userForm = defineModel<IUser>('modelValue', {
+const user = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
-        id: '',
-        name: '',
-        description: '',
         seoName: '',
-        seoTitle: '',
-    }
-})
-const props = defineProps({
-    disabled: {
-        type: Boolean,
-        defualt: false,
+        designs: [],
     }
 })
 
-watch(() => userForm.value, (newValue) => {
-    seoName.value = String(newValue.seoName)
-}, { deep: true, immediate: true, })
-
-// Methods
-async function patchSeoName() {
-    isSeoNameLoading.value = true
-    repoUI.debounce('patchUserSeoName', async () => {
-        const result = await repoUser.patchUserSeoName({
-            seoName: seoName.value,
-            id: userForm.value.id
-        })
-        isSeoNameValid.value = result.status === 200
-        isSeoNameLoading.value = false
-    })
-}
 </script>
 <style lang="scss" scoped>
-.card {
+.icon {
+    height: 24px;
+    width: 24px;
+}
 
-    .card__avatar {
-        display: block;
-        width: 118px;
-        height: 118px;
+.profile {
+    :deep(.el-card__header) {
+        border-bottom: 0px;
+
+    }
+
+    .profile__header {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        height: 32px; // template共同高度
+
+        >* {
+            margin-bottom: 0px; // 除掉form-item的maargon-bottom
+        }
+    }
+
+    .profile__avatar {
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
         margin: auto;
+        display: block;
     }
 
-    .card__editor {
-        margin-top: 20px;
-    }
-
-    .item__body {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-
-        >:first-child {
-            width: 100%;
-        }
+    .profile__name {
+        text-align: center;
+        margin: 1.25rem 0px;
     }
 }
 </style>

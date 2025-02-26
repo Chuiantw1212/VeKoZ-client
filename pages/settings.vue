@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </template>
-                <OrganismDesignProfile v-model="userTemplate"></OrganismDesignProfile>
+                <FormUserProfile v-model="userTemplate"></FormUserProfile>
                 <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -101,24 +101,32 @@ const userTemplate = ref<IUser>({
     id: '',
     designs: [
         {
+            type: 'banner',
+            value: '',
+            required: true,
+        },
+        {
             type: 'avatar',
             value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
-            // alignment: 'center',
+            required: true,
         },
         {
             type: 'header1',
             value: 'EN Chu',
             alignment: 'center',
+            required: true,
         },
         {
             type: 'textarea',
             value: '',
             alignment: 'center',
+            required: true,
         },
         {
             type: 'socialMedia',
             urls: [],
             alignment: '',
+            required: true,
         }
     ]
 })

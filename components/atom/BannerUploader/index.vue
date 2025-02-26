@@ -9,6 +9,7 @@
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled }">
             <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
+            <!-- isValidUrl(banner){{ isValidUrl(banner) }} -->
             <div v-if="!isUploaded" class="label__content">
                 Banner上傳
                 <el-icon>
@@ -56,8 +57,8 @@ const props = defineProps({
 })
 
 const isUploaded = computed(() => {
-    const isUrl = typeof banner.value === 'string'
-    const isUploaded = (banner.value as any).type !== ''
+    const isUrl = isValidUrl(banner.value)
+    const isUploaded = (banner.value as any).type && (banner.value as any).type !== ''
     return isUrl || isUploaded
 })
 
@@ -66,12 +67,8 @@ function getImageSrc() {
     if (!banner.value) {
         return
     }
-    if (typeof banner.value === "string") {
-        const expression = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
-        const regex = new RegExp(expression)
-        if (String(banner.value).match(regex)) {
-            return `url(${banner.value})`
-        }
+    if (isValidUrl(banner.value)) {
+        return `url(${banner.value})`
     }
     const { type, buffer } = banner.value as any
     let formatBuffer: any = buffer
@@ -82,6 +79,13 @@ function getImageSrc() {
     const blob = new Blob([typedArray], { type: `image/${type}` })
     const objectUrl = URL.createObjectURL(blob)
     return `url(${objectUrl})`
+}
+function isValidUrl(url: any) {
+    if (url && typeof url === "string") {
+        const expression = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
+        const regex = new RegExp(expression)
+        return String(url).match(regex)
+    }
 }
 async function handleFiles(event: any) {
     const { files } = event.target
