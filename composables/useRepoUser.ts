@@ -118,6 +118,13 @@ export default defineStore('user', () => {
         })
         return response.body
     }
+    async function postUserDesigns(designs: IUserDesign[]) {
+        const response = await defaultApi.authRequest(`/user/designs`, {
+            method: 'POST',
+            body: designs,
+        })
+        return response.body
+    }
     async function patchUserDesign(design: IUserDesign) {
         const response = await defaultApi.authRequest(`/user/design/${design.id}`, {
             method: 'PATCH',
@@ -140,6 +147,7 @@ export default defineStore('user', () => {
         // User preference
         patchUserPreference,
         // User Template & Designs
+        postUserDesigns,
         patchUserDesign,
     }
 })

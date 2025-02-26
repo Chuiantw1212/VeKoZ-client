@@ -67,7 +67,7 @@
                     </div>
                 </template>
                 尚未完成的功能，敬請期待。
-                <FormDesignDragging :model-value="userForm.designs" type="attendee" @dragstart="setTemplateItem($event)"
+                <FormDesignDragging type="attendee" @dragstart="setTemplateItem($event)"
                     @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
         </el-col>
@@ -209,14 +209,15 @@ async function confirmUserPrivateInfo() {
     isPrivateInfoOpen.value = false
 }
 
-function initializeUserForm(newValue: IUser) {
-    if (!newValue.id || userForm.value.id) {
+async function initializeUserForm(newValue: IUser) {
+    if (!newValue.id) {
         return
     }
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
+    return
     if (!userInfoCopy.designs?.length) {
-        const defaultDesign = [
+        const defaultDesigns: IUserDesign[] = [
             {
                 type: 'avatar',
                 value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
@@ -235,18 +236,21 @@ function initializeUserForm(newValue: IUser) {
                 value: '',
                 alignment: 'center',
                 required: true,
+                formField: 'description',
             },
             {
                 type: 'socialMedia',
                 urls: [],
-                alignment: '',
                 required: true,
+                formField: 'socialMedia',
             },
             {
                 type: 'eventHostHistory',
+                required: true,
             },
         ]
-        // userInfoCopy.designs = 
+        const createdDesign = await repoUser.postUserDesigns(defaultDesigns)
+        userInfoCopy.designs = createdDesign
     }
     userForm.value = userInfoCopy
 }
