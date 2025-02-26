@@ -16,7 +16,7 @@
         </template>
         <template v-slot:default>
             <el-input :placeholder="placeholder" v-model="customDesign.value" :maxlength="30" :show-word-limit="true"
-                size="large" type="textarea" :rows="1"></el-input>
+                size="large" type="textarea" :rows="1" :disabled="true"></el-input>
         </template>
     </MoleculeDesignToolbar>
 </template>
@@ -52,7 +52,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入主標題'
+        default: '請輸入別名'
     },
     onchange: {
         type: Function,

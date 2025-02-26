@@ -29,7 +29,7 @@
             </el-col>
         </el-row>
 
-        <AtomVenoniaDialog v-model="eventDialogIsOpen" :showClose="false">
+        <AtomVekozDialog v-model="eventDialogIsOpen" :showClose="false">
             <template #header>
                 <el-text size="large">
                     活動編輯
@@ -60,9 +60,9 @@
                     </FormTemplateDesign>
                 </el-container>
             </template>
-        </AtomVenoniaDialog>
+        </AtomVekozDialog>
 
-        <AtomVenoniaDialog v-model="loadTemplateDialogIsOpen" :showClose="true">
+        <AtomVekozDialog v-model="loadTemplateDialogIsOpen" :showClose="true">
             <template #header>
                 <el-text size="large">
                     選擇模板
@@ -70,7 +70,7 @@
             </template>
             <FormReadEventTemplate v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
             </FormReadEventTemplate>
-        </AtomVenoniaDialog>
+        </AtomVekozDialog>
     </div>
 </template>
 

@@ -53,14 +53,14 @@
                 </el-card>
             </el-col>
         </el-row>
-        <AtomVenoniaDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
+        <AtomVekozDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>
                 <FormEditEventTemplate v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
                     @update:modelValue="loadTemplate($event)" @reset="">
                 </FormEditEventTemplate>
             </template>
-        </AtomVenoniaDialog>
-        <AtomVenoniaDialog v-model="templateSavingDialog.isOpen" :showClose="true">
+        </AtomVekozDialog>
+        <AtomVekozDialog v-model="templateSavingDialog.isOpen" :showClose="true">
             <template #header>
                 另存新模板
             </template>
@@ -74,7 +74,7 @@
             <template #footer>
                 <el-button @click="confirmSaveDialog()">儲存</el-button>
             </template>
-        </AtomVenoniaDialog>
+        </AtomVekozDialog>
     </div>
 </template>
 <script setup lang="ts">

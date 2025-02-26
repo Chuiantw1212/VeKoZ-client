@@ -30,7 +30,7 @@
             </el-table-column>
         </el-table>
 
-        <AtomVenoniaDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
+        <AtomVekozDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
             <template #header>
                 <el-text size="large">
                     組織設定
@@ -46,9 +46,9 @@
                     確認
                 </el-button>
             </template>
-        </AtomVenoniaDialog>
+        </AtomVekozDialog>
 
-        <AtomVenoniaDialog v-model="organizationMemberDialog.visibility">
+        <AtomVekozDialog v-model="organizationMemberDialog.visibility">
             <template #header>
                 <el-text size="large">
                     成員設定
@@ -67,7 +67,7 @@
                     確認
                 </el-button>
             </template> -->
-        </AtomVenoniaDialog>
+        </AtomVekozDialog>
         <!-- <el-dialog v-model="organizationMemberDialog.visibility" title="成員設定" class="event__template">
         </el-dialog> -->
     </div>

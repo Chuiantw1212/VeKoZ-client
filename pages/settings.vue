@@ -1,24 +1,24 @@
 <template>
     <el-row class="user__btnGroup" :gutter="20">
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <el-button class="btnGroup__item" :icon="WarnTriangleFilled">註銷帳號</el-button>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <el-button class="btnGroup__item" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <el-button class="btnGroup__item" :icon="User">登出</el-button>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__item"
                 @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
             <el-button v-if="repoUser.userType === 'host'" class="btnGroup__item"
                 @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <el-button class="btnGroup__item" :icon="Message">許願&抱怨</el-button>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="sysBtnSpan">
             <NuxtLink class="btnGroup__item" to="https://github.com/VeKoZ-tw" target="_blank">
                 <el-button class="item__btn" :icon="Cpu">
                     開放原始碼
@@ -46,34 +46,41 @@
                                 變更文字顏色
                             </el-button> -->
                         <!-- </div> -->
-                        <el-button>
-                            變更基本資料
-                        </el-button>
+                        <div>
+                            <el-button @click="openPrivateInfo()">
+                                變更基本資料
+                            </el-button>
+                            <el-button>
+                                變更SEO資料
+                            </el-button>
+                        </div>
                         <div class="header__ui">
-                            <el-input placeholder="個人化網址">
+                            <!-- <el-input placeholder="個人化網址">
                                 <template #prefix>
                                     https://vekoz.org/
                                 </template>
-                            </el-input>
-                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開" inactive-text="關閉"
-                                size="large" />
+</el-input> -->
+                            <!-- <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開" inactive-text="關閉"
+                                size="large" /> -->
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">
-                                    瀏覽
+                                    分頁瀏覽
                                 </el-button>
                             </NuxtLink>
                         </div>
                     </div>
                 </template>
-                <FormUserProfile v-model="userTemplate" :is-designing="true"></FormUserProfile>
-                <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
+                <!-- {{ userForm }} -->
+                <FormUserProfile v-model="userForm" :is-designing="true">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
                             @dragover="allowDrop($event)"
                             :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
                         </div>
                     </template>
-                </FormTemplateDesign>
+                </FormUserProfile>
+                <!-- <FormTemplateDesign v-model="userTemplate.designs" :isDesigning="true" type="attendee">
+                </FormTemplateDesign> -->
             </el-card>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
@@ -83,12 +90,24 @@
                         請拖曳以下元件 到 指定位置
                     </div>
                 </template>
-                <FormDesignDragging :model-value="userTemplate.designs" type="attendee"
-                    @dragstart="setTemplateItem($event)" @mouseenter="setTemplateItem($event)"
-                    @mouseout="cancelDragging()"></FormDesignDragging>
+                尚未完成的功能，敬請期待。
+                <FormDesignDragging :model-value="userForm.designs" type="attendee" @dragstart="setTemplateItem($event)"
+                    @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging>
             </el-card>
         </el-col>
     </el-row>
+    <AtomVekozDialog v-model="isDialogOpen">
+        <template #header>
+            基本資料
+        </template>
+        <FormUserPrivateInfo v-if="isDialogOpen" :model-value="userForm">
+        </FormUserPrivateInfo>
+        <template #footer>
+            <el-button @click="updateUserPrivateInfo">
+                確認
+            </el-button>
+        </template>
+    </AtomVekozDialog>
 </template>
 <script setup lang="ts">
 import { Cpu, User, View, Message, WarnTriangleFilled, Switch } from '@element-plus/icons-vue';
@@ -96,50 +115,10 @@ import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 import type { ITemplateDragSouce } from '~/types/eventTemplate';
 import type { IUserDesign } from '~/types/userDesign';
+
+const isDialogOpen = ref<boolean>(false)
+
 // 主要的模板資料
-const userTemplate = ref<IUser>({
-    id: '',
-    designs: [
-        {
-            type: 'avatar',
-            value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
-            required: true,
-        },
-        {
-            type: 'header1',
-            value: 'EN Chu',
-            alignment: 'center',
-            required: true,
-        },
-        {
-            type: 'textarea',
-            value: '',
-            alignment: 'center',
-            required: true,
-        },
-        {
-            type: 'socialMedia',
-            urls: [],
-            alignment: '',
-            required: true,
-        },
-        {
-            type: 'eventHostHistory',
-            value: 4,
-            // required: true,
-        },
-    ]
-})
-const isLoading = ref<boolean>(false)
-const repoUser = useRepoUser()
-const eventList = ref<IEventFromList[]>([])
-const shareTooltipVisible = ref(false)
-const id = ref<string>(crypto.randomUUID())
-const seoName = ref<string>('')
-const isSeoNameValid = ref<boolean>(false)
-const repoUI = useRepoUI()
-const columnSpan = ref<number>(8)
-const repoEvent = useRepoEvent()
 const userForm = ref<IUser>({
     id: '',
     name: '',
@@ -148,6 +127,21 @@ const userForm = ref<IUser>({
     seoTitle: '',
     isPublic: false,
 })
+// const userTemplate = ref<IUser>({
+//     id: '',
+//     designs: 
+// })
+const isLoading = ref<boolean>(false)
+const repoUser = useRepoUser()
+const eventList = ref<IEventFromList[]>([])
+const shareTooltipVisible = ref(false)
+const id = ref<string>(crypto.randomUUID())
+const seoName = ref<string>('')
+const isSeoNameValid = ref<boolean>(false)
+const repoUI = useRepoUI()
+const sysBtnSpan = ref<number>(12)
+const columnSpan = ref<number>(8)
+const repoEvent = useRepoEvent()
 const templateTemp = ref<ITemplateDragSouce>({
     item: {
         type: '', // 拖曳中的判斷欄位
@@ -167,20 +161,69 @@ onMounted(async () => {
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
-watch(() => userForm.value, () => {
-    updateUserInfo()
-}, { deep: true, })
+// watch(() => userForm.value, () => {
+//     updateUserPrivateInfo()
+// }, { deep: true, })
+
 watch(() => repoUser.userInfo, (newValue) => {
-    if (newValue.id && !userForm.value.id) {
-        const copy: IUser = JSON.parse(JSON.stringify(newValue))
-        delete copy.preference
-        userForm.value = copy
-        isSeoNameValid.value = true
-        seoName.value = copy.seoName ?? ''
-    }
+    // console.log('??', newValue)
+    initializeUserForm(newValue)
 }, { immediate: true, })
 
 // Methods
+const userPrivateInfo = ref<{
+    email?: string,
+    name?: string,
+}>({})
+
+function openPrivateInfo() {
+    isDialogOpen.value = true
+    userPrivateInfo.value.email = userForm.value.email ?? ''
+    userPrivateInfo.value.name = userForm.value.name ?? ''
+}
+
+function initializeUserForm(newValue: IUser) {
+    if (!newValue.id || userForm.value.id) {
+        return
+    }
+    const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
+    delete userInfoCopy.preference
+    if (!userInfoCopy.designs?.length) {
+        userInfoCopy.designs = [
+            {
+                type: 'avatar',
+                value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
+                required: true,
+            },
+            {
+                type: 'header1',
+                value: 'EN Chu',
+                alignment: 'center',
+                required: true,
+            },
+            {
+                type: 'textarea',
+                value: '',
+                alignment: 'center',
+                required: true,
+            },
+            {
+                type: 'socialMedia',
+                urls: [],
+                alignment: '',
+                required: true,
+            },
+            {
+                type: 'eventHostHistory',
+                value: 4,
+                // required: true,
+            },
+        ]
+    }
+    userForm.value = userInfoCopy
+    // isSeoNameValid.value = true
+    // seoName.value = copy.seoName ?? ''
+}
 function setTemplateItem(itemMeta: IUserDesign) {
     Object.assign(templateTemp.value.item, itemMeta)
 }
@@ -202,8 +245,16 @@ function getPersonalLink() {
 function setColumnSpan() {
     repoUI.debounce(id.value, () => {
         columnSpan.value = 24
+        sysBtnSpan.value = 12
         if (repoUI.isMedium) {
             columnSpan.value = 12
+            sysBtnSpan.value = 8
+        }
+        if (repoUI.isLarge) {
+            sysBtnSpan.value = 6
+        }
+        if (repoUI.isXLarge) {
+            sysBtnSpan.value = 4
         }
     })
 }
@@ -216,12 +267,11 @@ async function getEventList() {
     eventList.value = result
 }
 
-function updateUserInfo() {
+async function updateUserPrivateInfo() {
     isLoading.value = true
-    repoUI.debounce('patchUser', async () => {
-        await repoUser.patchUser(userForm.value)
-        isLoading.value = false
-    })
+    delete userPrivateInfo.value.email
+    await repoUser.patchUser(userPrivateInfo.value)
+    isLoading.value = false
 }
 
 async function insertTemplate(ev: Event, destinationIndex = 0) {
@@ -314,7 +364,8 @@ function allowDrop(ev: any) {
 
     .btnGroup__item {
         width: 100%;
-        display: flex;
+        // display: flex;
+        flex-wrap: wrap;
 
         .item__btn {
             width: 100%;

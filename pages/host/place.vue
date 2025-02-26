@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import VenoniaDialog from '~/components/atom/VenoniaDialog.vue'
+import VenoniaDialog from '~/components/atom/VekozDialog.vue'
 import type { IPlace } from '~/types/place'
 
 // Data

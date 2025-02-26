@@ -100,5 +100,9 @@ const width = computed(() => {
         // border-top: 1px solid lightgray;
         // border-bottom: 1px solid lightgray;
     }
+
+    .venonia-dialog-footer {
+        padding: 0 20px;
+    }
 }
 </style>

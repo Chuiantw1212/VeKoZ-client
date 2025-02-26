@@ -1,12 +1,12 @@
 <template>
     <el-form label-width="auto" class="card">
-        <el-row justify="center">
+        <!-- <el-row justify="center">
             <el-col :span="6">
                 <el-form-item>
                     <img class="card__avatar" src="@/assets/mock/user.jpg">
                 </el-form-item>
             </el-col>
-        </el-row>
+        </el-row> -->
         <el-row justify="space-between" :gutter="20">
             <el-col :span="24">
                 <el-form-item label="註冊Email">
@@ -20,49 +20,17 @@
         </el-row>
         <el-row>
             <el-col :span="24">
-                <el-form-item label="暱稱/姓名">
-                    <el-input v-model="userForm.name" placeholder="請輸入暱稱或姓名" :maxlength="30" :show-word-limit="true"
+                <el-form-item label="別名/姓名">
+                    <el-input v-model="userForm.name" placeholder="請輸入別名或姓名" :maxlength="30" :show-word-limit="true"
                         :disabled="disabled">
                     </el-input>
                 </el-form-item>
             </el-col>
         </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁網址">
-                    <el-input v-model="seoName" :maxlength="30" placeholder="例：en-chu" :show-word-limit="true"
-                        :disabled="disabled" @change="patchSeoName">
-                        <template #prefix>
-                            https://venonia.com/
-                        </template>
-                        <template #suffix>
-                            <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
-                                <CircleCheck></CircleCheck>
-                            </el-icon>
-                            <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
-                                <CircleClose></CircleClose>
-                            </el-icon>
-                        </template>
-                    </el-input>
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁標題">
-                    <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
-                        :show-word-limit="true" :disabled="disabled" />
-                </el-form-item>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="24">
-                <el-form-item label="描述">
-                    <el-input v-model="userForm.description" type="textarea" :rows="3" :maxlength="150"
-                        placeholder="請輸入簡介" :show-word-limit="true" :disabled="disabled" />
-                </el-form-item>
-            </el-col>
-        </el-row>
+        <el-divider>願意主動提供給主辦方的資料</el-divider>
+        <el-alert type="info" show-icon :closable="false">
+            TODO：將會包含年齡、性別、職業，便於主辦方舉行特定活動，例：Womens Talk, Mens Talk。
+        </el-alert>
     </el-form>
 </template>
 <script setup lang="ts">
