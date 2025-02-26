@@ -118,20 +118,6 @@ export default defineStore('user', () => {
         })
         return response.body
     }
-    async function postUserDesigns(designs: IUserDesign[]) {
-        const response = await defaultApi.authRequest(`/user/designs`, {
-            method: 'POST',
-            body: designs,
-        })
-        return response.body
-    }
-    async function patchUserDesign(design: IUserDesign) {
-        const response = await defaultApi.authRequest(`/user/design/${design.id}`, {
-            method: 'PATCH',
-            body: design,
-        })
-        return response.body
-    }
     return {
         userType,
         userInfo,
@@ -146,8 +132,5 @@ export default defineStore('user', () => {
         putUserPhoto,
         // User preference
         patchUserPreference,
-        // User Template & Designs
-        postUserDesigns,
-        patchUserDesign,
     }
 })

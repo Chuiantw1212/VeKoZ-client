@@ -112,6 +112,7 @@ import type { ITemplateDragSouce } from '~/types/eventTemplate';
 import type { IUserDesign } from '~/types/userDesign';
 
 const repoUser = useRepoUser()
+const repoUserDesign = useRepoUserDesign()
 const repoEvent = useRepoEvent()
 
 // 其他未歸類
@@ -178,7 +179,7 @@ watch(() => repoUser.userInfo, (newValue) => {
 
 // Methods
 async function handleDesignChanged(userDesign: IUserDesign) {
-    // repoUser.patchEventTemplateDesign(templateDesign)
+    repoUserDesign.patchUserDesign(userDesign)
 }
 
 function openSeoInfo() {
@@ -251,7 +252,7 @@ async function initializeUserForm(newValue: IUser) {
                 required: true,
             },
         ]
-        const createdDesign = await repoUser.postUserDesigns(defaultDesigns)
+        const createdDesign = await repoUserDesign.postUserDesigns(defaultDesigns)
         userInfoCopy.designs = createdDesign
     }
     userTemplate.value = userInfoCopy
