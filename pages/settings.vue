@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </template>
-                <FormUserProfile v-model="userForm" :is-designing="true" :onchange="handleDesignChanged">
+                <FormUserProfile v-model="userTemplate" :is-designing="true" :onchange="handleDesignChanged">
                     <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
                             @dragover="allowDrop($event)"
@@ -131,13 +131,14 @@ const templateTemp = ref<ITemplateDragSouce>({
 })
 
 // 主要的模板資料
-const userForm = ref<IUser>({
+const userTemplate = ref<IUser>({
     id: '',
     name: '',
     description: '',
     seoName: '',
     seoTitle: '',
     isPublic: false,
+    designs: [],
 })
 
 // 基本資料相關
@@ -170,7 +171,9 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
 watch(() => repoUser.userInfo, (newValue) => {
-    initializeUserForm(newValue)
+    repoUI.debounce(`initializeUserForm${id.value}`, () => {
+        initializeUserForm(newValue)
+    })
 }, { immediate: true, })
 
 // Methods
@@ -179,9 +182,9 @@ async function handleDesignChanged(userDesign: IUserDesign) {
 }
 
 function openSeoInfo() {
-    userSeoInfo.value.id = userForm.value.id ?? ''
-    userSeoInfo.value.seoName = userForm.value.seoName ?? ''
-    userSeoInfo.value.seoTitle = userForm.value.seoTitle ?? ''
+    userSeoInfo.value.id = userTemplate.value.id ?? ''
+    userSeoInfo.value.seoName = userTemplate.value.seoName ?? ''
+    userSeoInfo.value.seoTitle = userTemplate.value.seoTitle ?? ''
     isSeoInfoOpen.value = true
 }
 
@@ -191,17 +194,17 @@ function confirmUserSeoInfo() {
 
 function openPrivateInfo() {
     isPrivateInfoOpen.value = true
-    userPrivateInfo.value.id = userForm.value.id ?? ''
-    userPrivateInfo.value.email = userForm.value.email ?? ''
-    userPrivateInfo.value.name = userForm.value.name ?? ''
+    userPrivateInfo.value.id = userTemplate.value.id ?? ''
+    userPrivateInfo.value.email = userTemplate.value.email ?? ''
+    userPrivateInfo.value.name = userTemplate.value.name ?? ''
 }
 
 async function confirmUserPrivateInfo() {
     isLoading.value = true
     delete userPrivateInfo.value.email
     // await repoUser.patchUser(userPrivateInfo.value)
-    Object.assign(userForm.value, userPrivateInfo.value)
-    const header1Design = userForm.value.designs?.find(design => design.formField === 'name')
+    Object.assign(userTemplate.value, userPrivateInfo.value)
+    const header1Design = userTemplate.value.designs?.find(design => design.formField === 'name')
     if (header1Design) {
         header1Design.value = userPrivateInfo.value.name
     }
@@ -210,13 +213,12 @@ async function confirmUserPrivateInfo() {
 }
 
 async function initializeUserForm(newValue: IUser) {
-    if (!newValue.id) {
+    if (!newValue.id || !userTemplate.value.designs) {
         return
     }
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
-    return
-    if (!userInfoCopy.designs?.length) {
+    if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
         const defaultDesigns: IUserDesign[] = [
             {
                 type: 'avatar',
@@ -252,7 +254,7 @@ async function initializeUserForm(newValue: IUser) {
         const createdDesign = await repoUser.postUserDesigns(defaultDesigns)
         userInfoCopy.designs = createdDesign
     }
-    userForm.value = userInfoCopy
+    userTemplate.value = userInfoCopy
 }
 function setTemplateItem(itemMeta: IUserDesign) {
     Object.assign(templateTemp.value.item, itemMeta)
