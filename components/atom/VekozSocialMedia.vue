@@ -30,7 +30,7 @@
             </el-button>
         </template>
         <template v-if="!socialUrls.length">
-            示意圖：
+            <!-- 示意圖： -->
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/vekoz.svg">
             </el-button>
