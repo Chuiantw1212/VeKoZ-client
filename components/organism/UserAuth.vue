@@ -43,12 +43,15 @@ async function handleLoggedIn(user: IUser) {
 
 async function registeredNewUser(firebaseUser: User) {
     const { emailVerified, displayName, email, phoneNumber, photoURL, providerId, uid } = firebaseUser
+    /**
+     * https://schema.org/Person
+     */
     const venoniaUser: IUser = {
         emailVerified,
-        displayName: displayName ?? '',
+        name: displayName ?? '',
         email: email ?? '',
-        phoneNumber: phoneNumber ?? '',
-        photoURL: photoURL ?? '',
+        telephone: phoneNumber ?? '',
+        avatar: photoURL ?? '',
         providerId: providerId,
         uid: uid
     }

@@ -216,7 +216,7 @@ function initializeUserForm(newValue: IUser) {
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
     if (!userInfoCopy.designs?.length) {
-        userInfoCopy.designs = [
+        const defaultDesign = [
             {
                 type: 'avatar',
                 value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
@@ -246,6 +246,7 @@ function initializeUserForm(newValue: IUser) {
                 type: 'eventHostHistory',
             },
         ]
+        // userInfoCopy.designs = 
     }
     userForm.value = userInfoCopy
 }

@@ -2,18 +2,17 @@ export type UserType = 'host' | 'attendee' | ''
 
 export interface IUser {
     id?: string,
-    emailVerified?: boolean,
-    displayName?: string,
-    email?: string,
-    phoneNumber?: string,
-    photoURL?: string,
-    providerId?: string,
     uid?: string,
-    preference?: IUserPreference,
-    // 通用
+    // 其他欄位
+    emailVerified?: boolean,
     name?: string,
+    email?: string,
+    telephone?: string,
+    avatar?: string,
+    providerId?: string, // 註冊來源
+    preference?: IUserPreference,
+    // SEO可用
     description?: string,
-    // SEO使用
     seoName?: string,
     seoTitle?: string,
     isPublic?: false,
