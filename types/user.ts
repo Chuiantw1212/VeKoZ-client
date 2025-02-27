@@ -8,7 +8,7 @@ export interface IUser {
     name?: string,
     email?: string,
     telephone?: string,
-    avatar?: string,
+    avatar?: any,
     providerId?: string, // 註冊來源
     preference?: IUserPreference,
     // SEO可用

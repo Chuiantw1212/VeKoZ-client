@@ -52,13 +52,16 @@
                     </div>
                 </template>
                 <FormUserProfile v-model="userTemplate" :is-designing="true" :onchange="handleDesignChanged">
-                    <template #default="defaultProps">
+                </FormUserProfile>
+                <el-card>
+                    EventHistory
+                    <!-- <template #default="defaultProps">
                         <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
                             @dragover="allowDrop($event)"
                             :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
                         </div>
-                    </template>
-                </FormUserProfile>
+                    </template> -->
+                </el-card>
             </el-card>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
