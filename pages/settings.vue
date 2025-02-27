@@ -41,9 +41,15 @@
                             </el-button>
                         </div>
                         <div class="header__ui">
+                            <!-- <el-col> -->
+                            <!-- <el-form-item :span="12" label=""> -->
+                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="打開" inactive-text="關閉"
+                                size="large" />
+                            <!-- </el-form-item> -->
+                            <!-- </el-col> -->
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">
-                                    分頁瀏覽
+                                    瀏覽
                                 </el-button>
                             </NuxtLink>
                         </div>
@@ -196,15 +202,14 @@ function openSeoInfo() {
 
 async function confirmUserSeoInfo() {
     const isValidForm = await seoFormRef.value?.validate()
-    console.log({
-        isValidForm
-    })
     if (!isValidForm) {
         return
     }
     isSeoInfoOpen.value = false
-    const isValid = await repoUser.patchUserSeo(userSeoInfo.value)
-    if (!isValid) {
+    try {
+        await repoUser.patchUserSeo(userSeoInfo.value)
+        userTemplate.value.seoName = userSeoInfo.value.seoName
+    } catch (error) {
         isSeoInfoOpen.value = true
     }
 }

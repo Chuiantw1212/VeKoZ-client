@@ -87,16 +87,11 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUserSeo(user: IUser): Promise<number> {
-        try {
-            const result = await defaultApi.authRequest(`/user/seo`, {
-                method: 'PATCH',
-                body: user,
-            })
-            return result.text()
-        } catch (error) {
-            // body stream already read
-            return 0
-        }
+        const result = await defaultApi.authRequest(`/user/seo`, {
+            method: 'PATCH',
+            body: user,
+        })
+        return result.text()
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
         if (!userPreference.value || !userInfo.value.id) {
