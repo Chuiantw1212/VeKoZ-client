@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <!-- <h1>{{ userForm.seoTitle }}</h1> -->
-        <el-card class="vekoz-card">
-            <template #header>
+    <!-- <div> -->
+    <!-- <h1>{{ userForm }}</h1> -->
+    <!-- <el-card class="vekoz-card"> -->
+    <!-- <template #header>
                 <div class="vekoz-card-header">
                     <div></div>
                     <div>
@@ -14,29 +14,24 @@
                         <el-button :icon="FullScreen">QR Code</el-button>
                     </div>
                 </div>
-            </template>
-            <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile>
-        </el-card>
-    </div>
+            </template> -->
+    <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile>
+    <!-- </el-card> -->
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">
 definePageMeta({
     layout: false
 })
-import { Share } from '@element-plus/icons-vue';
 import { FormUserProfile } from '#components';
-import { StarFilled, View, FullScreen } from '@element-plus/icons-vue';
 import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 const route = useRoute()
-const isLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 const eventList = ref<IEventFromList[]>([])
 const shareTooltipVisible = ref(false)
 const id = ref<string>(crypto.randomUUID())
-const seoName = ref<string>('')
-const isSeoNameValid = ref<boolean>(false)
 const repoUI = useRepoUI()
 const columnSpan = ref<number>(8)
 const repoEvent = useRepoEvent()

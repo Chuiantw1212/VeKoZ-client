@@ -293,13 +293,8 @@ function cancelDragging() {
 }
 
 function getPersonalLink() {
-    return '/'
-    if (import.meta.client) {
-        const { origin } = window.location
-        const openInLineExternal = `openExternalBrowser=1`
-        return `${origin}/${seoName.value}?${openInLineExternal}`
-    } else {
-    }
+    const openInLineExternal = `openExternalBrowser=1`
+    return `${userTemplate.value.seoName}?${openInLineExternal}`
 }
 
 function setColumnSpan() {

@@ -3,9 +3,9 @@
         <template #header>
             <div class="profile__header">
                 <div>
-                    <el-button :icon="Share" text circle :disabled="true">
+                    <el-button :icon="Share" text circle>
                     </el-button>
-                    <el-button text circle :disabled="true" :icon="Menu">
+                    <el-button text circle :icon="Menu">
                     </el-button>
                 </div>
                 <el-button :icon="CollectionTag" :disabled="true">
@@ -112,6 +112,10 @@ const formRules = ref<{ [key: string]: any }>({})
 // }, { immediate: true, deep: true })
 
 // methods
+function getPersonalLink() {
+    const openInLineExternal = `openExternalBrowser=1`
+    return `${userTemplate.value.seoName}?${openInLineExternal}`
+}
 async function validate() {
     return await formRef.value?.validate()
 }
