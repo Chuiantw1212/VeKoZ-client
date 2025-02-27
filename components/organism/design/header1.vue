@@ -16,7 +16,7 @@
         </template>
         <template v-slot:default>
             <el-input :placeholder="placeholder" v-model="customDesign.value" :maxlength="30" :show-word-limit="true"
-                size="large" type="textarea" :rows="1" :disabled="true"></el-input>
+                size="large" type="textarea" :rows="1"></el-input>
         </template>
     </MoleculeDesignToolbar>
 </template>

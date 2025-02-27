@@ -3,34 +3,34 @@
         名片頁網址，檢核通過後會立即更新。
     </el-alert>
     <br /> -->
-    <el-form label-width="auto">
+    <el-form label-width="auto" ref="formRef" :model="userForm" :rules="formRules">
+        <el-form-item label="名片頁網址" prop="seoName">
+            <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true">
+                <template #prefix>
+                    https://vekoz.org/
+                </template>
+                <!-- <template #suffix>
+                    <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
+                        <CircleCheck></CircleCheck>
+                    </el-icon>
+                    <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
+                        <CircleClose></CircleClose>
+                    </el-icon>
+                </template> -->
+            </el-input>
+        </el-form-item>
         <el-row>
             <el-col :span="24">
-                <el-form-item label="名片頁網址">
-                    <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true">
-                        <template #prefix>
-                            https://vekoz.org/
-                        </template>
-                        <!-- <template #suffix>
-                            <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
-                                <CircleCheck></CircleCheck>
-                            </el-icon>
-                            <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
-                                <CircleClose></CircleClose>
-                            </el-icon>
-                        </template> -->
-                    </el-input>
-                </el-form-item>
             </el-col>
         </el-row>
-        <el-row>
+        <!-- <el-row>
             <el-col :span="24">
                 <el-form-item label="名片頁標題">
                     <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
                         :show-word-limit="true" />
                 </el-form-item>
             </el-col>
-        </el-row>
+        </el-row> -->
         <!-- <el-row>
             <el-col :span="24">
                 <el-form-item label="名片頁描述">
@@ -42,9 +42,10 @@
                 </el-form-item>
             </el-col>
         </el-row> -->
-        <el-alert type="info" show-icon :closable="false">
+        <!-- <el-alert type="info" show-icon :closable="false">
             文字描述請到樣板編輯修改。
-        </el-alert>
+        </el-alert> -->
+        <el-divider>Line App Share</el-divider>
 
         <el-divider>Google 搜尋預覽</el-divider>
         <div class="gooogleCard">
@@ -60,13 +61,13 @@
             <div class="card__title">{{ userForm.seoTitle }}</div>
             <div class="card__desc">{{ userForm.description }}</div>
         </div>
-        <el-divider>Line App Share</el-divider>
     </el-form>
 </template>
 <script setup lang="ts">
 import type { IUser } from '~/types/user'
 import { CircleCheck, CircleClose } from '@element-plus/icons-vue'
-
+import type { FormInstance } from 'element-plus'
+const formRef = ref<FormInstance>()
 const isSeoNameLoading = ref<boolean>(false)
 const repoUser = useRepoUser()
 // const isSeoNameValid = ref<boolean>(true)
@@ -81,6 +82,10 @@ const userForm = defineModel<IUser>('modelValue', {
         seoTitle: '',
     }
 })
+
+const formRules = {
+    seoName: { required: true, message: '網址為必填' }
+}
 /**
  * https://developers.google.com/search/docs/appearance/favicon-in-search
  */
@@ -93,8 +98,8 @@ const userForm = defineModel<IUser>('modelValue', {
 // // Methods
 // async function patchSeoName() {
 //     isSeoNameLoading.value = true
-//     repoUI.debounce('patchUserSeoName', async () => {
-//         const result = await repoUser.patchUserSeoName({
+//     repoUI.debounce('patchUserSeo', async () => {
+//         const result = await repoUser.patchUserSeo({
 //             seoName: seoName.value,
 //             id: userForm.value.id
 //         })
@@ -102,6 +107,13 @@ const userForm = defineModel<IUser>('modelValue', {
 //         isSeoNameLoading.value = false
 //     })
 // }
+async function validate() {
+    return formRef.value?.validate()
+}
+
+defineExpose({
+    validate
+})
 </script>
 <style lang="scss" scoped>
 .card__header {

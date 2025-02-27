@@ -37,7 +37,7 @@
                                 變更基本資料
                             </el-button>
                             <el-button @click="openSeoInfo()">
-                                變更SEO資料
+                                變更名片頁資料
                             </el-button>
                         </div>
                         <div class="header__ui">
@@ -89,9 +89,9 @@
     </AtomVekozDialog>
     <AtomVekozDialog v-model="isSeoInfoOpen">
         <template #header>
-            SEO資料
+            名片頁資料
         </template>
-        <FormUserSeoInfo v-if="isSeoInfoOpen" :model-value="userSeoInfo">
+        <FormUserSeoInfo v-if="isSeoInfoOpen" :model-value="userSeoInfo" ref="seoFormRef">
 
         </FormUserSeoInfo>
         <template #footer>
@@ -110,10 +110,12 @@ import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 import type { ITemplateDragSouce } from '~/types/eventTemplate';
 import type { IUserDesign } from '~/types/userDesign';
+import type { FormInstance } from 'element-plus';
 
 const repoUser = useRepoUser()
 const repoUserDesign = useRepoUserDesign()
 const repoEvent = useRepoEvent()
+const seoFormRef = ref<FormInstance>()
 
 // 其他未歸類
 const id = ref<string>(crypto.randomUUID())
@@ -192,8 +194,19 @@ function openSeoInfo() {
     isSeoInfoOpen.value = true
 }
 
-function confirmUserSeoInfo() {
+async function confirmUserSeoInfo() {
+    const isValidForm = await seoFormRef.value?.validate()
+    console.log({
+        isValidForm
+    })
+    if (!isValidForm) {
+        return
+    }
     isSeoInfoOpen.value = false
+    const isValid = await repoUser.patchUserSeo(userSeoInfo.value)
+    if (!isValid) {
+        isSeoInfoOpen.value = true
+    }
 }
 
 function openPrivateInfo() {

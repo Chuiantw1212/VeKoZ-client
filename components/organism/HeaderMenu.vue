@@ -42,16 +42,23 @@ import { getAuth, signOut, } from "firebase/auth"
 import { MoleculeAttendeeMenuItems } from '#components'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const isFullScreen = ref<boolean>(false)
 const activeIndex = ref('1')
 
 // Hooks
 const router = useRouter()
-watch(() => repoUser.userPreference.isFullScreen, (newValue) => {
-    if (newValue) {
-        isFullScreen.value = true
+
+const isFullScreen = computed(() => {
+    if (repoUser.userPreference) {
+        return repoUser.userPreference.isFullScreen
+    } else {
+        return false
     }
 })
+// watch(() => repoUser.userPreference.isFullScreen, (newValue) => {
+//     if (newValue) {
+//         isFullScreen.value = true
+//     }
+// })
 
 // Methods
 function patchUserPreference() {

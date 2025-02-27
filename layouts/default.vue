@@ -2,7 +2,7 @@
     <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
         <HeaderMenu class="vekoz--header"></HeaderMenu>
     </el-header>
-    <el-container class="defaultLayout" :class="{ 'defaultLayout__isStandard': !repoUser.userPreference.isFullScreen }">
+    <el-container class="defaultLayout" :class="{ 'defaultLayout__isStandard': !isFullScreen }">
         <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
             <SideMenu></SideMenu>
         </el-aside>
@@ -23,6 +23,13 @@ import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 
 const repoUser = useRepoUser()
 const repoUI = useRepoUI()
+
+const isFullScreen = computed(() => {
+    if (repoUser.userPreference) {
+        return repoUser.userPreference?.isFullScreen
+    }
+})
+
 </script>
 <style lang="scss" scoped>
 .vekoz--header {
