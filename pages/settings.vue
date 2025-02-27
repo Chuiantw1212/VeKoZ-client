@@ -41,12 +41,8 @@
                             </el-button>
                         </div>
                         <div class="header__ui">
-                            <!-- <el-col> -->
-                            <!-- <el-form-item :span="12" label=""> -->
                             <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="打開" inactive-text="關閉"
-                                size="large" />
-                            <!-- </el-form-item> -->
-                            <!-- </el-col> -->
+                                size="large" @change="patchUserIsPublic()" />
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">
                                     瀏覽
@@ -212,6 +208,13 @@ async function confirmUserSeoInfo() {
     } catch (error) {
         isSeoInfoOpen.value = true
     }
+}
+
+function patchUserIsPublic() {
+    repoUser.patchUser({
+        id: userTemplate.value.id,
+        isPublic: userTemplate.value.isPublic
+    })
 }
 
 function openPrivateInfo() {
