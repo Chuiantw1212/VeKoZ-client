@@ -186,9 +186,6 @@ watch(() => repoUser.userInfo, (newValue) => {
 // Methods
 async function handleDesignChanged(userDesign: IUserDesign) {
     const userPatch = await repoUserDesign.patchUserDesign(userDesign)
-    console.log({
-        userPatch
-    })
     if (userPatch) {
         Object.assign(userTemplate.value, userPatch)
     }
@@ -212,7 +209,7 @@ async function confirmUserSeoInfo() {
         await repoUser.patchUserSeo(userSeoInfo.value)
         userTemplate.value.seoName = userSeoInfo.value.seoName
     } catch (error) {
-        isSeoInfoOpen.value = true
+        openSeoInfo()
     }
 }
 
