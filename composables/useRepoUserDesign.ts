@@ -11,14 +11,14 @@ export default defineStore('userDesign', () => {
             method: 'POST',
             body: designs,
         })
-        return response.body
+        return response.json()
     }
     async function patchUserDesign(design: IUserDesign) {
         const response = await defaultApi.authRequest(`/user-design/${design.id}`, {
             method: 'PATCH',
             body: design,
         })
-        return response.body
+        return response.json()
     }
     return {
         postUserDesigns,

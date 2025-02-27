@@ -185,7 +185,13 @@ watch(() => repoUser.userInfo, (newValue) => {
 
 // Methods
 async function handleDesignChanged(userDesign: IUserDesign) {
-    repoUserDesign.patchUserDesign(userDesign)
+    const userPatch = await repoUserDesign.patchUserDesign(userDesign)
+    console.log({
+        userPatch
+    })
+    if (userPatch) {
+        Object.assign(userTemplate.value, userPatch)
+    }
 }
 
 function openSeoInfo() {
@@ -256,7 +262,7 @@ async function initializeUserForm(newValue: IUser) {
                 value: 'EN Chu',
                 alignment: 'center',
                 required: true,
-                formField: 'name',
+                formField: 'seoTitle',
             },
             {
                 type: 'textarea',
