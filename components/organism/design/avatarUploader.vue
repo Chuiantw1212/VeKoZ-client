@@ -2,7 +2,7 @@
     <!-- 檢視與編輯用 -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
         <div class="avatar__wrapper">
-            <AtomAvatarUploader v-if="customDesign" v-model="customDesign.value"></AtomAvatarUploader>
+            <AtomAvatarUploader v-if="customDesign" v-model="customDesign.value" :disabled="true"></AtomAvatarUploader>
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -118,5 +118,6 @@ async function handleChange(templateDesign: any) {
 .avatar__wrapper {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 </style>

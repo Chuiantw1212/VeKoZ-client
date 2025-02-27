@@ -41,7 +41,7 @@
                             </el-button>
                         </div>
                         <div class="header__ui">
-                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="打開" inactive-text="關閉"
+                            <el-switch v-model="userTemplate.isPublic" inline-prompt active-text="公開" inactive-text="關閉"
                                 size="large" @change="patchUserIsPublic()" />
                             <NuxtLink :to="getPersonalLink()" target="_blank">
                                 <el-button v-loading="isLoading" :icon="View">

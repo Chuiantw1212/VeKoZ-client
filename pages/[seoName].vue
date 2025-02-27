@@ -1,28 +1,13 @@
 <template>
-    <!-- <div> -->
-    <!-- <h1>{{ userForm }}</h1> -->
-    <!-- <el-card class="vekoz-card"> -->
-    <!-- <template #header>
-                <div class="vekoz-card-header">
-                    <div></div>
-                    <div>
-                        <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                            <el-button v-loading="isLoading" :icon="Share" @click="shareLink()">
-                                分享網址
-                            </el-button>
-                        </el-tooltip>
-                        <el-button :icon="FullScreen">QR Code</el-button>
-                    </div>
-                </div>
-            </template> -->
-    <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile>
-    <!-- </el-card> -->
-    <!-- </div> -->
+    <div>
+        <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile>
+        <!-- <MoleculeVenoniaCalendar></MoleculeVenoniaCalendar> -->
+    </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-    layout: false
+    layout: 'profile'
 })
 import { FormUserProfile } from '#components';
 import type { IEventFromList } from '~/types/event';

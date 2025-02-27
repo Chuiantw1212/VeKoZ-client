@@ -1,5 +1,5 @@
 <template>
-    <el-card class="profile">
+    <el-card class="profile" :class="{ 'profile--borderless': !isDesigning }">
         <template #header>
             <div class="profile__header">
                 <div>
@@ -15,6 +15,12 @@
         </template>
         <div v-if="userTemplate.designs">
             <template v-for="(design, index) in userTemplate.designs">
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
+                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
+                </OrganismDesignAvatarUploader>
                 <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'"
                     v-model="userTemplate.designs[index]" :onchange="onchange" :required="design.required"
                     :isDesigning="props.isDesigning" :disabled="props.disabled" :show-label="false"
@@ -22,24 +28,24 @@
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
                 </OrganismDesignEventHistory>
-                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
-                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
-                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
-                </OrganismDesignAvatarUploader>
-                <OrganismDesignHeader1 v-if="design.type === 'header1'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
-                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
-                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
-                </OrganismDesignHeader1>
-                <OrganismDesignTextarea v-if="design.type === 'textarea'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
-                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
-                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
-                </OrganismDesignTextarea>
+                <template v-if="design.type === 'header1'">
+                    <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
+                        :required="design.required" :isDesigning="props.isDesigning" :disabled="props.disabled"
+                        :show-label="false" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
+                        @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                        @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
+                    </OrganismDesignHeader1>
+                    <h1 v-else>{{ userTemplate.designs[index].value }}</h1>
+                </template>
+                <template v-if="design.type === 'textarea'">
+                    <OrganismDesignTextarea v-if="isDesigning" v-model="userTemplate.designs[index]"
+                        :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
+                        :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+                        @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+                        @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
+                    </OrganismDesignTextarea>
+                    <p v-else>{{ userTemplate.designs[index].value }}</p>
+                </template>
                 <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
                     :onchange="onchange" :required="design.required" :isDesigning="props.isDesigning"
                     :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
@@ -188,7 +194,7 @@ defineExpose({
         justify-content: space-between;
         height: 32px; // template共同高度
 
-        >* {
+        > * {
             margin-bottom: 0px; // 除掉form-item的maargon-bottom
         }
     }
@@ -205,5 +211,10 @@ defineExpose({
         text-align: center;
         margin: 1.25rem 0px;
     }
+}
+
+.profile--borderless {
+    border: 0px;
+    box-shadow: unset;
 }
 </style>

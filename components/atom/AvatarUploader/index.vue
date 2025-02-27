@@ -6,13 +6,13 @@
                 {{ name }}
             </div>
         </div>
-        <label class="inputGroup__label">
+        <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled, }">
             <div v-if="localValue" class="label__image"
                 :style="{ width: size, height: size, 'background-image': getImageSrc() }"></div>
             <img v-else class="label__image" :style="{ width: size, height: size, }" :src="placeholder">
             <img class="label__placeholder" :style="{ width: size, height: size, }" src="./Rectangle1348.png">
             <input v-show="false" class="body__input" autocomplete="off" type="file" accept="image/*"
-                :data-required="required" :data-name="name" @change="handleFiles($event)"></input>
+                :data-required="required" :data-name="name" @change="handleFiles($event)" :disabled="disabled"></input>
         </label>
     </div>
 </template>
@@ -104,11 +104,11 @@ async function handleFiles(event: any) {
         &:hover {
             .label__placeholder {
                 visibility: visible;
-                background-size: contain;
             }
         }
 
         .label__placeholder {
+            background-size: contain;
             width: 120px;
             height: 120px;
             position: absolute;
@@ -131,7 +131,17 @@ async function handleFiles(event: any) {
             background-repeat: no-repeat;
             border-radius: 50%;
             border: 1px solid rgb(239, 239, 239);
-            // margin: auto;
+        }
+    }
+
+    .inputGroup__label--disabled {
+        cursor: unset;
+
+        &:hover {
+            .label__placeholder {
+                visibility: hidden;
+                background-size: contain;
+            }
         }
     }
 }
