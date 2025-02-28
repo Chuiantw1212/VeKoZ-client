@@ -3,7 +3,7 @@
         <OrganismDesignProfile class="userProfilePage__landing" v-model="userTemplate" :isDesigning="isDesigning">
         </OrganismDesignProfile>
         <el-divider class="userProfilePage__divider">近期公開活動</el-divider>
-        <el-carousel type="card">
+        <el-carousel type="card" :autoplay="false">
             <el-carousel-item v-for="(event) in eventList">
                 <MoleculeEventCard :model-value="event">
 
