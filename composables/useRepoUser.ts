@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
 import useVenoniaApi from './useVenoniaApi'
 import type { IUser, IUserPreference, UserType } from '~/types/user'
-import type { IUserDesign } from '~/types/userDesign'
 
 export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
@@ -86,13 +85,6 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function patchUserSeo(user: IUser): Promise<number> {
-        const result = await defaultApi.authRequest(`/user/seo`, {
-            method: 'PATCH',
-            body: user,
-        })
-        return result.text()
-    }
     async function patchUserPreference(fieldName: string, newValue: any) {
         if (!userPreference.value || !userInfo.value.id) {
             return
@@ -127,7 +119,6 @@ export default defineStore('user', () => {
         setUserType,
         deleteUser,
         postUser,
-        patchUserSeo,
         patchUser,
         putUserPhoto,
         // User preference

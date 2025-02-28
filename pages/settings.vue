@@ -219,7 +219,7 @@ async function confirmUserSeoInfo() {
     }
     isSeoInfoOpen.value = false
     try {
-        await repoUser.patchUserSeo(userSeoInfo.value)
+        await repoUser.patchUser(userSeoInfo.value)
         userTemplate.value.seoName = userSeoInfo.value.seoName
     } catch (error) {
         openSeoInfo()
