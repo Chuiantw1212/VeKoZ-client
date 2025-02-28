@@ -33,10 +33,10 @@
                 <template #header>
                     <div class="vekoz-card-header">
                         <div>
-                            <el-button @click="openPrivateInfo()">
+                            <el-button :disabled="isLoading" @click="openPrivateInfo()">
                                 變更基本資料
                             </el-button>
-                            <el-button @click="openSeoInfo()">
+                            <el-button :disabled="isLoading" @click="openSeoInfo()">
                                 變更名片頁資料
                             </el-button>
                         </div>
@@ -169,17 +169,17 @@ const isSeoNameValid = ref<boolean>(false)
 
 // Hooks
 onMounted(async () => {
-    isLoading.value = true
     window.addEventListener('resize', setColumnSpan)
     setColumnSpan()
-    isLoading.value = false
 })
 onBeforeUnmount(() => {
     window.removeEventListener('resize', setColumnSpan)
 })
 watch(() => repoUser.userInfo, (newValue) => {
+    isLoading.value = true
     repoUI.debounce(`initializeUserForm${id.value}`, () => {
         initializeUserForm(newValue)
+        isLoading.value = false
     })
 }, { immediate: true, })
 
@@ -206,6 +206,8 @@ function openSeoInfo() {
     userSeoInfo.value.id = userTemplate.value.id ?? ''
     userSeoInfo.value.seoName = userTemplate.value.seoName ?? ''
     userSeoInfo.value.seoTitle = userTemplate.value.seoTitle ?? ''
+    userSeoInfo.value.description = userTemplate.value.description
+    userSeoInfo.value.avatar = userTemplate.value.avatar
     userSeoInfo.value.description = userTemplate.value.description
     isSeoInfoOpen.value = true
 }

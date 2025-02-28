@@ -11,11 +11,27 @@
             <el-col :span="24">
             </el-col>
         </el-row>
+        <el-alert type="info" show-icon :closable="false">
+            縮圖、文字請從樣板設計更新。
+        </el-alert>
         <el-divider>Line App Share</el-divider>
-
+        <div class="lintCard">
+            <div class="card__header">https://vekoz.org/{{ userForm.seoName }}?openExternalBrowser=1</div>
+            <div class="card__body">
+                <div class="body__textGroup">
+                    <div class="textGroup__title">
+                        {{ userForm.seoTitle }}
+                    </div>
+                    <div class="textGroup__desc">
+                        {{ userForm.description }}
+                    </div>
+                </div>
+                <img class="body__image" :src="userForm.avatar">
+            </div>
+        </div>
         <el-divider>Google 搜尋預覽</el-divider>
         <!-- {{ userForm }} -->
-        <div class="gooogleCard">
+        <div class="googleCard">
             <div class="card__header">
                 <!-- <div> -->
                 <img class="header__avatar" src="@/assets/logo/160_160.png">
@@ -93,41 +109,90 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
-.card__header {
-    display: flex;
-    align-items: center;
-    width: 100%;
+.lintCard {
+    width: 360px;
+    padding: 8px 12px;
+    background-color: rgb(195, 246, 157);
+    border-radius: 17.5px;
+    margin-left: auto;
 
-    .header__avatar {
-        display: block;
-        width: 28px;
-        height: 28px;
-        margin-right: 12px;
+    .card__header {
+        color: #0000FF;
     }
 
-    .header__name {
-        // color: #dadce0;
-        font-size: 14px;
-        display: block;
-        line-height: 20px;
-        white-space: nowrap;
-    }
+    .card__body {
+        display: flex;
+        margin-top: 13px;
+        align-items: center;
 
-    .header__uirl {
-        font-size: 12px;
-        line-height: 18px;
-    }
+        .body__textGroup {
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid lightgray;
+            padding-left: 10px;
+            width: 235px;
+            // overflow: hidden;
+            // text-overflow: ellipsis;
 
+            .textGroup__title {
+                font-size: 14px;
+            }
+
+            .textGroup__desc {
+                font-size: 13px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .body__image {
+            height: 45px;
+            margin-left: 12px;
+        }
+    }
 }
 
-.card__title {
-    font-family: Arial, sans-serif;
-    font-size: 20px;
-    font-weight: 400;
-    margin-top: 18px;
-}
+.googleCard {
 
-.card__desc {
-    max-width: 600px;
+
+    .card__header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        .header__avatar {
+            display: block;
+            width: 28px;
+            height: 28px;
+            margin-right: 12px;
+        }
+
+        .header__name {
+            // color: #dadce0;
+            font-size: 14px;
+            display: block;
+            line-height: 20px;
+            white-space: nowrap;
+        }
+
+        .header__uirl {
+            font-size: 12px;
+            line-height: 18px;
+        }
+
+    }
+
+    .card__title {
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        margin-top: 18px;
+    }
+
+    .card__desc {
+        max-width: 600px;
+    }
 }
 </style>
