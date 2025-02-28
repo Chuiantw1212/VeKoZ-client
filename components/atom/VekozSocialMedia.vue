@@ -2,7 +2,8 @@
     <!-- <div> -->
     <div class="profile__socialMedia" :key="renderKey">
         <template v-for="(url, index) in socialUrls">
-            <el-button class="socialMedia__icon" text circle @click="removeUrl(index)">
+            <el-button class="socialMedia__icon" :class="{ 'socialMedia__icon--isDesigning': isDesigning }" text circle
+                @click="handleSocialVisit(index)">
                 <img v-if="url.includes('youtube.com/')" class="link__icon" src="@/assets/icon/youtube.svg">
                 <img v-else-if="url.includes('facebook.com/')" class="link__icon"
                     src="@/assets/icon/facebook-circle.svg">
@@ -66,10 +67,15 @@ function pushNewMedia() {
     renderKey.value = crypto.randomUUID()
     emit('change')
 }
-function removeUrl(index: number) {
-    if (socialUrls.value) {
-        socialUrls.value.splice(index, 1)
-        renderKey.value = crypto.randomUUID()
+function handleSocialVisit(index: number) {
+    if (props.isDesigning) {
+        if (socialUrls.value) {
+            socialUrls.value.splice(index, 1)
+            renderKey.value = crypto.randomUUID()
+        }
+    } else {
+        const url = socialUrls.value[index]
+        window.open(url, '_blank')?.focus();
     }
 }
 function validateEmail(email: string) {
@@ -91,6 +97,16 @@ function validateEmail(email: string) {
         height: 40px;
         position: relative;
 
+
+
+        .link__icon {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+    }
+
+    .socialMedia__icon--isDesigning {
         &:hover {
             ::before {
                 content: 'X';
@@ -102,12 +118,6 @@ function validateEmail(email: string) {
                 color: lightcoral;
                 font-size: 40px;
             }
-        }
-
-        .link__icon {
-            width: 24px;
-            height: 24px;
-            display: block;
         }
     }
 }
