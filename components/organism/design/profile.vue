@@ -5,7 +5,7 @@
                 <div>
                     <el-button v-loading="isLoading" :icon="Share" text circle>
                     </el-button>
-                    <el-button v-loading="isLoading" text circle :icon="Menu">
+                    <el-button v-loading="isLoading" text circle :icon="Menu" @click="isQrCodeDialogOpen = true">
                     </el-button>
                 </div>
                 <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="true">
@@ -24,14 +24,19 @@
         <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
         </AtomVekozSocialMedia>
     </el-card>
+    <AtomVekozDialog v-model="isQrCodeDialogOpen">
+        <canvas id="qrCanvas"></canvas>
+    </AtomVekozDialog>
 </template>
 <script setup lang="ts">
 import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
+import QRCode, { type QRCodeRenderersOptions } from 'qrcode'
 const repoUI = useRepoUI()
-const isLoading = ref<boolean>(false)
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
+const isLoading = ref<boolean>(false)
+const isQrCodeDialogOpen = ref<boolean>(false)
 const userTemplate = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
@@ -63,7 +68,11 @@ const formRef = ref<FormInstance>()
 const formModel = ref<{ [key: string]: any }>({})
 const formRules = ref<{ [key: string]: any }>({})
 
-// // Hooks
+// Hooks
+onMounted(() => {
+    drawQrCode()
+})
+
 // watch(() => templateDesigns.value, () => {
 //     templateDesigns.value.forEach(design => {
 //         if (design.formField) {
@@ -92,6 +101,18 @@ const formRules = ref<{ [key: string]: any }>({})
 // }, { immediate: true, deep: true })
 
 // methods
+async function drawQrCode() {
+    const openInLineExternal = `openExternalBrowser=1`
+    const url = `${userTemplate.value.seoName}?${openInLineExternal}`
+    const options: QRCodeRenderersOptions = {
+        errorCorrectionLevel: 'H'
+    }
+    QRCode.toCanvas(document.getElementById('qrCanvas'), url, options, function (error) {
+        if (error) console.error(error)
+        console.log('success!');
+    })
+}
+
 async function handleChange() {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
