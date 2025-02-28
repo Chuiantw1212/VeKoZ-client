@@ -16,7 +16,7 @@
             </div>
         </template>
         <div class="profile__avatar">
-            <AtomAvatarUploader v-model="userTemplate.avatar" @change="handleChange">
+            <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
             </AtomAvatarUploader>
         </div>
         <template v-if="isDesigning">
@@ -188,7 +188,7 @@ defineExpose({
 }
 
 .profile {
-    
+
     .content__header {
         text-align: center;
         font-size: 18px;

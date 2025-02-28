@@ -2,47 +2,19 @@
     <!-- <div> -->
     <div class="profile__socialMedia" :key="renderKey">
         <template v-for="(url, index) in socialUrls">
-            <el-button v-if="url.includes('youtube.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/youtube.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('facebook.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/facebook-circle.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('x.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/twitter.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('instagram.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/instagram.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('pinterest.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/pinterest.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('linkedin.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/linkedin.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('line.me/ti/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/line-logo.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('github.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/github.svg">
-            </el-button>
-            <el-button v-else-if="url.includes('reddit.com/')" class="socialMedia__icon" text circle
-                @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/reddit.svg">
-            </el-button>
-            <el-button v-else-if="validateEmail(url)" class="socialMedia__icon" text circle @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/email.svg">
-            </el-button>
-            <el-button v-else class="socialMedia__icon" text circle @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/web.svg">
+            <el-button class="socialMedia__icon" text circle @click="removeUrl(index)">
+                <img v-if="url.includes('youtube.com/')" class="link__icon" src="@/assets/icon/youtube.svg">
+                <img v-else-if="url.includes('facebook.com/')" class="link__icon"
+                    src="@/assets/icon/facebook-circle.svg">
+                <img v-else-if="url.includes('x.com/')" class="link__icon" src="@/assets/icon/twitter.svg">
+                <img v-else-if="url.includes('instagram.com/')" class="link__icon" src="@/assets/icon/instagram.svg">
+                <img v-else-if="url.includes('pinterest.com/')" class="link__icon" src="@/assets/icon/pinterest.svg">
+                <img v-else-if="url.includes('linkedin.com/')" class="link__icon" src="@/assets/icon/linkedin.svg">
+                <img v-else-if="url.includes('line.me/')" class="link__icon" src="@/assets/icon/line-logo.svg">
+                <img v-else-if="url.includes('github.com/')" class="link__icon" src="@/assets/icon/github.svg">
+                <img v-else-if="url.includes('reddit.com/')" class="link__icon" src="@/assets/icon/reddit.svg">
+                <img v-else-if="validateEmail(url)" class="link__icon" src="@/assets/icon/email.svg">
+                <img v-else class="link__icon" src="@/assets/icon/web.svg">
             </el-button>
         </template>
         <template v-if="!socialUrls.length">
@@ -58,7 +30,7 @@
             </el-button>
         </template>
     </div>
-    <div class="socialMedia__add">
+    <div v-if="isDesigning" class="socialMedia__add">
         <el-input v-model="socialMediaUrl" placeholder="請輸入連結(FB, IF, Email,......etc)">
 
         </el-input>
