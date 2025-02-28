@@ -27,6 +27,10 @@
                     </MoleculeEventCard>
                 </el-col>
             </el-row>
+            <el-card v-if="!eventList.length" class="notFound">
+                <el-empty description="查無資料">
+                </el-empty>
+            </el-card>
         </el-col>
     </el-row>
 </template>
