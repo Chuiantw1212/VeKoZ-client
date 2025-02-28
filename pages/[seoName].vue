@@ -44,7 +44,7 @@ async function getPublicUserInfo() {
         width: 100%;
         height: 100%;
         // min-height: 100vh;
-        background-image: url('@/assets/mock/background.jpg');
+        // background-image: url('@/assets/mock/background.jpg');
         background-size: cover;
         background-position: center;
         filter: brightness(50%);
