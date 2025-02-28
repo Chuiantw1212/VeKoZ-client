@@ -70,8 +70,8 @@
                     </div>
                 </template>
                 尚未完成的功能，敬請期待。
-                <FormDesignDragging type="attendee" @dragstart="setTemplateItem($event)"
-                    @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging>
+                <!-- <FormDesignDragging type="attendee" @dragstart="setTemplateItem($event)"
+                    @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging> -->
             </el-card>
         </el-col>
     </el-row>
