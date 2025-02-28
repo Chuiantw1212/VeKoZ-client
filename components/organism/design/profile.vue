@@ -11,7 +11,7 @@
                     </el-button>
                 </div>
                 <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning">
-                    訂閱
+                    追蹤
                 </el-button>
             </div>
         </template>

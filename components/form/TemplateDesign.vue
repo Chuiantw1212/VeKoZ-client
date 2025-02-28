@@ -5,7 +5,7 @@
         </slot>
     </div>
     <!-- {{ templateDesigns }} -->
-    <el-form v-if="type === 'host'" ref="formRef" class="designForm" label-width="auto" :model="formModel"
+    <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel"
         :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
             <!-- 必填且限量的欄位 -->
@@ -122,11 +122,11 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    type: {
-        type: String,
-        default: 'attendee',
-        required: true,
-    }
+    // type: {
+    //     type: String,
+    //     default: 'attendee',
+    //     required: true,
+    // }
 })
 const formRef = ref<FormInstance>()
 const formModel = ref<{ [key: string]: any }>({})

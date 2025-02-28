@@ -58,8 +58,10 @@
                 <el-button :icon="Close" text>
                 </el-button>
             </template>
-            <FormOrganizationMember v-if="organizationMemberDialog.visibility"
-                :mode="organizationMemberDialog.mode">
+            <el-alert>
+                連動已註冊的成員，才不會出BUG。
+            </el-alert>
+            <FormOrganizationMember v-if="organizationMemberDialog.visibility" :mode="organizationMemberDialog.mode">
             </FormOrganizationMember>
             <!-- <template #footer>
                 <el-button @click="organizationMemberDialog.visibility = false">取消</el-button>
@@ -128,7 +130,7 @@ async function putOrganization() {
 }
 
 function openNewDialog() {
-    organization.value = { } as any
+    organization.value = {} as any
     organizationDialog.visibility = true
     organizationDialog.mode = 'ADD'
 }

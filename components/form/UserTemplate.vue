@@ -1,57 +1,60 @@
 <template>
-    <div>
+    <div class="userProfilePage">
         <OrganismDesignProfile v-model="userTemplate" :isDesigning="isDesigning"></OrganismDesignProfile>
-    </div>
-    <div v-if="userTemplate.designs">
-        <template v-for="(design, index) in userTemplate.designs">
-            <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
-                :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                @mouseout="emit('mouseout')">
-            </OrganismDesignAvatarUploader>
-            <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'" v-model="userTemplate.designs[index]"
-                :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                @mouseout="emit('mouseout')">
-            </OrganismDesignEventHistory>
-            <template v-if="design.type === 'header1'">
-                <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
+        <el-divider>近期公開活動</el-divider>
+        <div v-if="userTemplate.designs">
+            <template v-for="(design, index) in userTemplate.designs">
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
+                    :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
+                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
+                    @mouseout="emit('mouseout')">
+                </OrganismDesignAvatarUploader>
+                <OrganismDesignEventHistory v-model="userTemplate.designs[index]" :onchange="onchange"
                     :required="design.required" :disabled="props.disabled" :show-label="false"
                     @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
-                </OrganismDesignHeader1>
-                <h1 v-else>{{ userTemplate.designs[index].value }}</h1>
-            </template>
-            <template v-if="design.type === 'textarea'">
-                <OrganismDesignTextarea v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
-                    :required="design.required" :disabled="props.disabled" :show-label="false"
+                </OrganismDesignEventHistory>
+                <template v-if="design.type === 'header1'">
+                    <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
+                        :required="design.required" :disabled="props.disabled" :show-label="false"
+                        @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                        @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
+                        @mouseout="emit('mouseout')">
+                    </OrganismDesignHeader1>
+                    <h1 v-else>{{ userTemplate.designs[index].value }}</h1>
+                </template>
+                <template v-if="design.type === 'textarea'">
+                    <OrganismDesignTextarea v-if="isDesigning" v-model="userTemplate.designs[index]"
+                        :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
+                        @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                        @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
+                        @mouseout="emit('mouseout')">
+                    </OrganismDesignTextarea>
+                    <p v-else>{{ userTemplate.designs[index].value }}</p>
+                </template>
+                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
+                    :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
                     @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
-                </OrganismDesignTextarea>
-                <p v-else>{{ userTemplate.designs[index].value }}</p>
+                </OrganismDesignSocialMedia>
             </template>
-            <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
-                :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                @mouseout="emit('mouseout')">
-            </OrganismDesignSocialMedia>
-        </template>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
-import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
 
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
+
+const eventRepo = useRepoEvent()
 const userTemplate = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
+        id: '',
         seoName: '',
         designs: [],
     },
@@ -73,42 +76,20 @@ const props = defineProps({
 })
 
 const formRef = ref<FormInstance>()
-const formModel = ref<{ [key: string]: any }>({})
-const formRules = ref<{ [key: string]: any }>({})
-
-// // Hooks
-// watch(() => templateDesigns.value, () => {
-//     templateDesigns.value.forEach(design => {
-//         if (design.formField) {
-//             switch (design.formField) {
-//                 case 'organizer': {
-//                     formModel.value[design.formField] = design.organizationId
-//                     break;
-//                 }
-//                 case 'performers': {
-//                     formModel.value[design.formField] = design.memberIds
-//                     break;
-//                 }
-//                 case 'dates':
-//                 case 'name':
-//                 case 'banner':
-//                 default: {
-//                     formModel.value[design.formField] = design.value
-//                 }
-//             }
-//             formRules.value[design.formField] = {
-//                 required: true,
-//                 message: `${design.label}為必填`
-//             }
-//         }
-//     })
-// }, { immediate: true, deep: true })
+// Hooks
+watch(() => userTemplate.value.id, (value) => {
+    getEventList()
+}, { immediate: true })
 
 // methods
-function getPersonalLink() {
-    const openInLineExternal = `openExternalBrowser=1`
-    return `${userTemplate.value.seoName}?${openInLineExternal}`
+async function getEventList() {
+    if (userTemplate.value.id) {
+        const result = await eventRepo.getEventList({
+            performerIds: [userTemplate.value.id],
+        })
+    }
 }
+
 async function validate() {
     return await formRef.value?.validate()
 }
@@ -159,6 +140,11 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
+.userProfilePage {
+    max-width: 480px;
+    margin: auto;
+}
+
 .designForm {
     width: 100%;
 }

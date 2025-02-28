@@ -58,6 +58,7 @@ export interface IEventQuery {
     keywords?: string,
     isPublic?: boolean,
     limit?: number,
+    performerIds: string[],
 }
 
 /**

@@ -14,7 +14,8 @@
         <el-alert type="info" show-icon :closable="false">
             縮圖、文字請從樣板設計更新。
         </el-alert>
-        <el-divider>Line App Share</el-divider>
+        <el-divider>Line 分享
+        </el-divider>
         <div class="lintCard">
             <div class="card__header">https://vekoz.org/{{ userForm.seoName }}?openExternalBrowser=1</div>
             <div class="card__body">
