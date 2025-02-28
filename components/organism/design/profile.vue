@@ -10,7 +10,7 @@
                     <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
                     </el-button>
                 </div>
-                <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="true">
+                <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning">
                     訂閱
                 </el-button>
             </div>
@@ -24,9 +24,8 @@
                 :maxlength="30" :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
         </template>
         <template v-else>
-            <h1 class="content__header">
-                {{ userTemplate.seoTitle }}
-            </h1>
+            <pre class="content__header">{{ userTemplate.seoTitle }}
+            </pre>
         </template>
         <template v-if="isDesigning">
             <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
@@ -189,8 +188,11 @@ defineExpose({
 }
 
 .profile {
+    
     .content__header {
         text-align: center;
+        font-size: 18px;
+        font-weight: bold;
 
         :deep(.el-input__inner) {
             font-size: 18px;
