@@ -5,7 +5,7 @@
                 <div>
                     <el-button v-loading="isLoading" :icon="Share" text circle>
                     </el-button>
-                    <el-button v-loading="isLoading" text circle :icon="Menu" @click="isQrCodeDialogOpen = true">
+                    <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
                     </el-button>
                 </div>
                 <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="true">
@@ -25,7 +25,7 @@
         </AtomVekozSocialMedia>
     </el-card>
     <AtomVekozDialog v-model="isQrCodeDialogOpen">
-        <canvas id="qrCanvas"></canvas>
+        <canvas class="dialog__qrCode" id="qrCanvas"></canvas>
     </AtomVekozDialog>
 </template>
 <script setup lang="ts">
@@ -70,7 +70,7 @@ const formRules = ref<{ [key: string]: any }>({})
 
 // Hooks
 onMounted(() => {
-    drawQrCode()
+    // drawQrCode()
 })
 
 // watch(() => templateDesigns.value, () => {
@@ -101,12 +101,21 @@ onMounted(() => {
 // }, { immediate: true, deep: true })
 
 // methods
+function openQrCode() {
+    isQrCodeDialogOpen.value = true
+    nextTick(() => {
+        drawQrCode()
+    })
+}
 async function drawQrCode() {
     const openInLineExternal = `openExternalBrowser=1`
-    const url = `${userTemplate.value.seoName}?${openInLineExternal}`
+    const url = `https://vekoz.org/${userTemplate.value.seoName}?${openInLineExternal}`
     const options: QRCodeRenderersOptions = {
         errorCorrectionLevel: 'H'
     }
+    console.log({
+        url
+    })
     QRCode.toCanvas(document.getElementById('qrCanvas'), url, options, function (error) {
         if (error) console.error(error)
         console.log('success!');
@@ -177,10 +186,16 @@ defineExpose({
         justify-content: center;
     }
 
+
     .profile__name {
         text-align: center;
         margin: 1.25rem 0px;
     }
+}
+
+.dialog__qrCode {
+    display: block;
+    margin: auto;
 }
 
 .profile--borderless {
