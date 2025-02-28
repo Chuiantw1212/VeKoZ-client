@@ -52,12 +52,12 @@
                     </div>
                 </template>
                 <div class="seoPage">
-                    <OrganismDesignProfile :key="renderKey" v-model="userTemplate" :is-designing="true"
+                    <FormUserTemplate :key="renderKey" v-model="userTemplate" :is-designing="true"
                         :onchange="patchUser">
-                    </OrganismDesignProfile>
-                    <el-card>
+                    </FormUserTemplate>
+                    <!-- <el-card>
                         尚未完成的功能，敬請期待。
-                    </el-card>
+                    </el-card> -->
                 </div>
             </el-card>
         </el-col>
@@ -437,5 +437,6 @@ function allowDrop(ev: any) {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    // background-image: url('@/assets/mock/background.jpg');
 }
 </style>

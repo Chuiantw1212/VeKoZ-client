@@ -1,5 +1,5 @@
 <template>
-    <el-form label-width="auto" ref="formRef" :model="userForm" :rules="formRules">
+    <el-form class="form" label-width="auto" ref="formRef" :model="userForm" :rules="formRules">
         <el-form-item label="名片頁網址" prop="seoName">
             <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true">
                 <template #prefix>
@@ -11,10 +11,7 @@
             <el-col :span="24">
             </el-col>
         </el-row>
-        <el-alert type="info" show-icon :closable="false">
-            縮圖、文字請從樣板設計更新。
-        </el-alert>
-        <el-divider>Line 分享
+        <!-- <el-divider>Line 分享
         </el-divider>
         <div class="lintCard">
             <div class="card__header">https://vekoz.org/{{ userForm.seoName }}?openExternalBrowser=1</div>
@@ -29,13 +26,16 @@
                 </div>
                 <img class="body__image" :src="userForm.avatar">
             </div>
-        </div>
+        </div> -->
+        <el-alert type="info" show-icon :closable="false">
+            縮圖、文字請從樣板設計更新。
+        </el-alert>
         <el-divider>Google 搜尋預覽</el-divider>
         <!-- {{ userForm }} -->
         <div class="googleCard">
             <div class="card__header">
                 <!-- <div> -->
-                <img class="header__avatar" src="@/assets/logo/160_160.png">
+                    <img class="header__avatar" src="@/assets/logo/160_160.png">
                 <!-- </div> -->
                 <div>
                     <div class="header__name">VeKoZ 微課室</div>
@@ -110,6 +110,10 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
+.form {
+    margin-top: 20px;
+}
+
 .lintCard {
     width: 360px;
     padding: 8px 12px;

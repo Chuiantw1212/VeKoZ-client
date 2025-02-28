@@ -10,7 +10,7 @@
                     <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
                     </el-button>
                 </div>
-                <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning">
+                <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
                     追蹤
                 </el-button>
             </div>
