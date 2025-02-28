@@ -1,50 +1,16 @@
 <template>
-    <!-- <el-alert type="info" show-icon :closable="false">
-        名片頁網址，檢核通過後會立即更新。
-    </el-alert>
-    <br /> -->
     <el-form label-width="auto" ref="formRef" :model="userForm" :rules="formRules">
         <el-form-item label="名片頁網址" prop="seoName">
             <el-input v-model="userForm.seoName" :maxlength="30" placeholder="en-chu" :show-word-limit="true">
                 <template #prefix>
-                    https://vekoz.org/
+                    {{ urlPrefix }}
                 </template>
-                <!-- <template #suffix>
-                    <el-icon v-if="isSeoNameValid" color="#67c23a" v-loading="isSeoNameLoading">
-                        <CircleCheck></CircleCheck>
-                    </el-icon>
-                    <el-icon v-else color="#f56c6c" v-loading="isSeoNameLoading">
-                        <CircleClose></CircleClose>
-                    </el-icon>
-                </template> -->
             </el-input>
         </el-form-item>
         <el-row>
             <el-col :span="24">
             </el-col>
         </el-row>
-        <!-- <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁標題">
-                    <el-input v-model="userForm.seoTitle" :maxlength="30" placeholder="例：EN Chu，一個善於理財的工程師"
-                        :show-word-limit="true" />
-                </el-form-item>
-            </el-col>
-        </el-row> -->
-        <!-- <el-row>
-            <el-col :span="24">
-                <el-form-item label="名片頁描述">
-                    <el-input v-model="userForm.description" :maxlength="90" :show-word-limit="true" :disabled="true">
-                        <template #prefix>
-                            請到樣板編輯修改文字~~
-                        </template>
-                    </el-input>
-                </el-form-item>
-            </el-col>
-        </el-row> -->
-        <!-- <el-alert type="info" show-icon :closable="false">
-            文字描述請到樣板編輯修改。
-        </el-alert> -->
         <el-divider>Line App Share</el-divider>
 
         <el-divider>Google 搜尋預覽</el-divider>
@@ -66,13 +32,10 @@
 </template>
 <script setup lang="ts">
 import type { IUser } from '~/types/user'
-import { CircleCheck, CircleClose } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
+import isURL from 'validator/lib/isURL'
 const formRef = ref<FormInstance>()
-const isSeoNameLoading = ref<boolean>(false)
-const repoUser = useRepoUser()
-// const isSeoNameValid = ref<boolean>(true)
-const repoUI = useRepoUI()
+const urlPrefix = ref<string>('https://vekoz.org/')
 const userForm = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
@@ -85,7 +48,20 @@ const userForm = defineModel<IUser>('modelValue', {
 })
 
 const formRules = {
-    seoName: { required: true, message: '網址為必填' }
+    seoName: [
+        {
+            required: true,
+            message: '網址為必填',
+        },
+        {
+            message: '網址不合規',
+            validator(rule: any, value: string) {
+                const urlWithPrefix = `${urlPrefix.value}${value}`
+                const isValidUrl = isURL(urlWithPrefix)
+                return isValidUrl;
+            },
+        }
+    ]
 }
 /**
  * https://developers.google.com/search/docs/appearance/favicon-in-search
