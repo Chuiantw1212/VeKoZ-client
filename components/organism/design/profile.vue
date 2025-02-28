@@ -14,7 +14,7 @@
             </div>
         </template>
         <div class="profile__avatar">
-            <AtomAvatarUploader v-if="userTemplate.avatar" v-model="userTemplate.avatar" @change="handleChange">
+            <AtomAvatarUploader v-model="userTemplate.avatar" @change="handleChange">
             </AtomAvatarUploader>
         </div>
         <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle" :maxlength="30"

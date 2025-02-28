@@ -8,15 +8,17 @@
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled, }">
             <div v-if="localValue" class="label__image"
-                :style="{ width: size, height: size, 'background-image': getImageSrc() }"></div>
+            :style="{ width: size, height: size, 'background-image': getImageSrc() }"></div>
             <img v-else class="label__image" :style="{ width: size, height: size, }" :src="placeholder">
             <img class="label__placeholder" :style="{ width: size, height: size, }" src="./Rectangle1348.png">
             <input v-show="false" class="body__input" autocomplete="off" type="file" accept="image/*"
-                :data-required="required" :data-name="name" @change="handleFiles($event)" :disabled="disabled"></input>
+            :data-required="required" :data-name="name" @change="handleFiles($event)" :disabled="disabled"></input>
         </label>
     </div>
+    <!-- localValue{{ localValue }} -->
 </template>
 <script setup lang="ts">
+import isURL from 'validator/lib/isURL'
 import { Buffer } from 'buffer/'
 import placeholderImage from './placeholder.png'
 const localValue = defineModel('modelValue', {
@@ -55,9 +57,7 @@ function getImageSrc() {
         return
     }
     if (typeof localValue.value === "string") {
-        const expression = /https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/
-        const regex = new RegExp(expression)
-        if (String(localValue.value).match(regex)) {
+        if (isURL(localValue.value)) {
             return `url(${localValue.value})`
         }
     }

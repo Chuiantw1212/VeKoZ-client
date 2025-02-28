@@ -52,7 +52,8 @@
                     </div>
                 </template>
                 <div class="seoPage">
-                    <OrganismDesignProfile v-model="userTemplate" :is-designing="true" :onchange="patchUser">
+                    <OrganismDesignProfile :key="renderKey" v-model="userTemplate" :is-designing="true"
+                        :onchange="patchUser">
                     </OrganismDesignProfile>
                     <el-card>
                         尚未完成的功能，敬請期待。
@@ -117,6 +118,7 @@ const repoUser = useRepoUser()
 const repoUserDesign = useRepoUserDesign()
 const repoEvent = useRepoEvent()
 const seoFormRef = ref<FormInstance>()
+const renderKey = ref<string>(crypto.randomUUID())
 
 // 其他未歸類
 const id = ref<string>(crypto.randomUUID())
@@ -185,13 +187,16 @@ watch(() => repoUser.userInfo, (newValue) => {
 
 // Methods
 function patchUser() {
-    repoUI.debounce(`patchUser-${id.value}`, () => {
-        repoUser.patchUser({
-            avatar: userTemplate.value.avatar,
+    repoUI.debounce(`patchUser-${id.value}`, async () => {
+        const publicUrl = await repoUser.putUserAvatar(userTemplate.value.avatar)
+        userTemplate.value.avatar = publicUrl
+        await repoUser.patchUser({
+            avatar: publicUrl,
             seoTitle: userTemplate.value.seoTitle,
             description: userTemplate.value.description,
             sameAs: userTemplate.value.sameAs,
         })
+        renderKey.value = crypto.randomUUID()
     })
 }
 

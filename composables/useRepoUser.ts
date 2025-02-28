@@ -103,12 +103,12 @@ export default defineStore('user', () => {
         })
         return response
     }
-    async function putUserPhoto(body: any) {
-        const response = await defaultApi.authRequest(`/user/photo`, {
+    async function putUserAvatar(body: any) {
+        const response = await defaultApi.authRequest(`/user/avatar`, {
             method: 'PUT',
             body,
         })
-        return response.body
+        return response.text()
     }
     return {
         userType,
@@ -120,7 +120,7 @@ export default defineStore('user', () => {
         deleteUser,
         postUser,
         patchUser,
-        putUserPhoto,
+        putUserAvatar,
         // User preference
         patchUserPreference,
     }
