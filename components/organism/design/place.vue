@@ -3,7 +3,7 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
         <el-select v-if="customDesign" v-model="customDesign.placeId" :placeholder="placeholder" :clearable="true"
             :disabled="disabled" @change="setLocationValues($event)">
-            <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.name)" />
+            <el-option v-for="(item, index) in placeList" :key="index" :label="item.name" :value="String(item.id)" />
         </el-select>
         <el-input v-if="customDesign" class="design__mt" placeholder="地址" :model-value="customDesign.placeAddress"
             :disabled="true"></el-input>
@@ -23,7 +23,7 @@
             <el-select v-model="customDesign.placeId" :placeholder="placeholder" :clearable="true" :disabled="disabled"
                 @change="setLocationValues($event)">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="item.name"
-                    :value="String(item.name)" />
+                    :value="String(item.id)" />
             </el-select>
             <el-input class="design__mt" placeholder="地址" :model-value="customDesign.placeAddress"
                 :disabled="true"></el-input>

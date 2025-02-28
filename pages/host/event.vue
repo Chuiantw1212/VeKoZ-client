@@ -115,7 +115,7 @@ const formRef = ref<FormInstance>()
 onMounted(async () => {
     isLoading.value = true
     await Promise.all([
-        getEventList(),
+        // getEventList(),
         getOrganizationList()
     ])
     // setCalendarView()
@@ -174,7 +174,10 @@ function setCalendarView() {
     }
 }
 async function handleDatesSet(datesSetArg: DatesSetArg) {
-    const { view } = datesSetArg
+    const { start, endStr, view } = datesSetArg
+    console.log({
+        datesSetArg
+    })
     const type = view.type as 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
     const preferenceEvnet: IPreferenceEvent = {
         calendarViewType: type,
@@ -192,7 +195,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     }
 
     // 抓取當月事件資料
-
+    getEventList(start)
 
     // // Remove Google Calendar Events
     // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
@@ -270,9 +273,9 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     isDialogPatchLoading.value = false
 }
 
-async function getEventList() {
-    const startOfTheMonth = new Date()
-    startOfTheMonth.setDate(0)
+async function getEventList(startDate: Date) {
+    // const startOfTheMonth = new Date()
+    // startOfTheMonth.setDate(0)
 
     // const condition: IEventFromList = {
     //     startDate: startOfTheMonth,
@@ -287,7 +290,7 @@ async function getEventList() {
     //     condition.isPublic = false
     // }
     vekozEventList.value = await repoEvent.getEventList({
-        startDate: startOfTheMonth,
+        startDate,
     })
 
     const fullCalendarEventList: IFullCalendarEvent[] = vekozEventList.value.map(event => {
@@ -471,8 +474,8 @@ async function deleteEvent() {
     isLoading.value = true
     if (dialogEventTemplate.value.id) {
         await repoEvent.deleteEvent(dialogEventTemplate.value.id)
-        vekozCalendarRef.value?.removeAllEvents()
-        await getEventList()
+        // vekozCalendarRef.value?.removeAllEvents()
+        // await getEventList()
         eventDialogIsOpen.value = false
         isLoading.value = false
     }
