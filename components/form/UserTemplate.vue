@@ -1,6 +1,7 @@
 <template>
     <div class="userProfilePage">
-        <OrganismDesignProfile class="userProfilePage__landing" v-model="userTemplate" :isDesigning="isDesigning">
+        <OrganismDesignProfile class="userProfilePage__landing" v-model="userTemplate" :onchange="onchange"
+            :isDesigning="isDesigning">
         </OrganismDesignProfile>
         <el-divider class="userProfilePage__divider">近期公開活動</el-divider>
         <el-carousel type="card" :autoplay="false">
@@ -157,10 +158,6 @@ defineExpose({
     max-width: 480px;
     margin: auto;
     min-height: 100vh;
-
-    .userProfilePage__landing {
-        margin-top: 20px;
-    }
 }
 
 .designForm {

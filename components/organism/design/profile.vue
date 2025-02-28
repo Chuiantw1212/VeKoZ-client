@@ -1,6 +1,6 @@
 <template>
     <div class="profile" :class="{ 'profile--borderless': !isDesigning }">
-        <el-card>
+        <el-card :body-class="'profile__body'">
             <template #header>
                 <div class="profile__header">
                     <div>
@@ -16,28 +16,31 @@
                     </el-button>
                 </div>
             </template>
-            <div class="profile__avatar">
-                <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
-                </AtomAvatarUploader>
-            </div>
-            <template v-if="isDesigning">
-                <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
-                    :maxlength="30" :show-word-limit="true" type="textarea" size="large"
-                    @change="handleChange"></el-input>
-            </template>
-            <template v-else>
-                <pre class="content__header">{{ userTemplate.seoTitle }}
+            <!-- <img class="profile__banner--mobile" src="@/assets/mock/mobileBanner.webp" /> -->
+            <div class="body__content">
+                <div class="profile__avatar">
+                    <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
+                    </AtomAvatarUploader>
+                </div>
+                <template v-if="isDesigning">
+                    <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
+                        :maxlength="30" :show-word-limit="true" type="textarea" size="large"
+                        @change="handleChange"></el-input>
+                </template>
+                <template v-else>
+                    <pre class="content__header">{{ userTemplate.seoTitle }}
             </pre>
-            </template>
-            <template v-if="isDesigning">
-                <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
-                    :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
-            </template>
-            <template v-else>
-                <p class="content__desc">{{ userTemplate.description }}</p>
-            </template>
-            <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
-            </AtomVekozSocialMedia>
+                </template>
+                <template v-if="isDesigning">
+                    <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
+                        :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+                </template>
+                <template v-else>
+                    <pre class="content__desc">{{ userTemplate.description }}</pre>
+                </template>
+                <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
+                </AtomVekozSocialMedia>
+            </div>
         </el-card>
         <AtomVekozDialog v-model="isQrCodeDialogOpen">
             <canvas class="dialog__qrCode" id="qrCanvas"></canvas>
@@ -196,6 +199,7 @@ defineExpose({
         text-align: center;
         font-size: 18px;
         font-weight: bold;
+        margin-bottom: 0px;
 
         :deep(.el-input__inner) {
             font-size: 18px;
@@ -206,6 +210,8 @@ defineExpose({
 
     .content__desc {
         text-align: center;
+        white-space: pre;
+        margin-top: 0px;
     }
 
     :deep(.el-textarea__inner) {
@@ -214,6 +220,10 @@ defineExpose({
 
     :deep(.el-card__header) {
         border-bottom: 0px;
+    }
+
+    .profile__banner--mobile {
+        width: 100%;
     }
 
     .profile__header {
@@ -226,6 +236,14 @@ defineExpose({
         >* {
             margin-bottom: 0px; // 除掉form-item的maargon-bottom
         }
+    }
+
+    :deep(.profile__body) {
+        padding: 0px;
+    }
+
+    .body__content {
+        padding: 20px;
     }
 
     .profile__avatar {
