@@ -25,7 +25,6 @@
 <script lang="ts" setup>
 import { Plus } from '@element-plus/icons-vue'
 import type { ITemplateDesign } from '~/types/eventTemplate'
-import { defineEmits, defineModel, defineProps, ref, onMounted, watch } from 'vue'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()

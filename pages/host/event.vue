@@ -3,10 +3,10 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
-                    <MoleculeVenoniaCalendar ref="venoniaCalendarRef" @create="openNewEventDialog($event)"
+                    <MoleculeVekozCalendar ref="vekozCalendarRef" @create="openNewEventDialog($event)"
                         @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)"
                         @dates-set="handleDatesSet($event)">
-                    </MoleculeVenoniaCalendar>
+                    </MoleculeVekozCalendar>
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
@@ -94,7 +94,7 @@ const isLoading = ref<boolean>(false)
 // Data Calendar
 const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
-const venoniaCalendarRef = ref<CalendarApi>()
+const vekozCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: '',
 })
@@ -127,10 +127,10 @@ watch((() => repoUser.userPreference), () => {
 
 // Methods
 async function validiateForm() {
-    if (!dialogEventTemplate.value || !venoniaCalendarRef.value) {
+    if (!dialogEventTemplate.value || !vekozCalendarRef.value) {
         return
     }
-    const calendarEvent = venoniaCalendarRef.value.getEventById(String(dialogEventTemplate.value.id))
+    const calendarEvent = vekozCalendarRef.value.getEventById(String(dialogEventTemplate.value.id))
     if (!calendarEvent) {
         return
     }
@@ -170,7 +170,7 @@ function setCalendarView() {
     const preference = repoUser.userInfo.preference
     const calendarViewType = preference?.event.calendarViewType
     if (calendarViewType) {
-        venoniaCalendarRef.value?.changeView(calendarViewType)
+        vekozCalendarRef.value?.changeView(calendarViewType)
     }
 }
 async function handleDatesSet(datesSetArg: DatesSetArg) {
@@ -179,11 +179,12 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     const preferenceEvnet: IPreferenceEvent = {
         calendarViewType: type,
     }
+
     // 更新偏好
     repoUser.patchUserPreference('event', preferenceEvnet)
 
     // 移除所有事件資料
-    const calendarEvents: EventApi[] | undefined = venoniaCalendarRef.value?.getEvents()
+    const calendarEvents: EventApi[] | undefined = vekozCalendarRef.value?.getEvents()
     if (calendarEvents) {
         calendarEvents.forEach(event => {
             event.remove()
@@ -194,7 +195,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
 
 
     // // Remove Google Calendar Events
-    // const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
+    // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
     // calendarEvent?.remove()
 
     // // Get Google Calender Events
@@ -212,7 +213,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     //     })
     //     eventList.forEach((event: IEventFromList) => {
     //         const fullCalendarEvent = parseFullCalendarEvent(event)
-    //         venoniaCalendarRef.value?.addEvent(fullCalendarEvent)
+    //         vekozCalendarRef.value?.addEvent(fullCalendarEvent)
     //     })
     // })
 }
@@ -228,13 +229,13 @@ async function getOrganizationList() {
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
     isDialogPatchLoading.value = true
-    if (!venoniaCalendarRef.value) {
+    if (!vekozCalendarRef.value) {
         return
     }
     /**
      * Will trigger handleEventCalendarChange
      */
-    const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))
+    const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
     if (!calendarEvent || !templateDesign) {
         return
     }
@@ -293,10 +294,10 @@ async function getEventList() {
         return parseFullCalendarEvent(event)
     })
 
-    venoniaCalendarRef.value?.removeAllEvents()
+    vekozCalendarRef.value?.removeAllEvents()
 
     fullCalendarEventList.forEach(event => {
-        venoniaCalendarRef.value?.addEvent(event)
+        vekozCalendarRef.value?.addEvent(event)
     })
 }
 
@@ -309,7 +310,7 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     if (nowTime >= startDate.getTime()) {
         ElMessage('不可變更為過去事件。')
         const oldEvent = changeInfo.oldEvent
-        const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
+        const calendarEvent = vekozCalendarRef.value?.getEventById(eventId)
         if (calendarEvent) {
             calendarEvent.setDates(oldEvent.start, oldEvent.end)
         }
@@ -401,7 +402,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
         }
         eventDialogIsOpen.value = true
     } else {
-        const calendarEvent = venoniaCalendarRef.value?.getEventById(eventId)
+        const calendarEvent = vekozCalendarRef.value?.getEventById(eventId)
         calendarEvent?.remove()
     }
 }
@@ -454,7 +455,7 @@ async function openNewCalendarEvent() {
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
 
     const calendarEvent = parseFullCalendarEvent(newEvent)
-    venoniaCalendarRef.value?.addEvent(calendarEvent)
+    vekozCalendarRef.value?.addEvent(calendarEvent)
     eventDialogIsOpen.value = true
 }
 
@@ -470,7 +471,7 @@ async function deleteEvent() {
     isLoading.value = true
     if (dialogEventTemplate.value.id) {
         await repoEvent.deleteEvent(dialogEventTemplate.value.id)
-        venoniaCalendarRef.value?.removeAllEvents()
+        vekozCalendarRef.value?.removeAllEvents()
         await getEventList()
         eventDialogIsOpen.value = false
         isLoading.value = false
