@@ -38,7 +38,7 @@
             </template>
             <template #headerUI>
                 <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
-                    :disabled="eventEnded" @click="deleteEvent()">
+                    @click="deleteEvent()">
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
@@ -78,7 +78,7 @@
 import { Delete, Close, View } from '@element-plus/icons-vue';
 import type { IEventFromList, IEventCreation, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { CalendarApi, DatesSetArg, EventSourceInput } from '@fullcalendar/core/index.js';
+import type { CalendarApi, DatesSetArg, EventApi, EventSourceInput } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
@@ -179,7 +179,19 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     const preferenceEvnet: IPreferenceEvent = {
         calendarViewType: type,
     }
+    // 更新偏好
     repoUser.patchUserPreference('event', preferenceEvnet)
+
+    // 移除所有事件資料
+    const calendarEvents: EventApi[] | undefined = venoniaCalendarRef.value?.getEvents()
+    if (calendarEvents) {
+        calendarEvents.forEach(event => {
+            event.remove()
+        })
+    }
+
+    // 抓取當月事件資料
+
 
     // // Remove Google Calendar Events
     // const calendarEvent = venoniaCalendarRef.value.getEventById(String(templateDesign.eventId))

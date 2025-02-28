@@ -13,7 +13,7 @@ export default defineStore('user', () => {
         event: {
 
         },
-        userType: '',
+        userType: 'attendee',
         isFullScreen: false,
     })
     /**
@@ -28,9 +28,11 @@ export default defineStore('user', () => {
         userInfo.value = user
         userPreference.value = user.preference as IUserPreference
         // if (String(route.name).includes('host')) {
-        //     setUserType('host')
+        //     // setUserType('host')
+        //     userType.value = 'host'
         // } else {
-        //     setUserType('attendee')
+        //     userType.value = 'attendee'
+        //     // setUserType('attendee')
         // }
         return userInfo.value
     }
@@ -52,8 +54,6 @@ export default defineStore('user', () => {
                     name: 'host-event'
                 })
             }
-            // if (!route.path.includes('host')) {
-            // }
         }
         if (newUserType === 'attendee') {
             if (route.name === 'signIn') {

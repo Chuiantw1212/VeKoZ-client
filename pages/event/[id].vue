@@ -9,7 +9,7 @@
                         <h1>{{ event.name }}</h1>
                         <p>{{ }}</p>
                         <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                            }}
+                        }}
                             ~
                             {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
                         <el-text>{{ event.description }}</el-text>
@@ -17,14 +17,19 @@
                 </el-col>
                 <el-col :span="sideSpan" class="event__side">
                     <el-card class="side__card">
-                        <img class="card__logo" :src="event.organizerLogo">
-                        <div class="card__name">
-                            {{ event.organizerName }}
+                        <div class="organization__body">
+                            <img class="card__logo" :src="event.organizerLogo">
+                            <div class="organizationNameGroup">
+                                <div class="card__name">
+                                    {{ event.organizerName }}
+                                </div>
+                                <div>已有?人追蹤</div>
+                            </div>
                         </div>
                     </el-card>
                 </el-col>
                 <el-col>
-                    <el-card>
+                    <el-card class="event__custom">
                         <template v-for="(design) in event.designs">
                             <template v-if="!design.formField">
                                 {{ design }}
@@ -109,6 +114,7 @@ async function getEvent() {
 <style lang="scss" scoped>
 .event {
     margin: -20px;
+    padding-bottom: 80px;
 
     .event__main {
         display: flex;
@@ -126,13 +132,13 @@ async function getEvent() {
     .event__actions {
         left: 0px;
         position: fixed;
-        bottom: 60px;
+        bottom: 0px;
         background-color: white;
         width: calc(100vw - 40px);
         display: flex;
         gap: 8px;
         padding: 20px;
-        z-index: 10px;
+        z-index: 20;
         border-top: 1px solid lightgrey;
 
         >* {
@@ -141,11 +147,28 @@ async function getEvent() {
     }
 
     .side__card {
+        margin-top: 20px;
+
+        .organization__body {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .organizationNameGroup {
+            display: flex;
+            flex-direction: column;
+        }
+
         .card__logo {
             width: 40px;
         }
 
         .card__name {}
+    }
+
+    .event__custom {
+        margin-top: 20px;
     }
 }
 </style>

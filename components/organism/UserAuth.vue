@@ -24,6 +24,9 @@ function addFirebaseListener() {
         if (firebaseUser.emailVerified) {
             // 判斷是否為已註冊用戶
             const user: IUser = await repoUser.getUser()
+            console.log({
+                user
+            })
             if (user.id) {
                 handleLoggedIn(user)
             } else {
@@ -37,8 +40,8 @@ function addFirebaseListener() {
 
 async function handleLoggedIn(user: IUser) {
     const { preference } = user
-    // 使用上次登入狀態或是預設一般參加者
-    repoUser.setUserType(preference?.userType ?? 'attendee')
+    // // 使用上次登入狀態或是預設一般參加者
+    // repoUser.setUserType(preference?.userType ?? 'attendee')
 }
 
 async function registeredNewUser(firebaseUser: User) {

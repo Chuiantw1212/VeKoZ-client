@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import { Calendar, } from '@fullcalendar/core';
-import type { CalendarApi, DatesSetArg, EventSourceInput, ViewMountArg } from '@fullcalendar/core';
+import type { CalendarApi, DatesSetArg, EventApi, EventSourceInput, ViewMountArg } from '@fullcalendar/core';
 import zhTwLocale from '@fullcalendar/core/locales/zh-tw';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -146,6 +146,13 @@ function addEvent(event: IFullCalendarEvent) {
     calendarInstance.value?.addEvent(event)
 }
 
+function getEvents() {
+    if (calendarInstance.value) {
+        const events: EventApi[] = calendarInstance.value.getEvents()
+        return events
+    }
+}
+
 function addEventSource(eventSource: EventSourceInput) {
     calendarInstance.value?.addEventSource(eventSource)
 }
@@ -235,6 +242,7 @@ function toggleEventAddingBtn(event: Event) {
 
 defineExpose({
     addEvent,
+    getEvents,
     addEventSource,
     removeAllEvents,
     getEventById,
