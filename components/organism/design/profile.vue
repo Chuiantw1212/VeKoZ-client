@@ -3,32 +3,34 @@
         <template #header>
             <div class="profile__header">
                 <div>
-                    <el-button :icon="Share" text circle>
+                    <el-button v-loading="isLoading" :icon="Share" text circle>
                     </el-button>
-                    <el-button text circle :icon="Menu">
+                    <el-button v-loading="isLoading" text circle :icon="Menu">
                     </el-button>
                 </div>
-                <el-button :icon="CollectionTag" :disabled="true">
+                <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="true">
                     訂閱
                 </el-button>
             </div>
         </template>
         <div class="profile__avatar">
-            <AtomAvatarUploader v-if="userTemplate.avatar" v-model="userTemplate.avatar">
+            <AtomAvatarUploader v-if="userTemplate.avatar" v-model="userTemplate.avatar" @change="handleChange">
             </AtomAvatarUploader>
         </div>
         <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle" :maxlength="30"
-            :show-word-limit="true" size="large"></el-input>
+            :show-word-limit="true" size="large" @change="handleChange"></el-input>
         <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
-            :show-word-limit="true" type="textarea" :rows="3"></el-input>
-        <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs"></AtomVekozSocialMedia>
+            :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+        <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
+        </AtomVekozSocialMedia>
     </el-card>
 </template>
 <script setup lang="ts">
 import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
-
+const repoUI = useRepoUI()
+const isLoading = ref<boolean>(false)
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
 const userTemplate = defineModel<IUser>('modelValue', {
     type: Object,
@@ -39,6 +41,10 @@ const userTemplate = defineModel<IUser>('modelValue', {
 })
 
 const props = defineProps({
+    id: {
+        type: String,
+        default: crypto.randomUUID()
+    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -86,6 +92,14 @@ const formRules = ref<{ [key: string]: any }>({})
 // }, { immediate: true, deep: true })
 
 // methods
+async function handleChange() {
+    isLoading.value = true // 增強體驗
+    repoUI.debounce(props.id, async function () {
+        await props.onchange()
+        isLoading.value = false
+    })
+}
+
 function getPersonalLink() {
     const openInLineExternal = `openExternalBrowser=1`
     return `${userTemplate.value.seoName}?${openInLineExternal}`
@@ -93,48 +107,7 @@ function getPersonalLink() {
 async function validate() {
     return await formRef.value?.validate()
 }
-function handleRemove(index: number) {
-    if (!userTemplate.value.designs) {
-        return
-    }
-    const item = userTemplate.value.designs[index]
-    emit('remove', {
-        item,
-        index,
-    })
-}
-function handleDragStart(index: number) {
-    if (!userTemplate.value.designs) {
-        return
-    }
-    const item = userTemplate.value.designs[index]
-    emit('dragstart', {
-        item: JSON.parse(JSON.stringify(item)),
-        index,
-    })
-}
-function handleUp(index: number) {
-    if (!userTemplate.value.designs) {
-        return
-    }
-    const removedElements = userTemplate.value.designs.splice(index, 1)
-    const target = removedElements[0]
-    if (target) {
-        const newIndex = Math.max(0, index - 1)
-        userTemplate.value.designs.splice(newIndex, 0, target)
-    }
-}
-function handleDown(index: number) {
-    if (!userTemplate.value.designs) {
-        return
-    }
-    const removedElements = userTemplate.value.designs.splice(index, 1)
-    const target = removedElements[0]
-    if (target) {
-        const newIndex = Math.min(userTemplate.value.designs.length, index + 1)
-        userTemplate.value.designs.splice(newIndex, 0, target)
-    }
-}
+
 defineExpose({
     validate,
 })

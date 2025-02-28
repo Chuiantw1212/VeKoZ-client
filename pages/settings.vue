@@ -52,10 +52,10 @@
                     </div>
                 </template>
                 <div class="seoPage">
-                    <OrganismDesignProfile v-model="userTemplate" :is-designing="true" :onchange="handleDesignChanged">
+                    <OrganismDesignProfile v-model="userTemplate" :is-designing="true" :onchange="patchUser">
                     </OrganismDesignProfile>
                     <el-card>
-                        EventHistory
+                        尚未完成的功能，敬請期待。
                     </el-card>
                 </div>
             </el-card>
@@ -184,12 +184,23 @@ watch(() => repoUser.userInfo, (newValue) => {
 }, { immediate: true, })
 
 // Methods
-async function handleDesignChanged(userDesign: IUserDesign) {
-    const userPatch = await repoUserDesign.patchUserDesign(userDesign)
-    if (userPatch) {
-        Object.assign(userTemplate.value, userPatch)
-    }
+function patchUser() {
+    repoUI.debounce(`patchUser-${id.value}`, () => {
+        repoUser.patchUser({
+            avatar: userTemplate.value.avatar,
+            seoTitle: userTemplate.value.seoTitle,
+            description: userTemplate.value.description,
+            sameAs: userTemplate.value.sameAs,
+        })
+    })
 }
+
+// async function handleDesignChanged(userDesign: IUserDesign) {
+//     const userPatch = await repoUserDesign.patchUserDesign(userDesign)
+//     if (userPatch) {
+//         Object.assign(userTemplate.value, userPatch)
+//     }
+// }
 
 function openSeoInfo() {
     userSeoInfo.value.id = userTemplate.value.id ?? ''
@@ -212,6 +223,7 @@ async function confirmUserSeoInfo() {
         openSeoInfo()
     }
 }
+
 
 function patchUserIsPublic() {
     repoUser.patchUser({

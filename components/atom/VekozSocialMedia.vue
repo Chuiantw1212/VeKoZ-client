@@ -70,6 +70,7 @@
 </template>
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
+const emit = defineEmits(['change'])
 const renderKey = ref<string>(crypto.randomUUID())
 const socialMediaUrl = ref<string>('')
 const socialUrls = defineModel<string[]>('modelValue', {
@@ -88,11 +89,10 @@ function pushNewMedia() {
     if (!socialUrls.value) {
         socialUrls.value = []
     }
-    // if (socialMediaUrl.value) {
     socialUrls.value.push(socialMediaUrl.value)
     socialMediaUrl.value = ''
     renderKey.value = crypto.randomUUID()
-    // }
+    emit('change')
 }
 function removeUrl(index: number) {
     if (socialUrls.value) {
