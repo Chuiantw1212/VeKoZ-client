@@ -1,6 +1,6 @@
 <template>
+    <!-- <div> -->
     <div class="profile__socialMedia" :key="renderKey">
-        <!-- {{socialUrls}} -->
         <template v-for="(url, index) in socialUrls">
             <el-button v-if="url.includes('youtube.com/')" class="socialMedia__icon" text circle
                 @click="removeUrl(index)">
@@ -42,13 +42,42 @@
             </el-button>
         </template>
     </div>
+    <div class="socialMedia__add">
+        <el-input placeholder="請輸入連結(FB, IF, Email,......etc)">
+
+        </el-input>
+        <el-button :icon="Plus" @click="pushNewMedia()">
+
+        </el-button>
+    </div>
+    <!-- </div> -->
 </template>
 <script setup lang="ts">
+import { Plus } from '@element-plus/icons-vue'
 const renderKey = ref<string>(crypto.randomUUID())
+const socialMediaUrl = ref<string>('')
 const socialUrls = defineModel<string[]>('modelValue', {
     required: true,
-    default: []
+    default: [],
 })
+const props = defineProps({
+    isDesigning: {
+        type: Boolean,
+        default: false
+    }
+})
+
+// Methods
+function pushNewMedia() {
+    if (!socialUrls.value) {
+        socialUrls.value = []
+    }
+    // if (socialMediaUrl.value) {
+    socialUrls.value.push(socialMediaUrl.value)
+    socialMediaUrl.value = ''
+    renderKey.value = crypto.randomUUID()
+    // }
+}
 function removeUrl(index: number) {
     if (socialUrls.value) {
         socialUrls.value.splice(index, 1)
@@ -68,18 +97,35 @@ function validateEmail(email: string) {
     justify-content: center;
     min-height: 40px;
     align-items: center;
+
+    .socialMedia__icon {
+        width: 40px;
+        height: 40px;
+        position: relative;
+
+        &:hover {
+            ::before {
+                content: 'X';
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                color: lightcoral;
+                font-size: 40px;
+            }
+        }
+
+        .link__icon {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+    }
 }
 
-.socialMedia__icon {
-    width: 40px;
-    height: 40px;
-}
-
-.link__icon {
-    width: 24px;
-    height: 24px;
-    // border-radius: 50%;
-    // margin: auto;
-    display: block;
+.socialMedia__add {
+    display: flex;
+    gap: 20px;
 }
 </style>

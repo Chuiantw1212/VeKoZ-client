@@ -51,17 +51,13 @@
                         </div>
                     </div>
                 </template>
-                <FormUserProfile v-model="userTemplate" :is-designing="true" :onchange="handleDesignChanged">
-                </FormUserProfile>
-                <el-card>
-                    EventHistory
-                    <!-- <template #default="defaultProps">
-                        <div class="user__card__designItem" @drop="insertTemplate($event, defaultProps.index)"
-                            @dragover="allowDrop($event)"
-                            :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
-                        </div>
-                    </template> -->
-                </el-card>
+                <div class="seoPage">
+                    <OrganismDesignProfile v-model="userTemplate" :is-designing="true" :onchange="handleDesignChanged">
+                    </OrganismDesignProfile>
+                    <el-card>
+                        EventHistory
+                    </el-card>
+                </div>
             </el-card>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
@@ -148,6 +144,7 @@ const userTemplate = ref<IUser>({
     isPublic: false,
     avatar: '',
     designs: [],
+    sameAs: [],
 })
 
 // 基本資料相關
@@ -407,12 +404,17 @@ function allowDrop(ev: any) {
 
     .btnGroup__item {
         width: 100%;
-        // display: flex;
         flex-wrap: wrap;
 
         .item__btn {
             width: 100%;
         }
     }
+}
+
+.seoPage {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 </style>

@@ -13,50 +13,15 @@
                 </el-button>
             </div>
         </template>
-        <AtomAvatarUploader v-if="userTemplate.avatar" v-model="userTemplate.avatar">
-        </AtomAvatarUploader>
-        <el-input v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle" :maxlength="30"
+        <div class="profile__avatar">
+            <AtomAvatarUploader v-if="userTemplate.avatar" v-model="userTemplate.avatar">
+            </AtomAvatarUploader>
+        </div>
+        <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle" :maxlength="30"
             :show-word-limit="true" size="large"></el-input>
-        <!-- <div v-if="userTemplate.designs">
-            <template v-for="(design, index) in userTemplate.designs">
-                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                    @mouseout="emit('mouseout')">
-                </OrganismDesignAvatarUploader>
-                <OrganismDesignEventHistory v-if="design.type === 'eventHostHistory'"
-                    v-model="userTemplate.designs[index]" :onchange="onchange" :required="design.required"
-                    :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
-                    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
-                </OrganismDesignEventHistory>
-                <template v-if="design.type === 'header1'">
-                    <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
-                        :required="design.required" :disabled="props.disabled" :show-label="false"
-                        @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                        @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                        @mouseout="emit('mouseout')">
-                    </OrganismDesignHeader1>
-                    <h1 v-else>{{ userTemplate.designs[index].value }}</h1>
-                </template>
-                <template v-if="design.type === 'textarea'">
-                    <OrganismDesignTextarea v-if="isDesigning" v-model="userTemplate.designs[index]"
-                        :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                        @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                        @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                        @mouseout="emit('mouseout')">
-                    </OrganismDesignTextarea>
-                    <p v-else>{{ userTemplate.designs[index].value }}</p>
-                </template>
-                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                    @mouseout="emit('mouseout')">
-                </OrganismDesignSocialMedia>
-            </template>
-        </div> -->
+        <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
+            :show-word-limit="true" type="textarea" :rows="3"></el-input>
+        <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs"></AtomVekozSocialMedia>
     </el-card>
 </template>
 <script setup lang="ts">
@@ -185,9 +150,20 @@ defineExpose({
 }
 
 .profile {
+    .content__header {
+        :deep(.el-input__inner) {
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+
+    :deep(.el-textarea__inner) {
+        text-align: center;
+    }
+
     :deep(.el-card__header) {
         border-bottom: 0px;
-
     }
 
     .profile__header {
@@ -203,11 +179,8 @@ defineExpose({
     }
 
     .profile__avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        margin: auto;
-        display: block;
+        display: flex;
+        justify-content: center;
     }
 
     .profile__name {
