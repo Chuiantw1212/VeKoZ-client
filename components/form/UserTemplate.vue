@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <OrganismDesignProfile v-model="userTemplate" :isDesigning="isDesigning"></OrganismDesignProfile>
+    </div>
     <div v-if="userTemplate.designs">
         <template v-for="(design, index) in userTemplate.designs">
             <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"

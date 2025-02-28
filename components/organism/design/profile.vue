@@ -19,10 +19,22 @@
             <AtomAvatarUploader v-model="userTemplate.avatar" @change="handleChange">
             </AtomAvatarUploader>
         </div>
-        <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle" :maxlength="30"
-            :show-word-limit="true" size="large" @change="handleChange"></el-input>
-        <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
-            :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+        <template v-if="isDesigning">
+            <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
+                :maxlength="30" :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
+        </template>
+        <template v-else>
+            <h1 class="content__header">
+                {{ userTemplate.seoTitle }}
+            </h1>
+        </template>
+        <template v-if="isDesigning">
+            <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
+                :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+        </template>
+        <template v-else>
+            <p class="content__desc">{{ userTemplate.description }}</p>
+        </template>
         <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
         </AtomVekozSocialMedia>
     </el-card>
@@ -178,11 +190,17 @@ defineExpose({
 
 .profile {
     .content__header {
+        text-align: center;
+
         :deep(.el-input__inner) {
             font-size: 18px;
             text-align: center;
             font-weight: bold;
         }
+    }
+
+    .content__desc {
+        text-align: center;
     }
 
     :deep(.el-textarea__inner) {

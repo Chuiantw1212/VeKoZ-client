@@ -188,10 +188,12 @@ watch(() => repoUser.userInfo, (newValue) => {
 // Methods
 function patchUser() {
     repoUI.debounce(`patchUser-${id.value}`, async () => {
-        const publicUrl = await repoUser.putUserAvatar(userTemplate.value.avatar)
-        userTemplate.value.avatar = publicUrl
+        if (typeof userTemplate.value.avatar !== 'string') {
+            const publicUrl = await repoUser.putUserAvatar(userTemplate.value.avatar)
+            userTemplate.value.avatar = publicUrl
+        }
         await repoUser.patchUser({
-            avatar: publicUrl,
+            avatar: userTemplate.value.avatar,
             seoTitle: userTemplate.value.seoTitle,
             description: userTemplate.value.description,
             sameAs: userTemplate.value.sameAs,

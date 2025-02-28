@@ -1,15 +1,15 @@
 <template>
-    <div>
-        <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile>
-        <!-- <MoleculeVenoniaCalendar></MoleculeVenoniaCalendar> -->
-    </div>
+    <!-- <div> -->
+    <FormUserTemplate v-model="userForm" :is-designing="false"></FormUserTemplate>
+    <!-- <FormUserProfile :model-value="userForm" :disabled="true"></FormUserProfile> -->
+    <!-- <MoleculeVenoniaCalendar></MoleculeVenoniaCalendar> -->
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">
 definePageMeta({
     layout: 'profile'
 })
-import { FormUserProfile } from '#components';
 import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 const route = useRoute()
