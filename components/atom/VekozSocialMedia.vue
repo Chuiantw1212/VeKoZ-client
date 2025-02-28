@@ -12,7 +12,7 @@
             </el-button>
             <el-button v-else-if="url.includes('x.com/')" class="socialMedia__icon" text circle
                 @click="removeUrl(index)">
-                <img class="link__icon" src="@/assets/icon/x.svg">
+                <img class="link__icon" src="@/assets/icon/twitter.svg">
             </el-button>
             <el-button v-else-if="url.includes('instagram.com/')" class="socialMedia__icon" text circle
                 @click="removeUrl(index)">
