@@ -33,8 +33,8 @@ export interface ITemplateDesign {
     memberIds?: string[],
     memberNames?: string[],
     // 時間
-    startDate?: string,
-    endDate?: string,
+    startDate?: Date,
+    endDate?: Date,
     // 線下地點
     placeId?: string, // entities
     placeName?: string,

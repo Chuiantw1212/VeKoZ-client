@@ -1,7 +1,7 @@
 import type { ITemplateDesign } from "./eventTemplate"
 
 export interface IEventCreation {
-    date: string,
+    date: Date,
 }
 
 /**

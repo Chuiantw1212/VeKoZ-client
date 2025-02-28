@@ -53,7 +53,7 @@ async function getOrganizationList() {
 
 async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
-    const currentDate = new Date().toISOString()
+    const currentDate = new Date()
 
     const ongoingOffers = result.filter(offer => {
         return offer.validThrough >= currentDate

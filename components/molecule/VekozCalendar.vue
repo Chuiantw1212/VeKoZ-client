@@ -230,7 +230,7 @@ function toggleEventAddingBtn(event: Event) {
     </svg></i>`
 
     const eventCreation: IEventCreation = {
-        date: dateInstance.toISOString()
+        date: dateInstance
     }
     button.onclick = async () => {
         emit('create', eventCreation)

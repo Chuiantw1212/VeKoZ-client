@@ -419,8 +419,7 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 async function openNewCalendarEvent() {
     eventEnded.value = false
     loadTemplateDialogIsOpen.value = false
-    const date = calendarEventCreation.value.date
-    const selectedDateInstance = new Date(date)
+    const selectedDateInstance = calendarEventCreation.value.date
     const selectedYear = selectedDateInstance.getFullYear()
     const selectedMonth = selectedDateInstance.getMonth()
     const selectedDate = selectedDateInstance.getDate()
@@ -439,7 +438,7 @@ async function openNewCalendarEvent() {
             const originalStartMinues = startDate.getMinutes()
             const defaultStartHour = Math.max(originalStartHour, 6)
             startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-            dateDesign.value[0] = startDate.toISOString()
+            dateDesign.value[0] = startDate
         }
         if (dateDesign.value[1]) {
             const endDate = new Date(dateDesign.value[1] ?? '')
@@ -449,7 +448,7 @@ async function openNewCalendarEvent() {
             endDate.setMonth(selectedMonth)
             endDate.setDate(selectedDate)
             endDate.setHours(originalEndHour, originalEndMinues, 0, 0)
-            dateDesign.value[1] = endDate.toISOString()
+            dateDesign.value[1] = endDate
         }
     }
 

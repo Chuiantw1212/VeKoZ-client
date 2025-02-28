@@ -24,7 +24,7 @@ const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
 const displayEnd = ref<string>('')
 
-const modelValue = defineModel<string[]>('modelValue', {
+const modelValue = defineModel<Date[]>('modelValue', {
     type: Array,
     required: true,
     default: []
@@ -44,12 +44,12 @@ watch(() => modelValue.value, () => {
 
 // Methods
 function setStatDate() {
-    const isoString = convertDisplayToIso(displayStart.value)
+    const isoString = convertDisplayToDate(displayStart.value)
     modelValue.value[0] = isoString
 }
 
 function setEndDate() {
-    const isoString = convertDisplayToIso(displayEnd.value)
+    const isoString = convertDisplayToDate(displayEnd.value)
     modelValue.value[1] = isoString
 }
 
@@ -83,7 +83,7 @@ function convertIsoToDisplayTime(isoString: string) {
     return `${hourString}:${minuteString}`
 }
 
-function convertDisplayToIso(display: string) {
+function convertDisplayToDate(display: string) {
     const times = display.split(':')
     const newHour = Number(times[0])
     const newMinutes = Number(times[1])
@@ -92,7 +92,7 @@ function convertDisplayToIso(display: string) {
     newDate = new Date(dateString)
     newDate.setHours(Math.max(newHour, 6))
     newDate.setMinutes(newMinutes)
-    return newDate.toISOString()
+    return newDate
 }
 
 function setHours() {

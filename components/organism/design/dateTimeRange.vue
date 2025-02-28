@@ -30,7 +30,6 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
-import { ElMessage } from 'element-plus';
 const emit = defineEmits(['remove', 'moveUp', 'moveDown', 'dragstart', 'mouseenter', 'mouseout'])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
@@ -133,8 +132,8 @@ function setDate() {
     if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
         return
     }
-    const newStartISO = newStartDate.toISOString()
-    const newEndISO = newEndDate.toISOString()
+    const newStartISO = newStartDate
+    const newEndISO = newEndDate
     customDesign.value.value = [newStartISO, newEndISO]
 }
 
