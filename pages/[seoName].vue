@@ -1,8 +1,9 @@
 <template>
     <div class="profile">
         <section class="profile__bg"></section>
-        <el-main>
-            <FormUserTemplate class="profile__template" v-model="userForm" :is-designing="false"></FormUserTemplate>
+        <!-- {{ userForm }} -->
+        <el-main class="profile__template">
+            <FormUserTemplate v-model="userForm" :is-designing="false"></FormUserTemplate>
         </el-main>
     </div>
 </template>

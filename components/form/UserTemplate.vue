@@ -161,12 +161,6 @@ defineExpose({
     .userProfilePage__landing {
         margin-top: 20px;
     }
-
-    .userProfilePage__divider {
-        :deep(.el-divider__text) {
-            background-color: unset;
-        }
-    }
 }
 
 .designForm {

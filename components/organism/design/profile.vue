@@ -1,45 +1,48 @@
 <template>
-    <el-card class="profile" :class="{ 'profile--borderless': !isDesigning }">
-        <template #header>
-            <div class="profile__header">
-                <div>
-                    <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                        <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
+    <div class="profile" :class="{ 'profile--borderless': !isDesigning }">
+        <el-card>
+            <template #header>
+                <div class="profile__header">
+                    <div>
+                        <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                            <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
+                            </el-button>
+                        </el-tooltip>
+                        <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
                         </el-button>
-                    </el-tooltip>
-                    <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
+                    </div>
+                    <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
+                        追蹤
                     </el-button>
                 </div>
-                <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
-                    追蹤
-                </el-button>
+            </template>
+            <div class="profile__avatar">
+                <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
+                </AtomAvatarUploader>
             </div>
-        </template>
-        <div class="profile__avatar">
-            <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
-            </AtomAvatarUploader>
-        </div>
-        <template v-if="isDesigning">
-            <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
-                :maxlength="30" :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
-        </template>
-        <template v-else>
-            <pre class="content__header">{{ userTemplate.seoTitle }}
+            <template v-if="isDesigning">
+                <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
+                    :maxlength="30" :show-word-limit="true" type="textarea" size="large"
+                    @change="handleChange"></el-input>
+            </template>
+            <template v-else>
+                <pre class="content__header">{{ userTemplate.seoTitle }}
             </pre>
-        </template>
-        <template v-if="isDesigning">
-            <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
-                :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
-        </template>
-        <template v-else>
-            <p class="content__desc">{{ userTemplate.description }}</p>
-        </template>
-        <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
-        </AtomVekozSocialMedia>
-    </el-card>
-    <AtomVekozDialog v-model="isQrCodeDialogOpen">
-        <canvas class="dialog__qrCode" id="qrCanvas"></canvas>
-    </AtomVekozDialog>
+            </template>
+            <template v-if="isDesigning">
+                <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
+                    :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+            </template>
+            <template v-else>
+                <p class="content__desc">{{ userTemplate.description }}</p>
+            </template>
+            <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
+            </AtomVekozSocialMedia>
+        </el-card>
+        <AtomVekozDialog v-model="isQrCodeDialogOpen">
+            <canvas class="dialog__qrCode" id="qrCanvas"></canvas>
+        </AtomVekozDialog>
+    </div>
 </template>
 <script setup lang="ts">
 import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';

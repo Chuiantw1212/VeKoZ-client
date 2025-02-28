@@ -52,6 +52,7 @@
                     </div>
                 </template>
                 <div class="seoPage">
+                    <!-- {{ userTemplate }} -->
                     <FormUserTemplate :key="renderKey" v-model="userTemplate" :is-designing="true"
                         :onchange="patchUser">
                     </FormUserTemplate>
@@ -267,42 +268,42 @@ async function initializeUserForm(newValue: IUser) {
     }
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
-    if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
-        const defaultDesigns: IUserDesign[] = [
-            {
-                type: 'avatar',
-                value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
-                required: true,
-                formField: 'avatar',
-            },
-            {
-                type: 'header1',
-                value: 'EN Chu',
-                alignment: 'center',
-                required: true,
-                formField: 'seoTitle',
-            },
-            {
-                type: 'textarea',
-                value: '',
-                alignment: 'center',
-                required: true,
-                formField: 'description',
-            },
-            {
-                type: 'socialMedia',
-                urls: [],
-                required: true,
-                formField: 'socialMedia',
-            },
-            {
-                type: 'eventHostHistory',
-                required: true,
-            },
-        ]
-        const createdDesign = await repoUserDesign.postUserDesigns(defaultDesigns)
-        userInfoCopy.designs = createdDesign
-    }
+    // if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
+    //     const defaultDesigns: IUserDesign[] = [
+    //         {
+    //             type: 'avatar',
+    //             value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
+    //             required: true,
+    //             formField: 'avatar',
+    //         },
+    //         {
+    //             type: 'header1',
+    //             value: 'EN Chu',
+    //             alignment: 'center',
+    //             required: true,
+    //             formField: 'seoTitle',
+    //         },
+    //         {
+    //             type: 'textarea',
+    //             value: '',
+    //             alignment: 'center',
+    //             required: true,
+    //             formField: 'description',
+    //         },
+    //         {
+    //             type: 'socialMedia',
+    //             urls: [],
+    //             required: true,
+    //             formField: 'socialMedia',
+    //         },
+    //         {
+    //             type: 'eventHostHistory',
+    //             required: true,
+    //         },
+    //     ]
+    //     const createdDesign = await repoUserDesign.postUserDesigns(defaultDesigns)
+    //     userInfoCopy.designs = createdDesign
+    // }
     userTemplate.value = userInfoCopy
 }
 function setTemplateItem(itemMeta: IUserDesign) {
