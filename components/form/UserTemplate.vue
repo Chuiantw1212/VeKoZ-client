@@ -2,6 +2,14 @@
     <div class="userProfilePage">
         <OrganismDesignProfile v-model="userTemplate" :isDesigning="isDesigning"></OrganismDesignProfile>
         <el-divider>近期公開活動</el-divider>
+        <el-carousel type="card">
+            <el-carousel-item v-for="(event) in eventList">
+                <MoleculeEventCard :model-value="event">
+
+                </MoleculeEventCard>
+                <!-- <img :src="event.banner"> -->
+            </el-carousel-item>
+        </el-carousel>
         <div v-if="userTemplate.designs">
             <template v-for="(design, index) in userTemplate.designs">
                 <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
@@ -10,12 +18,12 @@
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
                 </OrganismDesignAvatarUploader>
-                <OrganismDesignEventHistory v-model="userTemplate.designs[index]" :onchange="onchange"
+                <!-- <OrganismDesignEventHistory v-model="userTemplate.designs[index]" :onchange="onchange"
                     :required="design.required" :disabled="props.disabled" :show-label="false"
                     @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
-                </OrganismDesignEventHistory>
+                </OrganismDesignEventHistory> -->
                 <template v-if="design.type === 'header1'">
                     <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
                         :required="design.required" :disabled="props.disabled" :show-label="false"
@@ -46,6 +54,7 @@
 </template>
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
+import type { IEventFromList } from '~/types/event';
 import type { IUser } from '~/types/user';
 
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
@@ -76,6 +85,8 @@ const props = defineProps({
 })
 
 const formRef = ref<FormInstance>()
+const eventList = ref<IEventFromList[]>([])
+
 // Hooks
 watch(() => userTemplate.value.id, (value) => {
     getEventList()
@@ -87,6 +98,7 @@ async function getEventList() {
         const result = await eventRepo.getEventList({
             performerIds: [userTemplate.value.id],
         })
+        eventList.value = [...result, ...result, ...result]
     }
 }
 
