@@ -2,7 +2,6 @@
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <div v-if="event" class="event" :gutter="20">
         <img class="event__banner" :src="event.banner">
-        <!-- <el-main class="event__main"> -->
         <el-row :gutter="20">
             <el-col :span="mainSpan">
                 <el-card>
@@ -44,18 +43,13 @@
                     <div v-html="editorDesign.value"></div>
                 </el-card>
             </el-col>
-            <!-- <el-col :span="18" class="event__side">
-                </el-col> -->
-            <el-col :span="6">
+            <el-col v-if="repoUI.isLarge" :span="6">
                 <el-card class="event__actionCard">
-                    <MoleculeEventAction v-if="repoUI.isLarge"></MoleculeEventAction>
+                    <MoleculeEventAction></MoleculeEventAction>
                 </el-card>
             </el-col>
-            <!-- <el-col :span="18">
-                </el-col> -->
             <MoleculeEventAction v-if="!repoUI.isLarge"></MoleculeEventAction>
         </el-row>
-        <!-- </el-main> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -202,6 +196,12 @@ function getTimes(event: IEventSingle) {
 
     .event__mt {
         margin-top: 20px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .event {
+        padding-bottom: 20px;
     }
 }
 
