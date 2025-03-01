@@ -45,10 +45,7 @@
                 </el-col>
                 <el-col>
                     <el-card class="event__custom">
-                        <div v-html="editorDesign.value">
-
-                        </div>
-                        <!-- <FormEventTemplate :model-value="editorDesigns" :disabled="true"></FormEventTemplate> -->
+                        <div v-html="editorDesign.value"></div>
                     </el-card>
                 </el-col>
                 <div class="event__actions">
@@ -58,8 +55,6 @@
                                 <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
                                     :value="item.value" />
                             </el-select>
-                            <!-- </el-col> -->
-                            <!-- <el-col :span="12"> -->
                             <el-input-number v-model="form.offerCount" class="row__item" :controls-position="'right'">
 
                             </el-input-number>
@@ -69,8 +64,6 @@
                         </div>
                     </div>
                     <div class="actions__btnGroup">
-                        <!-- <div class="btnGroup__price">NTD 250</div> -->
-                        <!-- <div class="row__actionGroup"> -->
                         <el-button class="btnGroup__btn btnGroup__btn--large" type="danger" plain size="large">
                             <div class="btn__content">
                                 <el-icon :size="24">
@@ -82,10 +75,7 @@
                         <el-button class="btnGroup__btn" :icon="More" :disabled="true">
                             更多
                         </el-button>
-                        <!-- </div> -->
-                        <!-- </el-col> -->
                     </div>
-                    <!-- </div> -->
                 </div>
             </el-row>
         </el-main>
@@ -129,10 +119,10 @@ const sideSpan = ref<number>(24)
 watch(() => repoUI, (ui) => {
     mainSpan.value = 24
     if (ui.isSmall) {
-        mainSpan.value = 18
-        sideSpan.value = 6
+        // mainSpan.value = 18
+        // sideSpan.value = 12
     }
-})
+}, { immediate: true, deep: true, })
 
 onMounted(() => {
     getEvent()
@@ -221,6 +211,32 @@ function getTimes(event: IEventSingle) {
         background-size: cover;
     }
 
+    .side__card {
+        margin-top: 20px;
+        text-align: center;
+
+        .organization__body {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .organizationNameGroup {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card__logo {
+            width: 40px;
+        }
+    }
+
+    .event__custom {
+        margin-top: 20px;
+    }
+
     .event__actions {
         left: 0px;
         position: fixed;
@@ -249,8 +265,6 @@ function getTimes(event: IEventSingle) {
                 width: 50%;
             }
 
-
-
             .row__item--price {
                 width: fit-content;
                 text-align: right;
@@ -268,7 +282,6 @@ function getTimes(event: IEventSingle) {
             width: fit-content;
             display: flex;
             flex-direction: column;
-            // justify-content: flex-end;
             gap: 8px;
 
             .btnGroup__price {
@@ -306,34 +319,6 @@ function getTimes(event: IEventSingle) {
             }
         }
 
-    }
-
-    .side__card {
-        margin-top: 20px;
-        text-align: center;
-
-        .organization__body {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .organizationNameGroup {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card__logo {
-            width: 40px;
-        }
-
-        .card__name {}
-    }
-
-    .event__custom {
-        margin-top: 20px;
     }
 }
 
