@@ -170,6 +170,7 @@ const ticketOptions = ref([
 
             .offers__options {
                 display: flex;
+                flex-direction: column;
                 gap: 8px;
 
             }
