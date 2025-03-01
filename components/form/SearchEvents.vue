@@ -39,7 +39,7 @@
                 <el-col :span="whereFieldSpan">
                     <el-form-item label="城市">
                         <el-select v-model="form.locationAddressRegion" placeholder="請選擇" :clearable="true">
-                            <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
+                            <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select>
                     </el-form-item>
@@ -47,7 +47,7 @@
                 <el-col :span="whereFieldSpan">
                     <el-form-item class="mb-0" label="線上活動">
                         <!-- <el-select v-model="form.addressRegion" placeholder="請選擇">
-                            <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
+                            <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                                 :value="item.value" />
                         </el-select> -->
                         <el-switch v-model="form.hasVirtualLocation" inline-prompt active-text="包含"
@@ -75,7 +75,7 @@ const form = defineModel('modelValue', {
 })
 
 // Search form data
-const taiwanPlaces = ref<any[]>([])
+const taiwanRegions = ref<any[]>([])
 const periodOptions = ref([
     {
         label: '上午',
@@ -118,7 +118,7 @@ watch(() => repoUI.isLarge, (newValue) => {
 // Methods
 async function getMetaSelectById() {
     const result = await repoMeta.getMetaSelectById('taiwan')
-    taiwanPlaces.value = result
+    taiwanRegions.value = result
 }
 
 // const searchSpan = ref<number>(24)

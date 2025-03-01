@@ -8,16 +8,26 @@ export interface IEventCreation {
  * 參考Schema，便於SEO使用
  * https://schema.org/Event
  */
-export interface IEventFromList {
+export interface IEventFromList extends IEventQuery {
     id?: string,
     banner?: string,
-    startDate?: Date,
-    endDate?: Date,
-    isPublic?: boolean,
     offerCategoryIds?: string[],
     dateDesignId?: string,
     name?: string,
+    organizerLogo?: string,
     eventStatus?: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
+}
+
+export interface IEventQuery {
+    startDate?: Date,
+    endDate?: Date,
+    startHour?: string,
+    locationAddressRegion?: string,
+    hasVirtualLocation?: boolean,
+    keywords?: string,
+    isPublic?: boolean,
+    limit?: number,
+    performerIds?: string[],
 }
 
 export interface IEventSingle {
@@ -47,18 +57,6 @@ export interface IEvent extends IEventQuery {
     // 便於更新用
     dateDesignId?: string,
     offerCategoryIds?: string[]
-}
-
-export interface IEventQuery {
-    startDate?: Date,
-    endDate?: Date,
-    startHour?: string,
-    locationAddressRegion?: string,
-    hasVirtualLocation?: boolean,
-    keywords?: string,
-    isPublic?: boolean,
-    limit?: number,
-    performerIds?: string[],
 }
 
 /**

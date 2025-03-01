@@ -40,7 +40,7 @@
                                         </td> -->
                     </tr>
                     <tr>
-                        <td>{{ item.locationAddressRegion || '地點未定' }}</td>
+                        <td>{{ getRegionName(item) }}</td>
                         <td></td>
                         <td>
                             <div class="footer__offer">
@@ -66,11 +66,35 @@
     </MoleculeVenoniaCard>
 </template>
 <script setup lang="ts">
-import type { IEventFromList } from '~/types/event'
-const item = defineModel('modelValue', {
+import type { IEvent, IEventFromList } from '~/types/event'
+import type { ISelectOption } from '~/types/meta'
+const repoMeta = useRepoMeta()
+const item = defineModel<IEventFromList>('modelValue', {
     type: Object,
     default: {}
 })
+const taiwanRegions = ref<ISelectOption[]>([])
+
+onMounted(() => {
+    getMetaSelectById()
+})
+
+// Methods
+function getRegionName(event: IEventFromList) {
+    const regionValue = event.locationAddressRegion
+    const selectedOption = taiwanRegions.value.find(option => {
+        return option.value === regionValue
+    })
+    if (selectedOption) {
+        return selectedOption.label
+    }
+    return '地點未定'
+}
+
+async function getMetaSelectById() {
+    const result = await repoMeta.getMetaSelectById('taiwan')
+    taiwanRegions.value = result
+}
 function getDate(event: IEventFromList) {
     if (event.startDate) {
         const startDate: Date = new Date(event.startDate)

@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="所在城市">
             <el-select v-model="form.addressRegion" placeholder="請選擇">
-                <el-option v-for="(item, index) in taiwanPlaces" :key="index" :label="`${item.label}`"
+                <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
             </el-select>
         </el-form-item>
@@ -54,7 +54,7 @@ const form = computed({
 })
 
 const placeList = ref<IPlace[]>([])
-const taiwanPlaces = ref<any[]>([])
+const taiwanRegions = ref<any[]>([])
 
 onMounted(() => {
     getPlaceList()
@@ -76,7 +76,7 @@ async function getPlaceList() {
 
 async function getMetaTaiwanCities() {
     const result = await repoMeta.getMetaSelectById('taiwan')
-    taiwanPlaces.value = result
+    taiwanRegions.value = result
 }
 
 
