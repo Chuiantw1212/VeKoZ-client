@@ -32,7 +32,7 @@
             </pre>
                 </template>
                 <template v-if="isDesigning">
-                    <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="90"
+                    <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="120"
                         :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
                 </template>
                 <template v-else>

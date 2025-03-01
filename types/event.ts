@@ -17,6 +17,8 @@ export interface IEventSingle extends IEventFromList {
     organizerLogo?: string,
     locationId?: string,
     locationAddress?: string,
+    virtualLocationName?: string,
+    virtualLocationValue?: string,
     designs?: any[],
 }
 

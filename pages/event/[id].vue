@@ -6,7 +6,7 @@
             <el-row>
                 <el-col :span="mainSpan" class="event__main">
                     <el-card>
-                        <h1>{{ event.name }}</h1>
+                        <h1 class="event__title">{{ event.name }}</h1>
                         <el-descriptions :column="1">
                             <el-descriptions-item>{{ event.description }}</el-descriptions-item>
                             <el-descriptions-item label="時間">
@@ -15,13 +15,13 @@
                             </el-descriptions-item>
                             <el-descriptions-item label="地點">
                                 {{ event.locationAddress }}
-                                <NuxtLink target="_blank"
+                                <a target="_blank"
                                     :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
                                     <el-button :icon="LocationFilled" text circle></el-button>
-                                </NuxtLink>
+                                </a>
                             </el-descriptions-item>
-                            <el-descriptions-item label="線上">
-
+                            <el-descriptions-item label="視訊連結">
+                                <a target="_blank" :src="event.virtualLocationValue">{{ event.virtualLocationName }}</a>
                             </el-descriptions-item>
                         </el-descriptions>
                     </el-card>
@@ -196,6 +196,10 @@ function getTimes(event: IEventSingle) {
 .event {
     margin: -20px;
     padding-bottom: 180px;
+
+    .event__title {
+        margin-bottom: 20px;
+    }
 
     .event__main {
         display: flex;
