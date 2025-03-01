@@ -238,13 +238,13 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     /**
      * Will trigger handleEventCalendarChange
      */
-    console.log({
-        templateDesign
-    })
+    // console.log({
+    //     templateDesign
+    // })
     const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
-    console.log({
-        calendarEvent
-    })
+    // console.log({
+    //     calendarEvent
+    // })
     if (!calendarEvent || !templateDesign) {
         return
     }
