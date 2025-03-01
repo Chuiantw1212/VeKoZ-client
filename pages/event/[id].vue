@@ -2,83 +2,60 @@
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <div v-if="event" class="event" :gutter="20">
         <img class="event__banner" :src="event.banner">
-        <el-main class="event__main">
-            <el-row>
-                <el-col :span="mainSpan" class="event__main">
-                    <el-card>
-                        <h1 class="event__title">{{ event.name }}</h1>
-                        <el-descriptions :column="1">
-                            <el-descriptions-item>{{ event.description }}</el-descriptions-item>
-                            <el-descriptions-item label="時間">
-                                {{ getDate(event) }}
-                                {{ getTimes(event) }}
-                            </el-descriptions-item>
-                            <el-descriptions-item label="地點">
-                                {{ event.locationAddress }}
-                                <a target="_blank"
-                                    :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
-                                    <el-button :icon="LocationFilled" text circle></el-button>
-                                </a>
-                            </el-descriptions-item>
-                            <el-descriptions-item label="視訊連結">
-                                <a target="_blank" :src="event.virtualLocationValue">{{ event.virtualLocationName }}</a>
-                            </el-descriptions-item>
-                        </el-descriptions>
-                    </el-card>
-                </el-col>
-                <el-col :span="sideSpan" class="event__side">
-                    <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
-                        <el-carousel-item v-for="item in 6" :key="item">
-                            <el-card class="side__card">
-                                <img class="card__logo" :src="event.organizerLogo">
-                                <div class="organization__body">
-                                    <div class="organizationNameGroup">
-                                        <div class="card__name">
-                                            {{ event.organizerName }}
-                                        </div>
-                                        <div>已有?人追蹤</div>
+        <!-- <el-main class="event__main"> -->
+        <el-row :gutter="20">
+            <el-col :span="mainSpan">
+                <el-card>
+                    <h1 class="event__title">{{ event.name }}</h1>
+                    <el-descriptions :column="1">
+                        <el-descriptions-item>{{ event.description }}</el-descriptions-item>
+                        <el-descriptions-item label="時間">
+                            {{ getDate(event) }}
+                            {{ getTimes(event) }}
+                        </el-descriptions-item>
+                        <el-descriptions-item label="地點">
+                            {{ event.locationAddress }}
+                            <a target="_blank"
+                                :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
+                                <el-button :icon="LocationFilled" text circle></el-button>
+                            </a>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="視訊連結">
+                            <a target="_blank" :src="event.virtualLocationValue">{{ event.virtualLocationName }}</a>
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </el-card>
+                <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
+                    <el-carousel-item v-for="item in 6" :key="item">
+                        <el-card class="side__card">
+                            <img class="card__logo" :src="event.organizerLogo">
+                            <div class="organization__body">
+                                <div class="organizationNameGroup">
+                                    <div class="card__name">
+                                        {{ event.organizerName }}
                                     </div>
+                                    <div>已有?人追蹤</div>
                                 </div>
-                            </el-card>
-                        </el-carousel-item>
-                    </el-carousel>
-                </el-col>
-                <el-col>
-                    <el-card class="event__custom">
-                        <div v-html="editorDesign.value"></div>
-                    </el-card>
-                </el-col>
-                <div class="event__actions">
-                    <div class="actions__offers">
-                        <div class="offers__options">
-                            <el-select v-model="form.offerId" placeholder="請選擇" class="row__item row__item--select">
-                                <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
-                                    :value="item.value" />
-                            </el-select>
-                            <el-input-number v-model="form.offerCount" class="row__item" :controls-position="'right'">
-
-                            </el-input-number>
-                        </div>
-                        <div class="offers__desc">
-                            任選三場合購優惠價_每場1400元（定價2000元以內活動，可以任選3場參加。除本場活動，另外2場可以先保留）
-                        </div>
-                    </div>
-                    <div class="actions__btnGroup">
-                        <el-button class="btnGroup__btn btnGroup__btn--large" type="danger" plain size="large">
-                            <div class="btn__content">
-                                <el-icon :size="24">
-                                    <Money />
-                                </el-icon>
-                                1,200
                             </div>
-                        </el-button>
-                        <el-button class="btnGroup__btn" :icon="More" :disabled="true">
-                            更多
-                        </el-button>
-                    </div>
-                </div>
-            </el-row>
-        </el-main>
+                        </el-card>
+                    </el-carousel-item>
+                </el-carousel>
+                <el-card class="event__mt">
+                    <div v-html="editorDesign.value"></div>
+                </el-card>
+            </el-col>
+            <!-- <el-col :span="18" class="event__side">
+                </el-col> -->
+            <el-col :span="6">
+                <el-card class="event__actionCard">
+                    <MoleculeEventAction v-if="repoUI.isLarge"></MoleculeEventAction>
+                </el-card>
+            </el-col>
+            <!-- <el-col :span="18">
+                </el-col> -->
+            <MoleculeEventAction v-if="!repoUI.isLarge"></MoleculeEventAction>
+        </el-row>
+        <!-- </el-main> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -101,17 +78,6 @@ const form = ref({
     offerCount: 1,
 })
 
-const ticketOptions = ref([
-    {
-        label: '早鳥票',
-        value: 'earlyBird'
-    },
-    {
-        label: '一般票',
-        value: 'normal'
-    },
-])
-
 const mainSpan = ref<number>(24)
 const sideSpan = ref<number>(24)
 
@@ -119,7 +85,7 @@ const sideSpan = ref<number>(24)
 watch(() => repoUI, (ui) => {
     mainSpan.value = 24
     if (ui.isSmall) {
-        // mainSpan.value = 18
+        mainSpan.value = 18
         // sideSpan.value = 12
     }
 }, { immediate: true, deep: true, })
@@ -202,6 +168,7 @@ function getTimes(event: IEventSingle) {
         display: flex;
         flex-direction: column;
         gap: 20px;
+        overflow-y: unset;
     }
 
     .event__banner {
@@ -233,98 +200,19 @@ function getTimes(event: IEventSingle) {
         }
     }
 
-    .event__custom {
+    .event__mt {
         margin-top: 20px;
-    }
-
-    .event__actions {
-        left: 0px;
-        position: fixed;
-        bottom: 0px;
-        background-color: white;
-        width: calc(100vw - 40px);
-        display: flex;
-        // flex-direction: column;
-        gap: 8px;
-        padding: 20px;
-        z-index: 20;
-        border-top: 1px solid lightgrey;
-
-        .actions__offers {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            justify-content: space-between;
-
-            .offers__desc {
-                text-align: justify;
-            }
-
-            .row__item {
-                width: 50%;
-            }
-
-            .row__item--price {
-                width: fit-content;
-                text-align: right;
-                white-space: nowrap;
-            }
-
-            .offers__options {
-                display: flex;
-                gap: 8px;
-
-            }
-        }
-
-        .actions__btnGroup {
-            width: fit-content;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            .btnGroup__price {
-                text-align: right;
-                height: 32px;
-                line-height: 32px;
-            }
-
-            .btnGroup__btn {
-                margin: 0px;
-            }
-
-            .btnGroup__btn--large {
-                min-width: 95px;
-                height: 100%;
-                padding: 0px;
-
-                .btn__content {
-                    display: flex;
-                    gap: 8px;
-                    flex-direction: column;
-                    align-items: center;
-                    font-size: 24px;
-                }
-            }
-        }
-
-        .row__actionGroup {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            .group__icon {
-                margin: 0px;
-            }
-        }
-
     }
 }
 
 @media screen and (min-width: 1200px) {
     .event__main {
         padding: 0px;
+    }
+
+    .event__actionCard {
+        position: sticky;
+        top: 70px;
     }
 }
 </style>

@@ -137,8 +137,6 @@ defineExpose({
             border-left: 1px solid lightgray;
             padding-left: 10px;
             width: 235px;
-            // overflow: hidden;
-            // text-overflow: ellipsis;
 
             .textGroup__title {
                 font-size: 14px;

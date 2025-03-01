@@ -7,7 +7,7 @@
             <SideMenu></SideMenu>
         </el-aside>
         <el-container>
-            <el-main>
+            <el-main class="vekoz__main">
                 <slot></slot>
             </el-main>
         </el-container>
@@ -32,6 +32,11 @@ const isFullScreen = computed(() => {
 
 </script>
 <style lang="scss" scoped>
+.vekoz__main {
+    overflow-y: unset;
+    overflow-x: unset;
+}
+
 .vekoz--header {
     position: fixed;
     opacity: 0.9;
