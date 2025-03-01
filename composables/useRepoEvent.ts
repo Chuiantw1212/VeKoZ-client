@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
-import type { IEvent, IEventFromList, IEventQuery } from '~/types/event'
+import type { IEvent, IEventFromList, IEventQuery, IEventSingle } from '~/types/event'
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('event', () => {
@@ -46,7 +46,7 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function getEvent(eventId: string) {
+    async function getEvent(eventId: string): Promise<IEventSingle> {
         const response = await defaultApi.authRequest(`/event/${eventId}`, {
             method: 'GET',
         })

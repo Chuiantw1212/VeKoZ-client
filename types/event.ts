@@ -8,6 +8,18 @@ export interface IEventCreation {
  * 參考Schema，便於SEO使用
  * https://schema.org/Event
  */
+export interface IEventSingle extends IEventFromList {
+    id?: string,
+    name?: string,
+    description?: string,
+    organizerId?: string,
+    organizerName?: string,
+    organizerLogo?: string,
+    locationId?: string,
+    locationAddress?: string,
+    designs?: any[],
+}
+
 export interface IEventFromList extends IEventQuery {
     id?: string,
     banner?: string,
@@ -15,7 +27,7 @@ export interface IEventFromList extends IEventQuery {
     dateDesignId?: string,
     name?: string,
     organizerLogo?: string,
-    eventStatus?: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended' // 暫定
+    eventStatus?: 'cancelled' | 'movedOnline' | 'postponed' | 'rescheduled' | 'scheduled' | 'ended', // 暫定
 }
 
 export interface IEventQuery {
@@ -28,16 +40,6 @@ export interface IEventQuery {
     isPublic?: boolean,
     limit?: number,
     performerIds?: string[],
-}
-
-export interface IEventSingle {
-    id?: string,
-    name?: string,
-    description?: string,
-    organizerId?: string,
-    organizerName?: string,
-    organizerLogo?: string,
-    actorIds?: string[],
 }
 
 /**

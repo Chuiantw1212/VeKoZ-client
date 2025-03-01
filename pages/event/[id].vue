@@ -6,13 +6,27 @@
             <el-row>
                 <el-col :span="mainSpan" class="event__main">
                     <el-card>
+
                         <h1>{{ event.name }}</h1>
-                        <p>{{ }}</p>
-                        <p v-if="event.startDate && event.endDate">{{ new Date(event.startDate).toLocaleString('zh-TW')
-                            }}
-                            ~
-                            {{ new Date(event.endDate).toLocaleString('zh-TW') }}</p>
-                        <el-text>{{ event.description }}</el-text>
+
+                        <el-descriptions :column="1">
+                            <el-descriptions-item>{{ event.description }}</el-descriptions-item>
+                            <el-descriptions-item label="時間">
+                                <!-- <template #label>
+                                    <el-icon>
+                                        <AlarmClock />
+                                    </el-icon>
+                                </template> -->
+                                {{ getDate(event) }}
+                                {{ getTimes(event) }}
+                            </el-descriptions-item>
+                            <el-descriptions-item label="地點">
+                                {{ event.locationAddress }}
+                                <NuxtLink target="_blank" :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
+                                    <el-button :icon="LocationFilled" text circle></el-button>
+                                </NuxtLink>
+                            </el-descriptions-item>
+                        </el-descriptions>
                     </el-card>
                 </el-col>
                 <el-col :span="sideSpan" class="event__side">
@@ -69,7 +83,7 @@
                                 1,200
                             </div>
                         </el-button>
-                        <el-button class="btnGroup__btn" :icon="More">
+                        <el-button class="btnGroup__btn" :icon="More" :disabled="true">
                             更多
                         </el-button>
                         <!-- </div> -->
@@ -82,14 +96,14 @@
     </div>
 </template>
 <script setup lang="ts">
-import { More } from '@element-plus/icons-vue'
+import { More, LocationFilled, AlarmClock } from '@element-plus/icons-vue'
 import { CollectionTag, Money } from '@element-plus/icons-vue'
-import type { IEvent } from '~/types/event'
+import type { IEventSingle } from '~/types/event'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
 const route = useRoute()
-const event = ref<IEvent>()
+const event = ref<IEventSingle>()
 
 const form = ref({
     ticket: '',
@@ -140,7 +154,41 @@ async function getEvent() {
         //     result
         // })
         event.value = result
+        if (result.locationId) {
+
+        }
     }
+}
+
+function getDate(event: IEventSingle) {
+    if (event.startDate) {
+        const startDate: Date = new Date(event.startDate)
+        const date = startDate.toLocaleDateString('zh-TW', {
+            year: 'numeric',
+            month: "2-digit",
+            day: "2-digit",
+        })
+        return date
+    }
+}
+
+function getTimes(event: IEventSingle) {
+    let timeString = ''
+    if (event.startDate) {
+        const startDate: Date = new Date(event.startDate)
+        const startTime = startDate.toLocaleTimeString('zh-TW', {
+            hour12: false,
+        })
+        timeString += `${startTime.slice(0, 5)}`
+    }
+    if (event.endDate) {
+        const endDate: Date = new Date(event.endDate)
+        const endTime = endDate.toLocaleTimeString('zh-TW', {
+            hour12: false,
+        })
+        timeString += ` ~ ${endTime.slice(0, 5)}`
+    }
+    return timeString
 }
 </script>
 <style lang="scss" scoped>
