@@ -51,7 +51,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入描述'
+        default: '1. 請輸入描述，盡可能寫滿，會用於建立搜尋關鍵字。\n2. 活動名稱、主辦單位名稱、講者名稱，會自動作為關鍵字，不須額外強調。'
     },
     onchange: {
         type: Function,

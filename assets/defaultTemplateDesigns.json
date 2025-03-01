@@ -35,6 +35,12 @@
         "formField": "performers"
     },
     {
+        "type": "offers",
+        "label": "預設票券群組",
+        "required": true,
+        "formField": "offers"
+    },
+    {
         "type": "editor",
         "required": true
     }
