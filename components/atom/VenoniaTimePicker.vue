@@ -4,7 +4,7 @@
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
-        <!-- {{ displayStart }} -->
+        <!-- instanceOf Date {{ modelValue[0] instanceof Date }} -->
         <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
             @change="setStatDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>

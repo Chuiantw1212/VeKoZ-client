@@ -23,7 +23,16 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function patchEventCalendar(body: IEvent) {
+    async function patchEventCalendar(body: IEventFromList) {
+        if (body.startDate! instanceof Date) {
+            body.startDate = new Date(body.startDate)
+        }
+        if (body.endDate! instanceof Date) {
+            body.endDate = new Date(body.endDate)
+        }
+        console.log({
+            body
+        })
         const response = await defaultApi.authRequest(`/event/calendar`, {
             method: 'PATCH',
             body,

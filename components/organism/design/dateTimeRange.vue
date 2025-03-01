@@ -1,5 +1,6 @@
 <template>
     <!-- 檢視與編輯用 -->
+    <!-- customDesign:{{ customDesign }} -->
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')" :model="customDesign">
         <div class="dateTimeRange">
@@ -82,6 +83,7 @@ onMounted(() => {
 
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
+    console.log('mofified')
     handleChange(newValue)
 }, { deep: true })
 

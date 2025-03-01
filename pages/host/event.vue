@@ -238,7 +238,13 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     /**
      * Will trigger handleEventCalendarChange
      */
+    console.log({
+        templateDesign
+    })
     const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
+    console.log({
+        calendarEvent
+    })
     if (!calendarEvent || !templateDesign) {
         return
     }
@@ -255,9 +261,18 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
                 return event.id === templateDesign.eventId
             })
             if (changedEvent) {
-                const startDate = new Date(templateDesign.value[0])
+                let startTime: number = 0
+                if (typeof templateDesign.value[0] === 'string') {
+                    startTime = new Date(templateDesign.value[0]).getTime()
+                } else {
+                    startTime = templateDesign.value[0].getTime()
+                }
                 const nowTime = new Date().getTime()
-                if (nowTime >= startDate.getTime()) {
+                console.log({
+                    nowTime,
+                    startTime
+                })
+                if (nowTime >= startTime) {
                     return
                 }
                 changedEvent.startDate = templateDesign.value[0]
