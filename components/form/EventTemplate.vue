@@ -122,11 +122,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    // type: {
-    //     type: String,
-    //     default: 'attendee',
-    //     required: true,
-    // }
 })
 const formRef = ref<FormInstance>()
 const formModel = ref<{ [key: string]: any }>({})

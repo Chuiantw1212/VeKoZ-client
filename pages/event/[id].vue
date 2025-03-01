@@ -2,7 +2,7 @@
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <div v-if="event" class="event" :gutter="20">
         <img class="event__banner" :src="event.banner">
-        <el-main>
+        <el-main class="event__main">
             <el-row>
                 <el-col :span="mainSpan" class="event__main">
                     <el-card>
@@ -27,7 +27,7 @@
                     </el-card>
                 </el-col>
                 <el-col :span="sideSpan" class="event__side">
-                    <el-carousel :interval="4000" type="card" height="200px">
+                    <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
                         <el-carousel-item v-for="item in 6" :key="item">
                             <el-card class="side__card">
                                 <img class="card__logo" :src="event.organizerLogo">
@@ -45,7 +45,10 @@
                 </el-col>
                 <el-col>
                     <el-card class="event__custom">
-                        <FormEventTemplate :model-value="customDesigns" :disabled="true"></FormEventTemplate>
+                        <div v-html="editorDesign.value">
+
+                        </div>
+                        <!-- <FormEventTemplate :model-value="editorDesigns" :disabled="true"></FormEventTemplate> -->
                     </el-card>
                 </el-col>
                 <div class="event__actions">
@@ -98,7 +101,9 @@ const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
 const route = useRoute()
 const event = ref<IEventSingle>()
-const customDesigns = ref<ITemplateDesign[]>([])
+const editorDesign = ref<ITemplateDesign>({
+    value: ''
+})
 
 const form = ref({
     ticket: '',
@@ -152,10 +157,12 @@ async function getEvent() {
     // })
     event.value = result
     if (result.designs) {
-        const nonRequiredFields = result.designs.filter(design => {
-            return !design.formField
+        const eventDesign = result.designs.find(design => {
+            return design.type === 'editor'
         })
-        customDesigns.value = nonRequiredFields
+        if (eventDesign) {
+            editorDesign.value = eventDesign
+        }
     }
 }
 
@@ -309,6 +316,8 @@ function getTimes(event: IEventSingle) {
             display: flex;
             gap: 12px;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .organizationNameGroup {
@@ -325,6 +334,12 @@ function getTimes(event: IEventSingle) {
 
     .event__custom {
         margin-top: 20px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .event__main {
+        padding: 0px;
     }
 }
 </style>
