@@ -2,9 +2,14 @@
     <div>
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
-            <AtomVenoniaEditor v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder"
-                :alignment="alignment" :disabled="disabled">
-            </AtomVenoniaEditor>
+            <template v-if="customDesign">
+                <AtomVenoniaEditor v-if="!disabled" v-model="customDesign.value" :placeholder="placeholder"
+                    :alignment="alignment" :disabled="disabled">
+                </AtomVenoniaEditor>
+                <div v-else v-html="customDesign.value">
+
+                </div>
+            </template>
         </el-form-item>
         <!-- 樣板編輯專用 -->
         <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"

@@ -29,7 +29,7 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <NuxtLink :to="`/event/${item.id}`">
+                            <NuxtLink :to="`/event/${item.id}`" target="_blank">
                                 {{ item.name }}
                             </NuxtLink>
                         </td>

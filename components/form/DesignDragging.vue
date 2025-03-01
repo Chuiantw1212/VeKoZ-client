@@ -51,6 +51,10 @@
             @dragstart="setOnDrag({ type: 'eventGroup', })" @mouseenter="setOnEnter({ type: 'eventGroup', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignEventGroup>
+        <OrganismDesignEditor class="eventTemplate__draggable" draggable="true"
+            @dragstart="setOnDrag({ type: 'editor', })" @mouseenter="setOnEnter({ type: 'editor', })"
+            @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
+        </OrganismDesignEditor>
 
         <el-divider content-position="left">無限供應欄位，用於票券銷售</el-divider>
         <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
@@ -59,7 +63,7 @@
             :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
 
-        <el-divider content-position="left">無限供應且學員可見，用於客製化</el-divider>
+        <el-divider content-position="left">無限供應且對外不可見</el-divider>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'dateTimeRange', })" @mouseenter="setOnEnter({ type: 'dateTimeRange', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
@@ -75,17 +79,9 @@
             @dragstart="setOnDrag({ type: 'divider', })" @mouseenter="setOnEnter({ type: 'divider', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignDivider>
-        <OrganismDesignEditor class="eventTemplate__draggable" draggable="true"
-            @dragstart="setOnDrag({ type: 'editor', })" @mouseenter="setOnEnter({ type: 'editor', })"
-            @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
-        </OrganismDesignEditor>
         <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'number', })" @mouseenter="setOnEnter({ type: 'number', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false"></OrganismDesignNumber>
-        <!-- </template> -->
-        <!-- <template v-else>
-
-        </template> -->
     </el-form>
 </template>
 <script setup lang="ts">

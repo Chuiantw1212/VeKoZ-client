@@ -45,7 +45,7 @@
                 </el-col>
                 <el-col>
                     <el-card class="event__custom">
-                        <FormEventTemplate :model-value="customDesigns"></FormEventTemplate>
+                        <FormEventTemplate :model-value="customDesigns" :disabled="true"></FormEventTemplate>
                     </el-card>
                 </el-col>
                 <div class="event__actions">
