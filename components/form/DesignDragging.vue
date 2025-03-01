@@ -52,12 +52,14 @@
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignEventGroup>
 
-        <el-divider content-position="left">無限供應欄位</el-divider>
+        <el-divider content-position="left">無限供應欄位，用於票券銷售</el-divider>
         <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'offers', formField: 'offers', })"
             @mouseenter="setOnEnter({ type: 'offers', formField: 'offers', })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
+
+        <el-divider content-position="left">無限供應且學員可見，用於客製化</el-divider>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'dateTimeRange', })" @mouseenter="setOnEnter({ type: 'dateTimeRange', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">

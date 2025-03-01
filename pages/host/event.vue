@@ -55,9 +55,9 @@
             <template #default>
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
-                    <FormTemplateDesign ref="formRef" v-model="dialogEventTemplate.designs" :disabled="eventEnded"
+                    <FormEventTemplate ref="formRef" v-model="dialogEventTemplate.designs" :disabled="eventEnded"
                         :onchange="handleEventFormChange">
-                    </FormTemplateDesign>
+                    </FormEventTemplate>
                 </el-container>
             </template>
         </AtomVekozDialog>

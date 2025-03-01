@@ -6,53 +6,46 @@
             <el-row>
                 <el-col :span="mainSpan" class="event__main">
                     <el-card>
-
                         <h1>{{ event.name }}</h1>
-
                         <el-descriptions :column="1">
                             <el-descriptions-item>{{ event.description }}</el-descriptions-item>
                             <el-descriptions-item label="時間">
-                                <!-- <template #label>
-                                    <el-icon>
-                                        <AlarmClock />
-                                    </el-icon>
-                                </template> -->
                                 {{ getDate(event) }}
                                 {{ getTimes(event) }}
                             </el-descriptions-item>
                             <el-descriptions-item label="地點">
                                 {{ event.locationAddress }}
-                                <NuxtLink target="_blank" :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
+                                <NuxtLink target="_blank"
+                                    :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
                                     <el-button :icon="LocationFilled" text circle></el-button>
                                 </NuxtLink>
+                            </el-descriptions-item>
+                            <el-descriptions-item label="線上">
+
                             </el-descriptions-item>
                         </el-descriptions>
                     </el-card>
                 </el-col>
                 <el-col :span="sideSpan" class="event__side">
-                    <el-card class="side__card">
-                        <div class="organization__body">
-                            <img class="card__logo" :src="event.organizerLogo">
-                            <div class="organizationNameGroup">
-                                <div class="card__name">
-                                    {{ event.organizerName }}
+                    <el-carousel :interval="4000" type="card" height="200px">
+                        <el-carousel-item v-for="item in 6" :key="item">
+                            <el-card class="side__card">
+                                <img class="card__logo" :src="event.organizerLogo">
+                                <div class="organization__body">
+                                    <div class="organizationNameGroup">
+                                        <div class="card__name">
+                                            {{ event.organizerName }}
+                                        </div>
+                                        <div>已有?人追蹤</div>
+                                    </div>
                                 </div>
-                                <div>已有?人追蹤</div>
-                            </div>
-                        </div>
-                    </el-card>
+                            </el-card>
+                        </el-carousel-item>
+                    </el-carousel>
                 </el-col>
                 <el-col>
                     <el-card class="event__custom">
-                        <template v-for="(design) in event.designs">
-                            <template v-if="!design.formField">
-                                {{ design }}
-                            </template>
-                            <template v-if="design.type === 'editor'">
-                                <div v-if="design" v-html="design.value">
-                                </div>
-                            </template>
-                        </template>
+                        <FormEventTemplate :model-value="customDesigns"></FormEventTemplate>
                     </el-card>
                 </el-col>
                 <div class="event__actions">
@@ -99,11 +92,13 @@
 import { More, LocationFilled, AlarmClock } from '@element-plus/icons-vue'
 import { CollectionTag, Money } from '@element-plus/icons-vue'
 import type { IEventSingle } from '~/types/event'
+import type { ITemplateDesign } from '~/types/eventTemplate'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
 const route = useRoute()
 const event = ref<IEventSingle>()
+const customDesigns = ref<ITemplateDesign[]>([])
 
 const form = ref({
     ticket: '',
@@ -148,15 +143,19 @@ async function getOfferList() {
 
 async function getEvent() {
     const { id } = route.params as any
-    if (id) {
-        const result = await repoEvent.getEvent(String(id))
-        // console.log({
-        //     result
-        // })
-        event.value = result
-        if (result.locationId) {
-
-        }
+    if (!id) {
+        return
+    }
+    const result = await repoEvent.getEvent(String(id))
+    // console.log({
+    //     result
+    // })
+    event.value = result
+    if (result.designs) {
+        const nonRequiredFields = result.designs.filter(design => {
+            return !design.formField
+        })
+        customDesigns.value = nonRequiredFields
     }
 }
 
@@ -168,7 +167,9 @@ function getDate(event: IEventSingle) {
             month: "2-digit",
             day: "2-digit",
         })
-        return date
+        const weekOfTheDay = startDate.getDay()
+        const dayString = ['日', '一', '二', '三', '四', '五', '六']
+        return `${date}(${dayString[weekOfTheDay]})`
     }
 }
 
@@ -194,7 +195,7 @@ function getTimes(event: IEventSingle) {
 <style lang="scss" scoped>
 .event {
     margin: -20px;
-    padding-bottom: 80px;
+    padding-bottom: 180px;
 
     .event__main {
         display: flex;
@@ -298,6 +299,7 @@ function getTimes(event: IEventSingle) {
 
     .side__card {
         margin-top: 20px;
+        text-align: center;
 
         .organization__body {
             display: flex;

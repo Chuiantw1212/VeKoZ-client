@@ -10,9 +10,6 @@
                                     @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
                                 </el-input>
                             </el-form-item>
-                            <!-- <div>
-                                {{ eventTemplate.id }}
-                            </div> -->
                             <div v-loading="isBtnLoading" class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true">
                                     開啓模板
@@ -23,7 +20,9 @@
                             </div>
                         </div>
                     </template>
-                    <FormTemplateDesign v-model="eventTemplate.designs" :isDesigning="true"
+                    <!-- <el-divider>客製化內容</el-divider>
+                    <el-divider>標準內容</el-divider> -->
+                    <FormEventTemplate v-model="eventTemplate.designs" :isDesigning="true"
                         :onchange="handleDesignChanged" type="host" @remove="removeDesign($event)"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
@@ -32,7 +31,7 @@
                                 :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }">
                             </div>
                         </template>
-                    </FormTemplateDesign>
+                    </FormEventTemplate>
                     <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
