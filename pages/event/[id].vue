@@ -63,14 +63,11 @@
                         <!-- <div class="row__actionGroup"> -->
                         <el-button class="btnGroup__btn btnGroup__btn--large" type="danger" plain size="large">
                             <div class="btn__content">
-                                <div>
-                                    <el-icon :size="24">
-                                        <Money />
-                                    </el-icon>
-                                    <!-- 購票 -->
-                                </div>
-                                    1,200
-                                </div>
+                                <el-icon :size="24">
+                                    <Money />
+                                </el-icon>
+                                1,200
+                            </div>
                         </el-button>
                         <el-button class="btnGroup__btn" :icon="More">
                             更多
@@ -226,7 +223,6 @@ async function getEvent() {
 
             .btnGroup__btn--large {
                 min-width: 95px;
-                min-height: 95px;
                 height: 100%;
                 padding: 0px;
 
@@ -234,20 +230,11 @@ async function getEvent() {
                     display: flex;
                     gap: 8px;
                     flex-direction: column;
-                    // text-align: center;
                     align-items: center;
                     font-size: 24px;
                 }
             }
         }
-
-        // .row__item {
-        //     width: 100%;
-        // }
-
-        // .row__item--right {
-        //     text-align: right;
-        // }
 
         .row__actionGroup {
             display: flex;
@@ -259,13 +246,6 @@ async function getEvent() {
             }
         }
 
-
-        // >* {
-        //     width: 50%;
-        // }
-        // .el-row {
-        //     margin-bottom: 20px;
-        // }
     }
 
     .side__card {
