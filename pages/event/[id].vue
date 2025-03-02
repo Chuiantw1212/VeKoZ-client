@@ -1,8 +1,8 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <div v-if="event" class="event">
-        <img class="event__banner" :src="event.banner">
-        <el-row :gutter="repoUI.isLarge ? 20 : 0">
+        <img v-if="event.banner" class="event__banner " :src="event.banner">
+        <el-row class="event__mt" :gutter="repoUI.isLarge ? 20 : 0">
             <el-col :span="mainSpan">
                 <el-card>
                     <h1 class="event__title">{{ event.name }}</h1>
@@ -182,6 +182,7 @@ function getTimes(event: IEventSingle) {
         height: auto;
         background-position: center;
         background-size: cover;
+        // margin-bottom: 20px;
     }
 
     .side__card {
