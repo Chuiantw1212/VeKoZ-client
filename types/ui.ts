@@ -5,10 +5,12 @@ export interface IEventCarouselCard {
 }
 
 export interface IPublicInfoCard {
+    id?: string,
+    seoName?: string,
     name?: string,
     link?: string,
-    image?: string,
-    banner?: string,
+    image?: any,
+    banner?: any,
     description?: string,
     sameAs?: string[],
 }

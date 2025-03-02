@@ -2,9 +2,9 @@
     <div class="profile">
         <section class="profile__bg"></section>
         <!-- {{ userForm }} -->
-        <el-main class="profile__template">
-            <FormUserTemplate v-model="userForm" :is-designing="false"></FormUserTemplate>
-        </el-main>
+        <!-- <el-main class="profile__template"> -->
+        <FormUserTemplate v-model="userForm" :is-designing="false"></FormUserTemplate>
+        <!-- </el-main> -->
     </div>
 </template>
 
@@ -12,10 +12,11 @@
 definePageMeta({
     layout: 'profile'
 })
+import type { IPublicInfoCard } from '~/types/ui';
 import type { IUser } from '~/types/user';
 const route = useRoute()
 const repoUser = useRepoUser()
-const userForm = ref<IUser>({
+const userForm = ref<IPublicInfoCard>({
     id: '',
     name: '',
     description: '',
@@ -32,7 +33,14 @@ onMounted(() => {
 async function getUserSeoInfoInfo() {
     const { seoName } = route.params as any
     const user = await repoUser.getUserSeoInfo(seoName)
-    userForm.value = user
+    userForm.value = {
+        name: user.seoTitle,
+        description: user.description,
+        banner: user.banner,
+        image: user.avatar,
+        seoName: user.seoName,
+        id: user.id,
+    }
 }
 </script>
 <style lang="scss" scoped>

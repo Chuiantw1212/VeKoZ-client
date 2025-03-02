@@ -1,7 +1,7 @@
 <template>
     <div class="organization">
-        <!-- 組織專屬頁面 -->
-        <div class="organization__bannerWrap">
+        <OrganismDesignProfile v-model="organizationProfile"></OrganismDesignProfile>
+        <!-- <div class="organization__bannerWrap">
             <img class="organization__banner" :src="organization.banner">
         </div>
         <div class="organization__headerGroup">
@@ -9,28 +9,26 @@
             <h1 class="headerGroup__title">{{ organization.name }}</h1>
             <div class="headerGroup__followers">
                 已有 XX人追隨
-                <!-- <el-button :icon="CollectionTag">加入追隨</el-button> -->
             </div>
         </div>
         <el-main>
             <div class="headerGroup__desc">{{ organization.description }}</div>
         </el-main>
         <el-main>
-            <!-- <el-card> -->
-            <!-- </el-card> -->
             <el-row>
                 <el-col v-for="event in eventList" class="me-20">
                     <MoleculeEventCard :model-value="event">
                     </MoleculeEventCard>
                 </el-col>
             </el-row>
-        </el-main>
+        </el-main> -->
     </div>
 </template>
 <script setup lang="ts">
 import { CollectionTag } from '@element-plus/icons-vue'
 import type { IEventFromList } from '~/types/event'
 import type { IOrganization } from '~/types/organization'
+import type { IPublicInfoCard } from '~/types/ui'
 const route = useRoute()
 const repoOrganization = useRepoOrganization()
 const repoEvent = useRepoEvent()
@@ -38,6 +36,8 @@ const repoEvent = useRepoEvent()
 definePageMeta({
     layout: 'profile'
 })
+
+const organizationProfile = ref<IPublicInfoCard>({})
 
 const organization = ref<IOrganization>({})
 const eventList = ref<IEventFromList[]>([])
@@ -55,7 +55,14 @@ const organizatoinId = computed(() => {
 
 // Methods
 async function getOrganization() {
-    organization.value = await repoOrganization.getOrganization(organizatoinId.value)
+    const organization = await repoOrganization.getOrganization(organizatoinId.value)
+    organizationProfile.value = {
+        name: organization.name,
+        description: organization.description,
+        image: organization.logo,
+        banner: organization.banner,
+        link: `o/${organization.id}`
+    }
 }
 
 async function getEvents() {

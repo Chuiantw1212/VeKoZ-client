@@ -1,45 +1,48 @@
 <template>
     <div class="profile" :class="{ 'profile--borderless': !isDesigning }">
-        <el-card :body-class="'profile__body'">
-            <template #header>
-                <div class="profile__header">
-                    <div>
-                        <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                            <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
-                            </el-button>
-                        </el-tooltip>
-                        <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
-                        </el-button>
-                    </div>
-                    <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
-                        追隨
+        <!-- <el-card :body-class="'profile__body'"> -->
+        <!-- <template #header>
+        </template> -->
+        <div class="profile__header">
+            <div>
+                <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
+                    <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
                     </el-button>
-                </div>
-            </template>
-            <div class="body__content">
-                <div class="profile__avatar">
-                    <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
-                    </AtomAvatarUploader>
-                </div>
-                <template v-if="isDesigning">
-                    <el-input class="content__header" v-if="userTemplate.seoTitle" v-model="userTemplate.seoTitle"
-                        :maxlength="30" :show-word-limit="true" type="textarea" size="large"
-                        @change="handleChange"></el-input>
-                </template>
-                <template v-else>
-                    <pre class="content__header">{{ userTemplate.seoTitle }}</pre>
-                </template>
-                <template v-if="isDesigning">
-                    <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="120"
-                        :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
-                </template>
-                <template v-else>
-                    <pre class="content__desc">{{ userTemplate.description }}</pre>
-                </template>
-                <AtomVekozSocialMedia v-if="userTemplate.sameAs" v-model="userTemplate.sameAs" @change="handleChange">
-                </AtomVekozSocialMedia>
+                </el-tooltip>
+                <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
+                </el-button>
             </div>
-        </el-card>
+            <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
+                追隨
+            </el-button>
+        </div>
+        <div class="profile__bannerWrap">
+            <img class="bannerWrap__banner" :src="publicInfo.banner">
+        </div>
+        <div class="body__content">
+            <div class="profile__avatar">
+                <AtomAvatarUploader v-if="publicInfo.image" v-model="publicInfo.image" :disabled="!isDesigning"
+                    @change="handleChange">
+                </AtomAvatarUploader>
+            </div>
+            <template v-if="isDesigning">
+                <el-input class="content__header" v-if="publicInfo.name" v-model="publicInfo.name" :maxlength="30"
+                    :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
+            </template>
+            <template v-else>
+                <pre class="content__header">{{ publicInfo.name }}</pre>
+            </template>
+            <template v-if="isDesigning">
+                <el-input v-if="publicInfo.description" v-model="publicInfo.description" :maxlength="120"
+                    :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+            </template>
+            <template v-else>
+                <pre class="content__desc">{{ publicInfo.description }}</pre>
+            </template>
+            <AtomVekozSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs" @change="handleChange">
+            </AtomVekozSocialMedia>
+        </div>
+        <!-- </el-card> -->
         <AtomVekozDialog v-model="isQrCodeDialogOpen">
             <canvas class="dialog__qrCode" id="qrCanvas"></canvas>
         </AtomVekozDialog>
@@ -50,17 +53,21 @@ import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
 import QRCode, { type QRCodeRenderersOptions } from 'qrcode'
+import type { IPublicInfoCard } from '~/types/ui';
 const repoUI = useRepoUI()
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
 const isLoading = ref<boolean>(false)
 const isQrCodeDialogOpen = ref<boolean>(false)
 const shareTooltipVisible = ref(false)
 
-const userTemplate = defineModel<IUser>('modelValue', {
+const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
     type: Object,
+    required: true,
     default: {
-        seoName: '',
-        // designs: [],
+        name: '',
+        description: '',
+        image: '',
+        banner: '',
     },
 })
 
@@ -128,13 +135,10 @@ function openQrCode() {
 }
 async function drawQrCode() {
     const openInLineExternal = `openExternalBrowser=1`
-    const url = `https://vekoz.org/${userTemplate.value.seoName}?${openInLineExternal}`
+    const url = `https://vekoz.org/${publicInfo.value.seoName}?${openInLineExternal}`
     const options: QRCodeRenderersOptions = {
         errorCorrectionLevel: 'H'
     }
-    console.log({
-        url
-    })
     QRCode.toCanvas(document.getElementById('qrCanvas'), url, options, function (error) {
         if (error) console.error(error)
         console.log('success!');
@@ -154,16 +158,16 @@ async function shareLink() {
     const {
         id,
         seoName,
-        seoTitle,
+        name,
         description
-    } = userTemplate.value
+    } = publicInfo.value
     const seoId = seoName || id
     const url = `${origin}/${seoId}?${openInLineExternal}`
     await navigator.clipboard.writeText(url)
     shareTooltipVisible.value = true
     if (navigator.share) {
         await navigator.share({
-            title: seoTitle,
+            title: name,
             text: description,
             url,
         });
@@ -171,7 +175,7 @@ async function shareLink() {
 }
 function getPersonalLink() {
     const openInLineExternal = `openExternalBrowser=1`
-    return `${userTemplate.value.seoName}?${openInLineExternal}`
+    return `${publicInfo.value.seoName}?${openInLineExternal}`
 }
 async function validate() {
     return await formRef.value?.validate()
@@ -182,16 +186,19 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
-.designForm {
-    width: 100%;
-}
-
-.icon {
-    height: 24px;
-    width: 24px;
-}
-
 .profile {
+
+    .profile__bannerWrap {
+        height: 0px;
+
+        .bannerWrap__banner {
+            display: block;
+            width: 100%;
+            max-width: 1280px;
+            border-radius: 0px 0px 12px 12px;
+            top: 0px;
+        }
+    }
 
     .content__header {
         text-align: center;
@@ -255,6 +262,16 @@ defineExpose({
         margin: 1.25rem 0px;
     }
 }
+
+.designForm {
+    width: 100%;
+}
+
+.icon {
+    height: 24px;
+    width: 24px;
+}
+
 
 .dialog__qrCode {
     display: block;
