@@ -27,16 +27,17 @@
                 <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
                     <el-carousel-item v-for="(item, key) in cardUnits" :key="key">
                         <el-card class="side__card">
-                            <!-- <img class="card__logo" :src="item.image"> -->
-                            <div class="card__logo" :style="{ 'background-image': `url(${item.image})` }"></div>
-                            <div class="organization__body">
-                                <div class="organizationNameGroup">
-                                    <div class="card__name">
-                                        {{ item.name }}
+                            <NuxtLink :to="`/${item.link}`">
+                                <div class="card__logo" :style="{ 'background-image': `url(${item.image})` }"></div>
+                                <div class="organization__body">
+                                    <div class="organizationNameGroup">
+                                        <div class="card__name">
+                                            {{ item.name }}
+                                        </div>
+                                        <div>已有?人追蹤</div>
                                     </div>
-                                    <div>已有?人追蹤</div>
                                 </div>
-                            </div>
+                            </NuxtLink>
                         </el-card>
                     </el-carousel-item>
                 </el-carousel>
@@ -122,7 +123,8 @@ async function getEvent() {
         const user = await repoUser.getUserPublicInfo(id)
         const cardUnit: IEventCarouselCard = {
             name: user.name,
-            image: user.avatar
+            image: user.avatar,
+            link: user.seoName,
         }
         cardUnits.value.push(cardUnit)
     })
