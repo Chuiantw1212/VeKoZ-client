@@ -7,7 +7,7 @@
                         <div class="vekoz-card-header">
                             <el-form-item>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
-                                    @change="patchTemplateName()" :maxlength="8" :show-word-limit="true">
+                                    @change="patchTemplateName()" :maxlength="30" :show-word-limit="true">
                                 </el-input>
                             </el-form-item>
                             <div v-loading="isBtnLoading" class="header__btnGroup">
