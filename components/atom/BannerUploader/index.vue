@@ -160,9 +160,6 @@ async function handleFiles(event: any) {
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            // border-radius: 50%;
-            // border: 1px solid red;
-            // width: 100%;
             height: 100%;
         }
     }

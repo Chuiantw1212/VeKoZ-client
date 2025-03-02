@@ -76,13 +76,14 @@ async function getEvents() {
 </script>
 <style lang="scss" scoped>
 .organization {
-    max-width: 1280px;
+    max-width: 480px;
     width: 100%;
     margin: auto;
 
-    .organization__bannerWrap {
-        height: 0px;
-    }
+    // .organization__bannerWrap {
+    //     height: calc(50vw - 55px);
+    //     max-height: 240px;
+    // }
 
     .organization__banner {
         display: block;
@@ -92,30 +93,30 @@ async function getEvents() {
         top: 0px;
     }
 
-    .organization__headerGroup {
-        margin-top: calc(50vw - 55px);
-        z-index: 10;
+    // .organization__headerGroup {
+    //     // margin-top: calc(50vw - 55px);
+    //     z-index: 10;
 
-        .headerGroup__logo {
-            border-radius: 50%;
-            width: 110px;
-            margin: auto;
-            display: block;
-        }
+    //     .headerGroup__logo {
+    //         border-radius: 50%;
+    //         width: 110px;
+    //         margin: auto;
+    //         display: block;
+    //     }
 
-        .headerGroup__title {
-            text-align: center;
-            margin-bottom: 0px;
-        }
+    //     .headerGroup__title {
+    //         text-align: center;
+    //         margin-bottom: 0px;
+    //     }
 
-        .headerGroup__desc {
-            margin-top: 20px;
-        }
+    //     .headerGroup__desc {
+    //         margin-top: 20px;
+    //     }
 
-        .headerGroup__followers {
-            text-align: center;
-        }
-    }
+    //     .headerGroup__followers {
+    //         text-align: center;
+    //     }
+    // }
 }
 
 .me-20 {

@@ -29,6 +29,7 @@
             <template v-else>
                 <pre class="content__header">{{ publicInfo.name }}</pre>
             </template>
+            <div class="content__followers">XXX人追隨</div>
             <template v-if="isDesigning">
                 <el-input v-if="publicInfo.description" v-model="publicInfo.description" :maxlength="120"
                     :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
@@ -187,54 +188,6 @@ defineExpose({
     padding-top: 48px;
     position: relative;
 
-    .publicInfo__bannerWrap {
-        height: 0px;
-
-        .bannerWrap__banner {
-            display: block;
-            width: 100%;
-            max-width: 1280px;
-            border-radius: 0px 0px 12px 12px;
-            top: 0px;
-        }
-    }
-
-    .publicInfo__headerGroup--hasBanner {
-        margin-top: calc(50vw - 55px);
-        z-index: 10;
-    }
-
-    .content__header {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 0px;
-
-        :deep(.el-input__inner) {
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-        }
-    }
-
-    .content__desc {
-        text-align: center;
-        white-space: pre;
-        margin-top: 0px;
-    }
-
-    :deep(.el-textarea__inner) {
-        text-align: center;
-    }
-
-    :deep(.el-card__header) {
-        border-bottom: 0px;
-    }
-
-    .publicInfo__banner--mobile {
-        width: 100%;
-    }
-
     .publicInfo__actions {
         position: fixed;
         top: 0px;
@@ -251,8 +204,21 @@ defineExpose({
         }
     }
 
-    :deep(.publicInfo__body) {
-        padding: 0px;
+    .publicInfo__bannerWrap {
+        height: calc(50vw - 60px);
+        max-height: calc(240px - 60px);
+
+        .bannerWrap__banner {
+            display: block;
+            width: 100%;
+            max-width: 1280px;
+            border-radius: 0px 0px 12px 12px;
+            top: 0px;
+        }
+    }
+
+    .publicInfo__headerGroup--hasBanner {
+        z-index: 10;
     }
 
     .publicInfo__avatar {
@@ -260,6 +226,45 @@ defineExpose({
         justify-content: center;
     }
 
+    .content__header {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 0px;
+
+        :deep(.el-input__inner) {
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+
+    .content__followers {
+        text-align: center;
+    }
+
+    .content__desc {
+        text-align: center;
+        // white-space: pre;
+        white-space: pre-wrap;
+        margin-top: 20px;
+    }
+
+    :deep(.el-textarea__inner) {
+        text-align: center;
+    }
+
+    :deep(.el-card__header) {
+        border-bottom: 0px;
+    }
+
+    .publicInfo__banner--mobile {
+        width: 100%;
+    }
+
+    :deep(.publicInfo__body) {
+        padding: 0px;
+    }
 
     .publicInfo__name {
         text-align: center;
