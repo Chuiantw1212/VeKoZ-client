@@ -1,5 +1,5 @@
 <template>
-    <div class="event__actions">
+    <el-card class="event__actions" :body-class="'actions__body'">
         <div class="actions__offers">
             <div class="offers__options">
                 <el-select v-model="form.offerId" placeholder="請選擇" class="row__item row__item--select">
@@ -27,7 +27,7 @@
                 更多
             </el-button>
         </div>
-    </div>
+    </el-card>
 </template>
 <script setup lang="ts">
 import { More, Money } from '@element-plus/icons-vue';
@@ -54,12 +54,14 @@ const ticketOptions = ref([
     position: fixed;
     bottom: 0px;
     background-color: white;
-    width: calc(100vw - 40px);
-    display: flex;
-    gap: 8px;
-    padding: 20px;
+    width: 100vw;
+    flex-direction: row;
     z-index: 20;
-    border-top: 1px solid lightgrey;
+
+    :deep(.actions__body) {
+        gap: 8px;
+        display: flex;
+    }
 
     .actions__offers {
         width: 100%;
@@ -141,11 +143,14 @@ const ticketOptions = ref([
         background-color: white;
         width: unset;
         display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
         z-index: unset;
         border-top: unset;
+
+        :deep(.actions__body) {
+            gap: 8px;
+            display: flex;
+            flex-direction: column;
+        }
 
         .actions__offers {
             width: 100%;

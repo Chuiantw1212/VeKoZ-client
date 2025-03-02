@@ -50,11 +50,13 @@
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="6">
-                <el-card class="event__actionCard">
-                    <MoleculeEventAction></MoleculeEventAction>
-                </el-card>
+                <!-- <el-card class="event__actionCard"> -->
+                <MoleculeEventAction class="event__actionCard"></MoleculeEventAction>
+                <!-- </el-card> -->
             </el-col>
+            <!-- <el-card> -->
             <MoleculeEventAction v-if="!repoUI.isLarge"></MoleculeEventAction>
+            <!-- </el-card> -->
         </el-row>
     </div>
 </template>
