@@ -1,9 +1,6 @@
 <template>
-    <div class="profile" :class="{ 'profile--borderless': !isDesigning }">
-        <!-- <el-card :body-class="'profile__body'"> -->
-        <!-- <template #header>
-        </template> -->
-        <div class="profile__header">
+    <div class="publicInfo" :class="{ 'publicInfo--borderless': !isDesigning }">
+        <div class="publicInfo__actions">
             <div>
                 <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                     <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
@@ -16,11 +13,11 @@
                 追隨
             </el-button>
         </div>
-        <div class="profile__bannerWrap">
+        <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
             <img class="bannerWrap__banner" :src="publicInfo.banner">
         </div>
-        <div class="body__content">
-            <div class="profile__avatar">
+        <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
+            <div class="publicInfo__avatar">
                 <AtomAvatarUploader v-if="publicInfo.image" v-model="publicInfo.image" :disabled="!isDesigning"
                     @change="handleChange">
                 </AtomAvatarUploader>
@@ -186,9 +183,11 @@ defineExpose({
 })
 </script>
 <style lang="scss" scoped>
-.profile {
+.publicInfo {
+    padding-top: 48px;
+    position: relative;
 
-    .profile__bannerWrap {
+    .publicInfo__bannerWrap {
         height: 0px;
 
         .bannerWrap__banner {
@@ -198,6 +197,11 @@ defineExpose({
             border-radius: 0px 0px 12px 12px;
             top: 0px;
         }
+    }
+
+    .publicInfo__headerGroup--hasBanner {
+        margin-top: calc(50vw - 55px);
+        z-index: 10;
     }
 
     .content__header {
@@ -227,37 +231,37 @@ defineExpose({
         border-bottom: 0px;
     }
 
-    .profile__banner--mobile {
+    .publicInfo__banner--mobile {
         width: 100%;
     }
 
-    .profile__header {
+    .publicInfo__actions {
+        position: fixed;
+        top: 0px;
         display: flex;
-        width: 100%;
+        width: calc(100vw - 16px);
+        background-color: rgba(255, 255, 255, 0.9);
         align-items: center;
         justify-content: space-between;
         height: 32px; // template共同高度
+        padding: 8px;
 
         >* {
             margin-bottom: 0px; // 除掉form-item的maargon-bottom
         }
     }
 
-    :deep(.profile__body) {
+    :deep(.publicInfo__body) {
         padding: 0px;
     }
 
-    .body__content {
-        padding: 20px;
-    }
-
-    .profile__avatar {
+    .publicInfo__avatar {
         display: flex;
         justify-content: center;
     }
 
 
-    .profile__name {
+    .publicInfo__name {
         text-align: center;
         margin: 1.25rem 0px;
     }
@@ -278,7 +282,7 @@ defineExpose({
     margin: auto;
 }
 
-.profile--borderless {
+.publicInfo--borderless {
     border: 0px;
     box-shadow: unset;
 }

@@ -21,7 +21,6 @@ const userForm = ref<IPublicInfoCard>({
     name: '',
     description: '',
     seoName: '',
-    seoTitle: '',
 })
 
 // Hooks
