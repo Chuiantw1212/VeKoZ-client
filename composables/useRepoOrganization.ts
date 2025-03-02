@@ -4,6 +4,12 @@ import type { IOrganization } from '~/types/organization'
 
 export default defineStore('organization', () => {
     const defaultApi = useVenoniaApi()
+    async function getOrganization(organizationId: string): Promise<IOrganization> {
+        const response = await defaultApi.request(`/organization/${organizationId}`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function getOrganizationList(): Promise<IOrganization[]> {
         const response = await defaultApi.authRequest(`/organization/list`, {
             method: 'GET',
@@ -37,6 +43,7 @@ export default defineStore('organization', () => {
         return response.json()
     }
     return {
+        getOrganization,
         getOrganizationList,
         postOrganization,
         putOrganization,

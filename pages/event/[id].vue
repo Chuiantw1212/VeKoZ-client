@@ -44,10 +44,10 @@
                 <el-card class="event__mt">
                     <div v-html="editorDesign.value"></div>
                 </el-card>
-                <el-card class="event__mt">
+                <!-- <el-card class="event__mt">
                     活動群組
                     過往活動評價
-                </el-card>
+                </el-card> -->
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="6">
                 <!-- <el-card class="event__actionCard"> -->
@@ -69,6 +69,7 @@ const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
 const repoUser = useRepoUser()
+const rpeoOrganization = useRepoOrganization()
 const route = useRoute()
 const event = ref<IEventSingle>()
 const cardUnits = ref<IEventCarouselCard[]>([])
@@ -129,6 +130,12 @@ async function getEvent() {
             link: user.seoName,
         }
         cardUnits.value.push(cardUnit)
+    })
+    const organizer = await rpeoOrganization.getOrganization(String(result.organizerId))
+    cardUnits.value.push({
+        name: organizer.name,
+        image: String(organizer.logo),
+        link: `organization/${organizer.id}`,
     })
 }
 
