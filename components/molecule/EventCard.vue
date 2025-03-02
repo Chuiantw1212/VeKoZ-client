@@ -100,7 +100,9 @@ function getDate(event: IEventFromList) {
     if (event.startDate) {
         const startDate: Date = new Date(event.startDate)
         const date = startDate.toLocaleDateString('zh-TW')
-        return date
+        const weekOfTheDay = startDate.getDay()
+        const dayString = ['日', '一', '二', '三', '四', '五', '六']
+        return `${date}(${dayString[weekOfTheDay]})`
     }
 }
 
