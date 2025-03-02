@@ -53,15 +53,18 @@
     </div>
 </template>
 <script setup lang="ts">
-import { More, LocationFilled, AlarmClock } from '@element-plus/icons-vue'
-import { CollectionTag, Money } from '@element-plus/icons-vue'
+import { LocationFilled } from '@element-plus/icons-vue'
 import type { IEventSingle } from '~/types/event'
 import type { ITemplateDesign } from '~/types/eventTemplate'
+import type { IEventCarouselCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
 const repoOffer = useRepoOffer()
+const repoUser = useRepoUser()
 const route = useRoute()
 const event = ref<IEventSingle>()
+const cardUnits = ref<IEventCarouselCard[]>([])
+
 const editorDesign = ref<ITemplateDesign>({
     value: ''
 })
@@ -102,9 +105,6 @@ async function getEvent() {
         return
     }
     const result = await repoEvent.getEvent(String(id))
-    // console.log({
-    //     result
-    // })
     event.value = result
     if (result.designs) {
         const eventDesign = result.designs.find(design => {
@@ -114,6 +114,12 @@ async function getEvent() {
             editorDesign.value = eventDesign
         }
     }
+    result.performerIds?.forEach(async id => {
+        const user = await repoUser.getUserPublicInfo(id)
+        cardUnits.value.push({
+            name: user.name ?? '未命名'
+        })
+    })
 }
 
 function getDate(event: IEventSingle) {

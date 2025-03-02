@@ -36,8 +36,14 @@ export default defineStore('user', () => {
         // }
         return userInfo.value
     }
-    async function getPublicUser(seoName: string) {
-        const response = await defaultApi.authRequest(`/user/${seoName}`, {
+    async function getUserPublicInfo(userId: string): Promise<IUser> {
+        const response = await defaultApi.authRequest(`/user/${userId}`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
+    async function getUserSeoInfo(seoName: string): Promise<IUser> {
+        const response = await defaultApi.authRequest(`/user/seo/${seoName}`, {
             method: 'GET',
         })
         return response.json()
@@ -115,7 +121,8 @@ export default defineStore('user', () => {
         userInfo,
         userPreference,
         getUser,
-        getPublicUser,
+        getUserPublicInfo,
+        getUserSeoInfo,
         setUserType,
         deleteUser,
         postUser,

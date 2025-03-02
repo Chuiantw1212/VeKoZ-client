@@ -25,13 +25,13 @@ const userForm = ref<IUser>({
 
 // Hooks
 onMounted(() => {
-    getPublicUserInfo()
+    getUserSeoInfoInfo()
 })
 
 // Methods
-async function getPublicUserInfo() {
+async function getUserSeoInfoInfo() {
     const { seoName } = route.params as any
-    const user = await repoUser.getPublicUser(seoName)
+    const user = await repoUser.getUserSeoInfo(seoName)
     userForm.value = user
 }
 </script>
