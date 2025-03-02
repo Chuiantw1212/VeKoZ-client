@@ -1,5 +1,8 @@
 import type { IOffer } from "./offer"
 
+/**
+ * @deprecated
+ */
 export interface IEventTemplate {
     uid?: string,
     id?: string,

@@ -76,9 +76,9 @@
 
 <script setup lang="ts">
 import { Delete, Close, View } from '@element-plus/icons-vue';
-import type { IEventFromList, IEventCreation, } from '~/types/event';
+import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/event';
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { CalendarApi, DatesSetArg, EventApi, EventSourceInput } from '@fullcalendar/core/index.js';
+import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 import type { IOrganization } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
@@ -96,7 +96,7 @@ const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
 const vekozCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
-    date: '',
+    date: new Date(),
 })
 const vekozEventList = ref<IEventFromList[]>([])
 // Data sidemenu
@@ -105,7 +105,7 @@ const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
 const eventDialogIsOpen = ref<boolean>(false)
-const dialogEventTemplate = ref<IEventTemplate>({
+const dialogEventTemplate = ref<IEventSingle>({
     designs: []
 })
 const eventEnded = ref<boolean>(false)
@@ -236,15 +236,9 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
         return
     }
     /**
-     * Will trigger handleEventCalendarChange
+     * calendarEvent.call Will trigger handleEventCalendarChange
      */
-    // console.log({
-    //     templateDesign
-    // })
     const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
-    // console.log({
-    //     calendarEvent
-    // })
     if (!calendarEvent || !templateDesign) {
         return
     }
@@ -268,10 +262,6 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
                     startTime = templateDesign.value[0].getTime()
                 }
                 const nowTime = new Date().getTime()
-                console.log({
-                    nowTime,
-                    startTime
-                })
                 if (nowTime >= startTime) {
                     return
                 }
@@ -281,10 +271,8 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             }
             break;
         }
-        default: {
-            await repoEvent.patchEventForm(templateDesign)
-        }
     }
+    await repoEvent.patchEventForm(templateDesign)
     isDialogPatchLoading.value = false
 }
 
@@ -402,7 +390,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
-    const eventTemplate: IEventTemplate = await repoEvent.getEvent(eventId)
+    const eventTemplate: IEventSingle = await repoEvent.getEvent(eventId)
     isLoading.value = false
     if (eventTemplate) {
         dialogEventTemplate.value = eventTemplate

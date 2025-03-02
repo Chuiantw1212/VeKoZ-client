@@ -23,11 +23,12 @@
 <script setup lang="ts">
 import type { IEventTemplate, } from '~/types/eventTemplate';
 import defaultTemplateDesigns from '~/assets/defaultTemplateDesigns.json'
+import type { IEventSingle } from '~/types/event';
 
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const isLoading = ref<boolean>(false)
-const eventTemplate = defineModel<IEventTemplate>('modelValue', {
+const eventTemplate = defineModel<IEventSingle>('modelValue', {
     type: Object,
     default: {
         id: '',

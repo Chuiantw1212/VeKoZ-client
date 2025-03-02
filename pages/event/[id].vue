@@ -83,7 +83,6 @@ watch(() => repoUI, (ui) => {
     mainSpan.value = 24
     if (ui.isSmall) {
         mainSpan.value = 18
-        // sideSpan.value = 12
     }
 }, { immediate: true, deep: true, })
 
