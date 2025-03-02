@@ -66,7 +66,7 @@
     </MoleculeVenoniaCard>
 </template>
 <script setup lang="ts">
-import type { IEvent, IEventFromList } from '~/types/event'
+import type { IEventFromList } from '~/types/event'
 import type { ISelectOption } from '~/types/meta'
 import placeholderImage from '@/assets/logo/500_250.png'
 const repoMeta = useRepoMeta()

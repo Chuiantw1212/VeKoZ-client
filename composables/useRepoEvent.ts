@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
-import type { IEvent, IEventFromList, IEventQuery, IEventSingle } from '~/types/event'
-import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
+import type { IEventFromList, IEventQuery, IEventSingle } from '~/types/event'
+import type { ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('event', () => {
     const defaultApi = useVenoniaApi()
-    async function postEvent(event: IEventTemplate) {
-        if (!event.designs.length) {
+    async function postEvent(event: IEventSingle) {
+        if (!event.designs?.length) {
             alert(`!event.designs.length`)
             return
         }
@@ -30,9 +30,6 @@ export default defineStore('event', () => {
         if (body.endDate! instanceof Date) {
             body.endDate = new Date(body.endDate)
         }
-        console.log({
-            body
-        })
         const response = await defaultApi.authRequest(`/event/calendar`, {
             method: 'PATCH',
             body,

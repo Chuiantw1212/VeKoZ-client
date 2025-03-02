@@ -1,4 +1,8 @@
 <template>
+    <!-- 月曆 -->
+     <!-- <el-row class="organizationTemplate" :gutter="20">
+        
+     </el-row> -->
     <div class="organization">
         <div class="organization__header">
             <h1>組織管理</h1>
@@ -63,15 +67,7 @@
             </el-alert>
             <FormOrganizationMember v-if="organizationMemberDialog.visibility" :mode="organizationMemberDialog.mode">
             </FormOrganizationMember>
-            <!-- <template #footer>
-                <el-button @click="organizationMemberDialog.visibility = false">取消</el-button>
-                <el-button type="primary" @click="hanelDialogConfirm()">
-                    確認
-                </el-button>
-            </template> -->
         </AtomVekozDialog>
-        <!-- <el-dialog v-model="organizationMemberDialog.visibility" title="成員設定" class="event__template">
-        </el-dialog> -->
     </div>
 </template>
 <script setup lang="ts">

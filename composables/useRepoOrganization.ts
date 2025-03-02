@@ -24,7 +24,7 @@ export default defineStore('organization', () => {
         return response
     }
     async function putOrganization(organization: IOrganization) {
-        const response = await defaultApi.authRequest(`/organization/${organization.id}`, {
+        const response = await defaultApi.authRequest(`/organization`, {
             method: 'PUT',
             body: organization,
         })

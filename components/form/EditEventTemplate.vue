@@ -40,15 +40,14 @@
     </el-table>
 </template>
 <script setup lang="ts">
-import type { IEvent } from '~/types/event';
-import type { IEventTemplate, } from '~/types/eventTemplate';
+import type { IEventSingle } from '~/types/event';
 import {
     Delete,
 } from '@element-plus/icons-vue'
 const emit = defineEmits(['update:modelValue', 'reset'])
 const repoEventTemplate = useRepoEventTemplate()
 const isLoading = ref<boolean>(false)
-const eventTemplate = defineModel<IEventTemplate>('modelValue', {
+const eventTemplate = defineModel<IEventSingle>('modelValue', {
     type: Object,
     default: {
         id: '',
@@ -56,7 +55,7 @@ const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     }
 })
 
-const templateList = ref<IEvent[]>([])
+const templateList = ref<IEventSingle[]>([])
 
 // Hooks
 onMounted(() => {
@@ -64,7 +63,7 @@ onMounted(() => {
 })
 
 // Methods
-async function selectTemplate(template: IEventTemplate) {
+async function selectTemplate(template: IEventSingle) {
     if (!template.id) {
         return
     }
@@ -94,7 +93,7 @@ async function selectTemplate(template: IEventTemplate) {
     }
 }
 
-async function deleteTemplate(template: IEventTemplate) {
+async function deleteTemplate(template: IEventSingle) {
     if (!template.id) {
         return
     }

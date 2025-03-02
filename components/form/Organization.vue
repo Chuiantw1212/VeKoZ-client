@@ -1,5 +1,6 @@
 <template>
     <el-form label-width="auto">
+        <!-- {{ organization }} -->
         <el-row>
             <el-col :span="14">
                 <el-form-item label="單位名稱">
@@ -46,7 +47,7 @@
         </el-row>
         <el-row>
             <el-col>
-                <OrganismDesignBanner v-model="organization.banner"></OrganismDesignBanner>
+                <AtomBannerUploader v-model="organization.banner"></AtomBannerUploader>
             </el-col>
         </el-row>
         <el-row>

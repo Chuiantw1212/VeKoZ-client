@@ -135,7 +135,7 @@ async function getEvent() {
     cardUnits.value.push({
         name: organizer.name,
         image: String(organizer.logo),
-        link: `organization/${organizer.id}`,
+        link: `o/${organizer.id}`,
     })
 }
 

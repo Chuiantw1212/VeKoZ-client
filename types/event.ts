@@ -12,7 +12,6 @@ export interface IEventSingle extends IEventFromList {
     id?: string,
     name?: string,
     description?: string,
-    organizerId?: string,
     organizerName?: string,
     organizerLogo?: string,
     locationId?: string,
@@ -42,25 +41,7 @@ export interface IEventQuery {
     isPublic?: boolean,
     limit?: number,
     performerIds?: string[],
-}
-
-/**
- * 太雜了，要整理取代
- * @deprecated
- */
-export interface IEvent extends IEventQuery {
-    id?: string,
-    name?: string,
-    description?: string,
-    lastmod?: any,
-    banner?: string,
     organizerId?: string,
-    organizerName?: string,
-    organizerLogo?: string,
-    designs?: ITemplateDesign[]
-    // 便於更新用
-    dateDesignId?: string,
-    offerCategoryIds?: string[]
 }
 
 /**
