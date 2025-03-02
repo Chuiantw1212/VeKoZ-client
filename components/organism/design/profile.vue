@@ -1,5 +1,8 @@
 <template>
     <div class="publicInfo" :class="{ 'publicInfo--borderless': !isDesigning }">
+        <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
+            <img class="bannerWrap__banner" :src="publicInfo.banner">
+        </div>
         <div class="publicInfo__actions">
             <div>
                 <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
@@ -12,9 +15,6 @@
             <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
                 追隨
             </el-button>
-        </div>
-        <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
-            <img class="bannerWrap__banner" :src="publicInfo.banner">
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
@@ -189,15 +189,16 @@ defineExpose({
     position: relative;
 
     .publicInfo__actions {
-        position: fixed;
-        top: 0px;
+        // position: fixed;
+        // top: 0px;
         display: flex;
-        width: calc(100vw - 16px);
+        // width: calc(100vw - 16px);
         background-color: rgba(255, 255, 255, 0.9);
         align-items: center;
         justify-content: space-between;
-        height: 32px; // template共同高度
-        padding: 8px;
+        height: 0px; // template共同高度
+        // padding: 8px;
+        transform: translateY(90px);
 
         >* {
             margin-bottom: 0px; // 除掉form-item的maargon-bottom
