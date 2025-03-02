@@ -1,10 +1,10 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
     <div v-if="event" class="event">
-        <img v-if="event.banner" class="event__banner " :src="event.banner">
         <el-row class="event__mt" :gutter="repoUI.isLarge ? 20 : 0">
             <el-col :span="mainSpan">
-                <el-card>
+                <img v-if="event.banner" class="event__banner " :src="event.banner">
+                <el-card class="event__mt">
                     <h1 class="event__title">{{ event.name }}</h1>
                     <el-descriptions :column="1">
                         <el-descriptions-item>{{ event.description }}</el-descriptions-item>
