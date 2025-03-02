@@ -8,7 +8,7 @@
                 </el-form-item>
                 <el-form-item label="Email">
                     <el-input v-model="organization.lineId" :maxlength="8" :show-word-limit="true"
-                    placeholder="請輸入"></el-input>
+                        placeholder="請輸入"></el-input>
                 </el-form-item>
                 <el-form-item label="LineID">
                     <el-input v-model="organization.lineId" :maxlength="8" :show-word-limit="true"
@@ -22,7 +22,8 @@
             <el-col :span="10">
                 <el-form-item label="商標">
                     <ClientOnly>
-                        <AtomAvatarUploader v-model="organization.logo" accept="image/*"></AtomAvatarUploader>
+                        <AtomAvatarUploader v-if="organization.logo" v-model="organization.logo" accept="image/*">
+                        </AtomAvatarUploader>
                     </ClientOnly>
                 </el-form-item>
             </el-col>
@@ -43,21 +44,11 @@
                 </el-form-item>
             </el-col>
         </el-row>
-        <!-- <el-alert type="info" show-icon :closable="false">
-            有關SEO注意事項，依據以下標準，SEO效果最好。
-            <ul>
-                <li>
-                    1. 標題30中文字左右
-                </li>
-                <li>
-                    2. 描述120~150中文字左右
-                </li>
-                <li>
-                    3. 附上商標，在社群媒體可作為分享用的縮圖
-                </li>
-            </ul>
-        </el-alert>
-        <br/> -->
+        <el-row>
+            <el-col>
+                <OrganismDesignBanner v-model="organization.banner"></OrganismDesignBanner>
+            </el-col>
+        </el-row>
         <el-row>
             <el-col :span="24">
                 <el-form-item label="Google 日曆">
@@ -82,7 +73,15 @@
     </el-form>
 </template>
 <script setup lang="ts">
+import type { IOrganization } from '~/types/organization'
 const emits = defineEmits(['update:modelValue'])
+const organization = defineModel<IOrganization>({
+    default: {
+        name: '',
+        logo: '',
+        description: ''
+    }
+})
 const props = defineProps({
     modelValue: {
         type: Object,
@@ -105,12 +104,12 @@ const props = defineProps({
     }
 })
 
-const organization = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emits('update:modelValue', newValue)
-    }
-})
+// const organization = computed({
+//     get() {
+//         return props.modelValue
+//     },
+//     set(newValue) {
+//         emits('update:modelValue', newValue)
+//     }
+// })
 </script>

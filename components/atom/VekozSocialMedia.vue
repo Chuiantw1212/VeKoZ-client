@@ -8,6 +8,7 @@
                 <img v-else-if="url.includes('facebook.com/')" class="link__icon"
                     src="@/assets/icon/facebook-circle.svg">
                 <img v-else-if="url.includes('x.com/')" class="link__icon" src="@/assets/icon/twitter.svg">
+                <img v-else-if="url.includes('medium.com/')" class="link__icon" src="@/assets/icon/medium.svg">
                 <img v-else-if="url.includes('instagram.com/')" class="link__icon" src="@/assets/icon/instagram.svg">
                 <img v-else-if="url.includes('pinterest.com/')" class="link__icon" src="@/assets/icon/pinterest.svg">
                 <img v-else-if="url.includes('linkedin.com/')" class="link__icon" src="@/assets/icon/linkedin.svg">
