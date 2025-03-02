@@ -345,7 +345,6 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
      * Event Object
      * https://fullcalendar.io/docs/event-object
      */
-    const currentTime = new Date().getTime()
     const iFullCalendarEvent: IFullCalendarEvent = {
         id: String(event.id),
         title: `${title}`,

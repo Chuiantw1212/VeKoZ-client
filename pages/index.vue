@@ -48,14 +48,16 @@ const isLoading = ref<boolean>(false)
 // Data
 const eventList = ref<IEventFromList[]>([])
 const startDate = new Date()
-const currentMonth = new Date().getMonth()
-const endDate = new Date()
-endDate.setMonth(currentMonth + 1)
+// const currentMonth = startDate.getMonth()
+// const currentDate = startDate.getDate()
+// const endDate = new Date()
+// endDate.setMonth(currentMonth + 1)
+// endDate.setDate(currentDate - 1)
 const formRef = ref()
 const form = ref<IEventQuery>({
     keywords: '',
     startDate: startDate,
-    endDate: endDate,
+    // endDate: '',
     startHour: '',
     locationAddressRegion: '',
     hasVirtualLocation: true,
