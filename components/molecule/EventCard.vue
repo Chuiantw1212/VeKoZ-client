@@ -2,9 +2,9 @@
     <MoleculeVenoniaCard class="index__card">
         <template #default>
             <NuxtLink :to="`/event/${item.id}`" target="_blank">
-                <img v-if="item.banner" class="card__image" :src="item.banner" :alt="item.name"
-                    onerror="this.onerror=null;this.src='@/assets/logo/500_250.png'">
-                <img v-else class="card__image" src="@/assets/logo/500_250.png" :alt="item.name">
+                <div v-if="item.banner" class="card__image" :style="{ 'background-image': `url(${item.banner})` }">
+                </div>
+                <div v-else class="card__image" :style="{ 'background-image': `url(${placeholderImage})` }"></div>
             </NuxtLink>
         </template>
         <template #footer>
@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import type { IEvent, IEventFromList } from '~/types/event'
 import type { ISelectOption } from '~/types/meta'
+import placeholderImage from '@/assets/logo/500_250.png'
 const repoMeta = useRepoMeta()
 const item = defineModel<IEventFromList>('modelValue', {
     type: Object,
@@ -125,8 +126,11 @@ function getTimes(event: IEventFromList) {
 <style lang="scss" scoped>
 .card__image {
     background-position: center;
-    width: 100%;
     display: block;
+    height: 150px;
+    width: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .index__cardWrap {
