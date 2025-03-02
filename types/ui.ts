@@ -1,3 +1,4 @@
 export interface IEventCarouselCard {
-    name: string,
+    name?: string,
+    image?: string,
 }

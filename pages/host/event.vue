@@ -135,7 +135,6 @@ async function validiateForm() {
         return
     }
     try {
-        console.log('isPublic', dialogEventTemplate.value.isPublic)
         if (dialogEventTemplate.value.isPublic) {
             const isValid = await formRef.value?.validate()
             if (isValid) {
@@ -392,7 +391,7 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     isLoading.value = true
     const eventTemplate: IEventSingle = await repoEvent.getEvent(eventId)
     isLoading.value = false
-    if (eventTemplate) {
+    if (eventTemplate.designs) {
         dialogEventTemplate.value = eventTemplate
         const designDates = eventTemplate.designs.find(design => {
             return design.formField === 'dates'
@@ -428,7 +427,7 @@ async function openNewCalendarEvent() {
     const selectedDate = selectedDateInstance.getDate()
 
     // 給定新月曆所選擇的值
-    const dateDesign = dialogEventTemplate.value.designs.find(design => {
+    const dateDesign = dialogEventTemplate.value.designs?.find(design => {
         return design.formField === 'dates'
     })
     if (dateDesign?.value) {
@@ -461,6 +460,7 @@ async function openNewCalendarEvent() {
 
     const calendarEvent = parseFullCalendarEvent(newEvent)
     vekozCalendarRef.value?.addEvent(calendarEvent)
+
     eventDialogIsOpen.value = true
 }
 

@@ -1,8 +1,8 @@
 <template>
     <!-- 活動表單的呈現頁面，要可以被iFrame完美鑲嵌。 -->
-    <div v-if="event" class="event" :gutter="20">
+    <div v-if="event" class="event">
         <img class="event__banner" :src="event.banner">
-        <el-row :gutter="20">
+        <el-row :gutter="repoUI.isLarge ? 20 : 0">
             <el-col :span="mainSpan">
                 <el-card>
                     <h1 class="event__title">{{ event.name }}</h1>
@@ -25,13 +25,14 @@
                     </el-descriptions>
                 </el-card>
                 <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
-                    <el-carousel-item v-for="item in 6" :key="item">
+                    <el-carousel-item v-for="(item, key) in cardUnits" :key="key">
                         <el-card class="side__card">
-                            <img class="card__logo" :src="event.organizerLogo">
+                            <!-- <img class="card__logo" :src="item.image"> -->
+                            <div class="card__logo" :style="{ 'background-image': `url(${item.image})` }"></div>
                             <div class="organization__body">
                                 <div class="organizationNameGroup">
                                     <div class="card__name">
-                                        {{ event.organizerName }}
+                                        {{ item.name }}
                                     </div>
                                     <div>已有?人追蹤</div>
                                 </div>
@@ -41,6 +42,10 @@
                 </el-carousel>
                 <el-card class="event__mt">
                     <div v-html="editorDesign.value"></div>
+                </el-card>
+                <el-card class="event__mt">
+                    活動群組
+                    過往活動評價
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="6">
@@ -81,7 +86,7 @@ const sideSpan = ref<number>(24)
 // Hooks
 watch(() => repoUI, (ui) => {
     mainSpan.value = 24
-    if (ui.isSmall) {
+    if (ui.isLarge) {
         mainSpan.value = 18
     }
 }, { immediate: true, deep: true, })
@@ -115,9 +120,11 @@ async function getEvent() {
     }
     result.performerIds?.forEach(async id => {
         const user = await repoUser.getUserPublicInfo(id)
-        cardUnits.value.push({
-            name: user.name ?? '未命名'
-        })
+        const cardUnit: IEventCarouselCard = {
+            name: user.name,
+            image: user.avatar
+        }
+        cardUnits.value.push(cardUnit)
     })
 }
 
@@ -196,6 +203,11 @@ function getTimes(event: IEventSingle) {
 
         .card__logo {
             width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-position: center;
+            margin: auto;
+            background-size: cover;
         }
     }
 
