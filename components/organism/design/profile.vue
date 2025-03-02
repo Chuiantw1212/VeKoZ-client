@@ -12,11 +12,10 @@
                         </el-button>
                     </div>
                     <el-button v-loading="isLoading" :icon="CollectionTag" @click="openQrCode()">
-                        追蹤
+                        追隨
                     </el-button>
                 </div>
             </template>
-            <!-- <img class="profile__banner--mobile" src="@/assets/mock/mobileBanner.webp" /> -->
             <div class="body__content">
                 <div class="profile__avatar">
                     <AtomAvatarUploader v-model="userTemplate.avatar" :disabled="!isDesigning" @change="handleChange">
@@ -28,8 +27,7 @@
                         @change="handleChange"></el-input>
                 </template>
                 <template v-else>
-                    <pre class="content__header">{{ userTemplate.seoTitle }}
-            </pre>
+                    <pre class="content__header">{{ userTemplate.seoTitle }}</pre>
                 </template>
                 <template v-if="isDesigning">
                     <el-input v-if="userTemplate.description" v-model="userTemplate.description" :maxlength="120"
@@ -62,7 +60,7 @@ const userTemplate = defineModel<IUser>('modelValue', {
     type: Object,
     default: {
         seoName: '',
-        designs: [],
+        // designs: [],
     },
 })
 

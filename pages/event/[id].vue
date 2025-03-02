@@ -34,7 +34,7 @@
                                         <div class="card__name">
                                             {{ item.name }}
                                         </div>
-                                        <div>已有?人追蹤</div>
+                                        <div>已有?人追隨</div>
                                     </div>
                                 </div>
                             </NuxtLink>

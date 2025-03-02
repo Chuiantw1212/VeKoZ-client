@@ -15,7 +15,7 @@
                 <Collection />
             </el-icon>
             <span v-if="repoUI.isMedium">
-                追蹤訂閱
+                追隨
             </span>
         </el-menu-item>
     </NuxtLink>

@@ -7,18 +7,29 @@
         <div class="organization__headerGroup">
             <img class="headerGroup__logo" :src="organization.logo">
             <h1 class="headerGroup__title">{{ organization.name }}</h1>
-            <div class="headerGroup__followers">XX人追蹤</div>
+            <div class="headerGroup__followers">
+                已有 XX人追隨
+                <!-- <el-button :icon="CollectionTag">加入追隨</el-button> -->
+            </div>
         </div>
-        <!-- <MoleculeEventCard :model-value="item">
-
-        </MoleculeEventCard> -->
-        <!-- <MoleculeVekozCalendar></MoleculeVekozCalendar> -->
         <el-main>
-
+            <div class="headerGroup__desc">{{ organization.description }}</div>
+        </el-main>
+        <el-main>
+            <!-- <el-card> -->
+            <!-- </el-card> -->
+            <el-row>
+                <el-col v-for="event in eventList" class="me-20">
+                    <MoleculeEventCard :model-value="event">
+                    </MoleculeEventCard>
+                </el-col>
+            </el-row>
         </el-main>
     </div>
 </template>
 <script setup lang="ts">
+import { CollectionTag } from '@element-plus/icons-vue'
+import type { IEventFromList } from '~/types/event'
 import type { IOrganization } from '~/types/organization'
 const route = useRoute()
 const repoOrganization = useRepoOrganization()
@@ -29,6 +40,7 @@ definePageMeta({
 })
 
 const organization = ref<IOrganization>({})
+const eventList = ref<IEventFromList[]>([])
 
 // Hooks
 onMounted(() => {
@@ -47,9 +59,11 @@ async function getOrganization() {
 }
 
 async function getEvents() {
-    const events = await repoEvent.getEvent({
-        organizerId: organizatoinId.value
+    const events = await repoEvent.getEventList({
+        organizerId: organizatoinId.value,
+        isPublic: true,
     })
+    eventList.value = events
 }
 
 </script>
@@ -84,11 +98,20 @@ async function getEvents() {
 
         .headerGroup__title {
             text-align: center;
+            margin-bottom: 0px;
+        }
+
+        .headerGroup__desc {
+            margin-top: 20px;
         }
 
         .headerGroup__followers {
             text-align: center;
         }
     }
+}
+
+.me-20 {
+    margin-bottom: 20px;
 }
 </style>
