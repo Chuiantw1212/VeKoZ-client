@@ -12,7 +12,7 @@
         <template v-if="required">
             <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
                 @click="emit('remove')">
-                SEO
+                必填
             </el-button>
         </template>
         <template v-if="!required">

@@ -56,14 +56,14 @@
             @mouseout="cancelDragging()" :isDesigning="false" :disabled="true" placeholder="限制一個，內文上限2000字">
         </OrganismDesignEditor>
 
-        <el-divider content-position="left">無限供應欄位，用於票券銷售</el-divider>
+        <el-divider content-position="left">無限供應欄位</el-divider>
         <OrganismDesignOffer class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'offers', formField: 'offers', })"
             @mouseenter="setOnEnter({ type: 'offers', formField: 'offers', })" @mouseout="cancelDragging()"
             :disabled="true" :isDesigning="false">
         </OrganismDesignOffer>
 
-        <el-divider content-position="left">無限供應且對外不可見</el-divider>
+        <!-- <el-divider content-position="left">無限供應且對外不可見</el-divider>
         <OrganismDesignDateTimeRange class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'dateTimeRange', })" @mouseenter="setOnEnter({ type: 'dateTimeRange', })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
@@ -81,7 +81,7 @@
         </OrganismDesignDivider>
         <OrganismDesignNumber class="eventTemplate__draggable" draggable="true"
             @dragstart="setOnDrag({ type: 'number', })" @mouseenter="setOnEnter({ type: 'number', })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false"></OrganismDesignNumber>
+            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false"></OrganismDesignNumber> -->
     </el-form>
 </template>
 <script setup lang="ts">

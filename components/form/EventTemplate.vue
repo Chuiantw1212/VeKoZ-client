@@ -5,8 +5,7 @@
         </slot>
     </div>
     <!-- {{ templateDesigns }} -->
-    <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel"
-        :rules="formRules">
+    <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in templateDesigns">
             <!-- 必填且限量的欄位 -->
             <OrganismDesignHeader1 v-if="item.type === 'header1'" v-model="templateDesigns[index]" :onchange="onchange"
@@ -83,14 +82,15 @@
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignDivider>
             <OrganismDesignEditor v-if="item.type === 'editor'" v-model="templateDesigns[index]" :onchange="onchange"
-                :isDesigning="props.isDesigning" :disabled="props.disabled" placeholder="請輸入活動詳細內容"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+                :isDesigning="props.isDesigning" :disabled="props.disabled" :required="item.required"
+                placeholder="請輸入活動詳細內容" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
+                @mouseout="emit('mouseout')">
             </OrganismDesignEditor>
             <OrganismDesignOffer v-if="item.type === 'offers'" v-model="templateDesigns[index]" :onchange="onchange"
-                :isDesigning="props.isDesigning" :disabled="props.disabled" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+                :isDesigning="props.isDesigning" :disabled="props.disabled" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOffer>
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
