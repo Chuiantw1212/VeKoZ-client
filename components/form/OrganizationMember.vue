@@ -14,8 +14,8 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item>
-                    <el-button :icon="Plus" @click="postOrganizationMember()">
-                        邀請
+                    <el-button :icon="Message" @click="postOrganizationMember()">
+                        送出邀請信
                     </el-button>
                 </el-form-item>
             </el-col>
@@ -53,7 +53,7 @@ import type { IOrganizationMember } from '~/types/organization'
 import {
     Search,
     Delete,
-    Plus,
+    Message,
 } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 const repoOrganizationMember = useRepoOrganizationMember()
