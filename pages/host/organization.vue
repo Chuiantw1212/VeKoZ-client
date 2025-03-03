@@ -5,17 +5,13 @@
                 <el-card class="user__card vekoz-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="vekoz-card-header">
-                            <!-- <div>{{ currentPublicInfo.name }}</div> -->
-                            <!-- <el-form-item>
-                            <el-input placeholder="請輸入組織名稱" size="large" :maxlength="30" :show-word-limit="true">
-                            </el-input>
-                        </el-form-item> -->
                             <div class="header__btnGroup">
                                 <el-button v-loading="isLoading" size="small" :icon="FolderOpened"
                                     @click="organizationListDialog.visibility = true">
                                     開啓組織
                                 </el-button>
-                                <el-button v-loading="isLoading" size="small" :icon="Postcard">
+                                <el-button v-loading="isLoading" size="small" :icon="Postcard"
+                                    @click="organizationDialogVisible = true">
                                     變更資料
                                 </el-button>
                                 <!-- <el-button v-loading="isLoading" size="small" :icon="User"
@@ -53,7 +49,7 @@
             </el-col>
         </el-row>
 
-        <AtomVekozDialog v-model="organizationListDialog.visibility" class="event__template">
+        <AtomVekozDialog v-model="organizationListDialog.visibility">
             <template #header>
                 <el-text size="large">
                     開啟組織
@@ -62,16 +58,15 @@
             <FormOrganizationList :modelValue="currentPublicInfo.id" @update:modelValue="openOrganization($event)"
                 @create="createOrganization()">
             </FormOrganizationList>
-            <!-- TODO：搜尋已註冊的組織並聯動資料。 -->
-            <!-- <FormOrganization v-if="organizationListDialog.visibility" v-model="organization"
-                :mode="organizationListDialog.mode">
-            </FormOrganization> -->
-            <!-- <template #footer>
-                <el-button @click="organizationListDialog.visibility = false">取消</el-button>
-                <el-button type="primary" @click="hanelDialogConfirm()">
-                    確認
-                </el-button>
-            </template> -->
+        </AtomVekozDialog>
+
+        <AtomVekozDialog v-model="organizationDialogVisible">
+            <template #header>
+                <el-text size="large">
+                    組織資料
+                </el-text>
+            </template>
+            <FormOrganization :modelValue="currentPublicInfo"></FormOrganization>
         </AtomVekozDialog>
 
         <AtomVekozDialog v-model="organizationMemberDialog.visibility" :showClose="false">
@@ -102,11 +97,9 @@ import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
-const isDialogLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])
-// const publicInfoList = ref<IPublicInfoCard[]>([])
 const currentPublicInfo = ref<IPublicInfoCard>({})
 
 const organizationListDialog = reactive({
@@ -114,17 +107,12 @@ const organizationListDialog = reactive({
     mode: ''
 })
 
-// const organization = ref<IOrganization>({
-//     name: '',
-//     description: '',
-//     logo: '',
-//     id: '',
-// })
-
 const organizationMemberDialog = reactive({
     visibility: false,
     mode: '',
 })
+
+const organizationDialogVisible = ref<boolean>(false)
 
 // Hooks
 onMounted(() => {
