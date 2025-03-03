@@ -2,7 +2,7 @@
     <el-form ref="formRef" :rules="formRules" :model="searchForm">
         <el-row :gutter="20">
             <el-col :span="12">
-                <el-form-item label="搜尋用戶">
+                <el-form-item label="搜尋用戶" prop="email">
                     <el-input v-model="searchForm.email" placeholder="請輸入用戶Email">
                         <template #prefix>
                             <el-icon>
@@ -94,6 +94,10 @@ async function getOrganizationMemberList() {
 }
 
 async function postOrganizationMember() {
+    const isValid = formRef.value?.validate()
+    if (!isValid) {
+        return
+    }
     await repoOrganizationMember.postNewMember({
         organizationId: organizationId.value,
         email: searchForm.value.email,
