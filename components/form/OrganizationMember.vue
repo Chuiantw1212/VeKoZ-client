@@ -1,4 +1,26 @@
 <template>
+    <el-form>
+        <el-row :gutter="20">
+            <el-col :span="12">
+                <el-form-item label="搜尋用戶">
+                    <el-input placeholder="請輸入用戶Email">
+                        <template #prefix>
+                            <el-icon>
+                                <Search />
+                            </el-icon>
+                        </template>
+                    </el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item>
+                    <el-button :icon="Plus">
+                        邀請
+                    </el-button>
+                </el-form-item>
+            </el-col>
+        </el-row>
+    </el-form>
     <el-table :data="tableList" style="width: 100%">
         <el-table-column prop="name" label="名稱" />
         <el-table-column prop="view" label="檢視">
@@ -29,9 +51,11 @@
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'
 import {
+    Search,
     Delete,
+    Plus,
 } from '@element-plus/icons-vue'
-const repoOrganization = useRepoOrganization()
+const repoOrganizationMember = useRepoOrganizationMember()
 
 const organizationId = defineModel<string>('modelValue', {
     default: '',
@@ -56,7 +80,7 @@ async function deleteOrganizationMember(item: IOrganizationMember) {
 
 async function getOrganizationMemberList() {
     if (organizationId.value) {
-        const result = await repoOrganization.getOrganizationMemberList(organizationId.value)
+        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId.value)
         tableList.value = result
     }
 }

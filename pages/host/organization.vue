@@ -14,10 +14,10 @@
                                     @click="organizationDialogVisible = true">
                                     變更資料
                                 </el-button> -->
-                                <!-- <el-button v-loading="isLoading" size="small" :icon="User"
+                                <el-button v-loading="isLoading" size="small" :icon="User"
                                     @click="editOrganizationMemberDialog">
                                     管理成員
-                                </el-button> -->
+                                </el-button>
                             </div>
                             <div>
                                 <div class="header__ui">
@@ -72,16 +72,13 @@
         <AtomVekozDialog v-model="organizationMemberDialog.visibility" :showClose="false">
             <template #header>
                 <el-text size="large">
-                    成員設定
+                    成員與權限設定
                 </el-text>
             </template>
             <template #headerUI>
                 <el-button :icon="Close" text @click="organizationMemberDialog.visibility = false">
                 </el-button>
             </template>
-            <el-alert>
-                連動已註冊的成員，才不會出BUG。
-            </el-alert>
             <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="currentPublicInfo.id"
                 :mode="organizationMemberDialog.mode">
             </FormOrganizationMember>

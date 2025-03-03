@@ -14,7 +14,6 @@
 </template>
 <script setup lang="ts">
 import type { IEventFromList } from '~/types/event'
-import type { IOrganization } from '~/types/organization'
 import type { IPublicInfoCard } from '~/types/ui'
 const route = useRoute()
 const repoOrganization = useRepoOrganization()
@@ -28,7 +27,6 @@ const organizationProfile = ref<IPublicInfoCard>({
     id: '',
 })
 
-// const organization = ref<IOrganization>({})
 const eventList = ref<IEventFromList[]>([])
 
 // Hooks
@@ -47,7 +45,7 @@ async function getOrganization() {
     const organization = await repoOrganization.getOrganization(organizatoinId.value)
     if (organization) {
         organizationProfile.value = {
-            id: organization.id,
+            id: String(organization.id),
             name: organization.name,
             description: organization.description,
             image: organization.logo,

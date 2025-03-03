@@ -31,7 +31,7 @@
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOrganizationMember } from '~/types/organization'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
-const repoOrganizationMember = useRepoOrganization()
+const repoOrganizationMember = useRepoOrganizationMember()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 
