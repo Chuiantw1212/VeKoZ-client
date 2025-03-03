@@ -12,8 +12,12 @@ export type IOrganization = {
     designs?: any[]
 }
 
+/**
+ * 權限各自不相同
+ */
 export type IOrganizationMember = {
     id?: string,
-    name: string,
-    email: string,
+    name?: string,
+    email?: string,
+    organizationId?: string,
 }

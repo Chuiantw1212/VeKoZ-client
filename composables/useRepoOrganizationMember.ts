@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
+import type { IOrganizationMember } from '~/types/organization'
 
 export default defineStore('organizationMember', () => {
     const defaultApi = useVenoniaApi()
@@ -9,7 +10,15 @@ export default defineStore('organizationMember', () => {
         })
         return response.json()
     }
+    async function postNewMember(body: IOrganizationMember) {
+        const response = await defaultApi.authRequest(`/organization/member`, {
+            method: 'GET',
+            body,
+        })
+        return response.json()
+    }
     return {
         getOrganizationMemberList,
+        postNewMember,
     }
 })
