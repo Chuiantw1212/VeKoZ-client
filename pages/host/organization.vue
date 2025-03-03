@@ -18,10 +18,10 @@
                                 <el-button v-loading="isLoading" size="small" :icon="Postcard">
                                     變更資料
                                 </el-button>
-                                <el-button v-loading="isLoading" size="small" :icon="User"
+                                <!-- <el-button v-loading="isLoading" size="small" :icon="User"
                                     @click="editOrganizationMemberDialog">
                                     管理成員
-                                </el-button>
+                                </el-button> -->
                             </div>
                             <div>
                                 <div class="header__ui">
