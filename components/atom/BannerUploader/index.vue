@@ -8,7 +8,8 @@
             </div>
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled }">
-            <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div>
+            <img class="label__image" :src="getImageSrc()">
+            <!-- <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div> -->
             <!-- isValidUrl(banner){{ isValidUrl(banner) }} -->
             <div v-if="!isUploaded" class="label__content">
                 Banner上傳
@@ -52,7 +53,7 @@ const props = defineProps({
     },
     height: {
         type: String,
-        default: "100px",
+        default: "auto", // 預設不要再改變就是100%，這樣才有機會從外部容器控制高度
     }
 })
 
@@ -68,7 +69,7 @@ function getImageSrc() {
         return
     }
     if (isValidUrl(banner.value)) {
-        return `url(${banner.value})`
+        return `${banner.value}`
     }
     const { type, buffer } = banner.value as any
     let formatBuffer: any = buffer
@@ -78,7 +79,7 @@ function getImageSrc() {
     const typedArray = new Uint8Array(formatBuffer)
     const blob = new Blob([typedArray], { type: `image/${type}` })
     const objectUrl = URL.createObjectURL(blob)
-    return `url(${objectUrl})`
+    return objectUrl
 }
 function isValidUrl(url: any) {
     if (url && typeof url === "string") {
@@ -161,6 +162,7 @@ async function handleFiles(event: any) {
             background-position: center;
             background-repeat: no-repeat;
             height: 100%;
+            width: 100%;
         }
     }
 

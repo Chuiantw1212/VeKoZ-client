@@ -1,7 +1,8 @@
 <template>
     <div class="publicInfo" :class="{ 'publicInfo--borderless': !isDesigning }">
         <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
-            <img class="bannerWrap__banner" :src="publicInfo.banner">
+            <!-- <img class="bannerWrap__banner" :src="publicInfo.banner"> -->
+            <AtomBannerUploader v-model="publicInfo.banner"></AtomBannerUploader>
         </div>
         <div class="publicInfo__actions" :class="{ 'publicInfo__actions--withBanner': publicInfo.banner }">
             <div>
@@ -18,8 +19,7 @@
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
-                <AtomAvatarUploader v-if="publicInfo.image" v-model="publicInfo.image" :disabled="!isDesigning"
-                    @change="handleChange">
+                <AtomAvatarUploader v-model="publicInfo.image" :disabled="!isDesigning" @change="handleChange">
                 </AtomAvatarUploader>
             </div>
             <template v-if="isDesigning">
