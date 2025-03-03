@@ -109,48 +109,48 @@ async function getEventList() {
 async function validate() {
     return await formRef.value?.validate()
 }
-function handleRemove(index: number) {
-    if (!publicInfo.value.designs) {
-        return
-    }
-    const item = publicInfo.value.designs[index]
-    emit('remove', {
-        item,
-        index,
-    })
-}
-function handleDragStart(index: number) {
-    if (!publicInfo.value.designs) {
-        return
-    }
-    const item = publicInfo.value.designs[index]
-    emit('dragstart', {
-        item: JSON.parse(JSON.stringify(item)),
-        index,
-    })
-}
-function handleUp(index: number) {
-    if (!publicInfo.value.designs) {
-        return
-    }
-    const removedElements = publicInfo.value.designs.splice(index, 1)
-    const target = removedElements[0]
-    if (target) {
-        const newIndex = Math.max(0, index - 1)
-        publicInfo.value.designs.splice(newIndex, 0, target)
-    }
-}
-function handleDown(index: number) {
-    if (!publicInfo.value.designs) {
-        return
-    }
-    const removedElements = publicInfo.value.designs.splice(index, 1)
-    const target = removedElements[0]
-    if (target) {
-        const newIndex = Math.min(publicInfo.value.designs.length, index + 1)
-        publicInfo.value.designs.splice(newIndex, 0, target)
-    }
-}
+// function handleRemove(index: number) {
+//     if (!publicInfo.value.designs) {
+//         return
+//     }
+//     const item = publicInfo.value.designs[index]
+//     emit('remove', {
+//         item,
+//         index,
+//     })
+// }
+// function handleDragStart(index: number) {
+//     if (!publicInfo.value.designs) {
+//         return
+//     }
+//     const item = publicInfo.value.designs[index]
+//     emit('dragstart', {
+//         item: JSON.parse(JSON.stringify(item)),
+//         index,
+//     })
+// }
+// function handleUp(index: number) {
+//     if (!publicInfo.value.designs) {
+//         return
+//     }
+//     const removedElements = publicInfo.value.designs.splice(index, 1)
+//     const target = removedElements[0]
+//     if (target) {
+//         const newIndex = Math.max(0, index - 1)
+//         publicInfo.value.designs.splice(newIndex, 0, target)
+//     }
+// }
+// function handleDown(index: number) {
+//     if (!publicInfo.value.designs) {
+//         return
+//     }
+//     const removedElements = publicInfo.value.designs.splice(index, 1)
+//     const target = removedElements[0]
+//     if (target) {
+//         const newIndex = Math.min(publicInfo.value.designs.length, index + 1)
+//         publicInfo.value.designs.splice(newIndex, 0, target)
+//     }
+// }
 defineExpose({
     validate,
 })

@@ -244,7 +244,6 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     if (hasSource) {
         // 屬於原有模板拖曳
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
-        // return
         // 刪除原本位置的的模板
         if (destinationIndex < sourceIndex) {
             eventTemplate.value.designs.splice(sourceIndex + 1, 1)
@@ -260,7 +259,6 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         templateDesign.id = designId
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
     }
-    // return
     // 更新模板順序
     repoEventTemplate.patchTemplateDesignIds(eventTemplate.value)
 
