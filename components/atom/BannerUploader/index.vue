@@ -11,11 +11,13 @@
             <img class="label__image" :src="getImageSrc()">
             <!-- <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div> -->
             <!-- isValidUrl(banner){{ isValidUrl(banner) }} -->
-            <div v-if="!isUploaded" class="label__content">
-                Banner上傳
-                <el-icon>
+            <div class="label__content" :class="{ 'label__content--isVisible': !isUploaded }">
+                <!-- <div class="content__text"> -->
+                <el-icon size="large">
                     <UploadFilled></UploadFilled>
                 </el-icon>
+                點擊上傳
+                <!-- </div> -->
             </div>
             <input v-show="false" :disabled="disabled" class="body__input" autocomplete="off" type="file"
                 accept="image/*" :data-required="required" :data-name="name" @change="handleFiles($event)">
@@ -123,29 +125,33 @@ async function handleFiles(event: any) {
         border-radius: 4px;
 
         &:hover {
-            .label__placeholder {
+            .label__content {
                 visibility: visible;
-                background-size: contain;
             }
         }
 
         .label__content {
+            visibility: hidden;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
+            text-align: center;
+            justify-content: center;
             gap: 4px;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.1);
+
+            .content__text {
+                background-color: white;
+            }
         }
 
-        .label__placeholder {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0px;
-            visibility: hidden;
-            background-color: lightgrey;
+        .label__content--isVisible {
+            visibility: visible;
         }
 
         .label__icon {

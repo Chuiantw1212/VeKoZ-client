@@ -18,7 +18,7 @@
             <template #default="{ row }">
                 <template v-if="row.id === currentOrganizaiotnId">
                     <el-button size="small" :disabled="true">
-                        編輯中
+                        使用中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
