@@ -72,8 +72,8 @@
 </template>
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
-import instagram from '@/assets/icon/instagram.svg'
-const emit = defineEmits(['change'])
+const isLoading = ref(false)
+const repoUI = useRepoUI()
 const renderKey = ref<string>(crypto.randomUUID())
 const socialMediaUrl = ref<string>('')
 const socialUrls = defineModel<string[]>('modelValue', {
@@ -81,11 +81,23 @@ const socialUrls = defineModel<string[]>('modelValue', {
     default: [],
 })
 const props = defineProps({
+    id: {
+        type: String,
+        default: crypto.randomUUID()
+    },
     isDesigning: {
         type: Boolean,
         default: false
-    }
+    },
+    onchange: {
+        type: Function,
+        default: async () => { }
+    },
 })
+
+watch(() => socialUrls.value, (newValue) => {
+    handleChange(newValue)
+}, { deep: true })
 
 // Methods
 function pushNewMedia() {
@@ -95,7 +107,6 @@ function pushNewMedia() {
     socialUrls.value.push(socialMediaUrl.value)
     socialMediaUrl.value = ''
     renderKey.value = crypto.randomUUID()
-    emit('change')
 }
 function handleSocialVisit(index: number) {
     if (props.isDesigning) {
@@ -111,6 +122,14 @@ function handleSocialVisit(index: number) {
 function validateEmail(email: string) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
+}
+
+async function handleChange(templateDesign: any) {
+    isLoading.value = true // 增強體驗
+    repoUI.debounce(props.id, async function () {
+        await props.onchange(templateDesign)
+        isLoading.value = false
+    })
 }
 </script>
 <style lang="scss" scoped>

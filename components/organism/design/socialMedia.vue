@@ -106,6 +106,7 @@ function setDefaultValue() {
 }
 
 async function handleChange(templateDesign: any) {
+    console.log('handleChange')
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
         await props.onchange(templateDesign)

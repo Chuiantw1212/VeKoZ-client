@@ -1,6 +1,6 @@
 <template>
     <div class="organization">
-        <FormPublicInfoTemplate v-if="organization.id" v-model="organizationProfile" type="organization">
+        <FormPublicInfoTemplate v-if="organizationProfile.id" v-model="organizationProfile" type="organization">
         </FormPublicInfoTemplate>
         <el-empty v-else description="查無組織">
             <ol>
@@ -26,7 +26,7 @@ definePageMeta({
 
 const organizationProfile = ref<IPublicInfoCard>({})
 
-const organization = ref<IOrganization>({})
+// const organization = ref<IOrganization>({})
 const eventList = ref<IEventFromList[]>([])
 
 // Hooks

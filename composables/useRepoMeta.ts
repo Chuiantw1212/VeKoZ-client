@@ -4,6 +4,7 @@ import type { ISelectOption } from '~/types/meta'
 
 export default defineStore('meta', () => {
     const defaultApi = useVenoniaApi()
+    const repoUI = useRepoUI()
     const map = ref<{ [key: string]: ISelectOption[] }>({})
 
     /**
@@ -12,18 +13,23 @@ export default defineStore('meta', () => {
      * @returns 
      */
     async function getMetaSelectById(id: string): Promise<ISelectOption[]> {
-        if (map.value[id]) {
-            return map.value[id]
-        }
-        const response = await defaultApi.request(`/meta/select/${id}`, {
-            method: 'GET',
+        const newPromise = await new Promise((resolve, reject) => {
+            repoUI.debounce(`getMetaSelectById-${id}`, async () => {
+                if (map.value[id]) {
+                    return map.value[id]
+                }
+                const response = await defaultApi.request(`/meta/select/${id}`, {
+                    method: 'GET',
+                })
+                map.value[id] = response.json()
+                if (map.value[id]) {
+                    resolve(map.value[id])
+                } else {
+                    resolve([])
+                }
+            })
         })
-        map.value[id] = response.json()
-        if (map.value[id]) {
-            return map.value[id]
-        } else {
-            return []
-        }
+        return newPromise as ISelectOption[]
     }
     /**
      * 因為佔用記憶體無法快取，盡可能避免

@@ -39,8 +39,8 @@
                 <pre class="content__desc">{{ publicInfo.description }}</pre>
             </template>
             <!-- {{ publicInfo }} -->
-            <AtomVekozSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs" :is-designing="props.isDesigning"
-                @change="handleChange">
+            <AtomVekozSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs" :onchange="onchange"
+                :is-designing="props.isDesigning" @update:model-value="handleChange()">
             </AtomVekozSocialMedia>
         </div>
         <!-- </el-card> -->

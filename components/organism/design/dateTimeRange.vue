@@ -83,7 +83,6 @@ onMounted(() => {
 
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
-    console.log('mofified')
     handleChange(newValue)
 }, { deep: true })
 
