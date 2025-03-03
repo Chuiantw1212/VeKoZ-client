@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <el-row class="userTemplate" :gutter="20">
             <el-col :span="repoUI.isMedium ? 16 : 24">
                 <el-card class="user__card vekoz-card" body-class="card__body card__body--205">
@@ -13,10 +11,15 @@
                             </el-input>
                         </el-form-item> -->
                             <div class="header__btnGroup">
-                                <el-button size="small" :icon="FolderOpened">
+                                <el-button v-loading="isLoading" size="small" :icon="FolderOpened"
+                                    @click="organizationListDialog.visibility = true">
                                     開啓組織
                                 </el-button>
-                                <el-button size="small" :icon="User" @click="editOrganizationMemberDialog">
+                                <el-button v-loading="isLoading" size="small" :icon="Postcard">
+                                    變更資料
+                                </el-button>
+                                <el-button v-loading="isLoading" size="small" :icon="User"
+                                    @click="editOrganizationMemberDialog">
                                     管理成員
                                 </el-button>
                             </div>
@@ -31,7 +34,9 @@
                             </div>
                         </div>
                     </template>
-                    <FormPublicInfoTemplate v-model="currentPublicInfo" :isDesigning="true"></FormPublicInfoTemplate>
+                    <FormPublicInfoTemplate v-model="currentPublicInfo" :isDesigning="true" type="organization"
+                        :onchange="patchOrganization">
+                    </FormPublicInfoTemplate>
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isMedium" :span="8">
@@ -47,58 +52,24 @@
                 </el-card>
             </el-col>
         </el-row>
-        <!-- 月曆 -->
-        <!-- <el-row class="organizationTemplate" :gutter="20">
-        
-     </el-row> -->
-        <!-- <div class="organization">
-        <div class="organization__header">
-            <h1>組織管理</h1>
-            <ElButton @click="openNewDialog()">新增組織</ElButton>
-        </div>
 
-        <el-table v-loading="isLoading" :data="organizationList">
-            <el-table-column prop="logo" label="商標" width="80em">
-                <template #default="{ row }">
-                    <img width="40px" :src="row.logo">
-                </template>
-</el-table-column>
-<el-table-column prop="name" label="名稱" width="200em" />
-<el-table-column prop="description" label="描述" :width="repoUI.isXLarge ? undefined : '600em'" />
-<el-table-column prop="lastmod" label="上次更新" width="100em">
-    <template #default="{ row }">
-                    {{ new Date(row.lastmod).toLocaleDateString('zh-TW') }}
-                </template>
-</el-table-column>
-<el-table-column fixed="right" label="功能" width="200em">
-    <template #default="{ row }">
-                    <el-button link type="primary" size="small" @click="editOrganizationDialog(row)">編輯組織</el-button>
-                    <el-button link type="primary" size="small"
-                        @click="editOrganizationMemberDialog(row)">編輯成員</el-button>
-                    <el-button link type="danger" size="small" @click="deleteOrganization(row)">
-                        刪除
-                    </el-button>
-                </template>
-</el-table-column>
-</el-table>
-</div> -->
-
-        <AtomVekozDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
+        <AtomVekozDialog v-model="organizationListDialog.visibility" class="event__template">
             <template #header>
                 <el-text size="large">
-                    組織設定
+                    開啟組織
                 </el-text>
             </template>
-            TODO：搜尋已註冊的組織並聯動資料。
-            <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
-                :mode="organizationDialog.mode">
-            </FormOrganization>
-            <template #footer>
-                <el-button @click="organizationDialog.visibility = false">取消</el-button>
+            <FormOrganizationList v-model="organization"></FormOrganizationList>
+            <!-- TODO：搜尋已註冊的組織並聯動資料。 -->
+            <!-- <FormOrganization v-if="organizationListDialog.visibility" v-model="organization"
+                :mode="organizationListDialog.mode">
+            </FormOrganization> -->
+            <!-- <template #footer>
+                <el-button @click="organizationListDialog.visibility = false">取消</el-button>
                 <el-button type="primary" @click="hanelDialogConfirm()">
                     確認
                 </el-button>
-            </template>
+            </template> -->
         </AtomVekozDialog>
 
         <AtomVekozDialog v-model="organizationMemberDialog.visibility" :showClose="false">
@@ -123,7 +94,7 @@
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
 import { ElMessageBox } from 'element-plus'
-import { View, FolderOpened, User, Close } from '@element-plus/icons-vue'
+import { View, FolderOpened, User, Close, Postcard } from '@element-plus/icons-vue'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
@@ -135,17 +106,17 @@ const organizationList = ref<IOrganization[]>([])
 const publicInfoList = ref<IPublicInfoCard[]>([])
 const currentPublicInfo = ref<IPublicInfoCard>({})
 
-const organizationDialog = reactive({
+const organizationListDialog = reactive({
     visibility: false,
     mode: ''
 })
 
-const organization = ref<IOrganization>({
-    name: '',
-    description: '',
-    logo: '',
-    id: '',
-})
+// const organization = ref<IOrganization>({
+//     name: '',
+//     description: '',
+//     logo: '',
+//     id: '',
+// })
 
 const organizationMemberDialog = reactive({
     visibility: false,
@@ -161,7 +132,7 @@ onMounted(() => {
 // Methods
 function getPersonalLink() {
     const openInLineExternal = `openExternalBrowser=1`
-    return `${currentPublicInfo.value.seoName}?${openInLineExternal}`
+    return `${currentPublicInfo.value.link}?${openInLineExternal}`
 }
 
 async function getOrganizationList() {
@@ -176,11 +147,12 @@ async function getOrganizationList() {
         return {
             id: item.id,
             banner: item.banner,
-            seoName: item.seoName || item.id,
+            // seoName: item.seoName || item.id,
             image: item.logo,
             name: item.name,
             description: item.description,
             sameAs: item.sameAs,
+            link: `o/${item.seoName || item.id}`
         }
     })
     if (publicInfoList.value[0]) {
@@ -190,11 +162,11 @@ async function getOrganizationList() {
 
 async function hanelDialogConfirm() {
     isDialogLoading.value = true
-    if (organizationDialog.mode === 'ADD') {
+    if (organizationListDialog.mode === 'ADD') {
         await postOrganization()
     }
-    if (organizationDialog.mode === 'EDIT') {
-        await putOrganization()
+    if (organizationListDialog.mode === 'EDIT') {
+        await patchOrganization()
     }
     isDialogLoading.value = false
 }
@@ -202,25 +174,25 @@ async function hanelDialogConfirm() {
 async function postOrganization() {
     await repoOrganization.postOrganization(organization.value)
     getOrganizationList()
-    organizationDialog.visibility = false
+    organizationListDialog.visibility = false
 }
 
-async function putOrganization() {
-    await repoOrganization.putOrganization(organization.value)
-    getOrganizationList()
-    organizationDialog.visibility = false
+async function patchOrganization() {
+    isLoading.value = true
+    await repoOrganization.patchOrganization(currentPublicInfo.value)
+    isLoading.value = false
 }
 
 function openNewDialog() {
     organization.value = {} as any
-    organizationDialog.visibility = true
-    organizationDialog.mode = 'ADD'
+    organizationListDialog.visibility = true
+    organizationListDialog.mode = 'ADD'
 }
 
 function editOrganizationDialog(item: IOrganization) {
     Object.assign(organization.value, item)
-    organizationDialog.visibility = true
-    organizationDialog.mode = 'EDIT'
+    organizationListDialog.visibility = true
+    organizationListDialog.mode = 'EDIT'
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {
@@ -240,10 +212,10 @@ async function deleteOrganization(item: IOrganization) {
             }
         )
         if (result === 'confirm') {
-            isLoading.value = true
-            await repoOrganization.deleteOrganization(item.id)
-            await getOrganizationList()
-            isLoading.value = false
+            // isLoading.value = true
+            // await repoOrganization.deleteOrganization(item.id)
+            // await getOrganizationList()
+            // isLoading.value = false
         }
     } catch (error: any) {
         // Do nothing

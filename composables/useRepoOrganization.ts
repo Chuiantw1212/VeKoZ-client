@@ -23,9 +23,9 @@ export default defineStore('organization', () => {
         })
         return response
     }
-    async function putOrganization(organization: IOrganization) {
+    async function patchOrganization(organization: IOrganization) {
         const response = await defaultApi.authRequest(`/organization`, {
-            method: 'PUT',
+            method: 'PATCH',
             body: organization,
         })
         return response
@@ -46,7 +46,7 @@ export default defineStore('organization', () => {
         getOrganization,
         getOrganizationList,
         postOrganization,
-        putOrganization,
+        patchOrganization,
         deleteOrganization,
         getOrganizationMemberList,
     }

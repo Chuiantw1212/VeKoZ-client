@@ -32,7 +32,7 @@
             <div class="content__followers">XXX人追隨</div>
             <template v-if="isDesigning">
                 <el-input v-if="publicInfo.description" v-model="publicInfo.description" :maxlength="120"
-                    :show-word-limit="true" type="textarea" :rows="3" @change="handleChange"></el-input>
+                    :show-word-limit="true" type="textarea" :rows="6" @change="handleChange"></el-input>
             </template>
             <template v-else>
                 <pre class="content__desc">{{ publicInfo.description }}</pre>
@@ -133,8 +133,9 @@ function openQrCode() {
     })
 }
 async function drawQrCode() {
+    const { origin } = window.location
     const openInLineExternal = `openExternalBrowser=1`
-    const url = `https://vekoz.org/${publicInfo.value.seoName}?${openInLineExternal}`
+    const url = `${origin}/${publicInfo.value.link}?${openInLineExternal}`
     const options: QRCodeRenderersOptions = {
         errorCorrectionLevel: 'H'
     }
@@ -152,16 +153,14 @@ async function handleChange() {
     })
 }
 async function shareLink() {
-    const { origin } = window.location
     const openInLineExternal = `openExternalBrowser=1`
     const {
-        id,
-        seoName,
         name,
-        description
+        description,
+        link,
     } = publicInfo.value
-    const seoId = seoName || id
-    const url = `${origin}/${seoId}?${openInLineExternal}`
+    const { origin } = window.location
+    const url = `${origin}/${link}?${openInLineExternal}`
     await navigator.clipboard.writeText(url)
     shareTooltipVisible.value = true
     if (navigator.share) {

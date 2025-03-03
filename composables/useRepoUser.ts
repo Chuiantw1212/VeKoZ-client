@@ -27,13 +27,9 @@ export default defineStore('user', () => {
         const user = await response.json() as IUser
         userInfo.value = user
         userPreference.value = user.preference as IUserPreference
-        // if (String(route.name).includes('host')) {
-        //     // setUserType('host')
-        //     userType.value = 'host'
-        // } else {
-        //     userType.value = 'attendee'
-        //     // setUserType('attendee')
-        // }
+        if (user.preference) {
+            userType.value = user.preference.userType ?? ''
+        }
         return userInfo.value
     }
     async function getUserPublicInfo(userId: string): Promise<IUser> {

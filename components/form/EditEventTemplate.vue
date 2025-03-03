@@ -15,7 +15,7 @@
             <template #default="{ row }">
                 <template v-if="row.id === eventTemplate.id">
                     <el-button size="small" :disabled="true">
-                        使用中
+                        編輯中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
@@ -44,7 +44,7 @@ import type { IEventSingle } from '~/types/event';
 import {
     Delete,
 } from '@element-plus/icons-vue'
-const emit = defineEmits(['update:modelValue', 'reset'])
+const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const isLoading = ref<boolean>(false)
 const eventTemplate = defineModel<IEventSingle>('modelValue', {
@@ -110,10 +110,6 @@ async function getEventTemplateList() {
         id: 'default',
         name: '系統預設',
     })
-    // templateList.value.unshift({
-    //     id: 'blank',
-    //     name: '空白模板',
-    // })
 
     if (templateList.value.length === 1) {
         // 只剩下預設可選，刪除模板Id，觸發父層的Reset

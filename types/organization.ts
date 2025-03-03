@@ -9,6 +9,7 @@ export type IOrganization = {
     lineId?: string,
     sameAs?: string[],
     lastmod?: string,
+    designs?: any[]
 }
 
 export type IOrganizationMember = {
