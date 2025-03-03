@@ -100,7 +100,9 @@ const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])
-const currentPublicInfo = ref<IPublicInfoCard>({})
+const currentPublicInfo = ref<IPublicInfoCard>({
+    id: '',
+})
 
 const organizationListDialog = reactive({
     visibility: false,
@@ -154,7 +156,7 @@ async function createOrganization() {
 
 function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {
     return {
-        id: item.id,
+        id: String(item.id),
         banner: item.banner,
         image: item.logo,
         name: item.name,

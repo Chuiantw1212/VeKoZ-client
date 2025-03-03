@@ -51,15 +51,9 @@
                         </div>
                     </div>
                 </template>
-                <div class="seoPage">
-                    <!-- {{ userTemplate }} -->
-                    <FormPublicInfoTemplate :key="renderKey" v-model="userTemplate" :is-designing="true"
-                        :onchange="patchUser">
-                    </FormPublicInfoTemplate>
-                    <!-- <el-card>
-                        尚未完成的功能，敬請期待。
-                    </el-card> -->
-                </div>
+                <FormPublicInfoTemplate :key="renderKey" v-model="userPublicInfo" :is-designing="true" type="user"
+                    :onchange="patchUser">
+                </FormPublicInfoTemplate>
             </el-card>
         </el-col>
         <el-col v-if="repoUI.isMedium" :span="8">
@@ -148,7 +142,9 @@ const userTemplate = ref<IUser>({
 })
 
 // 模板上的資料
-const userPublicInfo = ref<IPublicInfoCard>()
+const userPublicInfo = ref<IPublicInfoCard>({
+    id: '',
+})
 
 // 基本資料相關
 const isPrivateInfoOpen = ref<boolean>(false)
@@ -263,12 +259,13 @@ async function confirmUserPrivateInfo() {
 }
 
 async function initializeUserForm(newValue: IUser) {
-    if (!newValue.id || !userTemplate.value.designs) {
+    if (!newValue.id) {
         return
     }
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
     userPublicInfo.value = {
+        id: String(userInfoCopy.id),
         name: userInfoCopy.seoTitle,
         description: userInfoCopy.description,
         urlPath: userInfoCopy.seoName || userInfoCopy.id,

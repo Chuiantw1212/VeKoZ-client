@@ -5,7 +5,7 @@ export interface IEventCarouselCard {
 }
 
 export interface IPublicInfoCard {
-    id?: string,
+    id: string, // 太重要
     seoName?: string,
     name?: string,
     image?: any,

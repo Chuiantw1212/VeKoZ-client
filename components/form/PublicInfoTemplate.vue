@@ -11,7 +11,7 @@
         <template v-if="eventList.length">
             <el-carousel type="card" :autoplay="false">
                 <el-carousel-item v-for="(event) in eventList">
-                    <MoleculeEventCard :model-value="event" :disabled="disabled"></MoleculeEventCard>
+                    <MoleculeEventCard :model-value="event" :disabled="disabled || isDesigning"></MoleculeEventCard>
                 </el-carousel-item>
             </el-carousel>
         </template>
