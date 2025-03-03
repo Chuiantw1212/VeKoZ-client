@@ -12,5 +12,5 @@ export interface IPublicInfoCard {
     banner?: any,
     description?: string,
     sameAs?: string[],
-    link?:string, // 瀏覽使用
+    urlPath?:string, // 瀏覽使用
 }

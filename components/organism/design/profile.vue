@@ -135,7 +135,7 @@ function openQrCode() {
 async function drawQrCode() {
     const { origin } = window.location
     const openInLineExternal = `openExternalBrowser=1`
-    const url = `${origin}/${publicInfo.value.link}?${openInLineExternal}`
+    const url = `${origin}/${publicInfo.value.urlPath}?${openInLineExternal}`
     const options: QRCodeRenderersOptions = {
         errorCorrectionLevel: 'H'
     }
@@ -157,10 +157,10 @@ async function shareLink() {
     const {
         name,
         description,
-        link,
+        urlPath,
     } = publicInfo.value
     const { origin } = window.location
-    const url = `${origin}/${link}?${openInLineExternal}`
+    const url = `${origin}/${urlPath}?${openInLineExternal}`
     await navigator.clipboard.writeText(url)
     shareTooltipVisible.value = true
     if (navigator.share) {
@@ -170,10 +170,6 @@ async function shareLink() {
             url,
         });
     }
-}
-function getPersonalLink() {
-    const openInLineExternal = `openExternalBrowser=1`
-    return `${publicInfo.value.seoName}?${openInLineExternal}`
 }
 async function validate() {
     return await formRef.value?.validate()

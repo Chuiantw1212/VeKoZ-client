@@ -59,7 +59,7 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList v-model="organization"></FormOrganizationList>
+            <FormOrganizationList v-model="currentPublicInfo.id"></FormOrganizationList>
             <!-- TODO：搜尋已註冊的組織並聯動資料。 -->
             <!-- <FormOrganization v-if="organizationListDialog.visibility" v-model="organization"
                 :mode="organizationListDialog.mode">
@@ -98,6 +98,7 @@ import { View, FolderOpened, User, Close, Postcard } from '@element-plus/icons-v
 import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
+const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 const isDialogLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
@@ -132,7 +133,7 @@ onMounted(() => {
 // Methods
 function getPersonalLink() {
     const openInLineExternal = `openExternalBrowser=1`
-    return `${currentPublicInfo.value.link}?${openInLineExternal}`
+    return `${currentPublicInfo.value.urlPath}?${openInLineExternal}`
 }
 
 async function getOrganizationList() {
@@ -147,35 +148,40 @@ async function getOrganizationList() {
         return {
             id: item.id,
             banner: item.banner,
-            // seoName: item.seoName || item.id,
             image: item.logo,
             name: item.name,
             description: item.description,
             sameAs: item.sameAs,
-            link: `o/${item.seoName || item.id}`
+            urlPath: `o/${item.seoName || item.id}`
         }
     })
     if (publicInfoList.value[0]) {
+        // 開啟上一次編輯的組織    
         currentPublicInfo.value = publicInfoList.value[0]
+    } else {
+        // 或是新增組織
+        const newOrganization = {
+            name: `${repoUser.userInfo.name}的組織`,
+        }
     }
 }
 
-async function hanelDialogConfirm() {
-    isDialogLoading.value = true
-    if (organizationListDialog.mode === 'ADD') {
-        await postOrganization()
-    }
-    if (organizationListDialog.mode === 'EDIT') {
-        await patchOrganization()
-    }
-    isDialogLoading.value = false
-}
+// async function hanelDialogConfirm() {
+//     isDialogLoading.value = true
+//     if (organizationListDialog.mode === 'ADD') {
+//         // await postOrganization()
+//     }
+//     if (organizationListDialog.mode === 'EDIT') {
+//         await patchOrganization()
+//     }
+//     isDialogLoading.value = false
+// }
 
-async function postOrganization() {
-    await repoOrganization.postOrganization(organization.value)
-    getOrganizationList()
-    organizationListDialog.visibility = false
-}
+// async function postOrganization() {
+//     await repoOrganization.postOrganization(organization.value)
+//     getOrganizationList()
+//     organizationListDialog.visibility = false
+// }
 
 async function patchOrganization() {
     isLoading.value = true
@@ -183,20 +189,20 @@ async function patchOrganization() {
     isLoading.value = false
 }
 
-function openNewDialog() {
-    organization.value = {} as any
-    organizationListDialog.visibility = true
-    organizationListDialog.mode = 'ADD'
-}
+// function openNewDialog() {
+//     organization.value = {} as any
+//     organizationListDialog.visibility = true
+//     organizationListDialog.mode = 'ADD'
+// }
 
 function editOrganizationDialog(item: IOrganization) {
-    Object.assign(organization.value, item)
+    // Object.assign(organization.value, item)
     organizationListDialog.visibility = true
     organizationListDialog.mode = 'EDIT'
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {
-    Object.assign(organization.value, item)
+    // Object.assign(organization.value, item)
     organizationMemberDialog.visibility = true
 }
 

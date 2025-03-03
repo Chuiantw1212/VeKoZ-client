@@ -16,7 +16,7 @@
         </el-table-column>
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
-                <template v-if="row.id === currentOrganizaiotn.id">
+                <template v-if="row.id === currentOrganizaiotnId">
                     <el-button size="small" :disabled="true">
                         編輯中
                     </el-button>
@@ -42,12 +42,9 @@ const emit = defineEmits(['update:modelValue', 'reset'])
 const repoOrganization = useRepoOrganization()
 const organizationList = ref<IOrganization[]>([])
 const isLoading = ref<boolean>(false)
-const currentOrganizaiotn = defineModel<IOrganization>('modelValue', {
-    type: Object,
-    default: {
-        id: '',
-        designs: [],
-    }
+const currentOrganizaiotnId = defineModel<string>('modelValue', {
+    type: String,
+    default: '',
 })
 
 // Hooks
@@ -71,16 +68,16 @@ async function selectOrganization(organization: IOrganization) {
     }
     switch (organization.id) {
         case 'default': {
-            currentOrganizaiotn.value.id = ''
-            currentOrganizaiotn.value.name = ''
-            emit('update:modelValue', currentOrganizaiotn.value)
+            // currentOrganizaiotn.value.id = ''
+            // currentOrganizaiotn.value.name = ''
+            // emit('update:modelValue', currentOrganizaiotn.value)
             break;
         }
         case 'blank': {
-            currentOrganizaiotn.value.id = 'blank'
-            currentOrganizaiotn.value.name = ''
-            currentOrganizaiotn.value.designs = []
-            emit('update:modelValue', currentOrganizaiotn.value)
+            // currentOrganizaiotn.value.id = 'blank'
+            // currentOrganizaiotn.value.name = ''
+            // currentOrganizaiotn.value.designs = []
+            // emit('update:modelValue', currentOrganizaiotn.value)
             break;
         }
         default: {
