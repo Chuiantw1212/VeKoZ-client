@@ -59,7 +59,8 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList :modelValue="currentPublicInfo.id" @update:modelValue="openOrganization($event)">
+            <FormOrganizationList :modelValue="currentPublicInfo.id" @update:modelValue="openOrganization($event)"
+                @create="createOrganization()">
             </FormOrganizationList>
             <!-- TODO：搜尋已註冊的組織並聯動資料。 -->
             <!-- <FormOrganization v-if="organizationListDialog.visibility" v-model="organization"
@@ -150,10 +151,17 @@ async function getOrganizationList() {
         currentPublicInfo.value = getOrganizationPublicInfo(response[0])
     } else {
         // 或是新增組織
-        const newOrganization = {
-            name: `${repoUser.userInfo.name}的組織`,
-        }
+        createOrganization()
     }
+}
+
+async function createOrganization() {
+    const newOrganization = {
+        name: `${repoUser.userInfo.name}的組織`,
+    }
+    const createdOrganization = await repoOrganization.postOrganization(newOrganization)
+    currentPublicInfo.value = getOrganizationPublicInfo(createdOrganization)
+    organizationListDialog.visibility = false
 }
 
 function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {

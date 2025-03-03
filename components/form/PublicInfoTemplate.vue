@@ -6,12 +6,21 @@
         <!-- <OrganismDesignSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs">
         </OrganismDesignSocialMedia> -->
         <!-- publicInfo{{ publicInfo.sameAs }} -->
+
         <el-divider class="userProfilePage__divider">近期公開活動</el-divider>
-        <el-carousel type="card" :autoplay="false">
-            <el-carousel-item v-for="(event) in eventList">
-                <MoleculeEventCard :model-value="event"></MoleculeEventCard>
-            </el-carousel-item>
-        </el-carousel>
+        <template v-if="eventList.length">
+            <el-carousel type="card" :autoplay="false">
+                <el-carousel-item v-for="(event) in eventList">
+                    <MoleculeEventCard :model-value="event"></MoleculeEventCard>
+                </el-carousel-item>
+            </el-carousel>
+        </template>
+        <template v-else>
+            <el-card class="notFound">
+                <el-empty description="無">
+                </el-empty>
+            </el-card>
+        </template>
         <!-- <div v-if="publicInfo.designs">
             <template v-for="(design, index) in publicInfo.designs">
                 <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="publicInfo.designs[index]"

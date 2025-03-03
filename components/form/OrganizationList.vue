@@ -1,5 +1,5 @@
 <template>
-    <el-table :data="organizationList" style="width: 100%">
+    <el-table v-loading="isLoading" :data="organizationList" style="width: 100%">
         <el-table-column prop="lastmod" label="上次修改">
             <template #default="{ row }">
                 <template v-if="row.lastmod">
@@ -23,7 +23,7 @@
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
                     <el-button size="small" @click="selectOrganization(row)">
-                        建新板
+                        新組織
                     </el-button>
                 </template>
                 <template v-else>
@@ -33,13 +33,21 @@
                 </template>
             </template>
         </el-table-column>
+        <el-table-column prop="" label="刪除">
+            <template #default="{ row }">
+                <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
+                    :disabled="row.id === currentOrganizaiotnId" @click="deleteOrganization(row)">
+                </el-button>
+            </template>
+        </el-table-column>
     </el-table>
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization';
-
-const emit = defineEmits(['update:modelValue', 'reset'])
+import { Delete } from '@element-plus/icons-vue';
+const emit = defineEmits(['update:modelValue', 'create'])
 const repoOrganization = useRepoOrganization()
+// const repoUser = useRepoUser()
 const organizationList = ref<IOrganization[]>([])
 const isLoading = ref<boolean>(false)
 const currentOrganizaiotnId = defineModel<string>('modelValue', {
@@ -54,13 +62,21 @@ onMounted(() => {
 
 // Methods
 async function getOrganizationList() {
+    isLoading.value = true
     const response: IOrganization[] = await repoOrganization.getOrganizationList()
     response.sort((a, b) => {
         const timeA = new Date(String(a.lastmod)).getTime()
         const timeB = new Date(String(b.lastmod)).getTime()
         return timeB - timeA
     })
-    organizationList.value = response
+    organizationList.value = [
+        {
+            id: 'blank',
+            name: `新組織`,
+        },
+        ...response,
+    ]
+    isLoading.value = false
 }
 async function selectOrganization(organization: IOrganization) {
     if (!organization.id) {
@@ -68,22 +84,19 @@ async function selectOrganization(organization: IOrganization) {
     }
     switch (organization.id) {
         case 'blank': {
-            // currentOrganizaiotn.value.id = 'blank'
-            // currentOrganizaiotn.value.name = ''
-            // currentOrganizaiotn.value.designs = []
-            // emit('update:modelValue', currentOrganizaiotn.value)
+            emit('create')
             break;
         }
         default: {
             emit('update:modelValue', organization.id)
-            // isLoading.value = true
-            // const result = await repoEventTemplate.getEventTemplate(organization.id)
-            // if (result) {
-            //     currentOrganizaiotn.value = result
-            // }
-            // isLoading.value = false
             break;
         }
     }
+}
+async function deleteOrganization(organization: IOrganization) {
+    isLoading.value = true
+    await repoOrganization.deleteOrganization(String(organization.id))
+    getOrganizationList()
+    isLoading.value = false
 }
 </script>

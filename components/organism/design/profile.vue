@@ -32,8 +32,8 @@
             </template>
             <div class="content__followers">XXX人追隨</div>
             <template v-if="isDesigning">
-                <el-input v-if="publicInfo.description" v-model="publicInfo.description" :maxlength="120"
-                    :show-word-limit="true" type="textarea" :rows="6" @change="handleChange"></el-input>
+                <el-input v-model="publicInfo.description" :maxlength="120" :show-word-limit="true" type="textarea"
+                    :rows="6" @change="handleChange" placeholder="請輸入簡介"></el-input>
             </template>
             <template v-else>
                 <pre class="content__desc">{{ publicInfo.description }}</pre>
@@ -71,6 +71,11 @@ const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
         banner: '',
     },
 })
+watch(() => publicInfo.value, (newValue) => {
+    if (newValue.sameAs) {
+        newValue.sameAs = []
+    }
+}, { immediate: true, })
 
 const props = defineProps({
     id: {

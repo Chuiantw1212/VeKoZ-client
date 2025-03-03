@@ -20,7 +20,7 @@
                 <img v-else class="link__icon" src="@/assets/icon/web.svg">
             </el-button>
         </template>
-        <div v-if="!socialUrls.length" class="socialMedia__grid">
+        <div v-if="!socialUrls.length && isDesigning" class="socialMedia__grid">
             <!-- 示意圖： -->
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/youtube.svg">
