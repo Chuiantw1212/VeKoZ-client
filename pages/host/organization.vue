@@ -59,7 +59,8 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList v-model="currentPublicInfo.id"></FormOrganizationList>
+            <FormOrganizationList :modelValue="currentPublicInfo.id" @update:modelValue="openOrganization($event)">
+            </FormOrganizationList>
             <!-- TODO：搜尋已註冊的組織並聯動資料。 -->
             <!-- <FormOrganization v-if="organizationListDialog.visibility" v-model="organization"
                 :mode="organizationListDialog.mode">
@@ -104,7 +105,7 @@ const isDialogLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 
 const organizationList = ref<IOrganization[]>([])
-const publicInfoList = ref<IPublicInfoCard[]>([])
+// const publicInfoList = ref<IPublicInfoCard[]>([])
 const currentPublicInfo = ref<IPublicInfoCard>({})
 
 const organizationListDialog = reactive({
@@ -144,26 +145,33 @@ async function getOrganizationList() {
         return timeB - timeA
     })
     organizationList.value = response
-    publicInfoList.value = response.map(item => {
-        return {
-            id: item.id,
-            banner: item.banner,
-            image: item.logo,
-            name: item.name,
-            description: item.description,
-            sameAs: item.sameAs,
-            urlPath: `o/${item.seoName || item.id}`
-        }
-    })
-    if (publicInfoList.value[0]) {
+    if (response[0]) {
         // 開啟上一次編輯的組織    
-        currentPublicInfo.value = publicInfoList.value[0]
+        currentPublicInfo.value = getOrganizationPublicInfo(response[0])
     } else {
         // 或是新增組織
         const newOrganization = {
             name: `${repoUser.userInfo.name}的組織`,
         }
     }
+}
+
+function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {
+    return {
+        id: item.id,
+        banner: item.banner,
+        image: item.logo,
+        name: item.name,
+        description: item.description,
+        sameAs: item.sameAs,
+        urlPath: `o/${item.seoName || item.id}`
+    }
+}
+
+async function openOrganization(organizationId: string) {
+    const result = await repoOrganization.getOrganization(organizationId)
+    currentPublicInfo.value = getOrganizationPublicInfo(result)
+    organizationListDialog.visibility = false
 }
 
 // async function hanelDialogConfirm() {

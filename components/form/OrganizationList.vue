@@ -67,12 +67,6 @@ async function selectOrganization(organization: IOrganization) {
         return
     }
     switch (organization.id) {
-        case 'default': {
-            // currentOrganizaiotn.value.id = ''
-            // currentOrganizaiotn.value.name = ''
-            // emit('update:modelValue', currentOrganizaiotn.value)
-            break;
-        }
         case 'blank': {
             // currentOrganizaiotn.value.id = 'blank'
             // currentOrganizaiotn.value.name = ''
@@ -81,6 +75,7 @@ async function selectOrganization(organization: IOrganization) {
             break;
         }
         default: {
+            emit('update:modelValue', organization.id)
             // isLoading.value = true
             // const result = await repoEventTemplate.getEventTemplate(organization.id)
             // if (result) {
