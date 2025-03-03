@@ -10,10 +10,10 @@
                                     @click="organizationListDialog.visibility = true">
                                     開啓組織
                                 </el-button>
-                                <el-button v-loading="isLoading" size="small" :icon="Postcard"
+                                <!-- <el-button v-loading="isLoading" size="small" :icon="Postcard"
                                     @click="organizationDialogVisible = true">
                                     變更資料
-                                </el-button>
+                                </el-button> -->
                                 <!-- <el-button v-loading="isLoading" size="small" :icon="User"
                                     @click="editOrganizationMemberDialog">
                                     管理成員

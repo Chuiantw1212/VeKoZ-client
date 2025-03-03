@@ -138,18 +138,17 @@ const templateTemp = ref<ITemplateDragSouce>({
     index: -1
 })
 
-// 主要的模板資料
-const userTemplate = ref<IPublicInfoCard>({
+// 主要的用戶資料
+const userTemplate = ref<IUser>({
     id: '',
     name: '',
     description: '',
     seoName: '',
-    // seoTitle: '',
-    // isPublic: false,
-    // avatar: '',
-    // designs: [],
     sameAs: [],
 })
+
+// 模板上的資料
+const userPublicInfo = ref<IPublicInfoCard>()
 
 // 基本資料相關
 const isPrivateInfoOpen = ref<boolean>(false)
@@ -269,6 +268,13 @@ async function initializeUserForm(newValue: IUser) {
     }
     const userInfoCopy: IUser = JSON.parse(JSON.stringify(newValue))
     delete userInfoCopy.preference
+    userPublicInfo.value = {
+        name: userInfoCopy.seoTitle,
+        description: userInfoCopy.description,
+        urlPath: userInfoCopy.seoName || userInfoCopy.id,
+        image: userInfoCopy.avatar,
+        sameAs: userInfoCopy.sameAs,
+    }
     // if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
     //     const defaultDesigns: IUserDesign[] = [
     //         {
