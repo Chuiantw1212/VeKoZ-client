@@ -3,8 +3,8 @@
         <!-- {{customDesign  }} -->
         <!-- 檢視與編輯用 -->
         <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
-            <AtomBannerUploader v-if="customDesign" v-model="customDesign.value" :disabled="disabled"
-                :height="bannerHeight">
+            <AtomBannerUploader v-if="customDesign" v-model="customDesign.value" :isDesigning="isDesigning"
+                :disabled="disabled" :height="bannerHeight">
             </AtomBannerUploader>
         </el-form-item>
         <!-- 樣板編輯專用 -->
@@ -12,7 +12,8 @@
             @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')"
             @moveDown="emit('moveDown')">
             <template v-slot:default>
-                <AtomBannerUploader v-model="customDesign.value" :disabled="disabled" :height="bannerHeight">
+                <AtomBannerUploader v-model="customDesign.value" :isDesigning="isDesigning" :disabled="disabled"
+                    :height="bannerHeight">
                 </AtomBannerUploader>
             </template>
         </MoleculeDesignToolbar>
