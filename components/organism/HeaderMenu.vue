@@ -20,9 +20,9 @@
             <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
         </div>
         <div class="menu__endGroup">
-            <el-menu-item>
+            <!-- <el-menu-item>
                 <el-switch v-model="isFullScreen" active-text="放大" @change="patchUserPreference()" />
-            </el-menu-item>
+            </el-menu-item> -->
             <NuxtLink v-if="repoUser.userType" to="/settings">
                 <el-menu-item index="4" class="headerMenu__firstItem">
                     <OrganismUserAuth></OrganismUserAuth>

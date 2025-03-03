@@ -1,44 +1,57 @@
 <template>
-    <el-row class="userTemplate" :gutter="20">
-        <el-col :span="repoUI.isMedium ? 16 : 24">
-            <el-card class="user__card vekoz-card" body-class="card__body card__body--205">
-                <template #header>
-                    <div class="vekoz-card-header">
-                        <el-form-item>
+    <div>
+
+
+        <el-row class="userTemplate" :gutter="20">
+            <el-col :span="repoUI.isMedium ? 16 : 24">
+                <el-card class="user__card vekoz-card" body-class="card__body card__body--205">
+                    <template #header>
+                        <div class="vekoz-card-header">
+                            <!-- <div>{{ currentPublicInfo.name }}</div> -->
+                            <!-- <el-form-item>
                             <el-input placeholder="請輸入組織名稱" size="large" :maxlength="30" :show-word-limit="true">
                             </el-input>
-                        </el-form-item>
-                        <div class="header__btnGroup">
-                            <el-button size="small">
-                                開啓組織
-                            </el-button>
-                            <el-button size="small">
-                                管理成員
-                            </el-button>
+                        </el-form-item> -->
+                            <div class="header__btnGroup">
+                                <el-button size="small" :icon="FolderOpened">
+                                    開啓組織
+                                </el-button>
+                                <el-button size="small" :icon="User" @click="editOrganizationMemberDialog">
+                                    管理成員
+                                </el-button>
+                            </div>
+                            <div>
+                                <div class="header__ui">
+                                    <NuxtLink :to="getPersonalLink()" target="_blank">
+                                        <el-button v-loading="isLoading" :icon="View" size="small">
+                                            瀏覽
+                                        </el-button>
+                                    </NuxtLink>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </template>
-                <FormPublicInfoTemplate v-model="currentPublicInfo"></FormPublicInfoTemplate>
-            </el-card>
-        </el-col>
-        <el-col v-if="repoUI.isMedium" :span="8">
-            <el-card class="vekoz-card" body-class="card__body card__body--205">
-                <template #header>
-                    <div class="vekoz-card-header">
-                        請拖曳以下元件 到 指定位置
-                    </div>
-                </template>
-                尚未完成的功能，敬請期待。
-                <!-- <FormDesignDragging type="attendee" @dragstart="setTemplateItem($event)"
+                    </template>
+                    <FormPublicInfoTemplate v-model="currentPublicInfo" :isDesigning="true"></FormPublicInfoTemplate>
+                </el-card>
+            </el-col>
+            <el-col v-if="repoUI.isMedium" :span="8">
+                <el-card class="vekoz-card" body-class="card__body card__body--205">
+                    <template #header>
+                        <div class="vekoz-card-header">
+                            請拖曳以下元件 到 指定位置
+                        </div>
+                    </template>
+                    尚未完成的功能，敬請期待。
+                    <!-- <FormDesignDragging type="attendee" @dragstart="setTemplateItem($event)"
                     @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()"></FormDesignDragging> -->
-            </el-card>
-        </el-col>
-    </el-row>
-    <!-- 月曆 -->
-    <!-- <el-row class="organizationTemplate" :gutter="20">
+                </el-card>
+            </el-col>
+        </el-row>
+        <!-- 月曆 -->
+        <!-- <el-row class="organizationTemplate" :gutter="20">
         
      </el-row> -->
-    <!-- <div class="organization">
+        <!-- <div class="organization">
         <div class="organization__header">
             <h1>組織管理</h1>
             <ElButton @click="openNewDialog()">新增組織</ElButton>
@@ -68,45 +81,49 @@
                 </template>
 </el-table-column>
 </el-table>
+</div> -->
 
-<AtomVekozDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
-    <template #header>
+        <AtomVekozDialog v-loading="isDialogLoading" v-model="organizationDialog.visibility" class="event__template">
+            <template #header>
                 <el-text size="large">
                     組織設定
                 </el-text>
             </template>
-    TODO：搜尋已註冊的組織並聯動資料。
-    <FormOrganization v-if="organizationDialog.visibility" v-model="organization" :mode="organizationDialog.mode">
-    </FormOrganization>
-    <template #footer>
+            TODO：搜尋已註冊的組織並聯動資料。
+            <FormOrganization v-if="organizationDialog.visibility" v-model="organization"
+                :mode="organizationDialog.mode">
+            </FormOrganization>
+            <template #footer>
                 <el-button @click="organizationDialog.visibility = false">取消</el-button>
                 <el-button type="primary" @click="hanelDialogConfirm()">
                     確認
                 </el-button>
             </template>
-</AtomVekozDialog>
+        </AtomVekozDialog>
 
-<AtomVekozDialog v-model="organizationMemberDialog.visibility">
-    <template #header>
+        <AtomVekozDialog v-model="organizationMemberDialog.visibility" :showClose="false">
+            <template #header>
                 <el-text size="large">
                     成員設定
                 </el-text>
             </template>
-    <template #headerUI>
-                <el-button :icon="Close" text>
+            <template #headerUI>
+                <el-button :icon="Close" text @click="organizationMemberDialog.visibility = false">
                 </el-button>
             </template>
-    <el-alert>
-        連動已註冊的成員，才不會出BUG。
-    </el-alert>
-    <FormOrganizationMember v-if="organizationMemberDialog.visibility" :mode="organizationMemberDialog.mode">
-    </FormOrganizationMember>
-</AtomVekozDialog>
-</div> -->
+            <el-alert>
+                連動已註冊的成員，才不會出BUG。
+            </el-alert>
+            <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="currentPublicInfo.id"
+                :mode="organizationMemberDialog.mode">
+            </FormOrganizationMember>
+        </AtomVekozDialog>
+    </div>
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
 import { ElMessageBox } from 'element-plus'
+import { View, FolderOpened, User, Close } from '@element-plus/icons-vue'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
@@ -142,6 +159,11 @@ onMounted(() => {
 
 
 // Methods
+function getPersonalLink() {
+    const openInLineExternal = `openExternalBrowser=1`
+    return `${currentPublicInfo.value.seoName}?${openInLineExternal}`
+}
+
 async function getOrganizationList() {
     const response: IOrganization[] = await repoOrganization.getOrganizationList()
     response.sort((a, b) => {
@@ -152,6 +174,7 @@ async function getOrganizationList() {
     organizationList.value = response
     publicInfoList.value = response.map(item => {
         return {
+            id: item.id,
             banner: item.banner,
             seoName: item.seoName || item.id,
             image: item.logo,

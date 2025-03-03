@@ -11,10 +11,10 @@
                                 </el-input>
                             </el-form-item>
                             <div v-loading="isBtnLoading" class="header__btnGroup">
-                                <el-button size="small" @click="loadTemplateDialog.isOpen = true">
+                                <el-button size="small" @click="loadTemplateDialog.isOpen = true" :icon="FolderOpened">
                                     開啓模板
                                 </el-button>
-                                <el-button size="small" @click="openSaveDialog">
+                                <el-button size="small" :icon="FolderAdd" @click="openSaveDialog">
                                     另存新檔
                                 </el-button>
                             </div>
@@ -77,6 +77,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import { FolderOpened, FolderAdd } from '@element-plus/icons-vue'
 import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
