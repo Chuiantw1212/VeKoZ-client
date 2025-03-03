@@ -6,23 +6,22 @@
                     <template #header>
                         <div class="vekoz-card-header">
                             <div class="header__btnGroup">
-                                <el-button v-loading="isLoading" size="small" :icon="FolderOpened"
+                                <el-button v-loading="isLoading" :icon="FolderOpened"
                                     @click="organizationListDialog.visibility = true">
                                     開啓組織
                                 </el-button>
-                                <!-- <el-button v-loading="isLoading" size="small" :icon="Postcard"
+                                <!-- <el-button v-loading="isLoading"  :icon="Postcard"
                                     @click="organizationDialogVisible = true">
                                     變更資料
                                 </el-button> -->
-                                <el-button v-loading="isLoading" size="small" :icon="User"
-                                    @click="editOrganizationMemberDialog">
+                                <el-button v-loading="isLoading" :icon="User" @click="editOrganizationMemberDialog">
                                     管理成員
                                 </el-button>
                             </div>
                             <div>
                                 <div class="header__ui">
                                     <NuxtLink :to="getPersonalLink()" target="_blank">
-                                        <el-button v-loading="isLoading" :icon="View" size="small">
+                                        <el-button v-loading="isLoading" :icon="View">
                                             瀏覽
                                         </el-button>
                                     </NuxtLink>
