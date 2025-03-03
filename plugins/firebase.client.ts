@@ -11,13 +11,13 @@ await import(`@/public/firebase/firebase-ui-auth.css`)
 export default defineNuxtPlugin(() => {
     // Create App
     let firebaseConfig = {
-        apiKey: "AIzaSyCqdGY6WPX0qk-KteFhjp3dfz1bdAwNMuM",
-        authDomain: "votion-d92bc.firebaseapp.com",
-        projectId: "votion-d92bc",
-        storageBucket: "votion-d92bc.firebasestorage.app",
-        messagingSenderId: "83032571165",
-        appId: "1:83032571165:web:fea97d2ec25be93b1a75f4",
-        measurementId: "G-6PBRFGGVJ2"
+        apiKey: "AIzaSyAcRHG9H_fZiLHJBNrv-IqjSJIqOzHPaSg",
+        authDomain: "vekoz-dev-170fa.firebaseapp.com",
+        projectId: "vekoz-dev-170fa",
+        storageBucket: "vekoz-dev-170fa.firebasestorage.app",
+        messagingSenderId: "216703103429",
+        appId: "1:216703103429:web:cba49ca3bcae9886765bac",
+        measurementId: "G-Y1TZBZ67N1"
     }
     firebase.initializeApp(firebaseConfig)
     try {
