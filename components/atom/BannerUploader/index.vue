@@ -12,12 +12,12 @@
             <!-- <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div> -->
             <!-- isValidUrl(banner){{ isValidUrl(banner) }} -->
             <div class="label__content" :class="{ 'label__content--isVisible': !isUploaded }">
-                <!-- <div class="content__text"> -->
-                <el-icon size="large">
-                    <UploadFilled></UploadFilled>
-                </el-icon>
-                點擊上傳
-                <!-- </div> -->
+                <div class="content__text">
+                    <el-icon size="large">
+                        <UploadFilled></UploadFilled>
+                    </el-icon>
+                    點擊上傳
+                </div>
             </div>
             <input v-show="false" :disabled="disabled" class="body__input" autocomplete="off" type="file"
                 accept="image/*" :data-required="required" :data-name="name" @change="handleFiles($event)">
