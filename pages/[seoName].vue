@@ -1,7 +1,16 @@
 <template>
     <div class="profile">
         <section class="profile__bg"></section>
-        <FormPublicInfoTemplate v-model="userForm" :is-designing="false"></FormPublicInfoTemplate>
+        <FormPublicInfoTemplate v-if="userForm.id" v-model="userForm" :is-designing="false"></FormPublicInfoTemplate>
+        <el-empty v-else description="查無此人">
+            <ol>
+                可能的原因如下
+                <li>專屬網址變更</li>
+                <li>用戶非公開</li>
+                <li>用戶已註銷</li>
+            </ol>
+            <NuxtLink to="/">回首頁</NuxtLink>
+        </el-empty>
     </div>
 </template>
 
@@ -35,7 +44,7 @@ async function getUserSeoInfoInfo() {
         banner: user.banner,
         image: user.avatar,
         seoName: user.seoName,
-        id: user.id,
+        id: String(user.id),
         sameAs: user.sameAs
     }
 }

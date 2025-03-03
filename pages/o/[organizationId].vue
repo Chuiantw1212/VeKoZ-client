@@ -24,7 +24,9 @@ definePageMeta({
     layout: 'profile'
 })
 
-const organizationProfile = ref<IPublicInfoCard>({})
+const organizationProfile = ref<IPublicInfoCard>({
+    id: '',
+})
 
 // const organization = ref<IOrganization>({})
 const eventList = ref<IEventFromList[]>([])
