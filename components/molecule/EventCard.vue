@@ -1,11 +1,16 @@
 <template>
     <MoleculeVenoniaCard class="index__card">
         <template #default>
-            <NuxtLink :to="`/event/${item.id}`" target="_blank" :disabled="disabled">
+            <NuxtLink v-if="!disabled" :to="`/event/${item.id}`" target="_blank">
                 <div v-if="item.banner" class="card__image" :style="{ 'background-image': `url(${item.banner})` }">
                 </div>
                 <div v-else class="card__image" :style="{ 'background-image': `url(${placeholderImage})` }"></div>
             </NuxtLink>
+            <template v-else>
+                <div v-if="item.banner" class="card__image" :style="{ 'background-image': `url(${item.banner})` }">
+                </div>
+                <div v-else class="card__image" :style="{ 'background-image': `url(${placeholderImage})` }"></div>
+            </template>
         </template>
         <template #footer>
             <table class="card__footTable">
@@ -29,9 +34,14 @@
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <NuxtLink :to="`/event/${item.id}`" target="_blank">
+                            <template v-if="!disabled">
+                                <NuxtLink :to="`/event/${item.id}`" target="_blank">
+                                    {{ item.name }}
+                                </NuxtLink>
+                            </template>
+                            <template v-else>
                                 {{ item.name }}
-                            </NuxtLink>
+                            </template>
                         </td>
                         <!-- <td>
                                             <div class="footer__offer">

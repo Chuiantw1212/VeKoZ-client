@@ -34,8 +34,8 @@
                             </div>
                         </div>
                     </template>
-                    <FormPublicInfoTemplate v-model="currentPublicInfo" :isDesigning="true" type="organization"
-                        :onchange="patchOrganization">
+                    <FormPublicInfoTemplate v-model="currentPublicInfo" :disabled="true" :isDesigning="true"
+                        type="organization" :onchange="patchOrganization">
                     </FormPublicInfoTemplate>
                 </el-card>
             </el-col>

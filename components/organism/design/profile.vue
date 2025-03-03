@@ -1,7 +1,6 @@
 <template>
     <div class="publicInfo" :class="{ 'publicInfo--borderless': !isDesigning }">
         <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
-            <!-- <img class="bannerWrap__banner" :src="publicInfo.banner"> -->
             <AtomBannerUploader v-model="publicInfo.banner" :disabled="!isDesigning" @change="handleChange">
             </AtomBannerUploader>
         </div>

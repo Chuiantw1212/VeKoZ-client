@@ -1,7 +1,7 @@
 <template>
     <div class="userProfilePage">
         <OrganismDesignProfile class="userProfilePage__landing" v-model="publicInfo" :onchange="onchange"
-            :isDesigning="isDesigning">
+            :isDesigning="isDesigning" :disabled="disabled">
         </OrganismDesignProfile>
         <!-- <OrganismDesignSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs">
         </OrganismDesignSocialMedia> -->
@@ -11,7 +11,7 @@
         <template v-if="eventList.length">
             <el-carousel type="card" :autoplay="false">
                 <el-carousel-item v-for="(event) in eventList">
-                    <MoleculeEventCard :model-value="event" :disabled="true"></MoleculeEventCard>
+                    <MoleculeEventCard :model-value="event" :disabled="disabled"></MoleculeEventCard>
                 </el-carousel-item>
             </el-carousel>
         </template>
