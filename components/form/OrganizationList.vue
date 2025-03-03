@@ -22,7 +22,10 @@
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button size="small" @click="selectOrganization(row)">
+                    <el-button v-if="maximumReached" :disabled="true" size="small" @click="selectOrganization(row)">
+                        達上限=2
+                    </el-button>
+                    <el-button v-else size="small" @click="selectOrganization(row)">
                         新組織
                     </el-button>
                 </template>
@@ -46,8 +49,9 @@
 import type { IOrganization } from '~/types/organization';
 import { Delete } from '@element-plus/icons-vue';
 const emit = defineEmits(['update:modelValue', 'create'])
+const maximumReached = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
-// const repoUser = useRepoUser()
+const repoUser = useRepoUser()
 const organizationList = ref<IOrganization[]>([])
 const isLoading = ref<boolean>(false)
 const currentOrganizaiotnId = defineModel<string>('modelValue', {
@@ -69,10 +73,13 @@ async function getOrganizationList() {
         const timeB = new Date(String(b.lastmod)).getTime()
         return timeB - timeA
     })
+    if (response.length >= 2) {
+        maximumReached.value = true
+    }
     organizationList.value = [
         {
             id: 'blank',
-            name: `新組織`,
+            name: `${repoUser.userInfo.name}的新組織`,
         },
         ...response,
     ]

@@ -30,6 +30,10 @@ export default defineStore('user', () => {
         if (user.preference) {
             userType.value = user.preference.userType ?? ''
         }
+        if (route.name === 'index') {
+            // 首頁強制轉換，不然會跑版
+            userType.value = 'attendee'
+        }
         return userInfo.value
     }
     async function getUserPublicInfo(userId: string): Promise<IUser> {
