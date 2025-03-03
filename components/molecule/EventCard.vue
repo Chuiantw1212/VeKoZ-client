@@ -1,7 +1,7 @@
 <template>
     <MoleculeVenoniaCard class="index__card">
         <template #default>
-            <NuxtLink :to="`/event/${item.id}`" target="_blank">
+            <NuxtLink :to="`/event/${item.id}`" target="_blank" :disabled="disabled">
                 <div v-if="item.banner" class="card__image" :style="{ 'background-image': `url(${item.banner})` }">
                 </div>
                 <div v-else class="card__image" :style="{ 'background-image': `url(${placeholderImage})` }"></div>
@@ -74,6 +74,13 @@ const item = defineModel<IEventFromList>('modelValue', {
     type: Object,
     default: {}
 })
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
+})
+
 const taiwanRegions = ref<ISelectOption[]>([])
 
 onMounted(() => {

@@ -4,7 +4,6 @@
         <template v-for="(url, index) in socialUrls">
             <el-button class="socialMedia__icon" :class="{ 'socialMedia__icon--isDesigning': isDesigning }" text circle
                 @click="handleSocialVisit(index)">
-                <!-- <img class="link__icon" :src="getIconSrc(url)"> -->
                 <img v-if="url.includes('youtube.com/')" class="link__icon" src="@/assets/icon/youtube.svg">
                 <img v-else-if="url.includes('facebook.com/')" class="link__icon"
                     src="@/assets/icon/facebook-circle.svg">

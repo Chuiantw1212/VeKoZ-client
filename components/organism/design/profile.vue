@@ -72,7 +72,7 @@ const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
     },
 })
 watch(() => publicInfo.value, (newValue) => {
-    if (newValue.sameAs) {
+    if (!newValue.sameAs) {
         newValue.sameAs = []
     }
 }, { immediate: true, })
