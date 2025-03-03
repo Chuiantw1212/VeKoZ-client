@@ -1,10 +1,7 @@
 <template>
     <div class="profile">
         <section class="profile__bg"></section>
-        <!-- {{ userForm }} -->
-        <!-- <el-main class="profile__template"> -->
-        <FormUserTemplate v-model="userForm" :is-designing="false"></FormUserTemplate>
-        <!-- </el-main> -->
+        <FormPublicInfoTemplate v-model="userForm" :is-designing="false"></FormPublicInfoTemplate>
     </div>
 </template>
 
@@ -39,6 +36,7 @@ async function getUserSeoInfoInfo() {
         image: user.avatar,
         seoName: user.seoName,
         id: user.id,
+        sameAs: user.sameAs
     }
 }
 </script>

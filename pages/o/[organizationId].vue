@@ -1,6 +1,7 @@
 <template>
     <div class="organization">
-        <OrganismDesignProfile v-model="organizationProfile"></OrganismDesignProfile>
+        <!-- <OrganismDesignProfile v-model="organizationProfile"></OrganismDesignProfile> -->
+        <FormPublicInfoTemplate v-model="organizationProfile" type="organization"></FormPublicInfoTemplate>
         <!-- <div class="organization__bannerWrap">
             <img class="organization__banner" :src="organization.banner">
         </div>
@@ -49,7 +50,7 @@ onMounted(() => {
 })
 
 const organizatoinId = computed(() => {
-    const organizationId: string = route.params.id as string
+    const organizationId: string = route.params.organizationId as string
     return organizationId
 })
 
@@ -57,11 +58,13 @@ const organizatoinId = computed(() => {
 async function getOrganization() {
     const organization = await repoOrganization.getOrganization(organizatoinId.value)
     organizationProfile.value = {
+        id: organization.id,
         name: organization.name,
         description: organization.description,
         image: organization.logo,
         banner: organization.banner,
-        link: `o/${organization.id}`
+        link: `o/${organization.id}`,
+        sameAs: organization.sameAs,
     }
 }
 

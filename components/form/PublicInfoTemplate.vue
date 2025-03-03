@@ -1,73 +1,66 @@
 <template>
     <div class="userProfilePage">
-        <OrganismDesignProfile class="userProfilePage__landing" v-model="userTemplate" :onchange="onchange"
+        <OrganismDesignProfile class="userProfilePage__landing" v-model="publicInfo" :onchange="onchange"
             :isDesigning="isDesigning">
         </OrganismDesignProfile>
+        <!-- <OrganismDesignSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs">
+        </OrganismDesignSocialMedia> -->
+        <!-- publicInfo{{ publicInfo.sameAs }} -->
         <el-divider class="userProfilePage__divider">近期公開活動</el-divider>
         <el-carousel type="card" :autoplay="false">
             <el-carousel-item v-for="(event) in eventList">
-                <MoleculeEventCard :model-value="event">
-
-                </MoleculeEventCard>
-                <!-- <img :src="event.banner"> -->
+                <MoleculeEventCard :model-value="event"></MoleculeEventCard>
             </el-carousel-item>
         </el-carousel>
-        <div v-if="userTemplate.designs">
-            <template v-for="(design, index) in userTemplate.designs">
-                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="userTemplate.designs[index]"
+        <!-- <div v-if="publicInfo.designs">
+            <template v-for="(design, index) in publicInfo.designs">
+                <OrganismDesignAvatarUploader v-if="design.type === 'avatar'" v-model="publicInfo.designs[index]"
                     :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
                     @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                     @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                     @mouseout="emit('mouseout')">
                 </OrganismDesignAvatarUploader>
-                <!-- <OrganismDesignEventHistory v-model="userTemplate.designs[index]" :onchange="onchange"
-                    :required="design.required" :disabled="props.disabled" :show-label="false"
-                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                    @mouseout="emit('mouseout')">
-                </OrganismDesignEventHistory> -->
                 <template v-if="design.type === 'header1'">
-                    <OrganismDesignHeader1 v-if="isDesigning" v-model="userTemplate.designs[index]" :onchange="onchange"
+                    <OrganismDesignHeader1 v-if="isDesigning" v-model="publicInfo.designs[index]" :onchange="onchange"
                         :required="design.required" :disabled="props.disabled" :show-label="false"
                         @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                         @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                         @mouseout="emit('mouseout')">
                     </OrganismDesignHeader1>
-                    <h1 v-else>{{ userTemplate.designs[index].value }}</h1>
+                    <h1 v-else>{{ publicInfo.designs[index].value }}</h1>
                 </template>
-                <template v-if="design.type === 'textarea'">
-                    <OrganismDesignTextarea v-if="isDesigning" v-model="userTemplate.designs[index]"
+<template v-if="design.type === 'textarea'">
+                    <OrganismDesignTextarea v-if="isDesigning" v-model="publicInfo.designs[index]"
                         :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
                         @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                         @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
                         @mouseout="emit('mouseout')">
                     </OrganismDesignTextarea>
-                    <p v-else>{{ userTemplate.designs[index].value }}</p>
+                    <p v-else>{{ publicInfo.designs[index].value }}</p>
                 </template>
-                <OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="userTemplate.designs[index]"
-                    :onchange="onchange" :required="design.required" :disabled="props.disabled" :show-label="false"
-                    @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                    @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', design.type)"
-                    @mouseout="emit('mouseout')">
-                </OrganismDesignSocialMedia>
-            </template>
-        </div>
+<OrganismDesignSocialMedia v-if="design.type === 'socialMedia'" v-model="publicInfo.designs[index]" :onchange="onchange"
+    :required="design.required" :disabled="props.disabled" :show-label="false" @dragstart="handleDragStart(index)"
+    @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
+    @mouseenter="emit('mouseenter', design.type)" @mouseout="emit('mouseout')">
+</OrganismDesignSocialMedia>
+</template>
+</div> -->
     </div>
 </template>
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
-import type { IEventFromList } from '~/types/event';
+import type { IEventFromList, IEventQuery } from '~/types/event';
+import type { IPublicInfoCard } from '~/types/ui';
 import type { IUser } from '~/types/user';
 
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
 
 const eventRepo = useRepoEvent()
-const userTemplate = defineModel<IUser>('modelValue', {
+const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
     type: Object,
     default: {
         id: '',
         seoName: '',
-        designs: [],
     },
 })
 
@@ -84,22 +77,31 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    type: {
+        type: String,
+        default: 'user',
+    },
 })
 
 const formRef = ref<FormInstance>()
 const eventList = ref<IEventFromList[]>([])
 
 // Hooks
-watch(() => userTemplate.value.id, (value) => {
+watch(() => publicInfo.value.id, (value) => {
     getEventList()
 }, { immediate: true })
 
 // methods
 async function getEventList() {
-    if (userTemplate.value.id) {
-        const result = await eventRepo.getEventList({
-            performerIds: [userTemplate.value.id],
-        })
+    if (publicInfo.value.id) {
+        const payload: IEventQuery = {}
+        if (props.type === 'user') {
+            payload.performerIds = [publicInfo.value.id]
+        }
+        if (props.type === 'organization') {
+            payload.organizerId = publicInfo.value.id
+        }
+        const result = await eventRepo.getEventList(payload)
         eventList.value = [...result, ...result, ...result]
     }
 }
@@ -108,45 +110,45 @@ async function validate() {
     return await formRef.value?.validate()
 }
 function handleRemove(index: number) {
-    if (!userTemplate.value.designs) {
+    if (!publicInfo.value.designs) {
         return
     }
-    const item = userTemplate.value.designs[index]
+    const item = publicInfo.value.designs[index]
     emit('remove', {
         item,
         index,
     })
 }
 function handleDragStart(index: number) {
-    if (!userTemplate.value.designs) {
+    if (!publicInfo.value.designs) {
         return
     }
-    const item = userTemplate.value.designs[index]
+    const item = publicInfo.value.designs[index]
     emit('dragstart', {
         item: JSON.parse(JSON.stringify(item)),
         index,
     })
 }
 function handleUp(index: number) {
-    if (!userTemplate.value.designs) {
+    if (!publicInfo.value.designs) {
         return
     }
-    const removedElements = userTemplate.value.designs.splice(index, 1)
+    const removedElements = publicInfo.value.designs.splice(index, 1)
     const target = removedElements[0]
     if (target) {
         const newIndex = Math.max(0, index - 1)
-        userTemplate.value.designs.splice(newIndex, 0, target)
+        publicInfo.value.designs.splice(newIndex, 0, target)
     }
 }
 function handleDown(index: number) {
-    if (!userTemplate.value.designs) {
+    if (!publicInfo.value.designs) {
         return
     }
-    const removedElements = userTemplate.value.designs.splice(index, 1)
+    const removedElements = publicInfo.value.designs.splice(index, 1)
     const target = removedElements[0]
     if (target) {
-        const newIndex = Math.min(userTemplate.value.designs.length, index + 1)
-        userTemplate.value.designs.splice(newIndex, 0, target)
+        const newIndex = Math.min(publicInfo.value.designs.length, index + 1)
+        publicInfo.value.designs.splice(newIndex, 0, target)
     }
 }
 defineExpose({

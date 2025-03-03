@@ -53,9 +53,9 @@
                 </template>
                 <div class="seoPage">
                     <!-- {{ userTemplate }} -->
-                    <FormUserTemplate :key="renderKey" v-model="userTemplate" :is-designing="true"
+                    <FormPublicInfoTemplate :key="renderKey" v-model="userTemplate" :is-designing="true"
                         :onchange="patchUser">
-                    </FormUserTemplate>
+                    </FormPublicInfoTemplate>
                     <!-- <el-card>
                         尚未完成的功能，敬請期待。
                     </el-card> -->
@@ -114,6 +114,7 @@ import type { IUser } from '~/types/user';
 import type { ITemplateDragSouce } from '~/types/eventTemplate';
 import type { IUserDesign } from '~/types/userDesign';
 import type { FormInstance } from 'element-plus';
+import type { IPublicInfoCard } from '~/types/ui';
 
 const repoUser = useRepoUser()
 const repoUserDesign = useRepoUserDesign()
@@ -138,15 +139,15 @@ const templateTemp = ref<ITemplateDragSouce>({
 })
 
 // 主要的模板資料
-const userTemplate = ref<IUser>({
+const userTemplate = ref<IPublicInfoCard>({
     id: '',
     name: '',
     description: '',
     seoName: '',
-    seoTitle: '',
-    isPublic: false,
-    avatar: '',
-    designs: [],
+    // seoTitle: '',
+    // isPublic: false,
+    // avatar: '',
+    // designs: [],
     sameAs: [],
 })
 

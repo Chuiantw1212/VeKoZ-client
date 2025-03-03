@@ -37,6 +37,7 @@
             <template v-else>
                 <pre class="content__desc">{{ publicInfo.description }}</pre>
             </template>
+            <!-- {{ publicInfo }} -->
             <AtomVekozSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs" @change="handleChange">
             </AtomVekozSocialMedia>
         </div>
