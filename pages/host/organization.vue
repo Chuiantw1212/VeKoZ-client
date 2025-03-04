@@ -6,7 +6,7 @@
                     <template #header>
                         <div class="vekoz-card-header">
                             <div class="header__btnGroup">
-                                <el-button v-loading="isLoading" :icon="FolderOpened"
+                                <el-button v-loading="isLoading" :icon="FolderOpened" :disabled="isLoading"
                                     @click="organizationListDialog.visibility = true">
                                     開啓組織
                                 </el-button>
@@ -14,7 +14,8 @@
                                     @click="organizationDialogVisible = true">
                                     變更資料
                                 </el-button> -->
-                                <el-button v-loading="isLoading" :icon="User" @click="editOrganizationMemberDialog">
+                                <el-button v-loading="isLoading" :disabled="isLoading" :icon="User"
+                                    @click="editOrganizationMemberDialog">
                                     管理成員
                                 </el-button>
                             </div>
