@@ -23,9 +23,8 @@
     </el-form>
     <el-table :data="tableList" style="width: 100%">
         <el-table-column prop="name" label="名稱" />
-        <el-table-column prop="auths" label="權限">
+        <el-table-column prop="auths" label="操作權限">
             <template #default="{ row }">
-                <!-- <el-checkbox></el-checkbox> 檢視 -->
                 <el-checkbox-group v-model="row.auths">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                         :label="auth.label" :value="auth.value">
@@ -38,11 +37,18 @@
         <el-table-column fixed="right" label="操作">
             <template #default="{ row }">
                 <el-button link type="danger" size="small" :icon="Delete" @click="deleteOrganizationMember(row)">
-                    刪除此用戶
+                    刪除
                 </el-button>
             </template>
         </el-table-column>
     </el-table>
+    <el-row justify="space-between">
+        <el-col>
+            <el-pagination v-model:current-page="tablePagination.currentPage"
+                v-model:page-size="tablePagination.pageSize" @change="getOrganizationMemberList()"
+                layout="prev, pager, next" :total="tableTotal" />
+        </el-col>
+    </el-row>
     <el-alert class="mt-20" type="info" show-icon :closable="false">
         部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。
     </el-alert>
@@ -55,6 +61,8 @@ import {
     Message,
 } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
+import type { IPagination } from '~/types/ui'
+
 const repoOrganizationMember = useRepoOrganizationMember()
 
 const organizationId = defineModel<string>('modelValue', {
@@ -96,7 +104,12 @@ const formRules = {
     }
 }
 
-const tableList = ref([])
+const tableList = ref<IOrganizationMember[]>([])
+const tableTotal = ref<number>(0)
+const tablePagination = ref<IPagination>({
+    pageSize: 5,
+    currentPage: 1,
+})
 
 onMounted(() => {
     getOrganizationMemberList()
@@ -109,8 +122,9 @@ async function deleteOrganizationMember(item: IOrganizationMember) {
 
 async function getOrganizationMemberList() {
     if (organizationId.value) {
-        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId.value)
-        tableList.value = result
+        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId.value, tablePagination.value)
+        tableList.value = result.items
+        tableTotal.value = result.total
     }
 }
 
