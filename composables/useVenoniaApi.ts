@@ -54,8 +54,12 @@ export default defineStore('api', {
             }
         },
         async authRequest(url: string, options: requestOptions) {
-            await this.setToken()
-            return await this.request(url, options)
+            try {
+                await this.setToken()
+                return await this.request(url, options)
+            } catch (error) {
+                console.trace(error)
+            }
         },
         async request(url: string, options: requestOptions) {
             const { method, body, headers, responseType = 'json' } = options

@@ -12,7 +12,7 @@ export default defineStore('organizationMember', () => {
     }
     async function postNewMember(body: IOrganizationMember) {
         const response = await defaultApi.authRequest(`/organization/member`, {
-            method: 'GET',
+            method: 'POST',
             body,
         })
         return response.json()

@@ -1,10 +1,12 @@
 <template>
-    <el-avatar :size="32" :src="avatar" />
+    <el-avatar v-if="repoUser.userInfo.id" :size="32" :src="repoUser.userInfo.avatar" />
+    <el-avatar v-else :size="32" :src="defaultAvatar" />
 </template>
 <script setup lang="ts">
-import avatar from '@/assets/mock/user.jpg'
+import defaultAvatar from '@/assets/logo/160_160.png'
 import { getAuth, onAuthStateChanged, type User, } from "firebase/auth"
 import type { IUser } from '~/types/user'
+
 const route = useRoute()
 const router = useRouter()
 const repoUser = useRepoUser()

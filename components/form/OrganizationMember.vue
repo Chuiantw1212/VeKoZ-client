@@ -14,7 +14,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item>
-                    <el-button :icon="Message" @click="postOrganizationMember()">
+                    <el-button :icon="Message" @click="postOrganizationMember">
                         送出邀請信
                     </el-button>
                 </el-form-item>
