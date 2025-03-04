@@ -87,6 +87,7 @@
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization'
 import { ElMessageBox } from 'element-plus'
+import type { IUser } from '~/types/user'
 import { View, FolderOpened, User, Close, Postcard } from '@element-plus/icons-vue'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
@@ -113,10 +114,11 @@ const organizationMemberDialog = reactive({
 const organizationDialogVisible = ref<boolean>(false)
 
 // Hooks
-onMounted(() => {
-    getOrganizationList()
-})
-
+watch(() => repoUser.userInfo, (newValue: IUser) => {
+    if (newValue.id) {
+        getOrganizationList()
+    }
+}, { immediate: true, })
 
 // Methods
 function getPersonalLink() {
