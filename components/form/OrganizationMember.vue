@@ -123,7 +123,7 @@ async function postOrganizationMember() {
         organizationId: organizationId.value,
         email: searchForm.value.email,
     })
-    searchForm.value.email = ''
+    formRef.value?.resetFields()
 }
 
 </script>
