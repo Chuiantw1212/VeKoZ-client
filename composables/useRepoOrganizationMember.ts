@@ -19,8 +19,15 @@ export default defineStore('organizationMember', () => {
         })
         return response.json()
     }
-    async function deleteOrganizationMember(memberEmail: string) {
-        const response = await defaultApi.authRequest(`/organization/member/${memberEmail}`, {
+    async function patchMember(body: IOrganizationMember): Promise<IOrganizationMember> {
+        const response = await defaultApi.authRequest(`/organization/member`, {
+            method: 'PATCH',
+            body,
+        })
+        return response.json()
+    }
+    async function deleteOrganizationMember(memberId: string) {
+        const response = await defaultApi.authRequest(`/organization/member/${memberId}`, {
             method: 'DELETE',
         })
         return response.json()
@@ -28,6 +35,7 @@ export default defineStore('organizationMember', () => {
     return {
         getOrganizationMemberList,
         postNewMember,
+        patchMember,
         deleteOrganizationMember,
     }
 })

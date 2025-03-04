@@ -28,7 +28,7 @@
         <el-table-column prop="name" label="名稱" />
         <el-table-column prop="auths" label="操作權限">
             <template #default="{ row }">
-                <el-checkbox-group v-model="row.auths">
+                <el-checkbox-group v-model="row.auths" @change="setMember(row)">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                         :label="auth.label" :value="auth.value">
                         {{ auth.label }}
@@ -64,12 +64,11 @@ import type { FormInstance } from 'element-plus'
 import type { IPagination } from '~/types/ui'
 
 const repoOrganizationMember = useRepoOrganizationMember()
+const repoUI = useRepoUI()
 
 const organizationId = defineModel<string>('modelValue', {
     default: '',
 })
-
-const memberAuths = ref([])
 
 const authOptions = [
     {
@@ -116,8 +115,14 @@ onMounted(() => {
 })
 
 // Methods
+async function setMember(item: IOrganizationMember) {
+    repoUI.debounce('setMember', () => {
+        repoOrganizationMember.patchMember(item)
+    })
+}
+
 async function deleteOrganizationMember(item: IOrganizationMember) {
-    await repoOrganizationMember.deleteOrganizationMember(String(item.email))
+    await repoOrganizationMember.deleteOrganizationMember(String(item.id))
     getOrganizationMemberList()
 }
 
