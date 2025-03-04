@@ -19,8 +19,15 @@ export default defineStore('organizationMember', () => {
         })
         return response.json()
     }
+    async function deleteOrganizationMember(memberEmail: string) {
+        const response = await defaultApi.authRequest(`/organization/member/${memberEmail}`, {
+            method: 'DELETE',
+        })
+        return response.json()
+    }
     return {
         getOrganizationMemberList,
         postNewMember,
+        deleteOrganizationMember,
     }
 })

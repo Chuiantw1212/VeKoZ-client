@@ -1,9 +1,12 @@
 <template>
-    <el-form ref="formRef" :rules="formRules" :model="searchForm">
+    <el-alert type="info" show-icon :closable="false">
+        部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。
+    </el-alert>
+    <el-form class="mt-20" ref="formRef" :rules="formRules" :model="searchForm">
         <el-row :gutter="20">
             <el-col :span="12">
-                <el-form-item label="搜尋用戶" prop="email">
-                    <el-input v-model="searchForm.email" placeholder="請輸入用戶Email">
+                <el-form-item label="新增成員" prop="email">
+                    <el-input v-model="searchForm.email" placeholder="請輸入邀請對象Email">
                         <template #prefix>
                             <el-icon>
                                 <Search />
@@ -36,8 +39,8 @@
         <el-table-column prop="email" label="電子信箱" />
         <el-table-column fixed="right" label="操作">
             <template #default="{ row }">
-                <el-button link type="danger" size="small" :icon="Delete" @click="deleteOrganizationMember(row)">
-                    刪除
+                <el-button circle plain type="danger" :icon="Delete" @click="deleteOrganizationMember(row)">
+
                 </el-button>
             </template>
         </el-table-column>
@@ -49,9 +52,6 @@
                 layout="prev, pager, next" :total="tableTotal" />
         </el-col>
     </el-row>
-    <el-alert class="mt-20" type="info" show-icon :closable="false">
-        部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。
-    </el-alert>
 </template>
 <script setup lang="ts">
 import type { IOrganizationMember } from '~/types/organization'
@@ -117,7 +117,8 @@ onMounted(() => {
 
 // Methods
 async function deleteOrganizationMember(item: IOrganizationMember) {
-
+    await repoOrganizationMember.deleteOrganizationMember(String(item.email))
+    getOrganizationMemberList()
 }
 
 async function getOrganizationMemberList() {
