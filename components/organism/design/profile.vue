@@ -23,7 +23,7 @@
                 </AtomAvatarUploader>
             </div>
             <template v-if="isDesigning">
-                <el-input class="content__header" v-if="publicInfo.name" v-model="publicInfo.name" :maxlength="30"
+                <el-input class="content__header" v-model="publicInfo.name" :maxlength="30" placeholder="請輸入組織名稱"
                     :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
             </template>
             <template v-else>
