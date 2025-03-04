@@ -5,6 +5,8 @@
 import avatar from '@/assets/mock/user.jpg'
 import { getAuth, onAuthStateChanged, type User, } from "firebase/auth"
 import type { IUser } from '~/types/user'
+const route = useRoute()
+const router = useRouter()
 const repoUser = useRepoUser()
 
 // Hooks
@@ -23,14 +25,15 @@ function addFirebaseListener() {
         }
         if (firebaseUser.emailVerified) {
             // 判斷是否為已註冊用戶
-            const user: IUser = await repoUser.getUser()
+            const user = await repoUser.getUser()
             console.log({
                 user
             })
-            if (user.id) {
+            if (user?.id) {
                 handleLoggedIn(user)
             } else {
-                registeredNewUser(firebaseUser)
+                await registeredNewUser(firebaseUser)
+                router.push('/')
             }
         } else {
             // 給出重新驗證的畫面
@@ -40,6 +43,9 @@ function addFirebaseListener() {
 
 async function handleLoggedIn(user: IUser) {
     const { preference } = user
+    if (route.name === 'signin') {
+        router.push('/')
+    }
     // // 使用上次登入狀態或是預設一般參加者
     // repoUser.setUserType(preference?.userType ?? 'attendee')
 }
@@ -49,7 +55,7 @@ async function registeredNewUser(firebaseUser: User) {
     /**
      * https://schema.org/Person
      */
-    const venoniaUser: IUser = {
+    const newUser: IUser = {
         emailVerified,
         name: displayName ?? '',
         email: email ?? '',
@@ -58,5 +64,6 @@ async function registeredNewUser(firebaseUser: User) {
         providerId: providerId,
         uid: uid
     }
+    await repoUser.postUser(newUser)
 }
 </script>

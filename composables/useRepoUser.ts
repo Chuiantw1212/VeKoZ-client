@@ -20,23 +20,27 @@ export default defineStore('user', () => {
      * 抓用戶自己的資料專用
      * @returns 
      */
-    async function getUser(): Promise<IUser> {
-        const response = await defaultApi.authRequest(`/user`, {
-            method: 'GET',
-        })
-        const user = await response.json() as IUser
-        userInfo.value = user
-        userPreference.value = user.preference as IUserPreference
-        if (user.preference) {
-            userType.value = user.preference.userType ?? ''
+    async function getUser(): Promise<IUser | undefined> {
+        try {
+            const response = await defaultApi.authRequest(`/user`, {
+                method: 'GET',
+            })
+            const user = await response.json() as IUser
+            userInfo.value = user
+            userPreference.value = user.preference as IUserPreference
+            if (user.preference) {
+                userType.value = user.preference.userType ?? ''
+            }
+            if (String(route.name).includes('host')) {
+                userType.value = 'host'
+            } else {
+                // 首頁強制轉換，不然會跑版
+                userType.value = 'attendee'
+            }
+            return userInfo.value
+        } catch (error: any) {
+            console.log(error.message)
         }
-        if (String(route.name).includes('host')) {
-            userType.value = 'host'
-        } else {
-            // 首頁強制轉換，不然會跑版
-            userType.value = 'attendee'
-        }
-        return userInfo.value
     }
     async function getUserPublicInfo(userId: string): Promise<IUser> {
         const response = await defaultApi.authRequest(`/user/${userId}`, {

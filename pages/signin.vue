@@ -11,7 +11,16 @@ const { $firebase } = useNuxtApp()
 
 function initializeFirebaseUI() {
     const nuxtAppFirebase = $firebase as any
-    // https://firebase.google.com/docs/auth/web/firebaseui
+    /**
+     * 需要的權限
+     * Make secondary Google calendars, and see, create, change, and delete events on them.
+     * 一個組織一個月曆
+     * https://developers.google.com/calendar/api/auth
+     */
+    /**
+     * Firebase既有的登入UI套件
+     * https://firebase.google.com/docs/auth/web/firebaseui
+     */
     const uiConfig = {
         callbacks: {
             signInSuccessWithAuthResult: function (authResult: any, redirectUrl: string) {
@@ -21,7 +30,7 @@ function initializeFirebaseUI() {
         signInOptions: [
             {
                 provider: nuxtAppFirebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                scopes: ['https://www.googleapis.com/auth/calendar.settings.readonly'],
+                scopes: ['https://www.googleapis.com/auth/calendar.app.created'],
             },
             {
                 provider: nuxtAppFirebase.auth.EmailAuthProvider.PROVIDER_ID,
