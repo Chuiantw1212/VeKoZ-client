@@ -10,8 +10,8 @@ import type { IUser } from '~/types/user'
 const route = useRoute()
 const router = useRouter()
 const repoUser = useRepoUser()
-const repoUI = useRepoUI()
 const unsuber = ref<Unsubscribe>()
+const repoUI = useRepoUI()
 
 // Hooks
 onMounted(() => {
@@ -31,6 +31,7 @@ function addFirebaseListener() {
         if (!firebaseUser) {
             // 這邊如果做事會中斷登入流程。
             repoUser.setUserType('')
+            router.push('/')
             return
         }
         if (firebaseUser.emailVerified) {

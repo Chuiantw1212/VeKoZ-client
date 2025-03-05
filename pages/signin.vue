@@ -6,8 +6,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { OAuthCredentialOptions } from 'firebase/auth/web-extension';
+import type { AdditionalUserInfo, Auth, AuthCredential, User } from 'firebase/auth/web-extension';
 const { $firebase } = useNuxtApp()
+
+const router = useRouter()
+const repoUser = useRepoUser()
 
 function initializeFirebaseUI() {
     const nuxtAppFirebase = $firebase as any
@@ -23,7 +26,16 @@ function initializeFirebaseUI() {
      */
     const uiConfig = {
         callbacks: {
-            signInSuccessWithAuthResult: function (authResult: any, redirectUrl: string) {
+            signInSuccessWithAuthResult: async function (authResult: any, redirectUrl: string) {
+                /**
+                 * 只有用戶第一次登入成功會走這裡
+                 */
+                const additionalUserInfo: AdditionalUserInfo = authResult.additionalUserInfo
+                const credential: AuthCredential = authResult.credential
+                const user: User = authResult.user
+                await repoUser.postNewUser()
+                await repoUser.getUser()
+                router.push('/')
                 return false;
             },
         },
@@ -36,7 +48,11 @@ function initializeFirebaseUI() {
                 provider: nuxtAppFirebase.auth.EmailAuthProvider.PROVIDER_ID,
             }
         ],
-        signInFlow: 'popup', // redirect開發時，onAuthStateChanged總是回傳null，必須使用popup才有可能登入成功。
+        /**
+         * redirect 時，onAuthStateChanged總是回傳null，必須使用popup才有可能登入成功。
+         * popoup 則可能觸發 Cross-Origin-Opener-Policy policy would block the window.closed call.導致登入失敗。
+         */
+        signInFlow: 'popup',
         // Terms of service url.
         tosUrl: 'https://storage.googleapis.com/public.econ-sense.com/Terms%20of%20Use.pdf',
         // Privacy policy url.

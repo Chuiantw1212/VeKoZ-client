@@ -8,6 +8,9 @@ import "firebase/compat/auth";
 await import(`@/public/firebase/firebase-ui-auth__zh_tw.js`)
 await import(`@/public/firebase/firebase-ui-auth.css`)
 
+/**
+ * https://firebase.google.com/docs/auth/web/redirect-best-practices
+ */
 export default defineNuxtPlugin(() => {
     // Create App
     let firebaseConfig = {
