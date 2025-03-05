@@ -61,30 +61,30 @@ const currentOrganizaiotnId = defineModel<string>('modelValue', {
 
 // Hooks
 onMounted(() => {
-    getOrganizationList()
+    // getOrganizationMemberList()
 })
 
 // Methods
-async function getOrganizationList() {
-    isLoading.value = true
-    const response: IOrganization[] = await repoOrganization.getOrganizationList()
-    response.sort((a, b) => {
-        const timeA = new Date(String(a.lastmod)).getTime()
-        const timeB = new Date(String(b.lastmod)).getTime()
-        return timeB - timeA
-    })
-    if (response.length >= 2) {
-        maximumReached.value = true
-    }
-    organizationList.value = [
-        {
-            id: 'blank',
-            name: `${repoUser.userInfo.name}的新組織`,
-        },
-        ...response,
-    ]
-    isLoading.value = false
-}
+// async function getOrganizationList() {
+//     isLoading.value = true
+//     const response: IOrganization[] = await repoOrganization.getOrganizationList()
+//     response.sort((a, b) => {
+//         const timeA = new Date(String(a.lastmod)).getTime()
+//         const timeB = new Date(String(b.lastmod)).getTime()
+//         return timeB - timeA
+//     })
+//     if (response.length >= 2) {
+//         maximumReached.value = true
+//     }
+//     organizationList.value = [
+//         {
+//             id: 'blank',
+//             name: `${repoUser.userInfo.name}的新組織`,
+//         },
+//         ...response,
+//     ]
+//     isLoading.value = false
+// }
 async function selectOrganization(organization: IOrganization) {
     if (!organization.id) {
         return
@@ -101,9 +101,24 @@ async function selectOrganization(organization: IOrganization) {
     }
 }
 async function deleteOrganization(organization: IOrganization) {
-    isLoading.value = true
-    await repoOrganization.deleteOrganization(String(organization.id))
-    getOrganizationList()
-    isLoading.value = false
+    try {
+        const result = await ElMessageBox.confirm(
+            `永久刪除"${organization.name}"？刪除後無法還原。`,
+            {
+                title: '警告',
+                confirmButtonText: '確認',
+                cancelButtonText: '取消',
+                type: 'warning',
+            }
+        )
+        if (result === 'confirm') {
+            isLoading.value = true
+            await repoOrganization.deleteOrganization(String(organization.id))
+            getOrganizationList()
+            isLoading.value = false
+        }
+    } catch (error: any) {
+        // Do nothing
+    }
 }
 </script>

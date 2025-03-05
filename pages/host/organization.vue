@@ -96,6 +96,7 @@ const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
+const repoOrganizationMember = useRepoOrganizationMember()
 
 const organizationList = ref<IOrganization[]>([])
 const currentPublicInfo = ref<IPublicInfoCard>({
@@ -117,7 +118,7 @@ const organizationDialogVisible = ref<boolean>(false)
 // Hooks
 watch(() => repoUser.userInfo, (newValue: IUser) => {
     if (newValue.id) {
-        getOrganizationList()
+        getOrganizationMemberships()
     }
 }, { immediate: true, })
 
@@ -127,8 +128,8 @@ function getPersonalLink() {
     return `${currentPublicInfo.value.urlPath}?${openInLineExternal}`
 }
 
-async function getOrganizationList() {
-    const response: IOrganization[] = await repoOrganization.getOrganizationList()
+async function getOrganizationMemberships() {
+    const response: IOrganization[] = await repoOrganizationMember.getMemberOrganizatoinList()
     response.sort((a, b) => {
         const timeA = new Date(String(a.lastmod)).getTime()
         const timeB = new Date(String(b.lastmod)).getTime()
@@ -155,7 +156,7 @@ async function createOrganization() {
 
 function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {
     return {
-        id: String(item.id),
+        id: item.id ?? '',
         banner: item.banner,
         image: item.logo,
         name: item.name,
@@ -171,66 +172,14 @@ async function openOrganization(organizationId: string) {
     organizationListDialog.visibility = false
 }
 
-// async function hanelDialogConfirm() {
-//     isDialogLoading.value = true
-//     if (organizationListDialog.mode === 'ADD') {
-//         // await postOrganization()
-//     }
-//     if (organizationListDialog.mode === 'EDIT') {
-//         await patchOrganization()
-//     }
-//     isDialogLoading.value = false
-// }
-
-// async function postOrganization() {
-//     await repoOrganization.postOrganization(organization.value)
-//     getOrganizationList()
-//     organizationListDialog.visibility = false
-// }
-
 async function patchOrganization() {
     isLoading.value = true
     await repoOrganization.patchOrganization(currentPublicInfo.value)
     isLoading.value = false
 }
 
-// function openNewDialog() {
-//     organization.value = {} as any
-//     organizationListDialog.visibility = true
-//     organizationListDialog.mode = 'ADD'
-// }
-
-function editOrganizationDialog(item: IOrganization) {
-    // Object.assign(organization.value, item)
-    organizationListDialog.visibility = true
-    organizationListDialog.mode = 'EDIT'
-}
-
 function editOrganizationMemberDialog(item: IOrganization) {
-    // Object.assign(organization.value, item)
     organizationMemberDialog.visibility = true
-}
-
-async function deleteOrganization(item: IOrganization) {
-    try {
-        const result = await ElMessageBox.confirm(
-            `永久刪除"${item.name}"？刪除後無法還原。`,
-            {
-                title: '警告',
-                confirmButtonText: '確認',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        )
-        if (result === 'confirm') {
-            // isLoading.value = true
-            // await repoOrganization.deleteOrganization(item.id)
-            // await getOrganizationList()
-            // isLoading.value = false
-        }
-    } catch (error: any) {
-        // Do nothing
-    }
 }
 </script>
 <style lang="scss" scoped>

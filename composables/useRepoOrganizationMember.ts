@@ -5,6 +5,13 @@ import type { IPagination } from '~/types/ui'
 
 export default defineStore('organizationMember', () => {
     const defaultApi = useVenoniaApi()
+    async function getMemberOrganizatoinList(pagination?: IPagination) {
+        const response = await defaultApi.authRequest(`/member/organization/list`, {
+            method: 'GET',
+            params: pagination,
+        })
+        return response.json()
+    }
     async function getOrganizationMemberList(organizationId: string, pagination: IPagination) {
         const response = await defaultApi.authRequest(`/organization/${organizationId}/member/list`, {
             method: 'GET',
@@ -33,6 +40,7 @@ export default defineStore('organizationMember', () => {
         return response.json()
     }
     return {
+        getMemberOrganizatoinList,
         getOrganizationMemberList,
         postNewMember,
         patchMember,

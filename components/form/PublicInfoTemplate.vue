@@ -102,6 +102,7 @@ watch(() => publicInfo.value.id, (value) => {
 
 // methods
 async function getEventList() {
+    console.log('publicInfo.value.id', publicInfo.value.id)
     if (publicInfo.value.id) {
         const payload: IEventQuery = {}
         if (props.type === 'user') {
