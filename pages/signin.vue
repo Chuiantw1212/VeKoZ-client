@@ -35,6 +35,7 @@ function initializeFirebaseUI() {
                 const user: User = authResult.user
                 await repoUser.postNewUser()
                 await repoUser.getUser()
+                repoUser.setUserType('attendee')
                 router.push('/')
                 return false;
             },

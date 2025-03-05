@@ -28,7 +28,7 @@
         <el-table-column prop="name" label="名稱" />
         <el-table-column prop="allowMethods" label="操作權限">
             <template #default="{ row }">
-                <el-checkbox-group v-model="row.auths" @change="setMember(row)">
+                <el-checkbox-group v-model="row.allowMethods" @change="setMember(row)">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                         :label="auth.label" :value="auth.value">
                         {{ auth.label }}
@@ -65,6 +65,7 @@ import type { IPagination } from '~/types/ui'
 
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUI = useRepoUI()
+const repoUser = useRepoUser()
 
 const organizationId = defineModel<string>('modelValue', {
     default: '',
@@ -73,20 +74,20 @@ const organizationId = defineModel<string>('modelValue', {
 const authOptions = [
     {
         label: '1.檢視',
-        value: 'get',
+        value: 'GET',
         disabled: true,
     },
     {
         label: '2.修改',
-        value: 'patch'
+        value: 'PATCH'
     },
     {
         label: '3.新增',
-        value: 'post',
+        value: 'POST',
     },
     {
         label: '4.刪除',
-        value: 'delete'
+        value: 'DELETE'
     },
 ]
 
