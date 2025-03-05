@@ -26,7 +26,7 @@
     </el-form>
     <el-table :data="tableList" style="width: 100%">
         <el-table-column prop="name" label="名稱" />
-        <el-table-column prop="auths" label="操作權限">
+        <el-table-column prop="allowMethods" label="操作權限">
             <template #default="{ row }">
                 <el-checkbox-group v-model="row.auths" @change="setMember(row)">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"

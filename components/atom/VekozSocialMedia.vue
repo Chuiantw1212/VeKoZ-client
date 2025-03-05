@@ -4,7 +4,8 @@
         <template v-for="(url, index) in socialUrls">
             <el-button class="socialMedia__icon" :class="{ 'socialMedia__icon--isDesigning': isDesigning }" text circle
                 @click="handleSocialVisit(index)">
-                <img v-if="url.includes('youtube.com/')" class="link__icon" src="@/assets/icon/youtube.svg">
+                <img v-if="validateEmail(url)" class="link__icon" src="@/assets/icon/email.svg">
+                <img v-else-if="url.includes('youtube.com/')" class="link__icon" src="@/assets/icon/youtube.svg">
                 <img v-else-if="url.includes('facebook.com/')" class="link__icon"
                     src="@/assets/icon/facebook-circle.svg">
                 <img v-else-if="url.includes('tiktok.com/')" class="link__icon" src="@/assets/icon/tiktok.svg">
@@ -15,12 +16,14 @@
                 <img v-else-if="url.includes('linkedin.com/')" class="link__icon" src="@/assets/icon/linkedin.svg">
                 <img v-else-if="url.includes('line.me/')" class="link__icon" src="@/assets/icon/line-logo.svg">
                 <img v-else-if="url.includes('github.com/')" class="link__icon" src="@/assets/icon/github.svg">
-                <img v-else-if="validateEmail(url)" class="link__icon" src="@/assets/icon/email.svg">
                 <img v-else class="link__icon" src="@/assets/icon/web.svg">
             </el-button>
         </template>
         <div v-if="!socialUrls.length && isDesigning" class="socialMedia__grid">
             <!-- 示意圖： -->
+            <el-button class="socialMedia__icon" text circle>
+                <img class="link__icon" src="@/assets/icon/email.svg">
+            </el-button>
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/youtube.svg">
             </el-button>
@@ -50,9 +53,6 @@
             </el-button>
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/github.svg">
-            </el-button>
-            <el-button class="socialMedia__icon" text circle>
-                <img class="link__icon" src="@/assets/icon/email.svg">
             </el-button>
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/web.svg">

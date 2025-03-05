@@ -28,7 +28,7 @@
                     <OrganismUserAuth></OrganismUserAuth>
                 </el-menu-item>
             </NuxtLink>
-            <NuxtLink v-else to="/signin">
+            <NuxtLink v-else-if="route.name !== 'signin'" to="/signin">
                 <el-menu-item class="headerMenu__firstItem">
                     登入
                 </el-menu-item>
@@ -46,6 +46,7 @@ const activeIndex = ref('1')
 
 // Hooks
 const router = useRouter()
+const route = useRoute()
 
 const isFullScreen = computed(() => {
     if (repoUser.userPreference) {

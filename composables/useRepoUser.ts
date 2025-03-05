@@ -73,10 +73,9 @@ export default defineStore('user', () => {
             }
         }
     }
-    async function postUser(body: IUser): Promise<IUser> {
+    async function postNewUser(): Promise<IUser> {
         const response = await defaultApi.authRequest(`/user`, {
             method: 'POST',
-            body,
         })
         return response
     }
@@ -131,7 +130,7 @@ export default defineStore('user', () => {
         getUserSeoInfo,
         setUserType,
         deleteUser,
-        postUser,
+        postNewUser,
         patchUser,
         putUserAvatar,
         // User preference

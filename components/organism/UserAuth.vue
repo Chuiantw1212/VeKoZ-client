@@ -4,22 +4,30 @@
 </template>
 <script setup lang="ts">
 import defaultAvatar from '@/assets/logo/160_160.png'
-import { getAuth, onAuthStateChanged, type User, } from "firebase/auth"
+import { getAuth, onAuthStateChanged, type Unsubscribe, type User, } from "firebase/auth"
 import type { IUser } from '~/types/user'
 
 const route = useRoute()
 const router = useRouter()
 const repoUser = useRepoUser()
+const repoUI = useRepoUI()
+const unsuber = ref<Unsubscribe>()
 
 // Hooks
 onMounted(() => {
     addFirebaseListener()
 })
 
+onBeforeUnmount(() => {
+    if (unsuber.value) {
+        unsuber.value()
+    }
+})
+
 // Methods
 function addFirebaseListener() {
     const auth = getAuth()
-    onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+    unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
         if (!firebaseUser) {
             // 這邊如果做事會中斷登入流程。
             repoUser.setUserType('')
@@ -27,16 +35,17 @@ function addFirebaseListener() {
         }
         if (firebaseUser.emailVerified) {
             // 判斷是否為已註冊用戶
+            console.log('executed', firebaseUser)
+            // repoUI.debounce('newUser', async () => {
             const user = await repoUser.getUser()
-            console.log({
-                user
-            })
             if (user?.id) {
                 handleLoggedIn(user)
             } else {
-                await registeredNewUser(firebaseUser)
+                await repoUser.postNewUser()
+                await repoUser.getUser()
                 router.push('/')
             }
+            // })
         } else {
             // 給出重新驗證的畫面
         }
@@ -50,22 +59,5 @@ async function handleLoggedIn(user: IUser) {
     }
     // // 使用上次登入狀態或是預設一般參加者
     // repoUser.setUserType(preference?.userType ?? 'attendee')
-}
-
-async function registeredNewUser(firebaseUser: User) {
-    const { emailVerified, displayName, email, phoneNumber, photoURL, providerId, uid } = firebaseUser
-    /**
-     * https://schema.org/Person
-     */
-    const newUser: IUser = {
-        emailVerified,
-        name: displayName ?? '',
-        email: email ?? '',
-        telephone: phoneNumber ?? '',
-        avatar: photoURL ?? '',
-        providerId: providerId,
-        uid: uid
-    }
-    await repoUser.postUser(newUser)
 }
 </script>

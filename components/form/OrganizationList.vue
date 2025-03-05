@@ -11,7 +11,7 @@
             </template>
         </el-table-column>
         <el-table-column prop="name" label="公司名稱" />
-        <el-table-column prop="auth" label="權限">
+        <el-table-column prop="auth" label="資料權限">
             TODO
         </el-table-column>
         <el-table-column prop="" label="選擇">
