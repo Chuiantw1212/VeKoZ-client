@@ -86,7 +86,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import type { IOrganization } from '~/types/organization'
+import type { IOrganization, IOrganizationMember } from '~/types/organization'
 import { ElMessageBox } from 'element-plus'
 import type { IUser } from '~/types/user'
 import { View, FolderOpened, User, Close, Postcard } from '@element-plus/icons-vue'
@@ -98,7 +98,7 @@ const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 
-const organizationList = ref<IOrganization[]>([])
+const membershipList = ref<IOrganization[]>([])
 const currentPublicInfo = ref<IPublicInfoCard>({
     id: '',
 })
@@ -129,20 +129,23 @@ function getPersonalLink() {
 }
 
 async function getOrganizationMemberships() {
-    const response: IOrganization[] = await repoOrganizationMember.getMemberOrganizatoinList()
-    response.sort((a, b) => {
-        const timeA = new Date(String(a.lastmod)).getTime()
-        const timeB = new Date(String(b.lastmod)).getTime()
-        return timeB - timeA
+    const response: IOrganizationMember[] = await repoOrganizationMember.getMemberOrganizatoinList({
+        pageSize: 5,
+        currentPage: 1,
     })
-    organizationList.value = response
+    membershipList.value = response
     if (response[0]) {
-        // 開啟上一次編輯的組織    
-        currentPublicInfo.value = getOrganizationPublicInfo(response[0])
-    } else {
-        // 或是新增組織
-        createOrganization()
+        const organizationId = response[0].organizationId
+        const organization = await repoOrganization.getOrganization(String(organizationId))
+        currentPublicInfo.value = getOrganizationPublicInfo(organization)
     }
+    // if (response[0]) {
+    //     // 開啟上一次編輯的組織    
+    //     currentPublicInfo.value = getOrganizationPublicInfo(response[0])
+    // } else {
+    //     // 或是新增組織
+    //     createOrganization()
+    // }
 }
 
 async function createOrganization() {

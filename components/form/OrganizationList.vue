@@ -1,18 +1,25 @@
 <template>
-    <el-table v-loading="isLoading" :data="organizationList" style="width: 100%">
+    <el-table v-loading="isLoading" :data="membershipList" style="width: 100%">
         <el-table-column prop="lastmod" label="上次修改">
             <template #default="{ row }">
                 <template v-if="row.lastmod">
-                    {{ new Date(row.lastmod).toLocaleString('zh-TW') }}
+                    {{ new Date(row.lastmod).toLocaleDateString('zh-TW') }}
                 </template>
                 <template v-else>
                     -
                 </template>
             </template>
         </el-table-column>
-        <el-table-column prop="name" label="公司名稱" />
+        <el-table-column prop="organizationName" label="公司名稱" />
         <el-table-column prop="auth" label="資料權限">
-            TODO
+            <template #default="{ row }">
+                <el-checkbox-group v-model="row.allowMethods" :disabled="true">
+                    <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
+                        :label="auth.label" :value="auth.value">
+                        {{ auth.label }}
+                    </el-checkbox>
+                </el-checkbox-group>
+            </template>
         </el-table-column>
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
@@ -47,44 +54,61 @@
 </template>
 <script setup lang="ts">
 import type { IOrganization } from '~/types/organization';
+import type { IOrganizationMember } from '~/types/organization';
 import { Delete } from '@element-plus/icons-vue';
 const emit = defineEmits(['update:modelValue', 'create'])
 const maximumReached = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 const repoUser = useRepoUser()
-const organizationList = ref<IOrganization[]>([])
+const repoOrganizationMember = useRepoOrganizationMember()
+const membershipList = ref<IOrganization[]>([])
 const isLoading = ref<boolean>(false)
 const currentOrganizaiotnId = defineModel<string>('modelValue', {
     type: String,
     default: '',
 })
 
+const authOptions = [
+    {
+        label: '1.檢視',
+        value: 'GET',
+        disabled: true,
+    },
+    {
+        label: '2.修改',
+        value: 'PATCH'
+    },
+    {
+        label: '3.新增',
+        value: 'POST',
+    },
+    {
+        label: '4.刪除',
+        value: 'DELETE'
+    },
+]
+
 // Hooks
 onMounted(() => {
-    // getOrganizationMemberList()
+    getOrganizationMemberships()
 })
 
 // Methods
-// async function getOrganizationList() {
-//     isLoading.value = true
-//     const response: IOrganization[] = await repoOrganization.getOrganizationList()
-//     response.sort((a, b) => {
-//         const timeA = new Date(String(a.lastmod)).getTime()
-//         const timeB = new Date(String(b.lastmod)).getTime()
-//         return timeB - timeA
-//     })
-//     if (response.length >= 2) {
-//         maximumReached.value = true
-//     }
-//     organizationList.value = [
-//         {
-//             id: 'blank',
-//             name: `${repoUser.userInfo.name}的新組織`,
-//         },
-//         ...response,
-//     ]
-//     isLoading.value = false
-// }
+async function getOrganizationMemberships() {
+    isLoading.value = true
+    const response: IOrganizationMember[] = await repoOrganizationMember.getMemberOrganizatoinList({
+        pageSize: 5,
+        currentPage: 1,
+    })
+    membershipList.value = [
+        {
+            id: 'blank',
+            organizationName: `${repoUser.userInfo.name}的新組織`,
+        },
+        ...response,
+    ]
+    isLoading.value = false
+}
 async function selectOrganization(organization: IOrganization) {
     if (!organization.id) {
         return

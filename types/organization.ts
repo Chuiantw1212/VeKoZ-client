@@ -20,4 +20,6 @@ export type IOrganizationMember = {
     name?: string,
     email?: string,
     organizationId?: string,
+    organizationName?: string,
+    lastmod?: string,
 }
