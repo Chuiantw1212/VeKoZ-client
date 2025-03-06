@@ -6,8 +6,7 @@
                     <template #header>
                         <div class="vekoz-card-header">
                             <div class="header__btnGroup">
-                                <el-button :icon="FolderOpened" :disabled="isLoading"
-                                    @click="organizationListDialog.visibility = true">
+                                <el-button :icon="FolderOpened" :disabled="isLoading" @click="orgListVisible = true">
                                     開啓組織
                                 </el-button>
                                 <!-- <el-button   :icon="Postcard"
@@ -48,13 +47,13 @@
             </el-col>
         </el-row>
 
-        <AtomVekozDialog v-model="organizationListDialog.visibility">
+        <AtomVekozDialog v-model="orgListVisible">
             <template #header>
                 <el-text size="large">
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList v-if="organizationListDialog.visibility" :modelValue="currentMembership"
+            <FormOrganizationList v-if="orgListVisible" :modelValue="currentMembership"
                 @update:modelValue="openOrganization($event)" @create="createOrganization()">
             </FormOrganizationList>
         </AtomVekozDialog>
@@ -68,18 +67,18 @@
             <FormOrganization :modelValue="currentPublicInfo"></FormOrganization>
         </AtomVekozDialog>
 
-        <AtomVekozDialog v-model="organizationMemberDialog.visibility" :showClose="false">
+        <AtomVekozDialog v-model="memberListVisible" :showClose="false">
             <template #header>
+                <img :src="currentPublicInfo.image">
                 <el-text size="large">
-                    成員與權限設定
+                    {{ currentPublicInfo.name }} 成員管理
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button :icon="Close" text @click="organizationMemberDialog.visibility = false">
+                <el-button :icon="Close" text @click="memberListVisible = false">
                 </el-button>
             </template>
-            <FormOrganizationMember v-if="organizationMemberDialog.visibility" v-model="currentPublicInfo.id"
-                :mode="organizationMemberDialog.mode">
+            <FormOrganizationMember v-if="memberListVisible" v-model="currentPublicInfo.id">
             </FormOrganizationMember>
         </AtomVekozDialog>
     </div>
@@ -110,16 +109,8 @@ const editingDisabled = computed(() => {
     }
 })
 
-const organizationListDialog = reactive({
-    visibility: false,
-    mode: ''
-})
-
-const organizationMemberDialog = reactive({
-    visibility: false,
-    mode: '',
-})
-
+const orgListVisible = ref<boolean>(false)
+const memberListVisible = ref<boolean>(false)
 const organizationDialogVisible = ref<boolean>(false)
 
 // Hooks
@@ -156,7 +147,7 @@ async function createOrganization() {
     }
     const createdOrganization = await repoOrganization.postOrganization(newOrganization)
     currentPublicInfo.value = convertPublicInfo(createdOrganization)
-    organizationListDialog.visibility = false
+    orgListVisible.value = false
 }
 
 function convertPublicInfo(item: IOrganization): IPublicInfoCard {
@@ -176,7 +167,7 @@ async function openOrganization(membership: IOrganizationMember) {
     if (membership.organizationId) {
         const result = await repoOrganization.getOrganization(membership.organizationId)
         currentPublicInfo.value = convertPublicInfo(result)
-        organizationListDialog.visibility = false
+        orgListVisible.value = false
     }
 }
 
@@ -190,7 +181,7 @@ async function patchOrganization() {
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {
-    organizationMemberDialog.visibility = true
+    memberListVisible.value = true
 }
 </script>
 <style lang="scss" scoped>

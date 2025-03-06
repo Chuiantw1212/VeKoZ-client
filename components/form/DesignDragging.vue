@@ -104,7 +104,6 @@ const props = defineProps({
     type: {
         type: String,
         default: 'attendee',
-        required: true,
     },
 })
 

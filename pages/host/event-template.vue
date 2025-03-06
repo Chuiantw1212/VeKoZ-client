@@ -23,7 +23,7 @@
                     <!-- <el-divider>客製化內容</el-divider>
                     <el-divider>標準內容</el-divider> -->
                     <FormEventTemplate v-model="eventTemplate.designs" :isDesigning="true"
-                        :onchange="handleDesignChanged" type="host" @remove="removeDesign($event)"
+                        :onchange="handleDesignChanged" @remove="removeDesign($event)"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"

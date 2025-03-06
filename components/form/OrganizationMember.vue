@@ -26,10 +26,11 @@
             </el-row>
         </el-form>
         <el-table :data="memberList" style="width: 100%">
-            <el-table-column prop="name" label="名稱" />
+            <el-table-column prop="email" label="電子信箱" />
+            <el-table-column prop="name" label="成員名稱" />
             <el-table-column prop="allowMethods" label="操作權限">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" :disabled="checkRowDisabled(row)"
+                    <el-checkbox-group v-model="row.allowMethods" :disabled="checkRowDisabled(row) || checkIsSelf(row)"
                         @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">
@@ -38,7 +39,6 @@
                     </el-checkbox-group>
                 </template>
             </el-table-column>
-            <el-table-column prop="email" label="電子信箱" />
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
                     <el-button v-if="!checkRowDisabled(row)" v-loading="isLoading" :icon="Delete"
@@ -123,9 +123,14 @@ onMounted(() => {
 })
 
 // Methods
+function checkIsSelf(member: IOrganizationMember) {
+    const isSelfMember = repoUser.userInfo.email === member.email
+    return isSelfMember
+}
+
 function checkRowDisabled(member: IOrganizationMember) {
-    const isSelf = repoUser.userInfo.id === member.organizationFounderId
-    return isSelf || member.isFounder
+    const isSelfFounder = repoUser.userInfo.id === member.organizationFounderId
+    return isSelfFounder || member.isFounder
 }
 
 async function setMember(item: IOrganizationMember) {
