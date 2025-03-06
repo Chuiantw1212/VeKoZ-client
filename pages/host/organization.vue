@@ -55,7 +55,7 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList :modelValue="currentPublicInfo.id" @update:modelValue="openOrganization($event)"
+            <FormOrganizationList :modelValue="currentPublicInfo" @update:modelValue="openOrganization($event)"
                 @create="createOrganization()">
             </FormOrganizationList>
         </AtomVekozDialog>
@@ -137,11 +137,11 @@ async function getOrganizationMemberships() {
     if (response[0]) {
         const organizationId = response[0].organizationId
         const organization = await repoOrganization.getOrganization(String(organizationId))
-        currentPublicInfo.value = getOrganizationPublicInfo(organization)
+        currentPublicInfo.value = convertPublicInfo(organization)
     }
     // if (response[0]) {
     //     // 開啟上一次編輯的組織    
-    //     currentPublicInfo.value = getOrganizationPublicInfo(response[0])
+    //     currentPublicInfo.value = convertPublicInfo(response[0])
     // } else {
     //     // 或是新增組織
     //     createOrganization()
@@ -153,11 +153,11 @@ async function createOrganization() {
         name: `${repoUser.userInfo.name}的組織`,
     }
     const createdOrganization = await repoOrganization.postOrganization(newOrganization)
-    currentPublicInfo.value = getOrganizationPublicInfo(createdOrganization)
+    currentPublicInfo.value = convertPublicInfo(createdOrganization)
     organizationListDialog.visibility = false
 }
 
-function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {
+function convertPublicInfo(item: IOrganization): IPublicInfoCard {
     return {
         id: item.id ?? '',
         banner: item.banner,
@@ -169,16 +169,20 @@ function getOrganizationPublicInfo(item: IOrganization): IPublicInfoCard {
     }
 }
 
-async function openOrganization(organizationId: string) {
-    const result = await repoOrganization.getOrganization(organizationId)
-    currentPublicInfo.value = getOrganizationPublicInfo(result)
-    organizationListDialog.visibility = false
+async function openOrganization(membership: IOrganizationMember) {
+    if (membership.organizationId) {
+        const result = await repoOrganization.getOrganization(membership.organizationId)
+        currentPublicInfo.value = convertPublicInfo(result)
+        organizationListDialog.visibility = false
+    }
 }
 
 async function patchOrganization() {
-    isLoading.value = true
-    await repoOrganization.patchOrganization(currentPublicInfo.value)
-    isLoading.value = false
+    if (currentPublicInfo.value.id) {
+        isLoading.value = true
+        await repoOrganization.patchOrganization(currentPublicInfo.value)
+        isLoading.value = false
+    }
 }
 
 function editOrganizationMemberDialog(item: IOrganization) {

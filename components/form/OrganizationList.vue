@@ -23,21 +23,21 @@
         </el-table-column>
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
-                <template v-if="row.id === currentOrganizaiotnId">
+                <template v-if="row.id === currentMembership">
                     <el-button size="small" :disabled="true">
                         使用中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button v-if="maximumReached" :disabled="true" size="small" @click="selectOrganization(row)">
+                    <el-button v-if="maximumReached" :disabled="true" size="small" @click="selectMembership(row)">
                         達上限=2
                     </el-button>
-                    <el-button v-else size="small" @click="selectOrganization(row)">
+                    <el-button v-else size="small" @click="selectMembership(row)">
                         新組織
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button size="small" @click="selectOrganization(row)">
+                    <el-button size="small" @click="selectMembership(row)">
                         可開啟
                     </el-button>
                 </template>
@@ -46,7 +46,7 @@
         <el-table-column prop="" label="刪除">
             <template #default="{ row }">
                 <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
-                    :disabled="row.id === currentOrganizaiotnId" @click="deleteOrganization(row)">
+                    :disabled="row.id === currentMembership" @click="deleteMembership(row)">
                 </el-button>
             </template>
         </el-table-column>
@@ -61,11 +61,12 @@ const maximumReached = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 const repoUser = useRepoUser()
 const repoOrganizationMember = useRepoOrganizationMember()
+
 const membershipList = ref<IOrganization[]>([])
 const isLoading = ref<boolean>(false)
-const currentOrganizaiotnId = defineModel<string>('modelValue', {
-    type: String,
-    default: '',
+const currentMembership = defineModel<IOrganizationMember>('modelValue', {
+    type: Object,
+    default: {},
 })
 
 const authOptions = [
@@ -109,25 +110,25 @@ async function getOrganizationMemberships() {
     ]
     isLoading.value = false
 }
-async function selectOrganization(organization: IOrganization) {
-    if (!organization.id) {
+async function selectMembership(member: IOrganizationMember) {
+    if (!member.id) {
         return
     }
-    switch (organization.id) {
+    switch (member.id) {
         case 'blank': {
             emit('create')
             break;
         }
         default: {
-            emit('update:modelValue', organization.id)
+            emit('update:modelValue', member)
             break;
         }
     }
 }
-async function deleteOrganization(organization: IOrganization) {
+async function deleteMembership(member: IOrganizationMember) {
     try {
         const result = await ElMessageBox.confirm(
-            `永久刪除"${organization.name}"？刪除後無法還原。`,
+            `永久刪除"${member.name}"？刪除後無法還原。`,
             {
                 title: '警告',
                 confirmButtonText: '確認',
@@ -137,8 +138,8 @@ async function deleteOrganization(organization: IOrganization) {
         )
         if (result === 'confirm') {
             isLoading.value = true
-            await repoOrganization.deleteOrganization(String(organization.id))
-            getOrganizationList()
+            await repoOrganizationMember.deleteOrganizationMember(String(member.id))
+            getOrganizationMemberships()
             isLoading.value = false
         }
     } catch (error: any) {
