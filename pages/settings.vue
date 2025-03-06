@@ -1,7 +1,7 @@
 <template>
     <el-row class="user__btnGroup" :gutter="20">
         <el-col :span="sysBtnSpan">
-            <el-button class="btnGroup__item" :icon="WarnTriangleFilled">註銷帳號</el-button>
+            <el-button class="btnGroup__item" :icon="WarnTriangleFilled" :disabled="true">註銷帳號</el-button>
         </el-col>
         <el-col :span="sysBtnSpan">
             <el-button class="btnGroup__item" :icon="WarnTriangleFilled" :disabled="true">變更密碼</el-button>
