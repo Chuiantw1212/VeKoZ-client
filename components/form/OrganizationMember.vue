@@ -17,14 +17,14 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item>
-                    <el-button :icon="Message" @click="postOrganizationMember">
+                    <el-button v-loading="isLoading" :icon="Message" @click="postOrganizationMember">
                         送出邀請信
                     </el-button>
                 </el-form-item>
             </el-col>
         </el-row>
     </el-form>
-    <el-table :data="tableList" style="width: 100%">
+    <el-table :data="memberList" style="width: 100%">
         <el-table-column prop="name" label="名稱" />
         <el-table-column prop="allowMethods" label="操作權限">
             <template #default="{ row }">
@@ -39,7 +39,8 @@
         <el-table-column prop="email" label="電子信箱" />
         <el-table-column fixed="right" label="操作">
             <template #default="{ row }">
-                <el-button circle plain type="danger" :icon="Delete" @click="deleteOrganizationMember(row)">
+                <el-button v-loading="isLoading" circle plain type="danger" :icon="Delete"
+                    @click="deleteOrganizationMember(row)">
 
                 </el-button>
             </template>
@@ -67,6 +68,7 @@ const repoOrganizationMember = useRepoOrganizationMember()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 
+const isLoading = ref<boolean>(false)
 const organizationId = defineModel<string>('modelValue', {
     default: '',
 })
@@ -104,7 +106,7 @@ const formRules = {
     }
 }
 
-const tableList = ref<IOrganizationMember[]>([])
+const memberList = ref<IOrganizationMember[]>([])
 const tableTotal = ref<number>(0)
 const tablePagination = ref<IPagination>({
     pageSize: 5,
@@ -123,14 +125,16 @@ async function setMember(item: IOrganizationMember) {
 }
 
 async function deleteOrganizationMember(item: IOrganizationMember) {
-    // await repoOrganizationMember.deleteOrganizationMember(String(item.id))
-    // getOrganizationMemberList()
+    isLoading.value = true
+    await repoOrganizationMember.deleteOrganizationMember(item)
+    getOrganizationMemberList()
+    isLoading.value = false
 }
 
 async function getOrganizationMemberList() {
     if (organizationId.value) {
         const result = await repoOrganizationMember.getOrganizationMemberList(organizationId.value, tablePagination.value)
-        tableList.value = result.items
+        memberList.value = result.items
         tableTotal.value = result.total
     }
 }
@@ -140,10 +144,11 @@ async function postOrganizationMember() {
     if (!isValid) {
         return
     }
-    await repoOrganizationMember.postNewMember({
+    const newMember = await repoOrganizationMember.postNewMember({
         organizationId: organizationId.value,
         email: searchForm.value.email,
     })
+    memberList.value.unshift(newMember)
     formRef.value?.resetFields()
 }
 
