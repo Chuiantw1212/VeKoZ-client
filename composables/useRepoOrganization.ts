@@ -21,7 +21,7 @@ export default defineStore('organization', () => {
             method: 'POST',
             body,
         })
-        return response
+        return response.json()
     }
     async function patchOrganization(organization: IOrganization) {
         const response = await defaultApi.authRequest(`/organization`, {

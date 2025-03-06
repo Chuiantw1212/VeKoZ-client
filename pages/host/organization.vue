@@ -55,8 +55,8 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList :modelValue="currentMembership" @update:modelValue="openOrganization($event)"
-                @create="createOrganization()">
+            <FormOrganizationList v-if="organizationListDialog.visibility" :modelValue="currentMembership"
+                @update:modelValue="openOrganization($event)" @create="createOrganization()">
             </FormOrganizationList>
         </AtomVekozDialog>
 
@@ -137,24 +137,18 @@ function getPersonalLink() {
 }
 
 async function getOrganizationMemberships() {
-    const response: IOrganizationMember[] = await repoOrganizationMember.getMemberOrganizatoinList({
+    const response = await repoOrganizationMember.getMemberOrganizatoinList({
         pageSize: 5,
         currentPage: 1,
     })
-    membershipList.value = response
-    if (response[0]) {
-        currentMembership.value = response[0]
-        const organizationId = response[0].organizationId
+    membershipList.value = response.items
+    const latestOrganization = response.items[0]
+    if (latestOrganization) {
+        currentMembership.value = latestOrganization
+        const organizationId = latestOrganization.organizationId
         const organization = await repoOrganization.getOrganization(String(organizationId))
         currentPublicInfo.value = convertPublicInfo(organization)
     }
-    // if (response[0]) {
-    //     // 開啟上一次編輯的組織    
-    //     currentPublicInfo.value = convertPublicInfo(response[0])
-    // } else {
-    //     // 或是新增組織
-    //     createOrganization()
-    // }
 }
 
 async function createOrganization() {

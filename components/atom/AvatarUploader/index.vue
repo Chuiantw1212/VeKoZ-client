@@ -7,7 +7,7 @@
             </div>
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled, }">
-            <div v-if="typeof localValue === 'string' || localValue.buffer" class="label__image"
+            <div v-if="typeof localValue === 'string' || localValue.type" class="label__image"
                 :style="{ width: size, height: size, 'background-image': getImageSrc() }">
             </div>
             <img v-else class="label__image" :style="{ width: size, height: size, }" :src="placeholder">
