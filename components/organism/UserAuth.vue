@@ -36,8 +36,6 @@ function addFirebaseListener() {
         }
         if (firebaseUser.emailVerified) {
             // 判斷是否為已註冊用戶
-            console.log('executed', firebaseUser)
-            // repoUI.debounce('newUser', async () => {
             const user = await repoUser.getUser()
             if (user?.id) {
                 handleLoggedIn(user)

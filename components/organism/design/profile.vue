@@ -1,7 +1,7 @@
 <template>
     <div class="publicInfo" :class="{ 'publicInfo--borderless': !isDesigning }">
         <div v-if="publicInfo.banner" class="publicInfo__bannerWrap">
-            <AtomBannerUploader v-model="publicInfo.banner" :disabled="!isDesigning" @change="handleChange">
+            <AtomBannerUploader v-model="publicInfo.banner" :disabled="!isDesigning || disabled" @change="handleChange">
             </AtomBannerUploader>
         </div>
         <div class="publicInfo__actions" :class="{ 'publicInfo__actions--withBanner': publicInfo.banner }">
@@ -13,33 +13,36 @@
                 <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning" @click="openQrCode()">
+            <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning || disabled"
+                @click="openQrCode()">
                 追隨
             </el-button>
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
-                <AtomAvatarUploader v-model="publicInfo.image" :disabled="!isDesigning" @change="handleChange">
+                <AtomAvatarUploader v-model="publicInfo.image" :disabled="!isDesigning || disabled"
+                    @change="handleChange">
                 </AtomAvatarUploader>
             </div>
-            <template v-if="isDesigning">
+            <template v-if="isDesigning && !disabled">
                 <el-input class="content__header" v-model="publicInfo.name" :maxlength="30" placeholder="請輸入組織名稱"
-                    :show-word-limit="true" type="textarea" size="large" @change="handleChange"></el-input>
+                    :show-word-limit="true" type="textarea" size="large" :disabled="disabled"
+                    @change="handleChange"></el-input>
             </template>
             <template v-else>
                 <pre class="content__header">{{ publicInfo.name }}</pre>
             </template>
             <div class="content__followers">XXX人追隨</div>
-            <template v-if="isDesigning">
+            <template v-if="isDesigning && !disabled">
                 <el-input v-model="publicInfo.description" :maxlength="120" :show-word-limit="true" type="textarea"
-                    :rows="6" @change="handleChange" placeholder="請輸入簡介"></el-input>
+                    :rows="6" :disabled="disabled" @change="handleChange" placeholder="請輸入簡介"></el-input>
             </template>
             <template v-else>
                 <pre class="content__desc">{{ publicInfo.description }}</pre>
             </template>
             <!-- {{ publicInfo }} -->
-            <AtomVekozSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs" :onchange="onchange"
-                :is-designing="props.isDesigning" @update:model-value="handleChange()">
+            <AtomVekozSocialMedia v-if="publicInfo.sameAs && !disabled" v-model="publicInfo.sameAs" :onchange="onchange"
+                :is-designing="props.isDesigning" :disabled="disabled" @update:model-value="handleChange()">
             </AtomVekozSocialMedia>
         </div>
         <!-- </el-card> -->

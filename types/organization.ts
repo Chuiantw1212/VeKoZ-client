@@ -22,4 +22,5 @@ export type IOrganizationMember = {
     organizationId?: string,
     organizationName?: string,
     lastmod?: string,
+    allowMethods?: string[],
 }

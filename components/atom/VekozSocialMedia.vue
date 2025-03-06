@@ -19,7 +19,7 @@
                 <img v-else class="link__icon" src="@/assets/icon/web.svg">
             </el-button>
         </template>
-        <div v-if="!socialUrls.length && isDesigning" class="socialMedia__grid">
+        <div v-if="!socialUrls.length && isDesigning && !disabled" class="socialMedia__grid">
             <!-- 示意圖： -->
             <el-button class="socialMedia__icon" text circle>
                 <img class="link__icon" src="@/assets/icon/email.svg">
@@ -59,11 +59,11 @@
             </el-button>
         </div>
     </div>
-    <div v-if="isDesigning" class="socialMedia__add">
-        <el-input v-model="socialMediaUrl" placeholder="請輸入連結(FB, IG, Email,......etc)">
+    <div v-if="isDesigning && !disabled" class="socialMedia__add">
+        <el-input v-model="socialMediaUrl" :disabled="disabled" placeholder="請輸入連結(FB, IG, Email,......etc)">
 
         </el-input>
-        <el-button :icon="Plus" @click="pushNewMedia()">
+        <el-button :icon="Plus" :disabled="disabled" @click="pushNewMedia()">
 
         </el-button>
     </div>
@@ -92,6 +92,10 @@ const props = defineProps({
         type: Function,
         default: async () => { }
     },
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
 })
 
 watch(() => socialUrls.value, (newValue) => {

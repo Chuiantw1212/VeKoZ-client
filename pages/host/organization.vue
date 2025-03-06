@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     </template>
-                    <FormPublicInfoTemplate v-model="currentPublicInfo" :disabled="true" :isDesigning="true"
+                    <FormPublicInfoTemplate v-model="currentPublicInfo" :disabled="editingDisabled" :isDesigning="true"
                         type="organization" :onchange="patchOrganization">
                     </FormPublicInfoTemplate>
                 </el-card>
@@ -89,7 +89,7 @@
 import type { IOrganization, IOrganizationMember } from '~/types/organization'
 import { ElMessageBox } from 'element-plus'
 import type { IUser } from '~/types/user'
-import { View, FolderOpened, User, Close, Postcard } from '@element-plus/icons-vue'
+import { View, FolderOpened, User, Close, } from '@element-plus/icons-vue'
 import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
@@ -99,8 +99,16 @@ const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 
 const membershipList = ref<IOrganization[]>([])
+const currentMembership = ref<IOrganizationMember>({})
 const currentPublicInfo = ref<IPublicInfoCard>({
     id: '',
+})
+const editingDisabled = computed(() => {
+    if (currentMembership.value.allowMethods?.includes('PATCH')) {
+        return false
+    } else {
+        return true
+    }
 })
 
 const organizationListDialog = reactive({
@@ -135,6 +143,7 @@ async function getOrganizationMemberships() {
     })
     membershipList.value = response
     if (response[0]) {
+        currentMembership.value = response[0]
         const organizationId = response[0].organizationId
         const organization = await repoOrganization.getOrganization(String(organizationId))
         currentPublicInfo.value = convertPublicInfo(organization)
@@ -170,6 +179,7 @@ function convertPublicInfo(item: IOrganization): IPublicInfoCard {
 }
 
 async function openOrganization(membership: IOrganizationMember) {
+    currentMembership.value = membership
     if (membership.organizationId) {
         const result = await repoOrganization.getOrganization(membership.organizationId)
         currentPublicInfo.value = convertPublicInfo(result)
@@ -178,7 +188,8 @@ async function openOrganization(membership: IOrganizationMember) {
 }
 
 async function patchOrganization() {
-    if (currentPublicInfo.value.id) {
+    const hasAuth = currentMembership.value.allowMethods?.includes('PATCH')
+    if (currentPublicInfo.value.id && hasAuth) {
         isLoading.value = true
         await repoOrganization.patchOrganization(currentPublicInfo.value)
         isLoading.value = false
