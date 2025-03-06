@@ -25,4 +25,5 @@ export type IOrganizationMember = {
     organizationFounderId?: string,
     lastmod?: string,
     allowMethods?: string[],
+    isFounder?: false,
 }

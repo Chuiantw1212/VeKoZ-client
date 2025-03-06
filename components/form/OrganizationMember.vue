@@ -29,7 +29,8 @@
             <el-table-column prop="name" label="名稱" />
             <el-table-column prop="allowMethods" label="操作權限">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" @change="setMember(row)">
+                    <el-checkbox-group v-model="row.allowMethods" :disabled="checkRowDisabled(row)"
+                        @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">
                             {{ auth.label }}
@@ -40,10 +41,12 @@
             <el-table-column prop="email" label="電子信箱" />
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
-                    <el-button v-loading="isLoading" circle plain type="danger" :icon="Delete"
+                    <el-button v-if="!checkRowDisabled(row)" v-loading="isLoading" :icon="Delete"
                         @click="deleteOrganizationMember(row)">
-
                     </el-button>
+                    <template v-else>
+                        創辦人不可被異動
+                    </template>
                 </template>
             </el-table-column>
         </el-table>
@@ -120,6 +123,11 @@ onMounted(() => {
 })
 
 // Methods
+function checkRowDisabled(member: IOrganizationMember) {
+    const isSelf = repoUser.userInfo.id === member.organizationFounderId
+    return isSelf || member.isFounder
+}
+
 async function setMember(item: IOrganizationMember) {
     repoUI.debounce('setMember', () => {
         repoOrganizationMember.patchMember(item)

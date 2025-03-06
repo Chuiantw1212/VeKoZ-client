@@ -46,11 +46,14 @@
         <el-table-column prop="" label="操作">
             <template #default="{ row }">
                 <template v-if="!['default', 'blank'].includes(row.id)">
-                    <el-button v-if="repoUser.userInfo.id !== row.organizationFounderId" @click="deleteMembership(row)">
+                    <el-button v-if="!row.isFounder" :disabled="row.isFounder" @click="deleteMembership(row)">
                         <el-icon class="rotate--90">
                             <Upload />
                         </el-icon>
                         退出組織
+                    </el-button>
+                    <el-button v-else :icon="Delete">
+                        刪除組織
                     </el-button>
                 </template>
             </template>
@@ -58,7 +61,7 @@
     </el-table>
 </template>
 <script setup lang="ts">
-import { Folder, FolderAdd, Upload } from '@element-plus/icons-vue';
+import { Folder, FolderAdd, Upload, Delete } from '@element-plus/icons-vue';
 import type { IOrganization } from '~/types/organization';
 import type { IOrganizationMember } from '~/types/organization';
 const emit = defineEmits(['update:modelValue', 'create'])
