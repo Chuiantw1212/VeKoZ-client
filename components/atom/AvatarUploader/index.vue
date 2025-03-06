@@ -7,10 +7,10 @@
             </div>
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled, }">
-            <img v-if="!localValue || !localValue.type" class="label__image" :style="{ width: size, height: size, }"
-                :src="placeholder">
-            <div v-else class="label__image" :style="{ width: size, height: size, 'background-image': getImageSrc() }">
+            <div v-if="typeof localValue === 'string' || localValue.buffer" class="label__image"
+                :style="{ width: size, height: size, 'background-image': getImageSrc() }">
             </div>
+            <img v-else class="label__image" :style="{ width: size, height: size, }" :src="placeholder">
             <img class="label__placeholder" :style="{ width: size, height: size, }" src="./Rectangle1348.png">
             <input v-show="false" class="body__input" autocomplete="off" type="file" accept="image/*"
                 :data-required="required" :data-name="name" @change="handleFiles($event)" :disabled="disabled"></input>
