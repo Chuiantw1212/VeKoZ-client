@@ -78,7 +78,7 @@
                 <el-button :icon="Close" text @click="memberListVisible = false">
                 </el-button>
             </template>
-            <FormOrganizationMember v-if="memberListVisible" v-model="currentPublicInfo.id">
+            <FormOrganizationMember v-if="memberListVisible" :modelValue="currentMembership">
             </FormOrganizationMember>
         </AtomVekozDialog>
     </div>

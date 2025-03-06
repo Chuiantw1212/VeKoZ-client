@@ -30,7 +30,7 @@
             <el-table-column prop="name" label="成員名稱" />
             <el-table-column prop="allowMethods" label="操作權限">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" :disabled="checkRowDisabled(row) || checkIsSelf(row)"
+                    <el-checkbox-group v-model="row.allowMethods" :disabled="!currentMember.isFounder"
                         @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">
@@ -74,7 +74,7 @@ const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 
 const isLoading = ref<boolean>(false)
-const organizationId = defineModel<string>('modelValue', {
+const currentMember = defineModel<IOrganizationMember>('modelValue', {
     default: '',
 })
 
@@ -147,9 +147,10 @@ async function deleteOrganizationMember(item: IOrganizationMember) {
 }
 
 async function getOrganizationMemberList() {
-    if (organizationId.value) {
+    if (currentMember.value.organizationId) {
         isLoading.value = true
-        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId.value, tablePagination.value)
+        const organizationId = currentMember.value.organizationId
+        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId, tablePagination.value)
         memberList.value = result.items
         tableTotal.value = result.total
         isLoading.value = false
@@ -163,7 +164,7 @@ async function postOrganizationMember() {
     }
     isLoading.value = true
     const newMember = await repoOrganizationMember.postNewMember({
-        organizationId: organizationId.value,
+        organizationId: currentMember.value.organizationId,
         email: searchForm.value.email,
     })
     memberList.value.unshift(newMember)

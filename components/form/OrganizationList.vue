@@ -10,7 +10,7 @@
                 </template>
             </template>
         </el-table-column>
-        <el-table-column prop="organizationName" label="公司名稱" />
+        <el-table-column prop="organizationName" label="組織名稱" />
         <el-table-column prop="auth" label="資料權限">
             <template #default="{ row }">
                 <el-checkbox-group v-model="row.allowMethods" :disabled="true">
@@ -54,10 +54,16 @@
                         退出組織
                     </el-button>
                     <!-- 創辦者只可以刪除或是轉讓(轉讓未開發) -->
-                    <el-button v-else :icon="Delete" :disabled="isFinalFounder || checkOrganizationOnUse(row)"
-                        @click="deleteOrganization(row)">
-                        刪除組織
-                    </el-button>
+                    <template v-if="row.isFounder">
+                        <template v-if="isFinalFounder">
+                            此為最後的用戶所有組織，
+                            不可異動。
+                        </template>
+                        <el-button v-else :icon="Delete" :disabled="checkOrganizationOnUse(row)"
+                            @click="deleteOrganization(row)">
+                            刪除組織
+                        </el-button>
+                    </template>
                 </template>
             </template>
         </el-table-column>
