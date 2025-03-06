@@ -52,18 +52,21 @@
                         </el-icon>
                         退出組織
                     </el-button>
-                    <el-button v-else :icon="Delete">
+                    <el-button v-else :icon="Delete" @click="">
                         刪除組織
                     </el-button>
                 </template>
             </template>
         </el-table-column>
     </el-table>
+    <el-pagination v-model:current-page="tablePagination.currentPage" v-model:page-size="tablePagination.pageSize"
+        @change="getOrganizationMemberships()" layout="prev, pager, next" :total="tableTotal" />
 </template>
 <script setup lang="ts">
 import { Folder, FolderAdd, Upload, Delete } from '@element-plus/icons-vue';
 import type { IOrganization } from '~/types/organization';
 import type { IOrganizationMember } from '~/types/organization';
+import type { IPagination } from '~/types/ui';
 const emit = defineEmits(['update:modelValue', 'create'])
 const maximumReached = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
@@ -71,6 +74,8 @@ const repoUser = useRepoUser()
 const repoOrganizationMember = useRepoOrganizationMember()
 
 const membershipList = ref<IOrganization[]>([])
+const tableTotal = ref<number>(0)
+
 const isLoading = ref<boolean>(false)
 const currentMembership = defineModel<IOrganizationMember>('modelValue', {
     type: Object,
@@ -96,6 +101,11 @@ const authOptions = [
         value: 'DELETE'
     },
 ]
+const tablePagination = ref<IPagination>({
+    pageSize: 5,
+    currentPage: 1,
+})
+
 
 // Hooks
 onMounted(() => {
@@ -109,7 +119,7 @@ function checkOrganizationOnUse(row: IOrganizationMember) {
 
 async function getOrganizationMemberships() {
     isLoading.value = true
-    const response: IOrganizationMember[] = await repoOrganizationMember.getMemberOrganizatoinList({
+    const response = await repoOrganizationMember.getMemberOrganizatoinList({
         pageSize: 5,
         currentPage: 1,
     })
@@ -118,8 +128,9 @@ async function getOrganizationMemberships() {
             id: 'blank',
             organizationName: `${repoUser.userInfo.name}的新組織`,
         },
-        ...response,
+        ...response.items,
     ]
+    tableTotal.value = response.total
     isLoading.value = false
 }
 async function selectMembership(member: IOrganizationMember) {
