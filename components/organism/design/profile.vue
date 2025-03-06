@@ -7,14 +7,13 @@
         <div class="publicInfo__actions" :class="{ 'publicInfo__actions--withBanner': publicInfo.banner }">
             <div>
                 <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
-                    <el-button v-loading="isLoading" :icon="Share" text circle @click="shareLink()">
+                    <el-button :icon="Share" text circle @click="shareLink()">
                     </el-button>
                 </el-tooltip>
-                <el-button v-loading="isLoading" text circle :icon="Menu" @click="openQrCode()">
+                <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <el-button v-loading="isLoading" :icon="CollectionTag" :disabled="isDesigning || disabled"
-                @click="openQrCode()">
+            <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="openQrCode()">
                 追隨
             </el-button>
         </div>
