@@ -21,9 +21,9 @@
                 </el-checkbox-group>
             </template>
         </el-table-column>
-        <el-table-column prop="" label="選擇">
+        <el-table-column label="選擇">
             <template #default="{ row }">
-                <template v-if="row.organizationId === currentMembership.organizationId">
+                <template v-if="checkOrganizationOnUse(row)">
                     <el-button :disabled="true">
                         使用中
                     </el-button>
@@ -46,10 +46,6 @@
         <el-table-column prop="" label="操作">
             <template #default="{ row }">
                 <template v-if="!['default', 'blank'].includes(row.id)">
-                    <!-- <el-button v-if="repoUser.userInfo.id === row.organizationFounderId" type="danger" :plain="true"
-                        size="small" :icon="Delete" :disabled="row.organizationId === currentMembership.organizationId"
-                        @click="deleteMembership(row)">
-                    </el-button> -->
                     <el-button v-if="repoUser.userInfo.id !== row.organizationFounderId" @click="deleteMembership(row)">
                         <el-icon class="rotate--90">
                             <Upload />
@@ -59,14 +55,6 @@
                 </template>
             </template>
         </el-table-column>
-        <!-- <el-table-column prop="" label="刪除組織">
-            <template #default="{ row }">
-                <el-button v-if="!['default', 'blank'].includes(row.id)" type="danger" :plain="true" size="small"
-                    :icon="Delete" :disabled="row.organizationId === currentMembership.organizationId"
-                    @click="deleteMembership(row)">
-                </el-button>
-            </template>
-        </el-table-column> -->
     </el-table>
 </template>
 <script setup lang="ts">
@@ -112,6 +100,10 @@ onMounted(() => {
 })
 
 // Methods
+function checkOrganizationOnUse(row: IOrganizationMember) {
+    return currentMembership.value.organizationId && row.organizationId === currentMembership.value.organizationId
+}
+
 async function getOrganizationMemberships() {
     isLoading.value = true
     const response: IOrganizationMember[] = await repoOrganizationMember.getMemberOrganizatoinList({
@@ -147,21 +139,6 @@ async function deleteMembership(member: IOrganizationMember) {
     await repoOrganizationMember.deleteOrganizationMember(member)
     getOrganizationMemberships()
     isLoading.value = false
-    // try {
-    //     const result = await ElMessageBox.confirm(
-    //         `退出"${member.organizationName}"？退出後需再次獲邀請方可加入。`,
-    //         {
-    //             title: '警告',
-    //             confirmButtonText: '確認',
-    //             cancelButtonText: '取消',
-    //             type: 'warning',
-    //         }
-    //     )
-    //     if (result === 'confirm') {
-    //     }
-    // } catch (error: any) {
-    //     // Do nothing
-    // }
 }
 </script>
 <style lang="scss" scoped>

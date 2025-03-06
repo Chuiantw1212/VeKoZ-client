@@ -13,7 +13,7 @@ export default defineStore('organizationMember', () => {
         return response.json()
     }
     async function getOrganizationMemberList(organizationId: string, pagination: IPagination) {
-        const response = await defaultApi.authRequest(`/organization/${organizationId}/member/list`, {
+        const response = await defaultApi.authRequest(`/organization/member/list/${organizationId}`, {
             method: 'GET',
             params: pagination,
         })
