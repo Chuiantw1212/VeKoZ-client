@@ -24,39 +24,55 @@
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
                 <template v-if="row.organizationId === currentMembership.organizationId">
-                    <el-button size="small" :disabled="true">
+                    <el-button :disabled="true">
                         使用中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button v-if="maximumReached" :disabled="true" size="small" @click="selectMembership(row)">
+                    <el-button v-if="maximumReached" :disabled="true" @click="selectMembership(row)">
                         達上限=2
                     </el-button>
-                    <el-button v-else :icon="FolderAdd" size="small" @click="selectMembership(row)">
+                    <el-button v-else :icon="FolderAdd" @click="selectMembership(row)">
                         新組織
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button :icon="Folder" size="small" @click="selectMembership(row)">
+                    <el-button :icon="Folder" @click="selectMembership(row)">
                         可開啟
                     </el-button>
                 </template>
             </template>
         </el-table-column>
-        <el-table-column prop="" label="刪除">
+        <el-table-column prop="" label="操作">
             <template #default="{ row }">
-                <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
-                    :disabled="row.organizationId === currentMembership.organizationId" @click="deleteMembership(row)">
-                </el-button>
+                <template v-if="!['default', 'blank'].includes(row.id)">
+                    <!-- <el-button v-if="repoUser.userInfo.id === row.organizationFounderId" type="danger" :plain="true"
+                        size="small" :icon="Delete" :disabled="row.organizationId === currentMembership.organizationId"
+                        @click="deleteMembership(row)">
+                    </el-button> -->
+                    <el-button v-if="repoUser.userInfo.id !== row.organizationFounderId" @click="deleteMembership(row)">
+                        <el-icon class="rotate--90">
+                            <Upload />
+                        </el-icon>
+                        退出組織
+                    </el-button>
+                </template>
             </template>
         </el-table-column>
+        <!-- <el-table-column prop="" label="刪除組織">
+            <template #default="{ row }">
+                <el-button v-if="!['default', 'blank'].includes(row.id)" type="danger" :plain="true" size="small"
+                    :icon="Delete" :disabled="row.organizationId === currentMembership.organizationId"
+                    @click="deleteMembership(row)">
+                </el-button>
+            </template>
+        </el-table-column> -->
     </el-table>
 </template>
 <script setup lang="ts">
-import { Folder, FolderAdd } from '@element-plus/icons-vue';
+import { Folder, FolderAdd, Upload } from '@element-plus/icons-vue';
 import type { IOrganization } from '~/types/organization';
 import type { IOrganizationMember } from '~/types/organization';
-import { Delete } from '@element-plus/icons-vue';
 const emit = defineEmits(['update:modelValue', 'create'])
 const maximumReached = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
@@ -127,24 +143,34 @@ async function selectMembership(member: IOrganizationMember) {
     }
 }
 async function deleteMembership(member: IOrganizationMember) {
-    try {
-        const result = await ElMessageBox.confirm(
-            `永久刪除"${member.name}"？刪除後無法還原。`,
-            {
-                title: '警告',
-                confirmButtonText: '確認',
-                cancelButtonText: '取消',
-                type: 'warning',
-            }
-        )
-        if (result === 'confirm') {
-            isLoading.value = true
-            await repoOrganizationMember.deleteOrganizationMember(String(member.id))
-            getOrganizationMemberships()
-            isLoading.value = false
-        }
-    } catch (error: any) {
-        // Do nothing
-    }
+    isLoading.value = true
+    await repoOrganizationMember.deleteOrganizationMember(member)
+    getOrganizationMemberships()
+    isLoading.value = false
+    // try {
+    //     const result = await ElMessageBox.confirm(
+    //         `退出"${member.organizationName}"？退出後需再次獲邀請方可加入。`,
+    //         {
+    //             title: '警告',
+    //             confirmButtonText: '確認',
+    //             cancelButtonText: '取消',
+    //             type: 'warning',
+    //         }
+    //     )
+    //     if (result === 'confirm') {
+    //     }
+    // } catch (error: any) {
+    //     // Do nothing
+    // }
 }
 </script>
+<style lang="scss" scoped>
+.rotate--90 {
+    transform: rotate(90deg);
+}
+
+.btn__icon {
+    width: 1em;
+    height: 1em;
+}
+</style>

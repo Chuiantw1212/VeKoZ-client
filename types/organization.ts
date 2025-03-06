@@ -9,7 +9,8 @@ export type IOrganization = {
     lineId?: string,
     sameAs?: string[],
     lastmod?: string,
-    designs?: any[]
+    designs?: any[],
+    founderId?: string,
 }
 
 /**
@@ -21,6 +22,7 @@ export type IOrganizationMember = {
     email?: string,
     organizationId?: string,
     organizationName?: string,
+    organizationFounderId?: string,
     lastmod?: string,
     allowMethods?: string[],
 }

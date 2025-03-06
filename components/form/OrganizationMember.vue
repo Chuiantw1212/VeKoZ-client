@@ -123,8 +123,8 @@ async function setMember(item: IOrganizationMember) {
 }
 
 async function deleteOrganizationMember(item: IOrganizationMember) {
-    await repoOrganizationMember.deleteOrganizationMember(String(item.id))
-    getOrganizationMemberList()
+    // await repoOrganizationMember.deleteOrganizationMember(String(item.id))
+    // getOrganizationMemberList()
 }
 
 async function getOrganizationMemberList() {
