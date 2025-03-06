@@ -139,7 +139,7 @@ async function handleChange(templateDesign: any) {
 async function getOrganizationMemberList(organizationId: string) {
     if (organizationId) {
         const result = await repoOrganizationMember.getOrganizationMemberList(organizationId)
-        organizationMemberList.value = result
+        organizationMemberList.value = result.items
     }
 }
 </script>
