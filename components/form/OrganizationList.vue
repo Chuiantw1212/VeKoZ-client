@@ -23,7 +23,7 @@
         </el-table-column>
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
-                <template v-if="row.id === currentMembership">
+                <template v-if="row.organizationId === currentMembership.organizationId">
                     <el-button size="small" :disabled="true">
                         使用中
                     </el-button>
@@ -32,12 +32,12 @@
                     <el-button v-if="maximumReached" :disabled="true" size="small" @click="selectMembership(row)">
                         達上限=2
                     </el-button>
-                    <el-button v-else size="small" @click="selectMembership(row)">
+                    <el-button v-else :icon="FolderAdd" size="small" @click="selectMembership(row)">
                         新組織
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button size="small" @click="selectMembership(row)">
+                    <el-button :icon="Folder" size="small" @click="selectMembership(row)">
                         可開啟
                     </el-button>
                 </template>
@@ -46,13 +46,14 @@
         <el-table-column prop="" label="刪除">
             <template #default="{ row }">
                 <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
-                    :disabled="row.id === currentMembership" @click="deleteMembership(row)">
+                    :disabled="row.organizationId === currentMembership.organizationId" @click="deleteMembership(row)">
                 </el-button>
             </template>
         </el-table-column>
     </el-table>
 </template>
 <script setup lang="ts">
+import { Folder, FolderAdd } from '@element-plus/icons-vue';
 import type { IOrganization } from '~/types/organization';
 import type { IOrganizationMember } from '~/types/organization';
 import { Delete } from '@element-plus/icons-vue';

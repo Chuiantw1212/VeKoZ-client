@@ -55,7 +55,7 @@
                     開啟組織
                 </el-text>
             </template>
-            <FormOrganizationList :modelValue="currentPublicInfo" @update:modelValue="openOrganization($event)"
+            <FormOrganizationList :modelValue="currentMembership" @update:modelValue="openOrganization($event)"
                 @create="createOrganization()">
             </FormOrganizationList>
         </AtomVekozDialog>
