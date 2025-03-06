@@ -54,7 +54,8 @@
                         退出組織
                     </el-button>
                     <!-- 創辦者只可以刪除或是轉讓(轉讓未開發) -->
-                    <el-button v-else :icon="Delete" :disabled="isFinalFounder" @click="deleteOrganization()">
+                    <el-button v-else :icon="Delete" :disabled="isFinalFounder || checkOrganizationOnUse(row)"
+                        @click="deleteOrganization(row)">
                         刪除組織
                     </el-button>
                 </template>
@@ -111,8 +112,16 @@ onMounted(() => {
 })
 
 // Methods
-function checkOrganizationOnUse(row: IOrganizationMember) {
-    return currentMembership.value.organizationId && row.organizationId === currentMembership.value.organizationId
+async function deleteOrganization(member: IOrganizationMember) {
+    isLoading.value = true
+    await repoOrganization.deleteOrganization(String(member.organizationId))
+    getOrganizationMemberships()
+    isLoading.value = true
+}
+
+function checkOrganizationOnUse(row: IOrganizationMember): boolean {
+    const { organizationId } = currentMembership.value
+    return !!(organizationId && row.organizationId === organizationId)
 }
 
 async function getOrganizationMemberships() {
