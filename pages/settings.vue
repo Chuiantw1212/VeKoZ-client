@@ -320,7 +320,8 @@ function cancelDragging() {
 
 function getPersonalLink() {
     const openInLineExternal = `openExternalBrowser=1`
-    return `${userTemplate.value.seoName}?${openInLineExternal}`
+    const urlPath = userTemplate.value.seoName || userTemplate.value.id
+    return `${urlPath}?${openInLineExternal}`
 }
 
 function setColumnSpan() {
