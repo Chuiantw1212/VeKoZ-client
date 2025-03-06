@@ -159,7 +159,7 @@ async function getOrganizationMemberships() {
 
 async function createOrganization() {
     const newOrganization = {
-        name: `${repoUser.userInfo.name}的組織`,
+        name: `${repoUser.userInfo.name}的新組織`,
     }
     const createdOrganization = await repoOrganization.postOrganization(newOrganization)
     currentPublicInfo.value = convertPublicInfo(createdOrganization)

@@ -1,5 +1,5 @@
 <template>
-    <el-table v-loading="isLoading" :data="membershipList" style="width: 100%">
+    <el-table v-loading="isLoading" :data="membershipList" :style="{ 'width': '100%' }">
         <el-table-column prop="lastmod" label="上次修改">
             <template #default="{ row }">
                 <template v-if="row.lastmod">
@@ -46,21 +46,23 @@
         <el-table-column prop="" label="操作">
             <template #default="{ row }">
                 <template v-if="!['default', 'blank'].includes(row.id)">
+                    <!-- 成員只可以退出 -->
                     <el-button v-if="!row.isFounder" :disabled="row.isFounder" @click="deleteMembership(row)">
                         <el-icon class="rotate--90">
                             <Upload />
                         </el-icon>
                         退出組織
                     </el-button>
-                    <el-button v-else :icon="Delete" @click="">
+                    <!-- 創辦者只可以刪除或是轉讓(轉讓未開發) -->
+                    <el-button v-else :icon="Delete" :disabled="isFinalFounder" @click="deleteOrganization()">
                         刪除組織
                     </el-button>
                 </template>
             </template>
         </el-table-column>
     </el-table>
-    <el-pagination v-model:current-page="tablePagination.currentPage" v-model:page-size="tablePagination.pageSize"
-        @change="getOrganizationMemberships()" layout="prev, pager, next" :total="tableTotal" />
+    <!-- <el-pagination v-model:current-page="tablePagination.currentPage" v-model:page-size="tablePagination.pageSize"
+        @change="getOrganizationMemberships()" layout="prev, pager, next" :total="tableTotal" /> -->
 </template>
 <script setup lang="ts">
 import { Folder, FolderAdd, Upload, Delete } from '@element-plus/icons-vue';
@@ -74,6 +76,7 @@ const repoUser = useRepoUser()
 const repoOrganizationMember = useRepoOrganizationMember()
 
 const membershipList = ref<IOrganization[]>([])
+const isFinalFounder = ref<boolean>(false)
 const tableTotal = ref<number>(0)
 
 const isLoading = ref<boolean>(false)
@@ -101,11 +104,6 @@ const authOptions = [
         value: 'DELETE'
     },
 ]
-const tablePagination = ref<IPagination>({
-    pageSize: 5,
-    currentPage: 1,
-})
-
 
 // Hooks
 onMounted(() => {
@@ -120,7 +118,7 @@ function checkOrganizationOnUse(row: IOrganizationMember) {
 async function getOrganizationMemberships() {
     isLoading.value = true
     const response = await repoOrganizationMember.getMemberOrganizatoinList({
-        pageSize: 5,
+        pageSize: 50,
         currentPage: 1,
     })
     membershipList.value = [
@@ -130,6 +128,10 @@ async function getOrganizationMemberships() {
         },
         ...response.items,
     ]
+    const founded = response.items.filter((member: IOrganizationMember) => {
+        return member.isFounder
+    })
+    isFinalFounder.value = founded.length <= 1 // 最後一個組織不可刪除
     tableTotal.value = response.total
     isLoading.value = false
 }
