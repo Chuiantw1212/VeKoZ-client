@@ -1,6 +1,6 @@
 import type { IOffer } from "./offer"
 
-export interface IEventTemplate {
+export interface IEventTemplate extends IEventTemplateQuery {
     uid?: string,
     id?: string,
     eventId?: string, // 已創建的event才會有, 編輯中或是樣板不會有
@@ -8,9 +8,12 @@ export interface IEventTemplate {
     designIds?: string[],
     name?: string,
     lastmod?: any,
-    organizationId?: string,
     organizationLogo?: string,
     organizationName?: string,
+}
+
+export interface IEventTemplateQuery {
+    organizationId?: string,
 }
 
 export interface ITemplateDesign {

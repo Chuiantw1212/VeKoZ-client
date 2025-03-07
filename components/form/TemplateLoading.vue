@@ -2,7 +2,7 @@
     <div>
         <el-form>
             <el-form-item label="模板來源" prop="organizationId">
-                <el-select v-model="searchForm.organizationId" placeholder="請選擇" @change="getEventTemplateList()">
+                <el-select v-model="templateQuery.organizationId" placeholder="請選擇" @change="getEventTemplateList()">
                     <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                         :value="String(item.organizationId)" />
                 </el-select>
@@ -52,15 +52,16 @@
 </template>
 <script setup lang="ts">
 import { FolderAdd, EditPen, FolderOpened, Delete } from '@element-plus/icons-vue';
-import type { IEventTemplate } from '~/types/eventTemplate';
+import type { IEventTemplate, IEventTemplateQuery } from '~/types/eventTemplate';
 import type { IOrganizationMember } from '~/types/organization';
+import type { IPreferenceEventTemplate } from '~/types/user';
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 
-const searchForm = ref<IOrganizationMember>({
+const templateQuery = ref<IEventTemplateQuery>({
     organizationId: '',
 })
 
@@ -88,8 +89,11 @@ async function getMemberOganizationList() {
     membershipList.value = result.items
     const onlyOrg = membershipList.value[0]
     if (result.total === 0 && onlyOrg) {
-        searchForm.value.organizationId = onlyOrg.organizationId
+        templateQuery.value.organizationId = onlyOrg.organizationId
+    } else {
+        templateQuery.value.organizationId = repoUser.preference.eventTemplate.organizationId
     }
+    getEventTemplateList()
 }
 
 async function selectTemplate(template: IEventTemplate) {
@@ -134,10 +138,13 @@ async function deleteTemplate(template: IEventTemplate) {
 }
 
 async function getEventTemplateList() {
-    repoUser.patchUserPreference('eventTemplate', searchForm.value.organizationId)
-    return
+    const patch: IPreferenceEventTemplate = {
+        organizationId: templateQuery.value.organizationId ?? '',
+    }
+    repoUser.patchUserPreference('eventTemplate', patch)
+    // return
     isLoading.value = true
-    const result = await repoEventTemplate.getEventTemplateList()
+    const result = await repoEventTemplate.getEventTemplateList(templateQuery.value)
     templateList.value = result
     // templateList.value.unshift({
     //     id: 'default',

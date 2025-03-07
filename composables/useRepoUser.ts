@@ -96,15 +96,20 @@ export default defineStore('user', () => {
     async function patchUserPreference(fieldName: string, newValue: any) {
         console.log({
             fieldName,
-            userInfo,
-            preference,
+            newValue,
         })
         if (!preference.value || !userInfo.value.id) {
             return
         }
         if (newValue === Object(newValue)) {
+            // 物件合併原有偏好，避免覆蓋掉其他既有偏好資料
             const field = preference.value[fieldName]
-            Object.assign(field, newValue)
+            try {
+                Object.assign(field, newValue)
+            } catch (error) {
+                delete preference.value[fieldName]
+                preference.value[fieldName] = newValue
+            }
         } else {
             preference.value[fieldName] = newValue
         }
