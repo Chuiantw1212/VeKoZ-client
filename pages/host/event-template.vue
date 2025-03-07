@@ -112,8 +112,9 @@ const loadTemplateDialog = ref({
 
 const saveTemplateDialogVisible = ref<boolean>(false)
 const saveTemplateRef = ref<FormInstance>()
-const templateSavingForm = ref({
-    name: ''
+const templateSavingForm = ref<IEventTemplate>({
+    name: '',
+    designs: [],
 })
 
 // Hooks
@@ -152,7 +153,7 @@ async function confirmSaveDialog() {
         return
     }
     isCardLoading.value = true
-    await postEventTemplate(templateSavingForm.value.name)
+    await postEventTemplate(templateSavingForm.value)
     saveTemplateDialogVisible.value = false
     isCardLoading.value = false
 }
@@ -197,11 +198,9 @@ async function handleDesignChanged(templateDesign: ITemplateDesign) {
     repoEventTemplate.patchEventTemplateDesign(templateDesign)
 }
 
-async function postEventTemplate(templateName: string = '') {
-    const newTemplate = eventTemplate.value
-    if (templateName) {
-        newTemplate.name = templateName
-    }
+async function postEventTemplate(template?: IEventTemplate) {
+    const newTemplate = template ?? eventTemplate.value
+    newTemplate.designs = eventTemplate.value.designs // 沿用designs
     const result = await repoEventTemplate.postEventTemplate(newTemplate)
     eventTemplate.value = result
 }

@@ -15,7 +15,7 @@
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
                 <template v-if="row.id === eventTemplate.id">
-                    <el-button :icon="Loading" size="small" :disabled="true">
+                    <el-button :icon="EditPen" size="small" :disabled="true">
                         編輯中
                     </el-button>
                 </template>
@@ -25,7 +25,7 @@
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button size="small" @click="selectTemplate(row)">
+                    <el-button :icon="FolderOpened" size="small" @click="selectTemplate(row)">
                         可開啟
                     </el-button>
                 </template>
@@ -41,7 +41,7 @@
     </el-table>
 </template>
 <script setup lang="ts">
-import { FolderAdd, Loading } from '@element-plus/icons-vue';
+import { FolderAdd, EditPen, FolderOpened } from '@element-plus/icons-vue';
 import type { IEventSingle } from '~/types/event';
 import {
     Delete,

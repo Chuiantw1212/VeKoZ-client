@@ -41,7 +41,8 @@ export default defineStore('api', {
                 })
                 if (auth && auth.currentUser && !this.token) {
                     try {
-                        this.token = await auth.currentUser.getIdToken(true)
+                        const idTokenResult = await auth.currentUser.getIdTokenResult(true)
+                        this.token = idTokenResult.token
                         setTimeout(() => {
                             this.token = ''
                             this.setToken()

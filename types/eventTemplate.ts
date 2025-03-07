@@ -8,6 +8,7 @@ export interface IEventTemplate {
     designIds?: string[],
     name?: string,
     lastmod?: any,
+    organizationId?: string,
     organizationLogo?: string,
     organizationName?: string,
 }

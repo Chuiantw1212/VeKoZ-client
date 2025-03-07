@@ -13,15 +13,16 @@
 </template>
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus';
+import type { IEventTemplate } from '~/types/eventTemplate';
 import type { IOrganizationMember } from '~/types/organization';
 const saveTemplateRef = ref<FormInstance>()
 const repoOrganizationMember = useRepoOrganizationMember()
-const form = defineModel('modelValue', {
+const form = defineModel<IEventTemplate>('modelValue', {
     default: {
         name: '',
         organizationId: '',
         organizationName: '',
-        organizatoinLogo: '',
+        organizationLogo: '',
     }
 })
 
@@ -43,7 +44,7 @@ function setOrganization(organizationId: string) {
     })
     if (selectedMembership) {
         form.value.organizationName = selectedMembership.organizationName ?? ''
-        form.value.organizatoinLogo = selectedMembership.organizationLogo ?? ''
+        form.value.organizationLogo = selectedMembership.organizationLogo ?? ''
     }
 }
 async function getMemberOganizationList() {
