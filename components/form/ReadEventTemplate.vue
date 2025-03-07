@@ -10,10 +10,10 @@
         </el-form>
         <el-divider>組織所屬模板</el-divider> -->
         <el-table v-if="templateList.length" :data="templateList" style="width: 100%">
-            <el-table-column prop="lastmod" label="上次修改">
+            <el-table-column prop="organizationLogo">
                 <template #default="{ row }">
-                    <template v-if="row.lastmod">
-                        {{ new Date(row.lastmod).toLocaleString('zh-TW') }}
+                    <template v-if="row.organizationLogo">
+                        <el-avatar :src="row.organizationLogo"></el-avatar>
                     </template>
                     <template v-else>
                         -

@@ -1,15 +1,16 @@
 <template>
     <el-table v-loading="isLoading" :data="templateList" style="width: 100%">
-        <el-table-column prop="lastmod" label="上次修改">
+        <el-table-column prop="organizationLogo">
             <template #default="{ row }">
-                <template v-if="row.lastmod">
-                    {{ new Date(row.lastmod).toLocaleString('zh-TW') }}
+                <template v-if="row.organizationLogo">
+                    <el-avatar :src="row.organizationLogo"></el-avatar>
                 </template>
                 <template v-else>
                     -
                 </template>
             </template>
         </el-table-column>
+        <el-table-column prop="organizationName" label="模板來源"></el-table-column>
         <el-table-column prop="name" label="模板名稱" />
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
@@ -45,10 +46,11 @@ import type { IEventSingle } from '~/types/event';
 import {
     Delete,
 } from '@element-plus/icons-vue'
+import type { IEventTemplate } from '~/types/eventTemplate';
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const isLoading = ref<boolean>(false)
-const eventTemplate = defineModel<IEventSingle>('modelValue', {
+const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     type: Object,
     default: {
         id: '',
@@ -56,7 +58,7 @@ const eventTemplate = defineModel<IEventSingle>('modelValue', {
     }
 })
 
-const templateList = ref<IEventSingle[]>([])
+const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
 onMounted(() => {
@@ -64,7 +66,7 @@ onMounted(() => {
 })
 
 // Methods
-async function selectTemplate(template: IEventSingle) {
+async function selectTemplate(template: IEventTemplate) {
     if (!template.id) {
         return
     }
@@ -94,7 +96,7 @@ async function selectTemplate(template: IEventSingle) {
     }
 }
 
-async function deleteTemplate(template: IEventSingle) {
+async function deleteTemplate(template: IEventTemplate) {
     if (!template.id) {
         return
     }
@@ -109,7 +111,9 @@ async function getEventTemplateList() {
     templateList.value = result
     templateList.value.unshift({
         id: 'default',
-        name: '系統預設',
+        name: '預設模板',
+        organizationName: '系統',
+        designs: [],
     })
 
     if (templateList.value.length === 1) {

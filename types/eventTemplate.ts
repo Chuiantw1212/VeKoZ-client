@@ -1,8 +1,5 @@
 import type { IOffer } from "./offer"
 
-/**
- * @deprecated
- */
 export interface IEventTemplate {
     uid?: string,
     id?: string,
@@ -11,7 +8,8 @@ export interface IEventTemplate {
     designIds?: string[],
     name?: string,
     lastmod?: any,
-    // isPublic?: boolean, // 可被搜索到的活動事件
+    organizationLogo?: string,
+    organizationName?: string,
 }
 
 export interface ITemplateDesign {
