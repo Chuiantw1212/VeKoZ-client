@@ -123,11 +123,11 @@ onMounted(async () => {
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
-    await getRecentTemplate()
-    if (!eventTemplate.value.id) {
-        await setDefaultTemplate()
-        await postEventTemplate()
-    }
+    // await getRecentTemplate()
+    // if (!eventTemplate.value.id) {
+    //     await setDefaultTemplate()
+    //     await postEventTemplate()
+    // }
     isCardLoading.value = false
 })
 onBeforeUnmount(() => {

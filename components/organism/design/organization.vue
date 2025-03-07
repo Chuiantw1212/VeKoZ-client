@@ -4,7 +4,8 @@
         :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <el-select v-if="customDesign" v-model="customDesign.organizationId" placeholder="請選擇現有組織" :clearable="true"
             :disabled="disabled" @change="setOrganizationName()">
-            <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
+            <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                :value="String(item.id)" />
         </el-select>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -16,7 +17,8 @@
         <template v-slot:default>
             <el-select v-model="customDesign.organizationId" placeholder="請選擇現有組織" :clearable="true"
                 :disabled="disabled" @change="setOrganizationName()">
-                <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name" :value="item.id" />
+                <el-option v-for="(item, index) in organizationList" :key="index" :label="item.name"
+                    :value="String(item.id)" />
             </el-select>
         </template>
     </MoleculeDesignToolbar>

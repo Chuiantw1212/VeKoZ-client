@@ -121,7 +121,7 @@ onMounted(async () => {
     // setCalendarView()
     isLoading.value = false
 })
-watch((() => repoUser.userPreference), () => {
+watch((() => repoUser.preference), () => {
     setCalendarView()
 }, { immediate: true, deep: true })
 

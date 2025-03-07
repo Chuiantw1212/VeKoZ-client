@@ -8,12 +8,12 @@ export interface IEventTemplate extends IEventTemplateQuery {
     designIds?: string[],
     name?: string,
     lastmod?: any,
-    organizationLogo?: string,
-    organizationName?: string,
+    organizerLogo?: string,
+    organizerName?: string,
 }
 
 export interface IEventTemplateQuery {
-    organizationId?: string,
+    organizerId?: string,
 }
 
 export interface ITemplateDesign {

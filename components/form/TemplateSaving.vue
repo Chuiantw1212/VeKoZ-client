@@ -1,13 +1,13 @@
 <template>
-    <el-form ref="saveTemplateRef" :model="form" :rules="formRules">
+    <el-form ref="saveTemplateRef" :model="eventTemplate" :rules="formRules">
         <el-form-item label="模板隸屬組織" prop="organizationId">
-            <el-select v-model="form.organizationId" placeholder="請選擇" @change="setOrganization($event)">
+            <el-select v-model="eventTemplate.organizerId" placeholder="請選擇" @change="setOrganization($event)">
                 <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                     :value="String(item.organizationId)" />
             </el-select>
         </el-form-item>
         <el-form-item label="模板名稱" prop="name">
-            <el-input v-model="form.name" placeholder="請輸入另存的模板名稱"></el-input>
+            <el-input v-model="eventTemplate.name" placeholder="請輸入另存的模板名稱"></el-input>
         </el-form-item>
     </el-form>
 </template>
@@ -17,7 +17,7 @@ import type { IEventTemplate } from '~/types/eventTemplate';
 import type { IOrganizationMember } from '~/types/organization';
 const saveTemplateRef = ref<FormInstance>()
 const repoOrganizationMember = useRepoOrganizationMember()
-const form = defineModel<IEventTemplate>('modelValue', {
+const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     default: {
         name: '',
         organizationId: '',
@@ -43,8 +43,8 @@ function setOrganization(organizationId: string) {
         return member.organizationId === organizationId
     })
     if (selectedMembership) {
-        form.value.organizationName = selectedMembership.organizationName ?? ''
-        form.value.organizationLogo = selectedMembership.organizationLogo ?? ''
+        eventTemplate.value.organizerName = selectedMembership.organizationName ?? ''
+        eventTemplate.value.organizerLogo = selectedMembership.organizationLogo ?? ''
     }
 }
 async function getMemberOganizationList() {

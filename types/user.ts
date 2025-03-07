@@ -39,5 +39,5 @@ export interface IPreferenceEvent {
 }
 
 export interface IPreferenceEventTemplate {
-    organizationId: string,
+    organizerId: string,
 }

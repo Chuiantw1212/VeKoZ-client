@@ -2,7 +2,7 @@
     <div>
         <el-form>
             <el-form-item label="模板來源" prop="organizationId">
-                <el-select v-model="templateQuery.organizationId" placeholder="請選擇" @change="getEventTemplateList()">
+                <el-select v-model="templateQuery.organizerId" placeholder="請選擇" @change="getEventTemplateList()">
                     <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                         :value="String(item.organizationId)" />
                 </el-select>
@@ -62,7 +62,7 @@ const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 
 const templateQuery = ref<IEventTemplateQuery>({
-    organizationId: '',
+    organizerId: '',
 })
 
 const eventTemplate = defineModel<IEventTemplate>('modelValue', {
@@ -89,9 +89,9 @@ async function getMemberOganizationList() {
     membershipList.value = result.items
     const onlyOrg = membershipList.value[0]
     if (result.total === 0 && onlyOrg) {
-        templateQuery.value.organizationId = onlyOrg.organizationId
+        templateQuery.value.organizerId = onlyOrg.organizationId
     } else {
-        templateQuery.value.organizationId = repoUser.preference.eventTemplate.organizationId
+        templateQuery.value.organizerId = repoUser.preference.eventTemplate.organizerId
     }
     getEventTemplateList()
 }
@@ -129,7 +129,7 @@ async function selectTemplate(template: IEventTemplate) {
 async function deleteTemplate(template: IEventTemplate) {
     isLoading.value = true
     await repoEventTemplate.deleteEventTemplate({
-        organizationId: template.organizationId,
+        organizerId: template.organizerId,
         id: template.id
     })
     getEventTemplateList()
@@ -137,7 +137,7 @@ async function deleteTemplate(template: IEventTemplate) {
 
 async function getEventTemplateList() {
     const patch: IPreferenceEventTemplate = {
-        organizationId: templateQuery.value.organizationId ?? '',
+        organizerId: templateQuery.value.organizerId ?? '',
     }
     repoUser.patchUserPreference('eventTemplate', patch)
     // return
