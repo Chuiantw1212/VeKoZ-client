@@ -23,12 +23,6 @@
         "formField": "dates"
     },
     {
-        "type": "organization",
-        "label": "主辦單位",
-        "required": true,
-        "formField": "organizer"
-    },
-    {
         "type": "organizationMember",
         "label": "講者/主持",
         "required": true,

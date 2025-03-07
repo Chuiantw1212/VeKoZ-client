@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form>
-            <el-form-item label="模板來源" prop="organizationId">
+            <el-form-item label="主辦單位" prop="organizationId">
                 <el-select v-model="templateQuery.organizerId" placeholder="請選擇" @change="getEventTemplateList()">
                     <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                         :value="String(item.organizationId)" />

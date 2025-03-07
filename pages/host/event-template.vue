@@ -20,10 +20,8 @@
                             </div>
                         </div>
                     </template>
-                    <!-- <el-divider>客製化內容</el-divider>
-                    <el-divider>標準內容</el-divider> -->
-                    <FormEventTemplate v-model="eventTemplate.designs" :isDesigning="true"
-                        :onchange="handleDesignChanged" @remove="removeDesign($event)"
+                    <FormEventTemplate v-model="eventTemplate.designs" :organizerId="eventTemplate.organizerId"
+                        :isDesigning="true" :onchange="handleDesignChanged" @remove="removeDesign($event)"
                         @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"
@@ -123,11 +121,11 @@ onMounted(async () => {
     addOnDropListener(true)
     await getPlaceList()
     await getOrganizationList()
-    // await getRecentTemplate()
-    // if (!eventTemplate.value.id) {
-    //     await setDefaultTemplate()
-    //     await postEventTemplate()
-    // }
+    await getRecentTemplate()
+    if (!eventTemplate.value.id) {
+        await setDefaultTemplate()
+        await postEventTemplate()
+    }
     isCardLoading.value = false
 })
 onBeforeUnmount(() => {

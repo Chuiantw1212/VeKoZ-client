@@ -16,7 +16,7 @@ export default defineStore('eventTemplate', () => {
         const result: IEventTemplate | 0 = response.json()
         return result
     }
-    async function getEventTemplateList(templateQuery: IEventTemplateQuery) {
+    async function getEventTemplateList(templateQuery?: IEventTemplateQuery) {
         const response = await defaultApi.authRequest(`/event/template/list`, {
             method: 'GET',
             params: templateQuery,

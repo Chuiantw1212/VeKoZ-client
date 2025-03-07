@@ -27,7 +27,7 @@
             </OrganismDesignOrganization>
             <OrganismDesignOrganizationMember v-if="item.type === 'organizationMember'" v-model="templateDesigns[index]"
                 :onchange="onchange" :isDesigning="props.isDesigning" :disabled="props.disabled"
-                :required="item.required" :organization-id="getOrganizationId()" @dragstart="handleDragStart(index)"
+                :required="item.required" :organization-id="organizerId" @dragstart="handleDragStart(index)"
                 @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOrganizationMember>
@@ -110,6 +110,10 @@ const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
     }
 })
 const props = defineProps({
+    organizerId: {
+        type: String,
+        default: ''
+    },
     isDesigning: {
         type: Boolean,
         default: false
@@ -160,14 +164,6 @@ async function validate() {
     return await formRef.value?.validate()
 }
 
-function getOrganizationId() {
-    const organization = templateDesigns.value.find((design: ITemplateDesign) => {
-        return design.type === 'organization'
-    })
-    if (organization) {
-        return organization.organizationId
-    }
-}
 function handleRemove(index: number) {
     const item = templateDesigns.value[index]
     emit('remove', {
