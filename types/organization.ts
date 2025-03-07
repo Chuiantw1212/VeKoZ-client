@@ -1,3 +1,5 @@
+import type { IPagination } from "./ui"
+
 export type IOrganization = {
     id?: string,
     seoName?: string,
@@ -16,7 +18,7 @@ export type IOrganization = {
 /**
  * 權限各自不相同
  */
-export type IOrganizationMember = {
+export type IOrganizationMember = IOrganizationMemberQuery & {
     id?: string,
     name?: string,
     email?: string,
@@ -24,6 +26,9 @@ export type IOrganizationMember = {
     organizationName?: string,
     organizationFounderId?: string,
     lastmod?: string,
-    allowMethods?: string[],
     isFounder?: false,
+}
+
+export type IOrganizationMemberQuery = IPagination & {
+    allowMethods?: string[],
 }

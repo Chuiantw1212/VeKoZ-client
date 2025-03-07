@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
-import type { IOrganizationMember } from '~/types/organization'
+import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization'
 import type { IPagination } from '~/types/ui'
 
 export default defineStore('organizationMember', () => {
     const defaultApi = useVenoniaApi()
-    async function getMemberOrganizatoinList(pagination?: IPagination) {
+    async function getMemberOrganizatoinList(params?: IOrganizationMemberQuery) {
         const response = await defaultApi.authRequest(`/member/organization/list`, {
             method: 'GET',
-            params: pagination,
+            params,
         })
         return response.json()
     }

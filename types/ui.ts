@@ -16,6 +16,6 @@ export interface IPublicInfoCard {
 }
 
 export interface IPagination {
-    pageSize: number,
-    currentPage: number,
+    pageSize?: number,
+    currentPage?: number,
 }
