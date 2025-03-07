@@ -33,8 +33,7 @@
             <el-table-column prop="name" label="成員名稱" />
             <el-table-column prop="allowMethods" label="操作權限">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" :disabled="row.isFounder"
-                        @change="setMember(row)">
+                    <el-checkbox-group v-model="row.allowMethods" :disabled="row.isFounder" @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">
                             {{ auth.label }}
@@ -44,7 +43,7 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
-                    <el-button v-if="!checkRowDisabled(row)" v-loading="isLoading" :icon="Delete"
+                    <el-button v-if="!row.isFounder" v-loading="isLoading" :icon="Delete"
                         @click="deleteOrganizationMember(row)">
                     </el-button>
                     <template v-else>
@@ -129,11 +128,6 @@ onMounted(() => {
 function checkIsSelf(member: IOrganizationMember) {
     const isSelfMember = repoUser.userInfo.email === member.email
     return isSelfMember
-}
-
-function checkRowDisabled(member: IOrganizationMember) {
-    const isSelfFounder = repoUser.userInfo.id === member.organizationFounderId
-    return isSelfFounder || member.isFounder
 }
 
 async function setMember(item: IOrganizationMember) {

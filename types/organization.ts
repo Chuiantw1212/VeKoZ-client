@@ -24,7 +24,7 @@ export type IOrganizationMember = IOrganizationMemberQuery & {
     email?: string,
     organizationId?: string,
     organizationName?: string,
-    organizationFounderId?: string,
+    organizationLogo?: string,
     lastmod?: string,
     isFounder?: false,
 }
