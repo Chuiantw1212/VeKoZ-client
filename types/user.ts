@@ -23,15 +23,21 @@ export interface IUser {
 
 export interface IUserPreference {
     [key: string]: any,
-    // publicInfos?: string[], // 這邊可能會限制講者開放的資訊  
     uid?: string,
     id?: string,
-    userType?: UserType,
+    // 主題偏好
+    menuType?: UserType,
     isFullScreen?: boolean,
-    event: IPreferenceEvent
+    // 個別管理畫面的偏好
+    event: IPreferenceEvent,
+    eventTemplate: IPreferenceEventTemplate,
 }
 
 export interface IPreferenceEvent {
     calendarViewType?: 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
     organizationIds?: string[]
+}
+
+export interface IPreferenceEventTemplate {
+    organizationId: string,
 }

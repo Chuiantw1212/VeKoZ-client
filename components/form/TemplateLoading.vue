@@ -1,25 +1,25 @@
 <template>
     <div>
         <el-form>
-            <el-form-item label="模板隸屬組織" prop="organizationId">
-                <el-select v-model="searchForm.organizationId" placeholder="請選擇">
+            <el-form-item label="模板來源" prop="organizationId">
+                <el-select v-model="searchForm.organizationId" placeholder="請選擇" @change="getEventTemplateList()">
                     <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                         :value="String(item.organizationId)" />
                 </el-select>
             </el-form-item>
         </el-form>
         <el-table v-loading="isLoading" :data="templateList" style="width: 100%">
-            <el-table-column prop="organizationLogo">
+            <!-- <el-table-column prop="organizationLogo">
                 <template #default="{ row }">
                     <template v-if="row.organizationLogo">
                         <el-avatar :src="row.organizationLogo"></el-avatar>
                     </template>
-                    <template v-else>
+<template v-else>
                         -
                     </template>
-                </template>
-            </el-table-column>
-            <el-table-column prop="organizationName" label="模板來源"></el-table-column>
+</template>
+</el-table-column> -->
+            <!-- <el-table-column prop="organizationName" label="模板來源"></el-table-column> -->
             <el-table-column prop="name" label="模板名稱" />
             <el-table-column prop="" label="選擇">
                 <template #default="{ row }">
@@ -57,6 +57,7 @@ import type { IOrganizationMember } from '~/types/organization';
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganizationMember = useRepoOrganizationMember()
+const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 
 const searchForm = ref<IOrganizationMember>({
@@ -77,7 +78,6 @@ const templateList = ref<IEventTemplate[]>([])
 // Hooks
 onMounted(() => {
     getMemberOganizationList()
-    // getEventTemplateList()
 })
 
 // Methods
@@ -86,6 +86,10 @@ async function getMemberOganizationList() {
         allowMethods: ['GET'],
     })
     membershipList.value = result.items
+    const onlyOrg = membershipList.value[0]
+    if (result.total === 0 && onlyOrg) {
+        searchForm.value.organizationId = onlyOrg.organizationId
+    }
 }
 
 async function selectTemplate(template: IEventTemplate) {
@@ -130,15 +134,17 @@ async function deleteTemplate(template: IEventTemplate) {
 }
 
 async function getEventTemplateList() {
+    repoUser.patchUserPreference('eventTemplate', searchForm.value.organizationId)
+    return
     isLoading.value = true
     const result = await repoEventTemplate.getEventTemplateList()
     templateList.value = result
-    templateList.value.unshift({
-        id: 'default',
-        name: '預設模板',
-        organizationName: '系統',
-        designs: [],
-    })
+    // templateList.value.unshift({
+    //     id: 'default',
+    //     name: '預設模板',
+    //     organizationName: '系統',
+    //     designs: [],
+    // })
 
     if (templateList.value.length === 1) {
         // 只剩下預設可選，刪除模板Id，觸發父層的Reset

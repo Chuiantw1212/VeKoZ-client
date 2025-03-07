@@ -57,6 +57,6 @@ async function handleLoggedIn(user: IUser) {
         router.push('/')
     }
     // // 使用上次登入狀態或是預設一般參加者
-    // repoUser.setUserType(preference?.userType ?? 'attendee')
+    // repoUser.setUserType(preference?.menuType ?? 'attendee')
 }
 </script>

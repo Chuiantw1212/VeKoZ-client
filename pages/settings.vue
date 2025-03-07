@@ -10,9 +10,9 @@
             <el-button class="btnGroup__item" :icon="User">登出</el-button>
         </el-col>
         <el-col :span="sysBtnSpan">
-            <el-button v-if="repoUser.userType === 'attendee'" class="btnGroup__item"
+            <el-button v-if="repoUser.preference.menuType === 'attendee'" class="btnGroup__item"
                 @click="repoUser.setUserType('host')" :icon="Switch">切換為主辦方</el-button>
-            <el-button v-if="repoUser.userType === 'host'" class="btnGroup__item"
+            <el-button v-if="repoUser.preference.menuType === 'host'" class="btnGroup__item"
                 @click="repoUser.setUserType('attendee')" :icon="Switch">切換為一般用戶</el-button>
         </el-col>
         <el-col :span="sysBtnSpan">

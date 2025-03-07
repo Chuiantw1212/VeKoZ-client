@@ -1,12 +1,12 @@
 <template>
     <el-menu :default-active="activeIndex" class="headerMenu" mode="horizontal" :ellipsis="false"
         :menu-trigger="'click'">
-        <!-- <el-menu-item v-if="repoUser.userType === 'host'" class="headerMenu__toggle" @click="repoUI.toggleMenu()">
+        <!-- <el-menu-item v-if="repoUser.preference.menuType === 'host'" class="headerMenu__toggle" @click="repoUI.toggleMenu()">
             <el-icon>
                 <More />
             </el-icon>
         </el-menu-item> -->
-        <NuxtLink v-if="repoUser.userType === 'host'" to="/host">
+        <NuxtLink v-if="repoUser.preference.menuType === 'host'" to="/host">
             <el-menu-item class="headerMenu__logo">
                 <img src="@/assets/logo/140_60_admin.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
@@ -16,14 +16,14 @@
                 <img src="@/assets/logo/140_60.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
-        <div v-if="repoUser.userType === 'attendee' && repoUI.isLarge" class="attendee__menu">
+        <div v-if="repoUser.preference.menuType === 'attendee' && repoUI.isLarge" class="attendee__menu">
             <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
         </div>
         <div class="menu__endGroup">
             <!-- <el-menu-item>
                 <el-switch v-model="isFullScreen" active-text="放大" @change="patchUserPreference()" />
             </el-menu-item> -->
-            <NuxtLink v-if="repoUser.userType" to="/settings">
+            <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
                 <el-menu-item index="4" class="headerMenu__firstItem">
                     <OrganismUserAuth></OrganismUserAuth>
                 </el-menu-item>

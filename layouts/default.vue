@@ -1,9 +1,9 @@
 <template>
-    <el-header v-if="repoUser.userType === 'host' || repoUI.isLarge">
+    <el-header v-if="repoUser.preference.menuType === 'host' || repoUI.isLarge">
         <HeaderMenu class="vekoz--header"></HeaderMenu>
     </el-header>
     <el-container class="defaultLayout" :class="{ 'defaultLayout__isStandard': !isFullScreen }">
-        <el-aside v-if="repoUser.userType === 'host'" class="defaultLayout__aside">
+        <el-aside v-if="repoUser.preference.menuType === 'host'" class="defaultLayout__aside">
             <SideMenu></SideMenu>
         </el-aside>
         <el-container>
@@ -12,7 +12,7 @@
             </el-main>
         </el-container>
     </el-container>
-    <el-footer v-if="repoUser.userType !== 'host' && !repoUI.isLarge" class="defaultLayout__footer">
+    <el-footer v-if="repoUser.preference.menuType !== 'host' && !repoUI.isLarge" class="defaultLayout__footer">
         <OrganismAttendeeMenu></OrganismAttendeeMenu>
     </el-footer>
 </template>

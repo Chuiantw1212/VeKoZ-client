@@ -7,13 +7,13 @@ export default defineStore('user', () => {
     const defaultApi = useVenoniaApi()
     const route = useRoute()
     const router = useRouter()
-    const userType = ref<UserType>('attendee') // 為了網址簡單，捨棄organizer改用host，並且用這個欄位驗證是否成功登入(isSignedIn)
     const userInfo = ref<IUser>({})
-    const userPreference = ref<IUserPreference>({
-        event: {
-
+    const preference = ref<IUserPreference>({
+        event: {},
+        eventTemplate: {
+            organizationId: '',
         },
-        userType: 'attendee',
+        menuType: 'attendee',
         isFullScreen: false,
     })
     /**
@@ -27,15 +27,12 @@ export default defineStore('user', () => {
             })
             const user = await response.json() as IUser
             userInfo.value = user
-            userPreference.value = user.preference as IUserPreference
-            if (user.preference) {
-                userType.value = user.preference.userType ?? ''
-            }
+            preference.value = user.preference as IUserPreference ?? {}
             if (String(route.name).includes('host')) {
-                userType.value = 'host'
+                preference.value.menuType = 'host'
             } else {
                 // 首頁強制轉換，不然會跑版
-                userType.value = 'attendee'
+                preference.value.menuType = 'attendee'
             }
             return userInfo.value
         } catch (error: any) {
@@ -55,10 +52,10 @@ export default defineStore('user', () => {
         return response.json()
     }
     async function setUserType(newUserType: UserType) {
-        userType.value = newUserType
+        // menuType.value = newUserType
         if (newUserType) {
             // 除了非登入狀態，紀錄登錄狀態
-            patchUserPreference('userType', newUserType)
+            patchUserPreference('menuType', newUserType)
         }
         if (newUserType === 'host') {
             if (route.name === 'signIn') {
@@ -97,17 +94,22 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
-        if (!userPreference.value || !userInfo.value.id) {
+        console.log({
+            fieldName,
+            userInfo,
+            preference,
+        })
+        if (!preference.value || !userInfo.value.id) {
             return
         }
         if (newValue === Object(newValue)) {
-            const field = userPreference.value[fieldName]
+            const field = preference.value[fieldName]
             Object.assign(field, newValue)
         } else {
-            userPreference.value[fieldName] = newValue
+            preference.value[fieldName] = newValue
         }
         const newPatch: { [key: string]: any } = {}
-        newPatch[fieldName] = userPreference.value[fieldName]
+        newPatch[fieldName] = preference.value[fieldName]
         const response = await defaultApi.authRequest(`/user/preference`, {
             method: 'PATCH',
             body: newPatch
@@ -122,9 +124,8 @@ export default defineStore('user', () => {
         return response.text()
     }
     return {
-        userType,
         userInfo,
-        userPreference,
+        preference,
         getUser,
         getUserPublicInfo,
         getUserSeoInfo,
