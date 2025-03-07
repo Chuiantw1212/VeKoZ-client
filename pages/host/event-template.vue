@@ -32,7 +32,7 @@
                             </div>
                         </template>
                     </FormEventTemplate>
-                    <div v-if="!eventTemplate.designs.length" class="eventTemplate__designItem"
+                    <div v-if="!eventTemplate.designs?.length" class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳元件至 此位置

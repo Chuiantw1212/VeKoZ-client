@@ -36,7 +36,7 @@
                 </template>
                 <template v-else>
                     <el-button :icon="Folder" size="small" @click="selectMembership(row)">
-                        可開啟
+                        開啟
                     </el-button>
                 </template>
             </template>

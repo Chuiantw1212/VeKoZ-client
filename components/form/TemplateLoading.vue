@@ -26,7 +26,7 @@
                 </template>
                 <template v-else>
                     <el-button :icon="FolderOpened" size="small" @click="selectTemplate(row)">
-                        可開啟
+                        開啟
                     </el-button>
                 </template>
             </template>
@@ -42,7 +42,6 @@
 </template>
 <script setup lang="ts">
 import { FolderAdd, EditPen, FolderOpened } from '@element-plus/icons-vue';
-import type { IEventSingle } from '~/types/event';
 import {
     Delete,
 } from '@element-plus/icons-vue'
