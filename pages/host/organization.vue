@@ -48,36 +48,36 @@
         </el-row>
 
         <AtomVekozDialog v-model="orgListVisible">
-            <template #header>
+            <!-- <template #header>
                 <el-text size="large">
                     開啟組織
                 </el-text>
-            </template>
+            </template> -->
             <FormOrganizationList v-if="orgListVisible" :modelValue="currentMembership"
                 @update:modelValue="openOrganization($event)" @create="createOrganization()">
             </FormOrganizationList>
         </AtomVekozDialog>
 
         <AtomVekozDialog v-model="organizationDialogVisible">
-            <template #header>
+            <!-- <template #header>
                 <el-text size="large">
                     組織資料
                 </el-text>
-            </template>
+            </template> -->
             <FormOrganization :modelValue="currentPublicInfo"></FormOrganization>
         </AtomVekozDialog>
 
-        <AtomVekozDialog v-model="memberListVisible" :showClose="false">
-            <template #header>
-                <img :src="currentPublicInfo.image">
+        <AtomVekozDialog v-model="memberListVisible" :showClose="true">
+            <!-- <template #header>
+                <el-avatar :src="currentPublicInfo.image"></el-avatar>
                 <el-text size="large">
-                    {{ currentPublicInfo.name }} 成員管理
+                    {{ currentPublicInfo.name }}
                 </el-text>
-            </template>
-            <template #headerUI>
+            </template> -->
+            <!-- <template #headerUI>
                 <el-button :icon="Close" text @click="memberListVisible = false">
                 </el-button>
-            </template>
+            </template> -->
             <FormOrganizationMember v-if="memberListVisible" :modelValue="currentMembership">
             </FormOrganizationMember>
         </AtomVekozDialog>
@@ -128,7 +128,7 @@ function getPersonalLink() {
 
 async function getOrganizationMemberships() {
     const response = await repoOrganizationMember.getMemberOrganizatoinList({
-        pageSize: 5,
+        pageSize: 50,
         currentPage: 1,
     })
     membershipList.value = response.items

@@ -14,12 +14,12 @@
         <el-table-column prop="" label="選擇">
             <template #default="{ row }">
                 <template v-if="row.id === eventTemplate.id">
-                    <el-button size="small" :disabled="true">
+                    <el-button :icon="Loading" size="small" :disabled="true">
                         編輯中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button size="small" @click="selectTemplate(row)">
+                    <el-button :icon="FolderAdd" size="small" @click="selectTemplate(row)">
                         建新板
                     </el-button>
                 </template>
@@ -40,6 +40,7 @@
     </el-table>
 </template>
 <script setup lang="ts">
+import { FolderAdd, Loading } from '@element-plus/icons-vue';
 import type { IEventSingle } from '~/types/event';
 import {
     Delete,

@@ -225,7 +225,7 @@ async function getOrganizationList() {
     organizationList.value = result
     // 預設全選
     selectedOrganizationIds.value = result.map(org => {
-        return org.id
+        return org.id ?? ''
     })
 }
 

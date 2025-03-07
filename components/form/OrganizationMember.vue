@@ -1,7 +1,10 @@
 <template>
     <div class="organizationMember">
         <el-alert type="info" show-icon :closable="false">
-            部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。
+            <ol>
+                <li>成員會看見創辦人建立的模板、組織、票券</li>
+                <li>部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。</li>
+            </ol>
         </el-alert>
         <el-form class="mt-20" ref="formRef" :rules="formRules" :model="searchForm">
             <el-row :gutter="20">
@@ -30,7 +33,7 @@
             <el-table-column prop="name" label="成員名稱" />
             <el-table-column prop="allowMethods" label="操作權限">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" :disabled="!currentMember.isFounder"
+                    <el-checkbox-group v-model="row.allowMethods" :disabled="row.isFounder"
                         @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">

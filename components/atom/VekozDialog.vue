@@ -3,7 +3,7 @@
         :show-close="showClose" :lock-scroll="true" :align-center="true">
         <template #header>
             <div class="venonia-dialog-header">
-                <div>
+                <div class="header__titleGroup">
                     <slot name="header"></slot>
                 </div>
                 <div class="headerUI">
@@ -63,6 +63,12 @@ const width = computed(() => {
         width: 100%;
         align-items: center;
         justify-content: space-between;
+
+        .header__titleGroup {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
         .header__btnGroup {
             display: flex;

@@ -13,9 +13,9 @@
                 <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="openQrCode()">
+            <!-- <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="openQrCode()">
                 追隨
-            </el-button>
+            </el-button> -->
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
@@ -31,7 +31,7 @@
             <template v-else>
                 <pre class="content__header">{{ publicInfo.name }}</pre>
             </template>
-            <div class="content__followers">XXX人追隨</div>
+            <!-- <div class="content__followers">XXX人追隨</div> -->
             <template v-if="isDesigning && !disabled">
                 <el-input v-model="publicInfo.description" :maxlength="120" :show-word-limit="true" type="textarea"
                     :rows="6" :disabled="disabled" @change="handleChange" placeholder="請輸入簡介"></el-input>

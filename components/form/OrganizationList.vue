@@ -1,17 +1,15 @@
 <template>
     <el-table v-loading="isLoading" :data="membershipList" :style="{ 'width': '100%' }">
-        <el-table-column prop="lastmod" label="上次修改">
+        <el-table-column prop="organizationLogo" label="">
             <template #default="{ row }">
-                <template v-if="row.lastmod">
-                    {{ new Date(row.lastmod).toLocaleDateString('zh-TW') }}
-                </template>
+                <el-avatar v-if="row.organizationLogo" :src="row.organizationLogo"></el-avatar>
                 <template v-else>
                     -
                 </template>
             </template>
         </el-table-column>
         <el-table-column prop="organizationName" label="組織名稱" />
-        <el-table-column prop="auth" label="資料權限">
+        <el-table-column prop="auth" label="我的權限">
             <template #default="{ row }">
                 <el-checkbox-group v-model="row.allowMethods" :disabled="true">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
@@ -21,33 +19,34 @@
                 </el-checkbox-group>
             </template>
         </el-table-column>
-        <el-table-column label="選擇">
+        <el-table-column label="開啟">
             <template #default="{ row }">
                 <template v-if="checkOrganizationOnUse(row)">
-                    <el-button :disabled="true">
+                    <el-button size="small" :disabled="true">
                         使用中
                     </el-button>
                 </template>
                 <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button v-if="maximumReached" :disabled="true" @click="selectMembership(row)">
+                    <el-button v-if="maximumReached" size="small" :disabled="true" @click="selectMembership(row)">
                         達上限=2
                     </el-button>
-                    <el-button v-else :icon="FolderAdd" @click="selectMembership(row)">
+                    <el-button v-else :icon="FolderAdd" size="small" @click="selectMembership(row)">
                         新組織
                     </el-button>
                 </template>
                 <template v-else>
-                    <el-button :icon="Folder" @click="selectMembership(row)">
+                    <el-button :icon="Folder" size="small" @click="selectMembership(row)">
                         可開啟
                     </el-button>
                 </template>
             </template>
         </el-table-column>
-        <el-table-column prop="" label="操作">
+        <el-table-column prop="" label="刪除/退出">
             <template #default="{ row }">
                 <template v-if="!['default', 'blank'].includes(row.id)">
                     <!-- 成員只可以退出 -->
-                    <el-button v-if="!row.isFounder" :disabled="row.isFounder" @click="deleteMembership(row)">
+                    <el-button v-if="!row.isFounder" size="small" :disabled="row.isFounder"
+                        @click="deleteMembership(row)">
                         <el-icon class="rotate--90">
                             <Upload />
                         </el-icon>
@@ -59,7 +58,7 @@
                             此為最後的用戶所有組織，
                             不可異動。
                         </template>
-                        <el-button v-else :icon="Delete" :disabled="checkOrganizationOnUse(row)"
+                        <el-button v-else :icon="Delete" size="small" :disabled="checkOrganizationOnUse(row)"
                             @click="deleteOrganization(row)">
                             刪除組織
                         </el-button>
@@ -136,11 +135,13 @@ async function getOrganizationMemberships() {
         pageSize: 50,
         currentPage: 1,
     })
+    const blankMembership: IOrganizationMember = {
+        id: 'blank',
+        organizationName: `${repoUser.userInfo.name}的新組織`,
+        allowMethods: ['GET', 'PATCH', 'POST', 'DELETE'],
+    }
     membershipList.value = [
-        {
-            id: 'blank',
-            organizationName: `${repoUser.userInfo.name}的新組織`,
-        },
+        blankMembership,
         ...response.items,
     ]
     const founded = response.items.filter((member: IOrganizationMember) => {

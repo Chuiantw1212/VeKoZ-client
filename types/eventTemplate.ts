@@ -11,7 +11,7 @@ export interface IEventTemplate {
     designIds?: string[],
     name?: string,
     lastmod?: any,
-    isPublic?: boolean, // 可被搜索到的活動事件
+    // isPublic?: boolean, // 可被搜索到的活動事件
 }
 
 export interface ITemplateDesign {

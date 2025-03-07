@@ -56,15 +56,23 @@
         <template #title>組織管理</template>
       </el-menu-item>
     </NuxtLink>
+    <NuxtLink to="/host/guide">
+      <el-menu-item index="host-guide">
+        <el-icon>
+          <InfoFilled />
+        </el-icon>
+        <template #title>系統說明</template>
+      </el-menu-item>
+    </NuxtLink>
   </el-menu>
 </template>
 <script setup lang="ts">
-import { Ticket, Tickets, Calendar, Document, DocumentCopy, Location, OfficeBuilding } from '@element-plus/icons-vue'
+import { Ticket, Tickets, Calendar, Document, DocumentCopy, Location, OfficeBuilding, InfoFilled } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
 const activeIndex = ref('event')
 const route = useRoute()
 onMounted(() => {
-  activeIndex.value = route.name
+  activeIndex.value = String(route.name)
 })
 </script>
 <style>
