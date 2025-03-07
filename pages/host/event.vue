@@ -65,7 +65,7 @@
         <AtomVekozDialog v-model="loadTemplateDialogIsOpen" :showClose="true">
             <template #header>
                 <el-text size="large">
-                    選擇模板
+                    選擇活動模板
                 </el-text>
             </template>
             <FormTemplateSelecting v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">

@@ -31,7 +31,7 @@ export default defineStore('eventTemplate', () => {
         return response.json()
     }
     async function patchTemplateDesignIds(template: IEventTemplate) {
-        const templateDesignIds = template.designs.map(design => String(design.id))
+        const templateDesignIds = template.designs?.map(design => String(design.id))
         const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
             method: 'PATCH',
             body: {
@@ -49,9 +49,10 @@ export default defineStore('eventTemplate', () => {
         })
         return response.text()
     }
-    async function deleteEventTemplate(id: string) {
-        const response = await defaultApi.authRequest(`/event/template/${id}`, {
+    async function deleteEventTemplate(template: IEventTemplate) {
+        const response = await defaultApi.authRequest(`/event/template`, {
             method: 'DELETE',
+            params: template,
         })
         return response.text()
     }

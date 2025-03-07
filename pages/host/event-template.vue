@@ -233,12 +233,16 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     if (!templateTemp.value.item.type) {
         alert('系統BUG, 元件類型遺失請重新拖曳。')
     }
+    if (!eventTemplate.value.designs) {
+        alert('系統BUG, designs資料遺失')
+        return
+    }
     // 插入元素
     const templateDesign: ITemplateDesign = JSON.parse(JSON.stringify(templateTemp.value.item)) // 必須深拷貝，不然會在清除站存資料時影響到模板
     // 先更新資料庫再更新畫面
     const hasSource = templateTemp.value.index !== -1
     const sourceIndex = Number(templateTemp.value.index)
-    if (hasSource) {
+    if (hasSource && eventTemplate.value.designs) {
         // 屬於原有模板拖曳
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)
         // 刪除原本位置的的模板
@@ -267,6 +271,10 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
 }
 
 async function removeDesign(data: ITemplateDragSouce) {
+    if (!eventTemplate.value.designs) {
+        alert('系統BUG, designs資料遺失。')
+        return
+    }
     isCardLoading.value = true
     // 更新資料庫
     await repoEventTemplate.deleteEventTemplateDesign(String(data.item.id))

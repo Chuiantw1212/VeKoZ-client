@@ -97,12 +97,14 @@ async function selectTemplate(template: IEventTemplate) {
 }
 
 async function deleteTemplate(template: IEventTemplate) {
-    if (!template.id) {
-        return
+    if (template.organizationId && template.id) {
+        isLoading.value = true
+        await repoEventTemplate.deleteEventTemplate({
+            organizationId: template.organizationId,
+            id: template.id
+        })
+        getEventTemplateList()
     }
-    isLoading.value = true
-    await repoEventTemplate.deleteEventTemplate(template.id)
-    getEventTemplateList()
 }
 
 async function getEventTemplateList() {

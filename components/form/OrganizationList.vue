@@ -56,7 +56,7 @@
                     <template v-if="row.isFounder">
                         <template v-if="isFinalFounder">
                             此為最後的用戶所有組織，
-                            不可異動。
+                            不可刪除。
                         </template>
                         <el-button v-else :icon="Delete" size="small" :disabled="checkOrganizationOnUse(row)"
                             @click="deleteOrganization(row)">

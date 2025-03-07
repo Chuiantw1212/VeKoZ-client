@@ -20,6 +20,8 @@
                     </template>
                 </template>
             </el-table-column>
+            <el-table-column prop="organizationName" label="活動主辦單位">
+            </el-table-column>
             <el-table-column prop="name" label="模板名稱" />
             <el-table-column prop="" label="選擇">
                 <template #default="{ row }">

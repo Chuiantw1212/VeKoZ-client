@@ -4,7 +4,7 @@ export interface IEventTemplate {
     uid?: string,
     id?: string,
     eventId?: string, // 已創建的event才會有, 編輯中或是樣板不會有
-    designs: ITemplateDesign[],
+    designs?: ITemplateDesign[],
     designIds?: string[],
     name?: string,
     lastmod?: any,
@@ -55,5 +55,5 @@ export interface ITemplateDesign {
 
 export interface ITemplateDragSouce {
     index: number,
-    item: ITemplateDesign
+    item: ITemplateDesign,
 }
