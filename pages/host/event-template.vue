@@ -54,9 +54,9 @@
         </el-row>
         <AtomVekozDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>
-                <FormEditEventTemplate v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
+                <FormTemplateLoading v-if="loadTemplateDialog.isOpen" v-model="eventTemplate"
                     @update:modelValue="loadTemplate($event)" @reset="">
-                </FormEditEventTemplate>
+                </FormTemplateLoading>
             </template>
         </AtomVekozDialog>
         <AtomVekozDialog v-model="templateSavingDialog.isOpen" :showClose="true">
@@ -64,7 +64,6 @@
                 另存新模板
             </template>
             <template #default>
-                隸屬于XX組織的模板
                 <el-form v-if="templateSavingDialog.isOpen" ref="saveFormRef" :model="templateSavingDialog">
                     <el-form-item label="模板名稱" :required="true" prop="name">
                         <el-input v-model="templateSavingDialog.name" placeholder="請輸入另存的模板名稱"></el-input>
