@@ -59,16 +59,13 @@
                 </FormTemplateLoading>
             </template>
         </AtomVekozDialog>
-        <AtomVekozDialog v-model="templateSavingDialog.isOpen" :showClose="true">
+        <AtomVekozDialog v-model="saveTemplateDialogVisible" :showClose="true">
             <template #header>
                 另存新模板
             </template>
             <template #default>
-                <el-form v-if="templateSavingDialog.isOpen" ref="saveFormRef" :model="templateSavingDialog">
-                    <el-form-item label="模板名稱" :required="true" prop="name">
-                        <el-input v-model="templateSavingDialog.name" placeholder="請輸入另存的模板名稱"></el-input>
-                    </el-form-item>
-                </el-form>
+                <FormTemplateSaving v-if="saveTemplateDialogVisible" v-model="templateSavingForm" ref="saveTemplateRef">
+                </FormTemplateSaving>
             </template>
             <template #footer>
                 <el-button @click="confirmSaveDialog()">儲存</el-button>
@@ -113,9 +110,9 @@ const loadTemplateDialog = ref({
     isOpen: false,
 })
 
-const saveFormRef = ref<FormInstance>()
-const templateSavingDialog = ref({
-    isOpen: false,
+const saveTemplateDialogVisible = ref<boolean>(false)
+const saveTemplateRef = ref<FormInstance>()
+const templateSavingForm = ref({
     name: ''
 })
 
@@ -146,17 +143,17 @@ async function patchTemplateName() {
 }
 
 async function openSaveDialog() {
-    templateSavingDialog.value.isOpen = true
+    saveTemplateDialogVisible.value = true
 }
 
 async function confirmSaveDialog() {
-    const isValid = await saveFormRef.value?.validate()
+    const isValid = await saveTemplateRef.value?.validate()
     if (!isValid) {
         return
     }
     isCardLoading.value = true
-    await postEventTemplate(templateSavingDialog.value.name)
-    templateSavingDialog.value.isOpen = false
+    await postEventTemplate(templateSavingForm.value.name)
+    saveTemplateDialogVisible.value = false
     isCardLoading.value = false
 }
 
