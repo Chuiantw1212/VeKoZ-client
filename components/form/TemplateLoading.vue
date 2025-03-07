@@ -1,54 +1,68 @@
 <template>
-    <el-table v-loading="isLoading" :data="templateList" style="width: 100%">
-        <el-table-column prop="organizationLogo">
-            <template #default="{ row }">
-                <template v-if="row.organizationLogo">
-                    <el-avatar :src="row.organizationLogo"></el-avatar>
+    <div>
+        <el-form>
+            <el-form-item label="模板隸屬組織" prop="organizationId">
+                <el-select v-model="searchForm.organizationId" placeholder="請選擇">
+                    <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
+                        :value="String(item.organizationId)" />
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <el-table v-loading="isLoading" :data="templateList" style="width: 100%">
+            <el-table-column prop="organizationLogo">
+                <template #default="{ row }">
+                    <template v-if="row.organizationLogo">
+                        <el-avatar :src="row.organizationLogo"></el-avatar>
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
                 </template>
-                <template v-else>
-                    -
+            </el-table-column>
+            <el-table-column prop="organizationName" label="模板來源"></el-table-column>
+            <el-table-column prop="name" label="模板名稱" />
+            <el-table-column prop="" label="選擇">
+                <template #default="{ row }">
+                    <template v-if="row.id === eventTemplate.id">
+                        <el-button :icon="EditPen" size="small" :disabled="true">
+                            編輯中
+                        </el-button>
+                    </template>
+                    <template v-else-if="['default', 'blank'].includes(row.id)">
+                        <el-button :icon="FolderAdd" size="small" @click="selectTemplate(row)">
+                            建新板
+                        </el-button>
+                    </template>
+                    <template v-else>
+                        <el-button :icon="FolderOpened" size="small" @click="selectTemplate(row)">
+                            開啟
+                        </el-button>
+                    </template>
                 </template>
-            </template>
-        </el-table-column>
-        <el-table-column prop="organizationName" label="模板來源"></el-table-column>
-        <el-table-column prop="name" label="模板名稱" />
-        <el-table-column prop="" label="選擇">
-            <template #default="{ row }">
-                <template v-if="row.id === eventTemplate.id">
-                    <el-button :icon="EditPen" size="small" :disabled="true">
-                        編輯中
+            </el-table-column>
+            <el-table-column prop="" label="刪除">
+                <template #default="{ row }">
+                    <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
+                        :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
                     </el-button>
                 </template>
-                <template v-else-if="['default', 'blank'].includes(row.id)">
-                    <el-button :icon="FolderAdd" size="small" @click="selectTemplate(row)">
-                        建新板
-                    </el-button>
-                </template>
-                <template v-else>
-                    <el-button :icon="FolderOpened" size="small" @click="selectTemplate(row)">
-                        開啟
-                    </el-button>
-                </template>
-            </template>
-        </el-table-column>
-        <el-table-column prop="" label="刪除">
-            <template #default="{ row }">
-                <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
-                    :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+            </el-table-column>
+        </el-table>
+    </div>
 </template>
 <script setup lang="ts">
-import { FolderAdd, EditPen, FolderOpened } from '@element-plus/icons-vue';
-import {
-    Delete,
-} from '@element-plus/icons-vue'
+import { FolderAdd, EditPen, FolderOpened, Delete } from '@element-plus/icons-vue';
 import type { IEventTemplate } from '~/types/eventTemplate';
+import type { IOrganizationMember } from '~/types/organization';
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
+const repoOrganizationMember = useRepoOrganizationMember()
 const isLoading = ref<boolean>(false)
+
+const searchForm = ref<IOrganizationMember>({
+    organizationId: '',
+})
+
 const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     type: Object,
     default: {
@@ -57,14 +71,23 @@ const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     }
 })
 
+const membershipList = ref<IOrganizationMember[]>([])
 const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
 onMounted(() => {
-    getEventTemplateList()
+    getMemberOganizationList()
+    // getEventTemplateList()
 })
 
 // Methods
+async function getMemberOganizationList() {
+    const result = await repoOrganizationMember.getMemberOrganizatoinList({
+        allowMethods: ['GET'],
+    })
+    membershipList.value = result.items
+}
+
 async function selectTemplate(template: IEventTemplate) {
     if (!template.id) {
         return
