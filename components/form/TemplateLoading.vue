@@ -42,8 +42,12 @@
             </el-table-column>
             <el-table-column prop="" label="刪除">
                 <template #default="{ row }">
-                    <el-button v-if="!['default', 'blank'].includes(row.id)" size="small" :icon="Delete"
+                    <el-button v-if="checkDeletable(row)" size="small" :icon="Delete"
                         :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
+                        刪除
+                    </el-button>
+                    <el-button v-else :icon="WarnTriangleFilled" size="small" :disabled="true">
+                        無權限
                     </el-button>
                 </template>
             </el-table-column>
@@ -51,7 +55,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { FolderAdd, EditPen, FolderOpened, Delete } from '@element-plus/icons-vue';
+import { FolderAdd, EditPen, FolderOpened, Delete, WarnTriangleFilled } from '@element-plus/icons-vue';
 import type { IEventTemplate, IEventTemplateQuery } from '~/types/eventTemplate';
 import type { IOrganizationMember } from '~/types/organization';
 import type { IPreferenceEventTemplate } from '~/types/user';
@@ -82,6 +86,12 @@ onMounted(() => {
 })
 
 // Methods
+function checkDeletable(row: IOrganizationMember) {
+    const isNotSystem = !['default', 'blank'].includes(String(row.id))
+    const hasAllowMethod = row.allowMethods?.includes('DELETE')
+    return isNotSystem && hasAllowMethod
+}
+
 async function getMemberOganizationList() {
     const result = await repoOrganizationMember.getMemberOrganizatoinList({
         allowMethods: ['GET'],
