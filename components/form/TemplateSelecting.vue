@@ -32,10 +32,8 @@
     </div>
 </template>
 <script setup lang="ts">
-// import type { IEventSingle, } from '~/types/eventTemplate';
 import defaultTemplateDesigns from '~/assets/defaultTemplateDesigns.json'
-import type { IEventSingle } from '~/types/event';
-import type { ITemplateDesign } from '~/types/eventTemplate';
+import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate';
 import type { IOrganization, IOrganizationMember } from '~/types/organization';
 
 const emit = defineEmits(['update:modelValue'])
@@ -47,7 +45,7 @@ const form = ref({
     organizationId: '',
 })
 
-const eventTemplate = defineModel<IEventSingle>('modelValue', {
+const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     type: Object,
     default: {
         id: '',
@@ -56,7 +54,7 @@ const eventTemplate = defineModel<IEventSingle>('modelValue', {
 })
 
 const membershipList = ref<IOrganizationMember[]>([])
-const templateList = ref<IEventSingle[]>([])
+const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
 onMounted(() => {
@@ -73,7 +71,7 @@ onMounted(() => {
 //     membershipList.value = response.items
 // }
 
-async function selectTemplate(template: IEventSingle) {
+async function selectTemplate(template: IEventTemplate) {
     if (!template.id) {
         return
     }
@@ -86,7 +84,7 @@ async function selectTemplate(template: IEventSingle) {
 }
 
 async function selectDefaultTemplate() {
-    const newTemplate: IEventSingle = {
+    const newTemplate: IEventTemplate = {
         id: '',
         designs: defaultTemplateDesigns as ITemplateDesign[],
     }
@@ -96,7 +94,7 @@ async function selectDefaultTemplate() {
 
 async function getEventTemplateList() {
     isLoading.value = true
-    const result: IEventSingle[] = await repoEventTemplate.getEventTemplateList()
+    const result: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
     templateList.value = result
     if (!templateList.value.length) {
         await selectDefaultTemplate()

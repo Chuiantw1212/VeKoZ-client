@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import useVenoniaApi from './useVenoniaApi'
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
-import type { IEventSingle } from '~/types/event'
 
 export default defineStore('eventTemplate', () => {
     const defaultApi = useVenoniaApi()
@@ -23,7 +22,7 @@ export default defineStore('eventTemplate', () => {
         })
         return response.json()
     }
-    async function postEventTemplate(body: IEventSingle): Promise<IEventSingle> {
+    async function postEventTemplate(body: IEventTemplate): Promise<IEventTemplate> {
         delete body.id // 另存新檔案
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'POST',

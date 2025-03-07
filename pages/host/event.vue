@@ -68,8 +68,8 @@
                     選擇模板
                 </el-text>
             </template>
-            <FormReadEventTemplate v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
-            </FormReadEventTemplate>
+            <FormTemplateSelecting v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
+            </FormTemplateSelecting>
         </AtomVekozDialog>
     </div>
 </template>
