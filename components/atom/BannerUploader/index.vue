@@ -1,6 +1,6 @@
 <template>
     <div class="inputGroup" :style="{ width: props.width, height: props.height, }">
-        <!-- {{ banner }} -->
+        <!-- banner {{ banner }} -->
         <div class="inputGroup__nameGroup">
             <div>
                 <span v-if="required" class="nameGroup__required">*</span>
@@ -8,9 +8,9 @@
             </div>
         </div>
         <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled }">
-            <img class="label__image" :src="getImageSrc()">
-            <!-- <div class="label__image" :style="{ 'background-image': getImageSrc() }"></div> -->
-            <!-- isValidUrl(banner){{ isValidUrl(banner) }} -->
+            <img v-if="(banner && typeof banner === 'string') || banner.type" class="label__image"
+                :src="getImageSrc()"></img>
+            <img v-else class="label__image" :style="{ width: width, height: height, }" :src="placeholder"></img>
             <div class="label__content" :class="{ 'label__content--isVisible': !isUploaded }">
                 <div class="content__text">
                     <el-icon size="large">
@@ -26,6 +26,7 @@
     </div>
 </template>
 <script setup lang="ts">
+import placeholder from '@/assets/mock/banner.png'
 import { UploadFilled } from '@element-plus/icons-vue'
 import { Buffer } from 'buffer/'
 const banner = defineModel('modelValue', {
