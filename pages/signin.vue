@@ -30,9 +30,9 @@ function initializeFirebaseUI() {
                 /**
                  * 只有用戶第一次登入成功會走這裡
                  */
-                const additionalUserInfo: AdditionalUserInfo = authResult.additionalUserInfo
-                const credential: AuthCredential = authResult.credential
-                const user: User = authResult.user
+                // const additionalUserInfo: AdditionalUserInfo = authResult.additionalUserInfo
+                // const credential: AuthCredential = authResult.credential
+                // const user: User = authResult.user
                 await repoUser.postNewUser()
                 await repoUser.getUser()
                 repoUser.setUserType('attendee')
@@ -54,6 +54,7 @@ function initializeFirebaseUI() {
          * popoup 則可能觸發 Cross-Origin-Opener-Policy policy would block the window.closed call.導致登入失敗。
          */
         signInFlow: 'popup',
+        signInSuccessUrl: '/', // 必填
         // Terms of service url.
         tosUrl: 'https://storage.googleapis.com/public.econ-sense.com/Terms%20of%20Use.pdf',
         // Privacy policy url.

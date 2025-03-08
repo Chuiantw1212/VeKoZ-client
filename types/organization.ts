@@ -32,5 +32,4 @@ export type IOrganizationMemberQuery = IPagination & {
     organizationId?: string,
     allowMethods?: string[],
     allowEntities?: string[],
-    canEditMember?: string[],
 }

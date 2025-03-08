@@ -11,9 +11,10 @@ export default defineStore('user', () => {
     const preference = ref<IUserPreference>({
         event: {},
         eventTemplate: {
-            organizationId: '',
+            organizerId: '',
+            templateId: '',
         },
-        menuType: 'attendee',
+        menuType: '', // 預設需要是空字串
         isFullScreen: false,
     })
     /**

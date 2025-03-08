@@ -49,8 +49,8 @@ const router = useRouter()
 const route = useRoute()
 
 const isFullScreen = computed(() => {
-    if (repoUser.userPreference) {
-        return repoUser.userPreference.isFullScreen
+    if (repoUser.preference) {
+        return repoUser.preference.isFullScreen
     } else {
         return false
     }
