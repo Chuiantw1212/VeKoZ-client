@@ -43,8 +43,9 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
-                    <el-button v-if="!row.isFounder" v-loading="isLoading" :icon="Delete"
+                    <el-button v-if="!row.isFounder" v-loading="isLoading" size="small" :icon="Delete"
                         @click="deleteOrganizationMember(row)">
+                        刪除成員
                     </el-button>
                     <template v-else>
                         創辦人不可被異動

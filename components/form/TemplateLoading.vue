@@ -154,19 +154,28 @@ async function getEventTemplateList() {
     isLoading.value = true
     const result = await repoEventTemplate.getEventTemplateList(templateQuery.value)
     templateList.value = result
-    // templateList.value.unshift({
-    //     id: 'default',
-    //     name: '預設模板',
-    //     organizationName: '系統',
-    //     designs: [],
-    // })
 
-    if (templateList.value.length === 1) {
+    const selectedMembership = membershipList.value.find((membership: IOrganizationMember) => {
+        return String(membership.organizationId) === patch.organizerId
+    })
+    if (selectedMembership?.allowMethods?.includes('POST')) {
+        templateList.value.unshift({
+            id: 'default',
+            name: '預設模板',
+            organizerName: '系統',
+            designs: [],
+        })
         // 只剩下預設可選，刪除模板Id，觸發父層的Reset
-        eventTemplate.value.id = ''
-        eventTemplate.value.name = ''
-        emit('update:modelValue', eventTemplate.value)
+        if (templateList.value.length === 1) {
+            eventTemplate.value.id = ''
+            eventTemplate.value.name = ''
+            eventTemplate.value.organizerId = selectedMembership.organizationId
+            eventTemplate.value.organizerLogo = selectedMembership.organizationLogo
+            eventTemplate.value.organizerName = selectedMembership.organizationName
+            emit('update:modelValue', eventTemplate.value)
+        }
     }
+
     isLoading.value = false
 }
 </script>
