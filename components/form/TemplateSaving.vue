@@ -1,6 +1,6 @@
 <template>
     <el-form ref="saveTemplateRef" :model="eventTemplate" :rules="formRules">
-        <el-form-item label="模板隸屬組織" prop="organizationId">
+        <el-form-item label="模板隸屬組織" prop="organizerId">
             <el-select v-model="eventTemplate.organizerId" placeholder="請選擇" @change="setOrganization($event)">
                 <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                     :value="String(item.organizationId)" />
@@ -20,15 +20,15 @@ const repoOrganizationMember = useRepoOrganizationMember()
 const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     default: {
         name: '',
-        organizationId: '',
-        organizationName: '',
-        organizationLogo: '',
+        organizerId: '',
+        organizerName: '',
+        organizerLogo: '',
     }
 })
 
 const membershipList = ref<IOrganizationMember[]>([])
 const formRules = {
-    organizationId: { required: true, message: '模板隸屬組織必填' },
+    organizerId: { required: true, message: '模板隸屬組織必填' },
     name: { required: true, message: '模板名稱必填' },
 }
 
@@ -38,9 +38,9 @@ onMounted(() => {
 })
 
 // Methods
-function setOrganization(organizationId: string) {
+function setOrganization(organizerId: string) {
     const selectedMembership = membershipList.value.find(member => {
-        return member.organizationId === organizationId
+        return member.organizationId === organizerId
     })
     if (selectedMembership) {
         eventTemplate.value.organizerName = selectedMembership.organizationName ?? ''

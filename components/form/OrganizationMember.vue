@@ -1,9 +1,10 @@
 <template>
     <div class="organizationMember">
+        <!-- {{currentMember}} -->
         <el-alert type="info" show-icon :closable="false">
             <ol>
-                <li>成員會看見創辦人建立的模板、組織、票券</li>
-                <li>部分看起來像是新增的操作，系統會判定為修改。例："新增"社群連結。</li>
+                <li>檢視：成員會看見創辦人建立的模板、組織、票券等，為標準權限。</li>
+                <li>部分新增操作，系統會判定為修改。例："新增"社群連結。</li>
             </ol>
         </el-alert>
         <el-form class="mt-20" ref="formRef" :rules="formRules" :model="searchForm">
@@ -31,9 +32,10 @@
         <el-table :data="memberList" style="width: 100%">
             <el-table-column prop="email" label="電子信箱" />
             <el-table-column prop="name" label="成員名稱" />
-            <el-table-column prop="allowMethods" label="操作權限">
+            <el-table-column prop="allowMethods" label="通用授權">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="row.allowMethods" :disabled="row.isFounder" @change="setMember(row)">
+                    <el-checkbox-group v-model="row.allowMethods"
+                        :disabled="row.isFounder || checkIsSelf(row) || !canEditMember" @change="setMember(row)">
                         <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                             :label="auth.label" :value="auth.value">
                             {{ auth.label }}
@@ -41,13 +43,31 @@
                     </el-checkbox-group>
                 </template>
             </el-table-column>
+            <el-table-column prop="allowEntities" label="特例授權">
+                <template #default="{ row }">
+                    <el-checkbox-group v-model="test" :disabled="row.isFounder || checkIsSelf(row) || !canEditMember"
+                        @change="setMember(row)">
+                        <el-checkbox value="organizationMember">成員異動</el-checkbox>
+                    </el-checkbox-group>
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
-                    <el-button v-if="!row.isFounder" v-loading="isLoading" size="small" :icon="Delete"
-                        @click="deleteOrganizationMember(row)">
-                        刪除成員
-                    </el-button>
-                    <template v-else>
+                    <template v-if="!row.isFounder">
+                        <template v-if="!canEditMember">
+                            <template v-if="checkIsSelf(row)">
+                                不可異動自身權限
+                            </template>
+                            <el-button v-if="!checkIsSelf(row)" v-loading="isLoading" size="small" :icon="Delete"
+                                @click="deleteOrganizationMember(row)">
+                                刪除成員
+                            </el-button>
+                        </template>
+                        <el-button v-if="!canEditMember" :icon="WarnTriangleFilled" size="small" :disabled="true">
+                            無權限
+                        </el-button>
+                    </template>
+                    <template v-if="row.isFounder">
                         創辦人不可被異動
                     </template>
                 </template>
@@ -68,6 +88,7 @@ import {
     Search,
     Delete,
     Message,
+    WarnTriangleFilled
 } from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import type { IPagination } from '~/types/ui'
@@ -80,6 +101,8 @@ const isLoading = ref<boolean>(false)
 const currentMember = defineModel<IOrganizationMember>('modelValue', {
     default: '',
 })
+
+const test = ref()
 
 const authOptions = [
     {
@@ -108,10 +131,12 @@ const searchForm = ref({
 })
 
 const formRules = {
-    email: {
-        required: true,
-        message: 'Email為必填',
-    }
+    email: [
+        {
+            required: true,
+            message: 'Email為必填',
+        }
+    ]
 }
 
 const memberList = ref<IOrganizationMember[]>([])
@@ -119,6 +144,9 @@ const tableTotal = ref<number>(0)
 const tablePagination = ref<IPagination>({
     pageSize: 5,
     currentPage: 1,
+})
+const canEditMember = computed(() => {
+    return currentMember.value.allowEntities?.includes('organizationMember')
 })
 
 onMounted(() => {

@@ -161,15 +161,6 @@ async function getEventTemplateList() {
             organizerName: '系統',
             designs: [],
         })
-        // // 只剩下預設可選，刪除模板Id，觸發父層的Reset
-        // if (templateList.value.length === 1) {
-        //     eventTemplate.value.id = ''
-        //     eventTemplate.value.name = ''
-        //     eventTemplate.value.organizerId = selectedMembership.organizationId
-        //     eventTemplate.value.organizerLogo = selectedMembership.organizationLogo
-        //     eventTemplate.value.organizerName = selectedMembership.organizationName
-        //     emit('update:modelValue', eventTemplate.value)
-        // }
     }
 
     isLoading.value = false

@@ -6,7 +6,8 @@
                     <template #header>
                         <div class="vekoz-card-header">
                             <div class="header__titleGroup">
-                                <el-avatar :src="eventTemplate.organizerLogo"></el-avatar>
+                                <el-avatar v-if="eventTemplate.organizerLogo"
+                                    :src="eventTemplate.organizerLogo"></el-avatar>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
                                     @change="patchEventTemplate()" :maxlength="30" :show-word-limit="true">
                                 </el-input>
@@ -302,6 +303,7 @@ async function getEventTemplate(templateId: string) {
     const result = await repoEventTemplate.getEventTemplate(templateId)
     if (result) {
         Object.assign(eventTemplate.value, result)
+        templateSavingForm.value.organizerId = result.organizerId
     }
 }
 </script>

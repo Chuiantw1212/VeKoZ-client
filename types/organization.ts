@@ -21,8 +21,6 @@ export type IOrganization = {
 export type IOrganizationMember = IOrganizationMemberQuery & {
     id?: string,
     name?: string,
-    email?: string,
-    organizationId?: string,
     organizationName?: string,
     organizationLogo?: string,
     lastmod?: string,
@@ -30,5 +28,9 @@ export type IOrganizationMember = IOrganizationMemberQuery & {
 }
 
 export type IOrganizationMemberQuery = IPagination & {
+    email?: string,
+    organizationId?: string,
     allowMethods?: string[],
+    allowEntities?: string[],
+    canEditMember?: string[],
 }
