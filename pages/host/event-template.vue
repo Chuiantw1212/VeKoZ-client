@@ -5,11 +5,12 @@
                 <el-card v-loading="isCardLoading" class="vekoz-card" body-class="card__body card__body--205">
                     <template #header>
                         <div class="vekoz-card-header">
-                            <el-form-item>
+                            <div class="header__titleGroup">
+                                <el-avatar :src="eventTemplate.organizerLogo"></el-avatar>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
-                                    @change="patchTemplateName()" :maxlength="30" :show-word-limit="true">
+                                    @change="patchEventTemplate()" :maxlength="30" :show-word-limit="true">
                                 </el-input>
-                            </el-form-item>
+                            </div>
                             <div v-loading="isBtnLoading" class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true" :icon="FolderOpened">
                                     開啓模板
@@ -133,10 +134,14 @@ onBeforeUnmount(() => {
 })
 
 // methods
-async function patchTemplateName() {
+async function patchEventTemplate() {
     isBtnLoading.value = true
     repoUI.debounce('templateName', async () => {
-        await repoEventTemplate.patchTemplateName(eventTemplate.value)
+        await repoEventTemplate.patchEventTemplate({
+            id: eventTemplate.value.id,
+            name: eventTemplate.value.name,
+            organizerId: eventTemplate.value.organizerId
+        })
         isBtnLoading.value = false
     })
 }
@@ -314,6 +319,12 @@ async function getEventTemplate(templateId: string) {
     .eventTemplate__designItem--outline {
         outline: 1px dashed red;
     }
+}
+
+.header__titleGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .footer {

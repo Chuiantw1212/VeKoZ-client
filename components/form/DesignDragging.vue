@@ -1,7 +1,6 @@
 <template>
     <!-- 這一個檔案要跟後端充分配合，全端工程師的含金量大概就在這邊了 -->
     <el-form label-width="auto">
-        <!-- <template v-if="props.type === 'host'"> -->
         <OrganismDesignHeader1 v-if="isTypeLimited('header1')" class="eventTemplate__draggable" :disabled="true"
             draggable="true" :isDesigning="false"
             @dragstart="setOnDrag({ type: 'header1', formField: 'name', required: true, })"
@@ -18,11 +17,6 @@
             @mouseenter="setOnEnter({ type: 'dateTimeRange', formField: 'dates', required: true, })"
             @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
         </OrganismDesignDateTimeRange>
-        <OrganismDesignOrganization v-if="isTypeLimited('organization')" class="eventTemplate__draggable"
-            draggable="true" @dragstart="setOnDrag({ type: 'organization', formField: 'organizer', required: true, })"
-            @mouseenter="setOnEnter({ type: 'organization', formField: 'organizer', required: true, })"
-            @mouseout="cancelDragging()" :disabled="true" :isDesigning="false">
-        </OrganismDesignOrganization>
         <OrganismDesignOrganizationMember v-if="isTypeLimited('organizationMember')" class="eventTemplate__draggable"
             draggable="true"
             @dragstart="setOnDrag({ type: 'organizationMember', formField: 'performers', required: true, })"

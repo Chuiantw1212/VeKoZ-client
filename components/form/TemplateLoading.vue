@@ -42,13 +42,15 @@
             </el-table-column>
             <el-table-column prop="" label="刪除">
                 <template #default="{ row }">
-                    <el-button v-if="checkDeletable(row)" size="small" :icon="Delete"
-                        :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
-                        刪除
-                    </el-button>
-                    <el-button v-else :icon="WarnTriangleFilled" size="small" :disabled="true">
-                        無權限
-                    </el-button>
+                    <template v-if="!['default', 'blank'].includes(String(row.id))">
+                        <el-button v-if="row.allowMethods?.includes('DELETE')" size="small" :icon="Delete"
+                            :disabled="row.id === eventTemplate.id" @click="deleteTemplate(row)">
+                            刪除
+                        </el-button>
+                        <el-button v-else :icon="WarnTriangleFilled" size="small" :disabled="true">
+                            無權限
+                        </el-button>
+                    </template>
                 </template>
             </el-table-column>
         </el-table>
@@ -86,12 +88,6 @@ onMounted(() => {
 })
 
 // Methods
-function checkDeletable(row: IOrganizationMember) {
-    const isNotSystem = !['default', 'blank'].includes(String(row.id))
-    const hasAllowMethod = row.allowMethods?.includes('DELETE')
-    return isNotSystem && hasAllowMethod
-}
-
 async function getMemberOganizationList() {
     const result = await repoOrganizationMember.getMemberOrganizatoinList({
         allowMethods: ['GET'],
@@ -129,6 +125,11 @@ async function selectTemplate(template: IEventTemplate) {
             const result = await repoEventTemplate.getEventTemplate(template.id)
             if (result) {
                 eventTemplate.value = result
+                const patch: IPreferenceEventTemplate = {
+                    organizerId: result.organizerId ?? '',
+                    templateId: result.id ?? ''
+                }
+                repoUser.patchUserPreference('eventTemplate', patch)
             }
             isLoading.value = false
             break;
@@ -146,17 +147,12 @@ async function deleteTemplate(template: IEventTemplate) {
 }
 
 async function getEventTemplateList() {
-    const patch: IPreferenceEventTemplate = {
-        organizerId: templateQuery.value.organizerId ?? '',
-    }
-    repoUser.patchUserPreference('eventTemplate', patch)
-    // return
     isLoading.value = true
     const result = await repoEventTemplate.getEventTemplateList(templateQuery.value)
     templateList.value = result
 
     const selectedMembership = membershipList.value.find((membership: IOrganizationMember) => {
-        return String(membership.organizationId) === patch.organizerId
+        return String(membership.organizationId) === templateQuery.value.organizerId
     })
     if (selectedMembership?.allowMethods?.includes('POST')) {
         templateList.value.unshift({
@@ -165,15 +161,15 @@ async function getEventTemplateList() {
             organizerName: '系統',
             designs: [],
         })
-        // 只剩下預設可選，刪除模板Id，觸發父層的Reset
-        if (templateList.value.length === 1) {
-            eventTemplate.value.id = ''
-            eventTemplate.value.name = ''
-            eventTemplate.value.organizerId = selectedMembership.organizationId
-            eventTemplate.value.organizerLogo = selectedMembership.organizationLogo
-            eventTemplate.value.organizerName = selectedMembership.organizationName
-            emit('update:modelValue', eventTemplate.value)
-        }
+        // // 只剩下預設可選，刪除模板Id，觸發父層的Reset
+        // if (templateList.value.length === 1) {
+        //     eventTemplate.value.id = ''
+        //     eventTemplate.value.name = ''
+        //     eventTemplate.value.organizerId = selectedMembership.organizationId
+        //     eventTemplate.value.organizerLogo = selectedMembership.organizationLogo
+        //     eventTemplate.value.organizerName = selectedMembership.organizationName
+        //     emit('update:modelValue', eventTemplate.value)
+        // }
     }
 
     isLoading.value = false

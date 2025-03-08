@@ -40,4 +40,5 @@ export interface IPreferenceEvent {
 
 export interface IPreferenceEventTemplate {
     organizerId: string,
+    templateId: string,
 }

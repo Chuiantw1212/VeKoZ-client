@@ -41,12 +41,13 @@ export default defineStore('eventTemplate', () => {
         })
         return response.text()
     }
-    async function patchTemplateName(template: IEventTemplate) {
+    async function patchEventTemplate(template: IEventTemplate) {
+        if (!template.id || !template.organizerId) {
+            throw '資料未提共完整'
+        }
         const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
             method: 'PATCH',
-            body: {
-                name: template.name
-            },
+            body: template,
         })
         return response.text()
     }
@@ -88,7 +89,7 @@ export default defineStore('eventTemplate', () => {
         getEventTemplate,
         getEventTemplateList,
         patchTemplateDesignIds,
-        patchTemplateName,
+        patchEventTemplate,
         deleteEventTemplate,
         // Design
         postEventTemplateDesign,
