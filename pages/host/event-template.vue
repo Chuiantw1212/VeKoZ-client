@@ -85,6 +85,7 @@ const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganization = useRepoOrganization()
 const repoPlace = useRepoPlace()
+const repoUser = useRepoUser()
 const isCardLoading = ref<boolean>(false)
 const isBtnLoading = ref<boolean>(false)
 
@@ -119,20 +120,27 @@ const templateSavingForm = ref<IEventTemplate>({
 
 // Hooks
 onMounted(async () => {
-    isCardLoading.value = true
+    getPlaceList()
     addOnDropListener(true)
-    await getPlaceList()
-    await getOrganizationList()
-    await getRecentTemplate()
-    if (!eventTemplate.value.id) {
-        await setDefaultTemplate()
-        await postEventTemplate()
-    }
-    isCardLoading.value = false
 })
 onBeforeUnmount(() => {
     addOnDropListener(false)
 })
+watch(() => repoUser.userInfo.preference, async (preference) => {
+    isCardLoading.value = true
+    const recentTemplateId = preference?.eventTemplate.templateId
+    if (recentTemplateId) {
+        // await getEventTemplate(recentTemplateId)
+    }
+    // // await getOrganizationList()
+    // // await getRecentTemplate()
+    // if (!eventTemplate.value.id) {
+    //     await setDefaultTemplate()
+    //     await postEventTemplate()
+    // }
+
+    isCardLoading.value = false
+}, { immediate: true, })
 
 // methods
 async function patchEventTemplate() {
@@ -192,6 +200,7 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
 }
 
 function setDefaultTemplate() {
+    console.log('here')
     delete eventTemplate.value.designIds
     Object.assign(eventTemplate.value, {
         designs: defaultTemplateDesigns
