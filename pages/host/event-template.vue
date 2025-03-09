@@ -279,6 +279,7 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
         const designId = await repoEventTemplate.postEventTemplateDesign({
             ...templateDesign,
             templateId: eventTemplate.value.id,
+            organizerId: eventTemplate.value.organizerId,
         })
         templateDesign.id = designId
         eventTemplate.value.designs.splice(destinationIndex, 0, templateDesign)

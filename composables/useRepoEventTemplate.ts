@@ -67,7 +67,7 @@ export default defineStore('eventTemplate', () => {
         })
         return response.text()
     }
-    async function postEventTemplateDesign(body: any) {
+    async function postEventTemplateDesign(body: ITemplateDesign) {
         const response = await defaultApi.authRequest(`/event/template/design`, {
             method: 'POST',
             body,

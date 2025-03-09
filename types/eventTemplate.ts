@@ -17,6 +17,8 @@ export interface IEventTemplateQuery {
 }
 
 export interface ITemplateDesign {
+    // 權限識別用
+    organizerId?: string,
     // 社群媒體連結
     urls?: string[],
     id?: string,
@@ -31,7 +33,7 @@ export interface ITemplateDesign {
     label?: string,
     value?: any,
     // organization
-    organizationId?: string,
+    organizationId?: string, // 元件保持organization，樣板從屬採用organizer
     organizationName?: string,
     // organization members
     memberIds?: string[],
