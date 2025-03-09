@@ -23,16 +23,16 @@
             <!-- <el-menu-item>
                 <el-switch v-model="isFullScreen" active-text="放大" @change="patchUserPreference()" />
             </el-menu-item> -->
-            <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
+            <OrganismUserAuth></OrganismUserAuth>
+            <!-- <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
                 <el-menu-item index="4" class="headerMenu__firstItem">
-                    <OrganismUserAuth></OrganismUserAuth>
                 </el-menu-item>
             </NuxtLink>
             <NuxtLink v-else-if="route.name !== 'signin'" to="/signin">
                 <el-menu-item class="headerMenu__firstItem">
                     登入
                 </el-menu-item>
-            </NuxtLink>
+            </NuxtLink> -->
         </div>
     </el-menu>
 </template>
@@ -55,11 +55,6 @@ const isFullScreen = computed(() => {
         return false
     }
 })
-// watch(() => repoUser.userPreference.isFullScreen, (newValue) => {
-//     if (newValue) {
-//         isFullScreen.value = true
-//     }
-// })
 
 // Methods
 function patchUserPreference() {

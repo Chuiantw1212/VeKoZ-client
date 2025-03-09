@@ -1,6 +1,18 @@
 <template>
-    <el-avatar v-if="repoUser.userInfo.id" :size="32" :src="repoUser.userInfo.avatar" />
-    <el-avatar v-else :size="32" :src="defaultAvatar" />
+    <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
+        <el-menu-item index="4" class="headerMenu__firstItem">
+            <!-- <OrganismUserAuth></OrganismUserAuth> -->
+            <el-avatar v-if="repoUser.userInfo.id" :size="32" :src="repoUser.userInfo.avatar" />
+            <el-avatar v-else :size="32" :src="defaultAvatar" />
+        </el-menu-item>
+    </NuxtLink>
+    <NuxtLink v-else-if="route.name !== 'signin'" to="/signin">
+        <el-menu-item index="4" class="headerMenu__firstItem">
+            登入
+        </el-menu-item>
+    </NuxtLink>
+    <!-- <el-avatar v-if="repoUser.userInfo.id" :size="32" :src="repoUser.userInfo.avatar" />
+    <el-avatar v-else :size="32" :src="defaultAvatar" /> -->
 </template>
 <script setup lang="ts">
 import defaultAvatar from '@/assets/logo/160_160.png'
@@ -28,6 +40,9 @@ onBeforeUnmount(() => {
 function addFirebaseListener() {
     const auth = getAuth()
     unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+        console.log({
+            firebaseUser
+        })
         if (!firebaseUser) {
             // 這邊如果做事會中斷登入流程。
             repoUser.setUserType('')
