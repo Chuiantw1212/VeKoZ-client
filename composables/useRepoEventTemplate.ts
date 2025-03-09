@@ -29,11 +29,14 @@ export default defineStore('eventTemplate', () => {
         })
         return response.json()
     }
-    async function postEventTemplate(body: IEventTemplate): Promise<IEventTemplate> {
-        delete body.id // 另存新檔案
+    async function postEventTemplate(template: IEventTemplate): Promise<IEventTemplate> {
+        if (!template.organizerId) {
+            throw '資料未提共完整'
+        }
+        delete template.id // 另存新檔案
         const response = await defaultApi.authRequest(`/event/template`, {
             method: 'POST',
-            body,
+            body: template,
         })
         return response.json()
     }

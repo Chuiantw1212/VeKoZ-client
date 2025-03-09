@@ -108,9 +108,10 @@ async function selectTemplate(template: IEventTemplate) {
     }
     switch (template.id) {
         case 'default': {
-            eventTemplate.value.id = ''
-            eventTemplate.value.name = ''
-            emit('update:modelValue', eventTemplate.value)
+            // eventTemplate.value.id = ''
+            // eventTemplate.value.name = ''
+            template.name = '未命名模板'
+            emit('update:modelValue', template)
             break;
         }
         case 'blank': {
@@ -125,16 +126,12 @@ async function selectTemplate(template: IEventTemplate) {
             const result = await repoEventTemplate.getEventTemplate(template.id)
             if (result) {
                 eventTemplate.value = result
-                const patch: IPreferenceEventTemplate = {
-                    organizerId: result.organizerId ?? '',
-                    templateId: result.id ?? ''
-                }
-                repoUser.patchUserPreference('eventTemplate', patch)
             }
             isLoading.value = false
             break;
         }
     }
+    // 觸發父層 @update:modelValue
 }
 
 async function deleteTemplate(template: IEventTemplate) {
@@ -157,8 +154,10 @@ async function getEventTemplateList() {
     if (selectedMembership?.allowMethods?.includes('POST')) {
         templateList.value.unshift({
             id: 'default',
+            organizerId: selectedMembership.organizationId,
+            organizerLogo: selectedMembership.organizationLogo,
+            organizerName: selectedMembership.organizationName,
             name: '預設模板',
-            organizerName: '系統',
             designs: [],
         })
     }

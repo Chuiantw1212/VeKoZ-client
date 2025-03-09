@@ -40,9 +40,9 @@ onBeforeUnmount(() => {
 function addFirebaseListener() {
     const auth = getAuth()
     unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
-        console.log({
-            firebaseUser
-        })
+        // console.log({
+        //     firebaseUser
+        // })
         if (!firebaseUser) {
             // 這邊如果做事會中斷登入流程。
             repoUser.setUserType('')

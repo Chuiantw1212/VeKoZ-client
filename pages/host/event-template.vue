@@ -9,7 +9,8 @@
                                 <el-avatar v-if="eventTemplate.organizerLogo"
                                     :src="eventTemplate.organizerLogo"></el-avatar>
                                 <el-input v-model="eventTemplate.name" placeholder="請輸入模板名稱" size="large"
-                                    @change="patchEventTemplate()" :maxlength="30" :show-word-limit="true">
+                                    @change="patchEventTemplate()" :maxlength="30" :show-word-limit="true"
+                                    :disabled="!eventTemplate.organizerId">
                                 </el-input>
                             </div>
                             <div v-loading="isBtnLoading" class="header__btnGroup">
@@ -32,11 +33,14 @@
                             </div>
                         </template>
                     </FormEventTemplate>
-                    <div v-if="!eventTemplate.designs?.length" class="eventTemplate__designItem"
+                    <div>
+                        請依序操作，開啟模板 -> 建新版。
+                    </div>
+                    <!-- <div v-if="!eventTemplate.designs?.length" class="eventTemplate__designItem"
                         :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
                         @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
                         請拖曳元件至 此位置
-                    </div>
+                    </div> -->
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="8">
@@ -79,6 +83,7 @@ import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
+import type { IPreferenceEventTemplate } from '~/types/user'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
@@ -178,6 +183,9 @@ async function getRecentTemplate() {
 }
 
 async function loadTemplate(loadedTemplate: IEventTemplate) {
+    console.log({
+        loadedTemplate
+    })
     loadTemplateDialog.value.isOpen = false
     switch (loadedTemplate.id) {
         case '':
@@ -196,6 +204,11 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
             // Do nothing
         }
     }
+    const patch: IPreferenceEventTemplate = {
+        organizerId: eventTemplate.value.organizerId ?? '',
+        templateId: eventTemplate.value.id ?? ''
+    }
+    repoUser.patchUserPreference('eventTemplate', patch)
 }
 
 async function setDefaultTemplate() {
