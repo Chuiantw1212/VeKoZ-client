@@ -9,13 +9,20 @@
             </template>
         </el-table-column>
         <el-table-column prop="organizationName" label="組織名稱" />
-        <el-table-column prop="auth" label="我的權限">
+        <el-table-column prop="auth" label="通用權限">
             <template #default="{ row }">
                 <el-checkbox-group v-model="row.allowMethods" :disabled="true">
                     <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
                         :label="auth.label" :value="auth.value">
                         {{ auth.label }}
                     </el-checkbox>
+                </el-checkbox-group>
+            </template>
+        </el-table-column>
+        <el-table-column prop="allowEntities" label="特例權限">
+            <template #default="{ row }">
+                <el-checkbox-group v-model="row.allowEntities" :disabled="true">
+                    <el-checkbox value="organizationMember">成員異動</el-checkbox>
                 </el-checkbox-group>
             </template>
         </el-table-column>
@@ -45,7 +52,7 @@
             <template #default="{ row }">
                 <template v-if="!['default', 'blank'].includes(row.id)">
                     <!-- 成員只可以退出 -->
-                    <el-button v-if="!row.isFounder" size="small" :disabled="row.isFounder"
+                    <el-button v-if="!row.isFounder" :plain="true" size="small" :disabled="row.isFounder"
                         @click="deleteMembership(row)">
                         <el-icon class="rotate--90">
                             <Upload />
@@ -58,8 +65,8 @@
                             此為最後的用戶所有組織，
                             不可刪除。
                         </template>
-                        <el-button v-else :icon="Delete" size="small" :disabled="checkOrganizationOnUse(row)"
-                            @click="deleteOrganization(row)">
+                        <el-button v-else :icon="Delete" type="danger" :plain="true" size="small"
+                            :disabled="checkOrganizationOnUse(row)" @click="deleteOrganization(row)">
                             刪除組織
                         </el-button>
                     </template>

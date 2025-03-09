@@ -45,8 +45,8 @@
             </el-table-column>
             <el-table-column prop="allowEntities" label="特例授權">
                 <template #default="{ row }">
-                    <el-checkbox-group v-model="test" :disabled="row.isFounder || checkIsSelf(row) || !canEditMember"
-                        @change="setMember(row)">
+                    <el-checkbox-group v-model="row.allowEntities"
+                        :disabled="row.isFounder || checkIsSelf(row) || !canEditMember" @change="setMember(row)">
                         <el-checkbox value="organizationMember">成員異動</el-checkbox>
                     </el-checkbox-group>
                 </template>
@@ -54,7 +54,10 @@
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
                     <template v-if="!row.isFounder">
-                        <template v-if="!canEditMember">
+                        <el-button v-if="!canEditMember" :icon="WarnTriangleFilled" size="small" :disabled="true">
+                            無權限
+                        </el-button>
+                        <template v-else>
                             <template v-if="checkIsSelf(row)">
                                 不可異動自身權限
                             </template>
@@ -63,12 +66,11 @@
                                 刪除成員
                             </el-button>
                         </template>
-                        <el-button v-if="!canEditMember" :icon="WarnTriangleFilled" size="small" :disabled="true">
-                            無權限
-                        </el-button>
                     </template>
                     <template v-if="row.isFounder">
-                        創辦人不可被異動
+                        <el-button :icon="WarnTriangleFilled" size="small" :disabled="true">
+                            創辦人
+                        </el-button>
                     </template>
                 </template>
             </el-table-column>
