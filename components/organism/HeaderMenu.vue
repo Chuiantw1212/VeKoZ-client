@@ -20,19 +20,7 @@
             <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
         </div>
         <div class="menu__endGroup">
-            <!-- <el-menu-item>
-                <el-switch v-model="isFullScreen" active-text="放大" @change="patchUserPreference()" />
-            </el-menu-item> -->
             <OrganismUserAuth></OrganismUserAuth>
-            <!-- <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
-                <el-menu-item index="4" class="headerMenu__firstItem">
-                </el-menu-item>
-            </NuxtLink>
-            <NuxtLink v-else-if="route.name !== 'signin'" to="/signin">
-                <el-menu-item class="headerMenu__firstItem">
-                    登入
-                </el-menu-item>
-            </NuxtLink> -->
         </div>
     </el-menu>
 </template>

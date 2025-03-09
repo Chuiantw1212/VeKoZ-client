@@ -75,13 +75,13 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-row justify="space-between">
+        <!-- <el-row justify="space-between">
             <el-col>
                 <el-pagination v-model:current-page="tablePagination.currentPage"
                     v-model:page-size="tablePagination.pageSize" @change="getOrganizationMemberList()"
                     layout="prev, pager, next" :total="tableTotal" />
             </el-col>
-        </el-row>
+        </el-row> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -143,10 +143,10 @@ const formRules = {
 
 const memberList = ref<IOrganizationMember[]>([])
 const tableTotal = ref<number>(0)
-const tablePagination = ref<IPagination>({
-    pageSize: 5,
-    currentPage: 1,
-})
+// const tablePagination = ref<IPagination>({
+//     pageSize: 5,
+//     currentPage: 1,
+// })
 const canEditMember = computed(() => {
     return currentMember.value.allowEntities?.includes('organizationMember')
 })
@@ -178,7 +178,7 @@ async function getOrganizationMemberList() {
     if (currentMember.value.organizationId) {
         isLoading.value = true
         const organizationId = currentMember.value.organizationId
-        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId, tablePagination.value)
+        const result = await repoOrganizationMember.getOrganizationMemberList(organizationId)
         memberList.value = result.items
         tableTotal.value = result.total
         isLoading.value = false
