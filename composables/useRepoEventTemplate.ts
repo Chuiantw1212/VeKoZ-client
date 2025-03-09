@@ -16,6 +16,12 @@ export default defineStore('eventTemplate', () => {
         const result: IEventTemplate | 0 = response.json()
         return result
     }
+    async function getEventTemplateDefault(): Promise<IEventTemplate> {
+        const response = await defaultApi.authRequest(`/event/template/default`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function getEventTemplateList(templateQuery?: IEventTemplateQuery) {
         const response = await defaultApi.authRequest(`/event/template/list`, {
             method: 'GET',
@@ -87,6 +93,7 @@ export default defineStore('eventTemplate', () => {
         // Template
         postEventTemplate,
         getEventTemplate,
+        getEventTemplateDefault,
         getEventTemplateList,
         patchTemplateDesignIds,
         patchEventTemplate,

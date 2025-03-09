@@ -34,9 +34,8 @@
     </div>
 </template>
 <script setup lang="ts">
-import defaultTemplateDesigns from '~/assets/defaultTemplateDesigns.json'
-import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate';
-import type { IOrganization, IOrganizationMember } from '~/types/organization';
+import type { IEventTemplate } from '~/types/eventTemplate';
+import type { IOrganizationMember } from '~/types/organization';
 
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
@@ -86,9 +85,10 @@ async function selectTemplate(template: IEventTemplate) {
 }
 
 async function selectDefaultTemplate() {
+    const defaultTemplate = await repoEventTemplate.getEventTemplateDefault()
     const newTemplate: IEventTemplate = {
         id: '',
-        designs: defaultTemplateDesigns as ITemplateDesign[],
+        designs: defaultTemplate.designs,
     }
     const result = await repoEventTemplate.postEventTemplate(newTemplate)
     eventTemplate.value = result

@@ -27,7 +27,6 @@ export interface ITemplateDesign {
     type?: string,
     required?: boolean,
     lastmod?: any,
-    [key: string]: any
     // 未定義欄位使用
     label?: string,
     value?: any,

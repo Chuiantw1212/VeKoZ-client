@@ -79,7 +79,6 @@ import type { IOrganization } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
-import defaultTemplateDesigns from '~/assets/defaultTemplateDesigns.json'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
@@ -199,12 +198,10 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
     }
 }
 
-function setDefaultTemplate() {
-    console.log('here')
+async function setDefaultTemplate() {
     delete eventTemplate.value.designIds
-    Object.assign(eventTemplate.value, {
-        designs: defaultTemplateDesigns
-    })
+    const defaultTemplate = await repoEventTemplate.getEventTemplateDefault()
+    eventTemplate.value.designs = defaultTemplate.designs
 }
 
 async function handleDesignChanged(templateDesign: ITemplateDesign) {
