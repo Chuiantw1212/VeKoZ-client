@@ -82,6 +82,16 @@ function initializeCalendar() {
             center: 'title',
             right: viewTypes.value.join(',')
         },
+        /**
+         * like '14:30'
+         * https://fullcalendar.io/docs/eventTimeFormat
+         */
+        eventTimeFormat: {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            meridiem: false,
+        },
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
         views: {
