@@ -49,9 +49,10 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function deleteEvent(eventId: string) {
-        const response = await defaultApi.authRequest(`/event/${eventId}`, {
+    async function deleteEvent(params: IEventQuery) {
+        const response = await defaultApi.authRequest(`/event`, {
             method: 'DELETE',
+            params,
         })
         return response.text()
     }

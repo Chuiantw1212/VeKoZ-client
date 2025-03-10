@@ -31,10 +31,11 @@
 
         <AtomVekozDialog v-model="eventDialogIsOpen" :showClose="false">
             <template #header>
-                <el-text size="large">
+                <el-avatar :src="dialogEventTemplate.organizerLogo"></el-avatar>
+                <!-- <el-text size="large">
                     活動編輯
                     ({{ dialogEventTemplate.id }})
-                </el-text>
+                </el-text> -->
             </template>
             <template #headerUI>
                 <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
@@ -421,12 +422,12 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 async function openNewCalendarEvent() {
     eventEnded.value = false
     loadTemplateDialogIsOpen.value = false
+
+    // 給定新月曆所選擇的值
     const selectedDateInstance = calendarEventCreation.value.date
     const selectedYear = selectedDateInstance.getFullYear()
     const selectedMonth = selectedDateInstance.getMonth()
     const selectedDate = selectedDateInstance.getDate()
-
-    // 給定新月曆所選擇的值
     const dateDesign = dialogEventTemplate.value.designs?.find(design => {
         return design.formField === 'dates'
     })
@@ -475,7 +476,10 @@ async function cancelEventEditing() {
 async function deleteEvent() {
     isLoading.value = true
     if (dialogEventTemplate.value.id) {
-        await repoEvent.deleteEvent(dialogEventTemplate.value.id)
+        await repoEvent.deleteEvent({
+            id: dialogEventTemplate.value.id,
+            
+        })
         // vekozCalendarRef.value?.removeAllEvents()
         // await getEventList()
         eventDialogIsOpen.value = false

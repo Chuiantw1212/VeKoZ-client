@@ -9,7 +9,6 @@ export interface IEventCreation {
  * https://schema.org/Event
  */
 export interface IEventSingle extends IEventFromList {
-    id?: string,
     name?: string,
     description?: string,
     organizerName?: string,
@@ -32,6 +31,7 @@ export interface IEventFromList extends IEventQuery {
 }
 
 export interface IEventQuery {
+    id?: string,
     startDate?: Date,
     endDate?: Date,
     startHour?: string,
