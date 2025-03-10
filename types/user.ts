@@ -35,7 +35,8 @@ export interface IUserPreference {
 
 export interface IPreferenceEvent {
     calendarViewType?: 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
-    organizationIds?: string[]
+    organizerIds?: string[],
+    organizerId?: string,
 }
 
 export interface IPreferenceEventTemplate {

@@ -1,27 +1,27 @@
 <template>
     <div>
-        <!-- <el-form :model="form">
+        <el-form :model="membershipForm">
             <el-form-item label="選擇組織">
-                <el-select v-model="form.organizationId" placeholder="請選擇">
+                <el-select v-model="membershipForm.organizationId" placeholder="請選擇" @change="getEventTemplateList()">
                     <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                         :value="String(item.organizationId)" />
                 </el-select>
             </el-form-item>
         </el-form>
-        <el-divider>組織所屬模板</el-divider> -->
+        <!-- <el-divider>組織所屬模板</el-divider> -->
         <el-table v-if="templateList.length" :data="templateList" style="width: 100%">
-            <el-table-column prop="organizationLogo">
+            <!-- <el-table-column prop="organizationLogo">
                 <template #default="{ row }">
                     <template v-if="row.organizationLogo">
                         <el-avatar :src="row.organizationLogo"></el-avatar>
                     </template>
-                    <template v-else>
+<template v-else>
                         -
                     </template>
-                </template>
-            </el-table-column>
-            <el-table-column prop="organizerName" label="活動主辦單位">
-            </el-table-column>
+</template>
+</el-table-column> -->
+            <!-- <el-table-column prop="organizerName" label="活動主辦單位">
+            </el-table-column> -->
             <el-table-column prop="name" label="模板名稱" />
             <el-table-column prop="" label="選擇">
                 <template #default="{ row }">
@@ -35,14 +35,15 @@
 </template>
 <script setup lang="ts">
 import type { IEventTemplate } from '~/types/eventTemplate';
-import type { IOrganizationMember } from '~/types/organization';
+import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization';
 
 const emit = defineEmits(['update:modelValue'])
 const repoEventTemplate = useRepoEventTemplate()
 const repoOrganizationMember = useRepoOrganizationMember()
+const repoUser = useRepoUser()
 const isLoading = ref<boolean>(false)
 
-const form = ref({
+const membershipForm = ref<IOrganizationMemberQuery>({
     organizationId: '',
 })
 
@@ -59,18 +60,25 @@ const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
 onMounted(() => {
-    getEventTemplateList()
-    // getOrganizationMemberships()
+    setDefaultValue()
+    getOrganizationMemberships()
 })
 
 // Methods
-// async function getOrganizationMemberships() {
-//     const response = await repoOrganizationMember.getMemberOrganizatoinList({
-//         pageSize: 50,
-//         currentPage: 1,
-//     })
-//     membershipList.value = response.items
-// }
+function setDefaultValue() {
+    const organizerId = repoUser.userInfo.preference?.event.organizerId
+    if (organizerId) {
+        membershipForm.value.organizationId = organizerId
+        getEventTemplateList()
+    }
+}
+
+async function getOrganizationMemberships() {
+    const response = await repoOrganizationMember.getMemberOrganizatoinList({
+        allowMethods: ['POST'],
+    })
+    membershipList.value = response.items
+}
 
 async function selectTemplate(template: IEventTemplate) {
     if (!template.id) {
@@ -96,7 +104,9 @@ async function selectDefaultTemplate() {
 
 async function getEventTemplateList() {
     isLoading.value = true
-    const result: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
+    const result: IEventTemplate[] = await repoEventTemplate.getEventTemplateList({
+        organizerId: membershipForm.value.organizationId
+    })
     templateList.value = result
     if (!templateList.value.length) {
         await selectDefaultTemplate()
@@ -108,6 +118,9 @@ async function getEventTemplateList() {
     //         selectTemplate(template)
     //     }
     // }
+    repoUser.patchUserPreference('event', {
+        organizerId: membershipForm.value.organizationId,
+    })
     isLoading.value = false
 }
 </script>

@@ -19,7 +19,7 @@
                             </el-checkbox-group>
                         </el-form-item> -->
                         <!-- <el-checkbox-group v-model="selectedOrganizationIds">
-                            <el-checkbox v-for="(item) in organizationList" :label="trimOrganizationName(item)"
+                            <el-checkbox v-for="(item) in memberOrganizationList" :label="trimOrganizationName(item)"
                                 :value="item.id" />
                         </el-checkbox-group> -->
                         <el-divider content-position="left">Todo</el-divider>
@@ -63,11 +63,6 @@
         </AtomVekozDialog>
 
         <AtomVekozDialog v-model="loadTemplateDialogIsOpen" :showClose="true">
-            <template #header>
-                <el-text size="large">
-                    選擇活動模板
-                </el-text>
-            </template>
             <FormTemplateSelecting v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
             </FormTemplateSelecting>
         </AtomVekozDialog>
@@ -87,6 +82,7 @@ import { ElMessage } from 'element-plus';
 // Data Repo
 const repoEvent = useRepoEvent()
 const repoOrganization = useRepoOrganization()
+const repoOrganizationMeber = useRepoOrganizationMember()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
@@ -100,7 +96,7 @@ const calendarEventCreation = ref<IEventCreation>({
 })
 const vekozEventList = ref<IEventFromList[]>([])
 // Data sidemenu
-const organizationList = ref<IOrganization[]>([])
+const memberOrganizationList = ref<IOrganization[]>([])
 const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
@@ -116,7 +112,7 @@ onMounted(async () => {
     isLoading.value = true
     await Promise.all([
         // getEventList(),
-        getOrganizationList()
+        getMemberOrganizatoinList()
     ])
     // setCalendarView()
     isLoading.value = false
@@ -201,7 +197,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     // calendarEvent?.remove()
 
     // // Get Google Calender Events
-    // const orgsWithCalendar = organizationList.value.filter((org) => {
+    // const orgsWithCalendar = memberOrganizationList.value.filter((org) => {
     //     return selectedOrganizationIds.value.includes(org.id) && org.googleCalendarId
     // });
 
@@ -220,13 +216,18 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     // })
 }
 
-async function getOrganizationList() {
-    const result = await repoOrganization.getOrganizationList()
-    organizationList.value = result
-    // 預設全選
-    selectedOrganizationIds.value = result.map(org => {
-        return org.id ?? ''
+async function getMemberOrganizatoinList() {
+    const result = await repoOrganizationMeber.getMemberOrganizatoinList({
+        allowMethods: ['POST']
     })
+    memberOrganizationList.value = result
+
+    // const result = await repoOrganization.getMemberOrganizatoinList()
+    // memberOrganizationList.value = result
+    // // 預設全選
+    // selectedOrganizationIds.value = result.map(org => {
+    //     return org.id ?? ''
+    // })
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
