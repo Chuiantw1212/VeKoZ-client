@@ -13,9 +13,9 @@
                                     :disabled="!eventTemplate.organizerId">
                                 </el-input>
                             </div>
-                            <div v-loading="isBtnLoading" class="header__btnGroup">
+                            <div class="header__btnGroup">
                                 <el-button size="small" @click="loadTemplateDialog.isOpen = true" :icon="FolderOpened">
-                                    開啓模板
+                                    打開模板
                                 </el-button>
                                 <el-button size="small" :icon="FolderAdd" @click="openSaveDialog">
                                     另存新檔
@@ -33,14 +33,9 @@
                             </div>
                         </template>
                     </FormEventTemplate>
-                    <div>
-                        請依序操作，開啟模板 -> 建新版。
+                    <div v-if="!eventTemplate.designs?.length">
+                        請依序操作，打開模板 -> 建新版。
                     </div>
-                    <!-- <div v-if="!eventTemplate.designs?.length" class="eventTemplate__designItem"
-                        :class="{ 'eventTemplate__designItem--outline': templateTemp.item.type }"
-                        @drop="insertTemplate($event, 0)" @dragover="allowDrop($event)">
-                        請拖曳元件至 此位置
-                    </div> -->
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="8">
@@ -50,9 +45,13 @@
                             請拖曳以下元件 到 指定位置
                         </div>
                     </template>
-                    <FormDesignDragging :model-value="eventTemplate.designs" @dragstart="setTemplateItem($event)"
+                    <FormDesignDragging v-if="currentMembership?.allowMethods?.includes('POST')"
+                        :model-value="eventTemplate.designs" @dragstart="setTemplateItem($event)"
                         @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()">
                     </FormDesignDragging>
+                    <el-button v-else :icon="WarnTriangleFilled" :disabled="true">
+                        需要新增權限
+                    </el-button>
                 </el-card>
             </el-col>
         </el-row>
@@ -78,20 +77,20 @@
     </div>
 </template>
 <script setup lang="ts">
-import { FolderOpened, FolderAdd } from '@element-plus/icons-vue'
-import type { IOrganization } from '~/types/organization'
-import type { IPlace } from '~/types/place'
+import { FolderOpened, FolderAdd, WarnTriangleFilled } from '@element-plus/icons-vue'
 import type { IEventTemplate, ITemplateDesign, ITemplateDragSouce } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
 import type { IPreferenceEventTemplate } from '~/types/user'
+import type { IOrganizationMember } from '~/types/organization'
 
 const repoUI = useRepoUI()
 const repoEventTemplate = useRepoEventTemplate()
-const repoOrganization = useRepoOrganization()
-const repoPlace = useRepoPlace()
 const repoUser = useRepoUser()
+const repoOrganizationMeber = useRepoOrganizationMember()
+
 const isCardLoading = ref<boolean>(false)
 const isBtnLoading = ref<boolean>(false)
+const currentMembership = ref<IOrganizationMember>()
 
 // 主要的模板資料
 const eventTemplate = ref<IEventTemplate>({
@@ -108,13 +107,10 @@ const templateTemp = ref<ITemplateDragSouce>({
     index: -1
 })
 
-const organizationList = ref<IOrganization[]>([])
-const placeList = ref<IPlace[]>([])
-
+// 彈窗連動資料
 const loadTemplateDialog = ref({
     isOpen: false,
 })
-
 const saveTemplateDialogVisible = ref<boolean>(false)
 const saveTemplateRef = ref<FormInstance>()
 const templateSavingForm = ref<IEventTemplate>({
@@ -124,7 +120,6 @@ const templateSavingForm = ref<IEventTemplate>({
 
 // Hooks
 onMounted(async () => {
-    getPlaceList()
     addOnDropListener(true)
 })
 onBeforeUnmount(() => {
@@ -137,10 +132,20 @@ watch(() => repoUser.userInfo.preference, async (preference) => {
         await getEventTemplate(recentTemplateId)
     }
 
+    const recentOrganierId = preference?.eventTemplate.organizerId
+    if (recentOrganierId) {
+        await getCurrentMembership(recentOrganierId)
+    }
+
     isCardLoading.value = false
 }, { immediate: true, })
 
 // methods
+async function getCurrentMembership(organizerId: string) {
+    const membersip = await repoOrganizationMeber.getOrganizationMembership(organizerId)
+    currentMembership.value = membersip
+}
+
 async function patchEventTemplate() {
     isBtnLoading.value = true
     repoUI.debounce('templateName', async () => {
@@ -168,18 +173,7 @@ async function confirmSaveDialog() {
     isCardLoading.value = false
 }
 
-async function getRecentTemplate() {
-    const templateList: IEventTemplate[] = await repoEventTemplate.getEventTemplateList()
-    const mostRecentTemplate = templateList[0]
-    if (mostRecentTemplate?.id) {
-        await getEventTemplate(mostRecentTemplate.id)
-    }
-}
-
 async function loadTemplate(loadedTemplate: IEventTemplate) {
-    console.log({
-        loadedTemplate
-    })
     loadTemplateDialog.value.isOpen = false
     switch (loadedTemplate.id) {
         case '':
@@ -198,11 +192,14 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
             // Do nothing
         }
     }
-    const patch: IPreferenceEventTemplate = {
-        organizerId: eventTemplate.value.organizerId ?? '',
-        templateId: eventTemplate.value.id ?? ''
+    if (eventTemplate.value.organizerId) {
+        const patch: IPreferenceEventTemplate = {
+            organizerId: eventTemplate.value.organizerId,
+            templateId: eventTemplate.value.id ?? ''
+        }
+        repoUser.patchUserPreference('eventTemplate', patch)
+        getCurrentMembership(eventTemplate.value.organizerId)
     }
-    repoUser.patchUserPreference('eventTemplate', patch)
 }
 
 async function setDefaultTemplate() {
@@ -234,14 +231,6 @@ async function clearOnDrop() {
     templateTemp.value.item.id = ''
 }
 
-async function getPlaceList() {
-    const result = await repoPlace.getPlaceList()
-    placeList.value = result
-}
-async function getOrganizationList() {
-    const result = await repoOrganization.getOrganizationList()
-    organizationList.value = result
-}
 function setTemplateTemp(templateSource: ITemplateDragSouce) {
     templateTemp.value = templateSource
 }

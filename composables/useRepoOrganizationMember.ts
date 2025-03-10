@@ -19,6 +19,12 @@ export default defineStore('organizationMember', () => {
         })
         return response.json()
     }
+    async function getOrganizationMembership(organizationId: string): Promise<IOrganizationMember> {
+        const response = await defaultApi.authRequest(`/organization/member/${organizationId}`, {
+            method: 'GET',
+        })
+        return response.json()
+    }
     async function postNewMember(body: IOrganizationMember): Promise<IOrganizationMember> {
         const response = await defaultApi.authRequest(`/organization/member`, {
             method: 'POST',
@@ -43,6 +49,7 @@ export default defineStore('organizationMember', () => {
     return {
         getMemberOrganizatoinList,
         getOrganizationMemberList,
+        getOrganizationMembership,
         postNewMember,
         patchMember,
         deleteOrganizationMember,

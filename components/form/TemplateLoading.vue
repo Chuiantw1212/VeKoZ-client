@@ -139,6 +139,7 @@ async function deleteTemplate(template: IEventTemplate) {
         organizerId: template.organizerId,
         id: template.id
     })
+    isLoading.value = false
     getEventTemplateList()
 }
 

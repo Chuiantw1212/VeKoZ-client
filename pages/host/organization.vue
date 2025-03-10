@@ -92,7 +92,7 @@ import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const isLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(true)
 const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 

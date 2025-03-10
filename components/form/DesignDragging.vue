@@ -94,13 +94,6 @@ const designs = defineModel<ITemplateDesign[]>('modelValue', {
     }
 })
 
-const props = defineProps({
-    type: {
-        type: String,
-        default: 'attendee',
-    },
-})
-
 // Methods
 function isTypeLimited(type: string = '') {
     const isAvailable = designs.value.every((design) => {

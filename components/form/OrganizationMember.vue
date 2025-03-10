@@ -3,12 +3,12 @@
         <!-- {{currentMember}} -->
         <el-alert type="info" show-icon :closable="false">
             <ol>
-                <li>檢視：成員會看見創辦人建立的模板、組織、票券等，為標準權限。</li>
+                <li>檢視：成員會看見創辦人建立的模板、組織、票券等。</li>
                 <li>部分新增操作，系統會判定為修改。例："新增"社群連結。</li>
             </ol>
         </el-alert>
         <el-form class="mt-20" ref="formRef" :rules="formRules" :model="searchForm">
-            <el-row :gutter="20">
+            <el-row :gutter="20" v-if="canEditMember">
                 <el-col :span="12">
                     <el-form-item label="新增成員" prop="email">
                         <el-input v-model="searchForm.email" placeholder="請輸入邀請對象Email">
@@ -53,24 +53,26 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作">
                 <template #default="{ row }">
-                    <template v-if="!row.isFounder">
-                        <el-button v-if="!canEditMember" :icon="WarnTriangleFilled" size="small" :disabled="true">
-                            無權限
-                        </el-button>
-                        <template v-else>
-                            <template v-if="checkIsSelf(row)">
-                                不可異動自身權限
-                            </template>
-                            <el-button v-if="!checkIsSelf(row)" v-loading="isLoading" size="small" :icon="Delete"
-                                @click="deleteOrganizationMember(row)">
-                                刪除成員
-                            </el-button>
-                        </template>
-                    </template>
                     <template v-if="row.isFounder">
                         <el-button :icon="WarnTriangleFilled" size="small" :disabled="true">
                             創辦人
                         </el-button>
+                    </template>
+                    <template v-else>
+                        <template v-if="checkIsSelf(row)">
+                            <el-button :icon="WarnTriangleFilled" size="small" :disabled="true">
+                                不可異動自己
+                            </el-button>
+                        </template>
+                        <template v-else>
+                            <el-button v-if="canEditMember" v-loading="isLoading" size="small" :icon="Delete"
+                                @click="deleteOrganizationMember(row)">
+                                刪除成員
+                            </el-button>
+                            <el-button v-else :icon="WarnTriangleFilled" size="small" :disabled="true">
+                                無權限
+                            </el-button>
+                        </template>
                     </template>
                 </template>
             </el-table-column>
