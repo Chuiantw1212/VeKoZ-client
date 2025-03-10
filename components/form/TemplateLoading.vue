@@ -108,8 +108,7 @@ async function selectTemplate(template: IEventTemplate) {
     }
     switch (template.id) {
         case 'default': {
-            // eventTemplate.value.id = ''
-            // eventTemplate.value.name = ''
+            template.id = ''
             template.name = '未命名模板'
             emit('update:modelValue', template)
             break;

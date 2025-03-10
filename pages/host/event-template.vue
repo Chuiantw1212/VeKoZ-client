@@ -134,14 +134,8 @@ watch(() => repoUser.userInfo.preference, async (preference) => {
     isCardLoading.value = true
     const recentTemplateId = preference?.eventTemplate.templateId
     if (recentTemplateId) {
-        // await getEventTemplate(recentTemplateId)
+        await getEventTemplate(recentTemplateId)
     }
-    // // await getOrganizationList()
-    // // await getRecentTemplate()
-    // if (!eventTemplate.value.id) {
-    //     await setDefaultTemplate()
-    //     await postEventTemplate()
-    // }
 
     isCardLoading.value = false
 }, { immediate: true, })
