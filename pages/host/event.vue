@@ -32,10 +32,10 @@
         <AtomVekozDialog v-model="eventDialogIsOpen" :showClose="false">
             <template #header>
                 <el-avatar :src="dialogEventTemplate.organizerLogo"></el-avatar>
-                <!-- <el-text size="large">
+                <el-text size="large">
                     活動編輯
                     ({{ dialogEventTemplate.id }})
-                </el-text> -->
+                </el-text>
             </template>
             <template #headerUI>
                 <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
@@ -95,7 +95,13 @@ const vekozCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: new Date(),
 })
+/**
+ * @deprecated
+ */
 const vekozEventList = ref<IEventFromList[]>([])
+
+const vekozEventMap = ref<{ [key: string]: IEventFromList[] }>({})
+
 // Data sidemenu
 const memberOrganizationList = ref<IOrganization[]>([])
 const selectedOrganizationIds = ref<string[]>([])
@@ -112,10 +118,8 @@ const formRef = ref<FormInstance>()
 onMounted(async () => {
     isLoading.value = true
     await Promise.all([
-        // getEventList(),
         getMemberOrganizatoinList()
     ])
-    // setCalendarView()
     isLoading.value = false
 })
 watch((() => repoUser.preference), () => {
@@ -191,7 +195,7 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     }
 
     // 抓取當月事件資料
-    getEventList(start)
+    // getEventList(start)
 
     // // Remove Google Calendar Events
     // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
@@ -218,11 +222,17 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
 }
 
 async function getMemberOrganizatoinList() {
-    const result = await repoOrganizationMeber.getMemberOrganizatoinList({
-        allowMethods: ['POST']
-    })
-    memberOrganizationList.value = result
+    const result = await repoOrganizationMeber.getMemberOrganizatoinList()
+    memberOrganizationList.value = result.items
 
+    memberOrganizationList.value.forEach(async (org: IOrganization) => {
+        if (org.id) {
+            const orgEventList = await repoEvent.getEventList({
+                organizerId: org.id
+            })
+            vekozEventMap.value[org.id] = orgEventList
+        }
+    })
     // const result = await repoOrganization.getMemberOrganizatoinList()
     // memberOrganizationList.value = result
     // // 預設全選
@@ -335,7 +345,8 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
     if (vekozEvent) {
         eventPatch.offerCategoryIds = vekozEvent.offerCategoryIds
         // eventPatch.isPublic = vekozEvent.isPublic // 這會導致事件永遠打不開
-        eventPatch.dateDesignId = vekozEvent?.dateDesignId
+        eventPatch.dateDesignId = vekozEvent.dateDesignId
+        eventPatch.organizerId = vekozEvent.organizerId
     }
     await repoEvent.patchEventCalendar(eventPatch)
 }
@@ -478,7 +489,6 @@ async function deleteEvent() {
     if (dialogEventTemplate.value.id) {
         await repoEvent.deleteEvent({
             id: dialogEventTemplate.value.id,
-            
         })
         // vekozCalendarRef.value?.removeAllEvents()
         // await getEventList()
