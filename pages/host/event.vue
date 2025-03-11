@@ -16,8 +16,8 @@
                     </template>
                     <el-form>
                         <el-checkbox-group v-model="selectedOrganizationIds">
-                            <el-checkbox v-for="(item) in memberOrganizationList"
-                                :value="item.id"  :label="trimOrganizationName(item)"/>
+                            <el-checkbox v-for="(item) in memberOrganizationList" :value="item.id"
+                                :label="trimOrganizationName(item)" />
                         </el-checkbox-group>
                     </el-form>
                 </el-card>
@@ -79,10 +79,10 @@
 <script setup lang="ts">
 import { Delete, Close, View } from '@element-plus/icons-vue';
 import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/event';
-import type {  ITemplateDesign } from '~/types/eventTemplate'
+import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
-import type {  IOrganization,IOrganizationMember } from '~/types/organization';
+import type { IOrganization, IOrganizationMember } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
 import type { FormInstance, } from 'element-plus';
 import { ElMessage } from 'element-plus';
@@ -172,7 +172,7 @@ async function validiateForm() {
 }
 
 function trimOrganizationName(item: IOrganizationMember) {
-    if(item.organizationName){
+    if (item.organizationName) {
         if (item.organizationName.length >= 12) {
             return `${item.organizationName.slice(0, 10)}...`
         } else {
@@ -210,7 +210,24 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     }
 
     // 抓取當月事件資料
-    // getEventList(start)
+    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
+        if (membership.organizationId) {
+            const orgEventList = await repoEvent.getEventList({
+                organizerId: membership.organizationId,
+                startDate: start,
+                allowMethods: ['GET'],
+            })
+            vekozEventMap.value[membership.organizationId] = orgEventList
+
+            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
+                return parseFullCalendarEvent(event)
+            })
+
+            fullCalendarEventList.forEach(event => {
+                vekozCalendarRef.value?.addEvent(event)
+            })
+        }
+    })
 
     // // Remove Google Calendar Events
     // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
@@ -240,25 +257,8 @@ async function getMemberOrganizatoinList() {
     const result = await repoOrganizationMeber.getMemberOrganizatoinList()
     memberOrganizationList.value = result.items
 
-    selectedOrganizationIds.value = result.items.map((org:IOrganization) => {
+    selectedOrganizationIds.value = result.items.map((org: IOrganization) => {
         return org.id ?? ''
-    })
-
-    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
-        if (membership.organizationId) {
-            const orgEventList = await repoEvent.getEventList({
-                organizerId: membership.organizationId
-            })
-            vekozEventMap.value[membership.organizationId] = orgEventList
-
-            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
-                return parseFullCalendarEvent(event)
-            })
-
-            fullCalendarEventList.forEach(event => {
-                vekozCalendarRef.value?.addEvent(event)
-            })
-        }
     })
 }
 
@@ -495,7 +495,7 @@ async function deleteEvent() {
         justify-content: space-between;
     }
 
-    .event__todoList{
+    .event__todoList {
         margin-top: 20px;
     }
 }

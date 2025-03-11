@@ -27,9 +27,11 @@ export type IOrganizationMember = IOrganizationMemberQuery & {
     isFounder?: false,
 }
 
+export type IAllowMethod = 'GET' | 'PATCH' | 'POST' | 'DELETE'
+
 export type IOrganizationMemberQuery = IPagination & {
     email?: string,
     organizationId?: string,
-    allowMethods?: string[],
+    allowMethods?: IAllowMethod[],
     allowEntities?: string[],
 }

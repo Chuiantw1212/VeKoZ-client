@@ -1,4 +1,5 @@
 import type { ITemplateDesign } from "./eventTemplate"
+import type { IAllowMethod } from "./organization"
 
 export interface IEventCreation {
     date: Date,
@@ -42,6 +43,7 @@ export interface IEventQuery {
     limit?: number,
     performerIds?: string[],
     organizerId?: string,
+    allowMethods?: IAllowMethod[],
 }
 
 /**
