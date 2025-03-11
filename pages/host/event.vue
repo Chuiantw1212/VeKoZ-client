@@ -12,16 +12,10 @@
             <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
                     <el-form>
-                        <!-- <el-form-item label="事件狀態">
-                            <el-checkbox-group v-model="calendarStatus" @change="getEventList">
-                                <el-checkbox v-for="(item) in calendatPublicOptins" :label="item.label"
-                                    :value="item.value" />
-                            </el-checkbox-group>
-                        </el-form-item> -->
-                        <!-- <el-checkbox-group v-model="selectedOrganizationIds">
-                            <el-checkbox v-for="(item) in memberOrganizationList" :label="trimOrganizationName(item)"
-                                :value="item.id" />
-                        </el-checkbox-group> -->
+                        <el-checkbox-group v-model="selectedOrganizationIds">
+                            <el-checkbox v-for="(item) in memberOrganizationList"
+                                :value="item.id"  :label="trimOrganizationName(item)"/>
+                        </el-checkbox-group>
                         <el-divider content-position="left">Todo</el-divider>
                         如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                     </el-form>
@@ -76,7 +70,7 @@ import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/even
 import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
-import type { IOrganization } from '~/types/organization';
+import type { IOrganization, IOrganizationMember } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
 import type { FormInstance, } from 'element-plus';
 import { ElMessage } from 'element-plus';
@@ -103,7 +97,7 @@ const vekozEventList = ref<IEventFromList[]>([])
 const vekozEventMap = ref<{ [key: string]: IEventFromList[] }>({})
 
 // Data sidemenu
-const memberOrganizationList = ref<IOrganization[]>([])
+const memberOrganizationList = ref<IOrganizationMember[]>([])
 const selectedOrganizationIds = ref<string[]>([])
 // Data Dialog
 const isDialogPatchLoading = ref<boolean>(false)
@@ -166,6 +160,16 @@ async function validiateForm() {
     calendarEvent.setProp('classNames', ['blue-text-event'])
 }
 
+function trimOrganizationName(item: IOrganizationMember) {
+    if(item.organizationName){
+        if (item.organizationName.length >= 12) {
+            return `${item.organizationName.slice(0, 10)}...`
+        } else {
+            return item.organizationName
+        }
+    }
+}
+
 function setCalendarView() {
     const preference = repoUser.userInfo.preference
     const calendarViewType = preference?.event.calendarViewType
@@ -225,12 +229,12 @@ async function getMemberOrganizatoinList() {
     const result = await repoOrganizationMeber.getMemberOrganizatoinList()
     memberOrganizationList.value = result.items
 
-    memberOrganizationList.value.forEach(async (org: IOrganization) => {
-        if (org.id) {
+    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
+        if (membership.organizationId) {
             const orgEventList = await repoEvent.getEventList({
-                organizerId: org.id
+                organizerId: membership.organizationId
             })
-            vekozEventMap.value[org.id] = orgEventList
+            vekozEventMap.value[membership.organizationId] = orgEventList
         }
     })
     // const result = await repoOrganization.getMemberOrganizatoinList()
