@@ -29,11 +29,7 @@
             </span>
         </el-menu-item>
     </NuxtLink>
-    <NuxtLink to="/settings">
-        <el-menu-item v-if="!repoUI.isLarge" class="menu__item" index="4">
-            <OrganismUserAuth></OrganismUserAuth>
-        </el-menu-item>
-    </NuxtLink>
+    <OrganismUserAuth v-if="!repoUI.isLarge"></OrganismUserAuth>
 </template>
 <script setup lang="ts">
 import { Search, Collection, Setting, Ticket } from '@element-plus/icons-vue'
