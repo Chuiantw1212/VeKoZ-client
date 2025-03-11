@@ -11,14 +11,26 @@
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
+                    <template #header>
+                        行事曆
+                    </template>
                     <el-form>
                         <el-checkbox-group v-model="selectedOrganizationIds">
                             <el-checkbox v-for="(item) in memberOrganizationList"
                                 :value="item.id"  :label="trimOrganizationName(item)"/>
                         </el-checkbox-group>
-                        <el-divider content-position="left">Todo</el-divider>
-                        如果是多日的活動，就要個別編輯不同課堂的資料，比如當日教學內容。
                     </el-form>
+                </el-card>
+                <el-card class="event__todoList">
+                    <template #header>
+                        待辦事項
+                    </template>
+                    <el-row>
+                        未完成的海報
+                    </el-row>
+                    <el-row>
+                        未完成的海報
+                    </el-row>
                 </el-card>
             </el-col>
         </el-row>
@@ -67,16 +79,15 @@
 <script setup lang="ts">
 import { Delete, Close, View } from '@element-plus/icons-vue';
 import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/event';
-import type { IEventTemplate, ITemplateDesign } from '~/types/eventTemplate'
+import type {  ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
-import type { IOrganization, IOrganizationMember } from '~/types/organization';
+import type {  IOrganization,IOrganizationMember } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
 import type { FormInstance, } from 'element-plus';
 import { ElMessage } from 'element-plus';
 // Data Repo
 const repoEvent = useRepoEvent()
-const repoOrganization = useRepoOrganization()
 const repoOrganizationMeber = useRepoOrganizationMember()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
@@ -229,20 +240,26 @@ async function getMemberOrganizatoinList() {
     const result = await repoOrganizationMeber.getMemberOrganizatoinList()
     memberOrganizationList.value = result.items
 
+    selectedOrganizationIds.value = result.items.map((org:IOrganization) => {
+        return org.id ?? ''
+    })
+
     memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
         if (membership.organizationId) {
             const orgEventList = await repoEvent.getEventList({
                 organizerId: membership.organizationId
             })
             vekozEventMap.value[membership.organizationId] = orgEventList
+
+            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
+                return parseFullCalendarEvent(event)
+            })
+
+            fullCalendarEventList.forEach(event => {
+                vekozCalendarRef.value?.addEvent(event)
+            })
         }
     })
-    // const result = await repoOrganization.getMemberOrganizatoinList()
-    // memberOrganizationList.value = result
-    // // 預設全選
-    // selectedOrganizationIds.value = result.map(org => {
-    //     return org.id ?? ''
-    // })
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
@@ -289,37 +306,6 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     }
     await repoEvent.patchEventForm(templateDesign)
     isDialogPatchLoading.value = false
-}
-
-async function getEventList(startDate: Date) {
-    // const startOfTheMonth = new Date()
-    // startOfTheMonth.setDate(0)
-
-    // const condition: IEventFromList = {
-    //     startDate: startOfTheMonth,
-    // }
-
-    // const hasStatus = calendarStatus.value.length === 1
-    // const selectedStatus: string = String(calendarStatus.value[0])
-    // if (hasStatus && selectedStatus === 'public') {
-    //     condition.isPublic = true
-    // }
-    // if (hasStatus && selectedStatus === 'private') {
-    //     condition.isPublic = false
-    // }
-    vekozEventList.value = await repoEvent.getEventList({
-        startDate,
-    })
-
-    const fullCalendarEventList: IFullCalendarEvent[] = vekozEventList.value.map(event => {
-        return parseFullCalendarEvent(event)
-    })
-
-    vekozCalendarRef.value?.removeAllEvents()
-
-    fullCalendarEventList.forEach(event => {
-        vekozCalendarRef.value?.addEvent(event)
-    })
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
@@ -507,6 +493,10 @@ async function deleteEvent() {
     .event__header {
         display: flex;
         justify-content: space-between;
+    }
+
+    .event__todoList{
+        margin-top: 20px;
     }
 }
 
