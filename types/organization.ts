@@ -1,6 +1,6 @@
 import type { IPagination } from "./ui"
 
-export type IOrganization = {
+export interface IOrganization {
     id?: string,
     seoName?: string,
     name?: string,
@@ -18,7 +18,12 @@ export type IOrganization = {
 /**
  * 權限各自不相同
  */
-export type IOrganizationMember = IOrganizationMemberQuery & {
+export interface IMemberListRes {
+    total: number,
+    items: IOrganizationMember[]
+}
+
+export interface IOrganizationMember extends IOrganizationMemberQuery {
     id?: string,
     name?: string,
     organizationName?: string,
@@ -27,9 +32,10 @@ export type IOrganizationMember = IOrganizationMemberQuery & {
     isFounder?: false,
 }
 
+
 export type IAllowMethod = 'GET' | 'PATCH' | 'POST' | 'DELETE'
 
-export type IOrganizationMemberQuery = IPagination & {
+export interface IOrganizationMemberQuery extends IPagination {
     email?: string,
     organizationId?: string,
     allowMethods?: IAllowMethod[],

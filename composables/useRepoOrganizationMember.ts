@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import useVekozApi from './useVekozApi'
-import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization'
+import type { IMemberListRes, IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization'
 import type { IPagination } from '~/types/ui'
 
 export default defineStore('organizationMember', () => {
     const defaultApi = useVekozApi()
-    async function getMemberOrganizationList(params?: IOrganizationMemberQuery) {
+    async function getMemberOrganizationList(params?: IOrganizationMemberQuery): Promise<IMemberListRes | undefined> {
         try {
             const response = await defaultApi.authRequest(`/member/organization/list`, {
                 method: 'GET',

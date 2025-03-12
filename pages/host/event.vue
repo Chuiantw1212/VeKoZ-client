@@ -16,7 +16,7 @@
                     </template>
                     <el-form>
                         <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
-                            <el-checkbox v-for="(item) in memberOrganizationList" :value="item.id"
+                            <el-checkbox v-for="(item) in memberOrganizationList" :value="item.organizationId"
                                 :label="trimOrganizationName(item)" />
                         </el-checkbox-group>
                     </el-form>
@@ -133,7 +133,7 @@ watch((() => repoUser.preference.event), async () => {
     await getMemberOrganizationList()
     setCalendarView()
     isLoading.value = false
-}, { immediate: true, deep: true })
+}, { deep: true })
 
 // Methods
 function updatePreferneceOrgs() {
@@ -251,23 +251,21 @@ async function getCalendarEvents(payload: any) {
     const start = payload.start
 
     // 抓取當月事件資料
-    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
-        if (membership.organizationId) {
-            const orgEventList = await repoEvent.getEventList({
-                organizerId: membership.organizationId,
-                startDate: start,
-                allowMethods: ['GET'],
-            })
-            vekozEventMap.value[membership.organizationId] = orgEventList
+    selectedOrganizationIds.value.forEach(async (organizerId: string) => {
+        const orgEventList = await repoEvent.getEventList({
+            organizerId: organizerId,
+            startDate: start,
+            allowMethods: ['GET'],
+        })
+        vekozEventMap.value[organizerId] = orgEventList
 
-            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
-                return parseFullCalendarEvent(event)
-            })
+        const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
+            return parseFullCalendarEvent(event)
+        })
 
-            fullCalendarEventList.forEach(event => {
-                vekozCalendarRef.value?.addEvent(event)
-            })
-        }
+        fullCalendarEventList.forEach(event => {
+            vekozCalendarRef.value?.addEvent(event)
+        })
     })
 }
 
@@ -284,8 +282,8 @@ async function getMemberOrganizationList() {
     if (preferenceOrgs) {
         selectedOrganizationIds.value = preferenceOrgs
     } else {
-        selectedOrganizationIds.value = result.items.map((org: IOrganization) => {
-            return org.id ?? ''
+        selectedOrganizationIds.value = result.items.map((membership: IOrganizationMember) => {
+            return membership.organizationId ?? ''
         })
     }
 }
