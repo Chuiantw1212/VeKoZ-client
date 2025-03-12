@@ -14,12 +14,10 @@
                     <template #header>
                         行事曆
                     </template>
-                    <el-form>
-                        <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
-                            <el-checkbox v-for="(item) in memberOrganizationList" :value="item.organizationId"
-                                :label="trimOrganizationName(item)" />
-                        </el-checkbox-group>
-                    </el-form>
+                    <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
+                        <el-checkbox v-for="(item) in memberOrganizationList" :value="item.organizationId"
+                            :label="trimOrganizationName(item)" />
+                    </el-checkbox-group>
                 </el-card>
                 <el-card class="event__todoList">
                     <template #header>
@@ -87,6 +85,7 @@ import type { IPreferenceEvent } from '~/types/user';
 import type { FormInstance, } from 'element-plus';
 import { ElMessage } from 'element-plus';
 // Data Repo
+// const route = useRoute()
 const repoEvent = useRepoEvent()
 const repoOrganizationMeber = useRepoOrganizationMember()
 const repoUI = useRepoUI()
@@ -117,10 +116,6 @@ const eventDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 // Hooks
-// onMounted(async () => {
-//     await Promise.all([
-//     ])
-// })
 /**
  * 觸發來源
  * 初始化&更新月曆組織
@@ -132,7 +127,7 @@ watch((() => repoUser.preference.event), () => {
         setCalendarView()
         isLoading.value = false
     })
-}, { deep: true })
+}, { immediate: true, deep: true })
 
 // Methods
 function updatePreferneceOrgs() {
@@ -176,9 +171,8 @@ async function validiateForm() {
         })
     }
     // Fail fallback to private
-    calendarEvent.setProp('backgroundColor', 'lightblue')
-    // calendarEvent.setProp('textColor', 'lightblue')
-    calendarEvent.setProp('classNames', ['blue-text-event'])
+    // calendarEvent.setProp('backgroundColor', 'lightblue')
+    // calendarEvent.setProp('classNames', ['blue-text-event'])
 }
 
 function trimOrganizationName(item: IOrganizationMember) {
@@ -387,7 +381,7 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         // textColor: 'lightblue',
         classNames: ['blue-text-event']
     }
-    if (event.isPublic) {
+    if (event.isPublic || true) {
         delete iFullCalendarEvent.backgroundColor
         // delete iFullCalendarEvent.textColor
         delete iFullCalendarEvent.classNames
