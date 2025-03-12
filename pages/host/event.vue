@@ -87,9 +87,9 @@
                 組織行事曆
             </template>
             <FormOrganizationCalendarList :model-value="memberOrganizationList"></FormOrganizationCalendarList>
-            <template #footer>
+            <!-- <template #footer>
                 <el-button>確認</el-button>
-            </template>
+            </template> -->
         </AtomVekozDialog>
     </div>
 </template>

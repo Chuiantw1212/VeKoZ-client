@@ -2,7 +2,7 @@
     <el-table :data="memberships" style="width: 100%">
         <el-table-column prop="color" label="顏色">
             <template #default="{ row }">
-                <input ref="pickRef" :id="`pickr-${row.organizationId}`"></input>
+                <input class="pickr" ref="pickrRef" :id="`pickr-${row.organizationId}`"></input>
             </template>
         </el-table-column>
         <el-table-column prop="organizationName" label="名稱" />
@@ -17,7 +17,7 @@
 import type Pickr from '@simonwep/pickr'
 import type { IOrganizationMember } from '@/types/organization'
 const { $Pickr } = useNuxtApp()
-const pickRef = ref() // 只是用來偵測選染完成
+const pickrRef = ref() // 只是用來偵測選染完成
 
 const memberships = defineModel<IOrganizationMember[]>({
     type: Array,
@@ -33,7 +33,7 @@ onMounted(() => {
 
 // Methods
 function waitForRenderCompleted() {
-    if (pickRef.value) {
+    if (pickrRef.value) {
         initializePickr()
     } else {
         requestAnimationFrame(waitForRenderCompleted)
@@ -88,15 +88,18 @@ function initializePickr() {
             ],
 
             components: {
+                // preview: true,
                 interaction: {
-                    input: true,
-                    save: true,
+                    // hex: true,
+                    //     save: true,
                 }
             }
         }
 
         const pickr = ($Pickr as any).create(options)
-        pickr.on('save', (instance: Pickr) => {
+        pickr.on('change', (instance: any) => {
+            pickr.applyColor()
+            pickr.hide()
             if (memberships.value[index]) {
                 memberships.value[index].calendarColor = instance.toHEXA() as any
             }
@@ -106,4 +109,10 @@ function initializePickr() {
 </script>
 <style lang="scss" scoped>
 @import '@simonwep/pickr/dist/themes/nano.min.css';
+
+.pickr {
+    :deep(.pcr-swatches) {
+        margin-bottom: .6em;
+    }
+}
 </style>
