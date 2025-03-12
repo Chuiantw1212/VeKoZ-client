@@ -20,13 +20,14 @@
             <MoleculeAttendeeMenuItems></MoleculeAttendeeMenuItems>
         </div>
         <div class="menu__endGroup">
+            <el-switch class="item__switch" :model-value="isFullScreen" active-text="延展"
+                @change="patchUserPreference()" />
             <OrganismUserAuth></OrganismUserAuth>
         </div>
     </el-menu>
 </template>
 
 <script lang="ts" setup>
-import { getAuth, signOut, } from "firebase/auth"
 import { MoleculeAttendeeMenuItems } from '#components'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
@@ -34,27 +35,13 @@ const activeIndex = ref('1')
 
 // Hooks
 const router = useRouter()
-const route = useRoute()
-
 const isFullScreen = computed(() => {
-    if (repoUser.preference) {
-        return repoUser.preference.isFullScreen
-    } else {
-        return false
-    }
+    return repoUser.preference.isFullScreen ?? false
 })
 
 // Methods
 function patchUserPreference() {
-    repoUser.patchUserPreference('isFullScreen', isFullScreen.value)
-}
-
-async function handleSignOut() {
-    const auth = getAuth()
-    await signOut(auth)
-    router.push({
-        name: 'signIn',
-    })
+    repoUser.patchUserPreference('isFullScreen', !isFullScreen.value)
 }
 </script>
 
@@ -62,8 +49,6 @@ async function handleSignOut() {
 .headerMenu {
     justify-content: space-between;
     width: calc(100vw - 40px); // -padding x 2
-    // z-index: 10;
-    // opacity: 1;
 
     .headerMenu__logo {
         margin: 0px;

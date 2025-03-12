@@ -19,14 +19,14 @@
 <script setup lang="ts">
 import HeaderMenu from '~/components/organism/HeaderMenu.vue'
 import SideMenu from '~/components/organism/SideMenu.vue';
-import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
+// import zhTw from 'element-plus/dist/locale/zh-tw.mjs'
 
 const repoUser = useRepoUser()
 const repoUI = useRepoUI()
 
 const isFullScreen = computed(() => {
-    if (repoUser.userPreference) {
-        return repoUser.userPreference?.isFullScreen
+    if (repoUser.preference) {
+        return repoUser.preference?.isFullScreen
     }
 })
 

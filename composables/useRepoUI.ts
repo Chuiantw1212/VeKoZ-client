@@ -11,7 +11,7 @@ export default defineStore('ui', () => {
     const isLarge = ref<boolean>(false) // 992px 
     const isXLarge = ref<boolean>(false) // 1200px 
     const isXXLarge = ref<boolean>(false) // 1400px 
-    const isMenuCollapse = ref<boolean>(false)
+    const isMenuCollapse = ref<boolean>(true)
     const isLoading = ref<boolean>(false)
     const loadingInstance = ref<any>(null)
     const debounceTemp = ref<{
@@ -43,7 +43,7 @@ export default defineStore('ui', () => {
         }
         if (innerWidth >= 1200) {
             isXLarge.value = true
-            isMenuCollapse.value = false
+            // isMenuCollapse.value = false
         }
         if (innerWidth >= 1400) {
             isXXLarge.value = true
