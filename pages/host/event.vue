@@ -14,14 +14,16 @@
                     <template #header>
                         <div class="card__header">
                             組織行事曆
-                            <!-- <el-button :icon="Edit" :text="true" :circle="true" @click="openEditOrgs()">
-                            </el-button> -->
                         </div>
                     </template>
-                    <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
-                        <el-checkbox v-for="(item) in memberOrganizationList" :value="item.organizationId"
-                            :label="trimOrganizationName(item)" />
-                    </el-checkbox-group>
+                    <AtomVekozCheckboxGroup v-model="selectedOrganizationIds" :items="memberOrganizationList"
+                        :item-label="'organizationName'" :item-value="'organizationId'">
+                    </AtomVekozCheckboxGroup>
+                    <!-- <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
+                        <template v-for="(item) in memberOrganizationList">
+                            <el-checkbox :value="item.organizationId" :label="trimOrganizationName(item)" />
+                        </template>
+                    </el-checkbox-group> -->
                 </el-card>
                 <el-card class="event__todoList">
                     <template #header>
