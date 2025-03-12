@@ -125,11 +125,13 @@ const formRef = ref<FormInstance>()
  * 觸發來源
  * 初始化&更新月曆組織
  */
-watch((() => repoUser.preference.event), async () => {
+watch((() => repoUser.preference.event), () => {
     isLoading.value = true
-    await getMemberOrganizationList()
-    setCalendarView()
-    isLoading.value = false
+    repoUI.debounce('preferenceEventChanged', async () => {
+        await getMemberOrganizationList()
+        setCalendarView()
+        isLoading.value = false
+    })
 }, { deep: true })
 
 // Methods
