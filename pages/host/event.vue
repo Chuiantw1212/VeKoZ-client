@@ -100,12 +100,9 @@ const vekozCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: new Date(),
 })
-/**
- * @deprecated
- */
-const vekozEventList = ref<IEventFromList[]>([])
 
-const vekozEventMap = ref<{ [key: string]: IEventFromList[] }>({})
+const vekozEventList = ref<IEventFromList[]>([])
+// const vekozEventMap = ref<{ [key: string]: IEventFromList[] }>({})
 
 // Data sidemenu
 const memberOrganizationList = ref<IOrganizationMember[]>([])
@@ -251,13 +248,15 @@ async function getCalendarEvents(payload: any) {
     const start = payload.start
 
     // 抓取當月事件資料
+    vekozEventList.value = []
     selectedOrganizationIds.value.forEach(async (organizerId: string) => {
         const orgEventList = await repoEvent.getEventList({
             organizerId: organizerId,
             startDate: start,
             allowMethods: ['GET'],
         })
-        vekozEventMap.value[organizerId] = orgEventList
+        vekozEventList.value.push(...orgEventList)
+        // vekozEventMap.value[organizerId] = orgEventList
 
         const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
             return parseFullCalendarEvent(event)
@@ -418,6 +417,15 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
     const eventTemplate: IEventSingle = await repoEvent.getEvent(eventId)
+    const selectedEventMaster = vekozEventList.value.find(event => {
+        return event.id === eventId
+    })
+    if (selectedEventMaster) {
+        const relatedMembership = memberOrganizationList.value.find(item => {
+            return item.organizationId === selectedEventMaster?.organizerId
+        })
+        eventTemplate.allowMethods = relatedMembership?.allowMethods
+    }
     dialogEventTemplate.value = eventTemplate
     isLoading.value = false
 
