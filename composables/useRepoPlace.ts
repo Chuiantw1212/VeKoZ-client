@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 
 export default defineStore('place', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     async function getPlaceList() {
         const response = await defaultApi.authRequest(`/place/list`, {
             method: 'GET',

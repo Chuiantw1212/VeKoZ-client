@@ -3,9 +3,9 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
-                    <MoleculeVekozCalendar ref="vekozCalendarRef" @create="openNewEventDialog($event)"
-                        @eventChange="handleEventCalendarChange($event)" @event-click="handleEventClick($event)"
-                        @dates-set="handleDatesSet($event)">
+                    <MoleculeVekozCalendar ref="vekozCalendarRef" @create="openNewEventDialog"
+                        @eventChange="handleEventCalendarChange" @event-click="handleEventClick"
+                        @dates-set="handleDatesSet" @mounted="getCalendarEvents">
                     </MoleculeVekozCalendar>
                 </el-card>
             </el-col>
@@ -120,15 +120,15 @@ const eventDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 // Hooks
-onMounted(async () => {
+// onMounted(async () => {
+//     await Promise.all([
+//     ])
+// })
+watch((() => repoUser.preference), async () => {
     isLoading.value = true
-    await Promise.all([
-        getMemberOrganizatoinList()
-    ])
-    isLoading.value = false
-})
-watch((() => repoUser.preference), () => {
+    await getMemberOrganizationList()
     setCalendarView()
+    isLoading.value = false
 }, { immediate: true, deep: true })
 
 // Methods
@@ -260,13 +260,15 @@ async function getCalendarEvents(payload: any) {
     })
 }
 
-async function getMemberOrganizatoinList() {
-    const result = await repoOrganizationMeber.getMemberOrganizatoinList()
-    memberOrganizationList.value = result.items
+async function getMemberOrganizationList() {
+    const result = await repoOrganizationMeber.getMemberOrganizationList()
+    if (result) {
+        memberOrganizationList.value = result.items
 
-    selectedOrganizationIds.value = result.items.map((org: IOrganization) => {
-        return org.id ?? ''
-    })
+        selectedOrganizationIds.value = result.items.map((org: IOrganization) => {
+            return org.id ?? ''
+        })
+    }
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {

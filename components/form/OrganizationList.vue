@@ -138,7 +138,7 @@ function checkOrganizationOnUse(row: IOrganizationMember): boolean {
 
 async function getOrganizationMemberships() {
     isLoading.value = true
-    const response = await repoOrganizationMember.getMemberOrganizatoinList({
+    const response = await repoOrganizationMember.getMemberOrganizationList({
         pageSize: 50,
         currentPage: 1,
     })

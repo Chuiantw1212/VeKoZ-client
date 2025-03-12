@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 // import { getAuth, } from "firebase/auth"
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IUser, UserType } from '~/types/user'
 /**
  * 大量使用Setup store
@@ -8,7 +8,7 @@ import type { IUser, UserType } from '~/types/user'
  */
 export default defineStore('auth', () => {
     // State
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     // Actions
     async function postVerificationEmail(body: any) {
         const response = await defaultApi.authRequest(`/auth/verificationEmail`, {

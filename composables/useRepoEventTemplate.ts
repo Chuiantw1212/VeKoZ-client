@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IEventTemplate, IEventTemplateQuery, ITemplateDesign } from '~/types/eventTemplate'
 
 export default defineStore('eventTemplate', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
 
     async function getEventTemplate(templateId: string) {
         if (!templateId) {

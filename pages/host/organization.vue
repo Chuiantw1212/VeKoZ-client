@@ -127,7 +127,7 @@ function getPersonalLink() {
 }
 
 async function getOrganizationMemberships() {
-    const response = await repoOrganizationMember.getMemberOrganizatoinList({
+    const response = await repoOrganizationMember.getMemberOrganizationList({
         pageSize: 50,
         currentPage: 1,
     })

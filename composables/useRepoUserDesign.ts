@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IUser, IUserPreference, UserType } from '~/types/user'
 import type { IUserDesign } from '~/types/userDesign'
 
 export default defineStore('userDesign', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     async function postUserDesigns(designs: IUserDesign[]) {
         const response = await defaultApi.authRequest(`/user-design/list`, {
             method: 'POST',

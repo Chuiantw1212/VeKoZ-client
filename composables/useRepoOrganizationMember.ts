@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization'
 import type { IPagination } from '~/types/ui'
 
 export default defineStore('organizationMember', () => {
-    const defaultApi = useVenoniaApi()
-    async function getMemberOrganizatoinList(params?: IOrganizationMemberQuery) {
-        const response = await defaultApi.authRequest(`/member/organization/list`, {
-            method: 'GET',
-            params,
-        })
-        return response.json()
+    const defaultApi = useVekozApi()
+    async function getMemberOrganizationList(params?: IOrganizationMemberQuery) {
+        try {
+            const response = await defaultApi.authRequest(`/member/organization/list`, {
+                method: 'GET',
+                params,
+            })
+            return response.json()
+        } catch (error: any) {
+            console.log(error.message)
+        }
     }
     async function getOrganizationMemberList(organizationId: string, pagination?: IPagination) {
         const response = await defaultApi.authRequest(`/organization/member/list/${organizationId}`, {
@@ -47,7 +51,7 @@ export default defineStore('organizationMember', () => {
         return response.json()
     }
     return {
-        getMemberOrganizatoinList,
+        getMemberOrganizationList,
         getOrganizationMemberList,
         getOrganizationMembership,
         postNewMember,

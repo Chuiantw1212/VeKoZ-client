@@ -48,7 +48,7 @@ function setOrganization(organizerId: string) {
     }
 }
 async function getMemberOganizationList() {
-    const result = await repoOrganizationMember.getMemberOrganizatoinList({
+    const result = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['POST'],
     })
     membershipList.value = result.items

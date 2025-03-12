@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 export default defineStore('google', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     async function getGoogleCalendarEvents(params: any) {
         const response = await defaultApi.authRequest(`/google/calendar/event/list`, {
             method: 'GET',

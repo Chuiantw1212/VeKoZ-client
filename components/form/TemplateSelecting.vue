@@ -77,7 +77,7 @@ function setDefaultValue() {
 }
 
 async function getOrganizationMemberships() {
-    const response = await repoOrganizationMember.getMemberOrganizatoinList({
+    const response = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['POST'],
     })
     membershipList.value = response.items

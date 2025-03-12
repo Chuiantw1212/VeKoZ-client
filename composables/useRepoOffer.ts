@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IOffer, IPatchOffer } from '~/types/offer'
 
 export default defineStore('offer', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     async function getOfferList(params?: object): Promise<IOffer[]> {
         const response = await defaultApi.authRequest(`/offer/list`, {
             method: 'GET',

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { ISelectOption } from '~/types/meta'
 
 export default defineStore('meta', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     const repoUI = useRepoUI()
     const map = ref<{ [key: string]: ISelectOption[] }>({})
 

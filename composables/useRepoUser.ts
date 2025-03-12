@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { getAuth, } from "firebase/auth"
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IUser, IUserPreference, UserType } from '~/types/user'
 
 export default defineStore('user', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     const route = useRoute()
     const router = useRouter()
     const userInfo = ref<IUser>({})

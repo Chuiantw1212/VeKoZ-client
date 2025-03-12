@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import useVenoniaApi from './useVenoniaApi'
+import useVekozApi from './useVekozApi'
 import type { IOrganization } from '~/types/organization'
 
 export default defineStore('organization', () => {
-    const defaultApi = useVenoniaApi()
+    const defaultApi = useVekozApi()
     async function getOrganization(organizationId: string): Promise<IOrganization> {
         const response = await defaultApi.request(`/organization/${organizationId}`, {
             method: 'GET',

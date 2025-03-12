@@ -14,8 +14,11 @@ interface requestOptions {
 
 export default defineStore('api', {
     state: () => {
+        const token = ''
+        const refreshTimerId: NodeJS.Timeout = null as any
         return {
-            token: '',
+            token,
+            refreshTimerId,
         }
     },
     actions: {
@@ -39,17 +42,20 @@ export default defineStore('api', {
                     }
                     step()
                 })
-                if (auth && auth.currentUser && !this.token) {
-                    try {
-                        const idTokenResult = await auth.currentUser.getIdTokenResult(true)
-                        this.token = idTokenResult.token
-                        setTimeout(() => {
-                            this.token = ''
-                            this.setToken()
-                        }, 3500 * 1000)
-                    } catch (error: any) {
-                        console.log(error.message)
-                        return
+                if (auth && auth.currentUser) {
+                    if (!this.token) {
+                        try {
+                            const idTokenResult = await auth.currentUser.getIdTokenResult(true)
+                            this.token = idTokenResult.token
+                            this.refreshTimerId = setTimeout(() => {
+                                this.refreshTimerId = '' as any
+                                this.token = ''
+                                this.setToken()
+                            }, 3500 * 1000)
+                        } catch (error: any) {
+                            console.log(error.message)
+                            return
+                        }
                     }
                 }
             }

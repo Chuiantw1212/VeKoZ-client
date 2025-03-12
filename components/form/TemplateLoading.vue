@@ -89,7 +89,7 @@ onMounted(() => {
 
 // Methods
 async function getMemberOganizationList() {
-    const result = await repoOrganizationMember.getMemberOrganizatoinList({
+    const result = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['GET'],
     })
     membershipList.value = result.items
