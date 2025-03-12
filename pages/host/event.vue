@@ -209,26 +209,9 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
         })
     }
 
-    // 抓取當月事件資料
-    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
-        if (membership.organizationId) {
-            const orgEventList = await repoEvent.getEventList({
-                organizerId: membership.organizationId,
-                startDate: start,
-                allowMethods: ['GET'],
-            })
-            vekozEventMap.value[membership.organizationId] = orgEventList
-
-            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
-                return parseFullCalendarEvent(event)
-            })
-
-            fullCalendarEventList.forEach(event => {
-                vekozCalendarRef.value?.addEvent(event)
-            })
-        }
+    getCalendarEvents({
+        start
     })
-
     // // Remove Google Calendar Events
     // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
     // calendarEvent?.remove()
@@ -251,6 +234,30 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     //         vekozCalendarRef.value?.addEvent(fullCalendarEvent)
     //     })
     // })
+}
+
+async function getCalendarEvents(payload: any) {
+    const start = payload.start
+
+    // 抓取當月事件資料
+    memberOrganizationList.value.forEach(async (membership: IOrganizationMember) => {
+        if (membership.organizationId) {
+            const orgEventList = await repoEvent.getEventList({
+                organizerId: membership.organizationId,
+                startDate: start,
+                allowMethods: ['GET'],
+            })
+            vekozEventMap.value[membership.organizationId] = orgEventList
+
+            const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
+                return parseFullCalendarEvent(event)
+            })
+
+            fullCalendarEventList.forEach(event => {
+                vekozCalendarRef.value?.addEvent(event)
+            })
+        }
+    })
 }
 
 async function getMemberOrganizatoinList() {

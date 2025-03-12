@@ -16,7 +16,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
 import type { IFullCalendarEvent, IChangeInfo, IEventClickInfo } from '~/types/fullCalendar';
 
-const emit = defineEmits(['update:modelValue', 'create', 'eventChange', 'eventClick', 'datesSet'])
+const emit = defineEmits(['create', 'eventChange', 'eventClick', 'datesSet', 'mounted'])
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
@@ -130,8 +130,9 @@ function handleDatesSet(datesSetArg: DatesSetArg) {
  * 只會運作一次
  */
 function handleViewDidMount(viewMountArg: ViewMountArg) {
-    const { view } = viewMountArg
-    const { type } = view
+    // const { view } = viewMountArg
+    // const { type } = view
+    emit('mounted', viewMountArg)
     // console.log({
     //     type
     // })
