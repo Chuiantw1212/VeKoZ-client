@@ -12,7 +12,11 @@
             <el-col v-if="repoUI.isXLarge" :span="5">
                 <el-card>
                     <template #header>
-                        行事曆
+                        <div class="card__header">
+                            組織行事曆
+                            <!-- <el-button :icon="Edit" :text="true" :circle="true" @click="openEditOrgs()">
+                            </el-button> -->
+                        </div>
                     </template>
                     <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
                         <el-checkbox v-for="(item) in memberOrganizationList" :value="item.organizationId"
@@ -75,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { Delete, Close, View } from '@element-plus/icons-vue';
+import { Delete, Close, View, Edit } from '@element-plus/icons-vue';
 import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/event';
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
@@ -115,6 +119,8 @@ const dialogEventTemplate = ref<IEventSingle>({
 const eventDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
+const editOrgModal = ref<boolean>(false)
+
 // Hooks
 /**
  * 觸發來源
@@ -524,7 +530,7 @@ async function deleteEvent() {
 
 <style lang="scss" scoped>
 .event {
-    .event__header {
+    .card__header {
         display: flex;
         justify-content: space-between;
     }

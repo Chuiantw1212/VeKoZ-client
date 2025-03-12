@@ -92,7 +92,7 @@ import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const isLoading = ref<boolean>(true)
+const isLoading = ref<boolean>(false)
 const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 
@@ -131,6 +131,9 @@ async function getOrganizationMemberships() {
         pageSize: 50,
         currentPage: 1,
     })
+    if (!response) {
+        return
+    }
     membershipList.value = response.items
     const latestOrganization = response.items[0]
     if (latestOrganization) {
