@@ -97,12 +97,11 @@ import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/even
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
 import type { IChangeInfo, IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
-import type { IOrganization, IOrganizationMember } from '~/types/organization';
+import type { IOrganizationMember } from '~/types/organization';
 import type { IPreferenceEvent } from '~/types/user';
 import type { FormInstance, } from 'element-plus';
 import { ElMessage } from 'element-plus';
 // Data Repo
-// const route = useRoute()
 const repoEvent = useRepoEvent()
 const repoOrganizationMeber = useRepoOrganizationMember()
 const repoUI = useRepoUI()
@@ -116,7 +115,6 @@ const vekozCalendarRef = ref<CalendarApi>()
 const calendarEventCreation = ref<IEventCreation>({
     date: new Date(),
 })
-
 const vekozEventList = ref<IEventFromList[]>([])
 // const vekozEventMap = ref<{ [key: string]: IEventFromList[] }>({})
 

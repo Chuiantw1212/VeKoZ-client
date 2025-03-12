@@ -1,17 +1,15 @@
 <template>
     <div class="checkbox-group">
-        <template v-for="(item, index) in props.items">
+        <template v-for="(item) in props.items">
             <label :id="item[itemValue]">
-                <input type="checkbox" v-model="modelValue" :id="item[itemValue]" :value="item[itemValue]" />
-
+                <input class="group__input" type="checkbox" v-model="modelValue" :id="item[itemValue]"
+                    :value="item[itemValue]" :style="{ 'accent-color': `${item.calendarColor} !important` }" />
                 {{ item[itemLabel] }}
-
             </label>
         </template>
     </div>
 </template>
 <script setup lang="ts">
-// const 
 const modelValue = defineModel({
     type: Array,
     required: true,
@@ -29,10 +27,10 @@ const props = defineProps({
     itemValue: {
         type: String,
         default: 'value',
-    }
+    },
 })
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .checkbox-group {
     display: flex;
     flex-direction: column;
