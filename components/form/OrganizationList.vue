@@ -142,6 +142,11 @@ async function getOrganizationMemberships() {
         pageSize: 50,
         currentPage: 1,
     })
+    isLoading.value = false
+    if (!response) {
+        return
+    }
+
     const blankMembership: IOrganizationMember = {
         id: 'blank',
         organizationName: `${repoUser.userInfo.name}的新組織`,
@@ -156,7 +161,6 @@ async function getOrganizationMemberships() {
     })
     isFinalFounder.value = founded.length <= 1 // 最後一個組織不可刪除
     tableTotal.value = response.total
-    isLoading.value = false
 }
 async function selectMembership(member: IOrganizationMember) {
     if (!member.id) {

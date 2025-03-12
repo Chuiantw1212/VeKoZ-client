@@ -14,10 +14,14 @@
                     <template #header>
                         <div class="card__header">
                             組織行事曆
+                            <el-button :icon="More" :text="true" :circle="true" @click="openOrgCalendarModal()">
+
+                            </el-button>
                         </div>
                     </template>
                     <AtomVekozCheckboxGroup v-model="selectedOrganizationIds" :items="memberOrganizationList"
-                        :item-label="'organizationName'" :item-value="'organizationId'">
+                        :item-label="'organizationName'" :item-value="'organizationId'"
+                        @change="updatePreferneceOrgs()">
                     </AtomVekozCheckboxGroup>
                     <!-- <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
                         <template v-for="(item) in memberOrganizationList">
@@ -77,11 +81,21 @@
             <FormTemplateSelecting v-model="dialogEventTemplate" @update:modelValue="openNewCalendarEvent()">
             </FormTemplateSelecting>
         </AtomVekozDialog>
+
+        <AtomVekozDialog v-model="orgCalendarModalVisible" :showClose="true">
+            <template #header>
+                組織行事曆
+            </template>
+            <FormOrganizationCalendarList :model-value="memberOrganizationList"></FormOrganizationCalendarList>
+            <template #footer>
+                <el-button>確認</el-button>
+            </template>
+        </AtomVekozDialog>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Delete, Close, View, Edit } from '@element-plus/icons-vue';
+import { Delete, Close, View, More } from '@element-plus/icons-vue';
 import type { IEventFromList, IEventCreation, IEventSingle, } from '~/types/event';
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js';
@@ -121,7 +135,9 @@ const dialogEventTemplate = ref<IEventSingle>({
 const eventDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
-const editOrgModal = ref<boolean>(false)
+
+// 組織月曆管理
+const orgCalendarModalVisible = ref<boolean>(false)
 
 // Hooks
 /**
@@ -138,6 +154,10 @@ watch((() => repoUser.preference.event), () => {
 }, { immediate: true, deep: true })
 
 // Methods
+function openOrgCalendarModal() {
+    orgCalendarModalVisible.value = true
+}
+
 function updatePreferneceOrgs() {
     const preference: IPreferenceEvent = {
         organizerIds: selectedOrganizationIds.value,
