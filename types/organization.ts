@@ -8,7 +8,7 @@ export interface IOrganization {
     logo?: any,
     banner?: any,
     googleCalendarId?: string,
-    lineId?: string,
+    // lineId?: string,
     sameAs?: string[],
     lastmod?: string,
     designs?: any[],
@@ -30,6 +30,7 @@ export interface IOrganizationMember extends IOrganizationMemberQuery {
     organizationLogo?: string,
     lastmod?: string,
     isFounder?: false,
+    calendarColor?: string,
 }
 
 

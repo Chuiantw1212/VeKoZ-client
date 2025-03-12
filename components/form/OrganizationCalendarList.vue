@@ -2,9 +2,7 @@
     <el-table :data="memberships" style="width: 100%">
         <el-table-column prop="color" label="顏色">
             <template #default="{ row }">
-                <!-- <div> -->
-                    <div ref="pickRef" :id="`pickr-${row.organizationId}`"></div>
-                <!-- </div> -->
+                <input ref="pickRef" :id="`pickr-${row.organizationId}`"></input>
             </template>
         </el-table-column>
         <el-table-column prop="organizationName" label="名稱" />
@@ -16,24 +14,24 @@
     </el-table>
 </template>
 <script setup lang="ts">
+import type Pickr from '@simonwep/pickr'
 import type { IOrganizationMember } from '@/types/organization'
 const { $Pickr } = useNuxtApp()
 const pickRef = ref() // 只是用來偵測選染完成
-
-// const
 
 const memberships = defineModel<IOrganizationMember[]>({
     type: Array,
     required: true,
 })
-const currentInstance = getCurrentInstance()
 
+// Hooks
 onMounted(() => {
     if (import.meta.client) {
         requestAnimationFrame(waitForRenderCompleted)
     }
 })
 
+// Methods
 function waitForRenderCompleted() {
     if (pickRef.value) {
         initializePickr()
@@ -43,12 +41,13 @@ function waitForRenderCompleted() {
 }
 
 function initializePickr() {
-    memberships.value.forEach(membership => {
-        const element = document.querySelector(`#pickr-${membership.organizationId}`)
-        // console.log(element)
-        // console.log(currentInstance?.refs)
-        // return
-        const pickr = ($Pickr as any).create({
+    memberships.value.forEach((membership, index) => {
+        const element = document.querySelector(`#pickr-${membership.organizationId}`) as HTMLElement
+        /**
+         * 規格看這裡
+         * https://github.com/simonwep/pickr?tab=readme-ov-file
+         */
+        const options: Pickr.Options = {
             el: element,
             theme: 'nano', // or 'monolith', or 'nano'
             default: '#42445a',
@@ -89,28 +88,18 @@ function initializePickr() {
             ],
 
             components: {
-
-                // Main components
-                // preview: true,
-                // opacity: true,
-                // hue: true,
-
-                // Input / output Options
                 interaction: {
-                    //     hex: true,
-                    // rgba: true,
-                    //     hsla: true,
-                    //     hsva: true,
-                    //     cmyk: true,
                     input: true,
-                    //     clear: true,
-                    // save: true
+                    save: true,
                 }
             }
-        })
-        pickr.on('change', (instance: any) => {
-            console.log('Event: "change"', instance);
-            pickr.hide()
+        }
+
+        const pickr = ($Pickr as any).create(options)
+        pickr.on('save', (instance: Pickr) => {
+            if (memberships.value[index]) {
+                memberships.value[index].calendarColor = instance.toHEXA() as any
+            }
         })
     })
 }
