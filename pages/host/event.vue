@@ -15,7 +15,7 @@
                         行事曆
                     </template>
                     <el-form>
-                        <el-checkbox-group v-model="selectedOrganizationIds">
+                        <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
                             <el-checkbox v-for="(item) in memberOrganizationList" :value="item.id"
                                 :label="trimOrganizationName(item)" />
                         </el-checkbox-group>
@@ -124,7 +124,11 @@ const formRef = ref<FormInstance>()
 //     await Promise.all([
 //     ])
 // })
-watch((() => repoUser.preference), async () => {
+/**
+ * 觸發來源
+ * 初始化&更新月曆組織
+ */
+watch((() => repoUser.preference.event), async () => {
     isLoading.value = true
     await getMemberOrganizationList()
     setCalendarView()
@@ -132,6 +136,13 @@ watch((() => repoUser.preference), async () => {
 }, { immediate: true, deep: true })
 
 // Methods
+function updatePreferneceOrgs() {
+    const preference: IPreferenceEvent = {
+        organizerIds: selectedOrganizationIds.value,
+    }
+    repoUser.patchUserPreference('event', preference)
+}
+
 async function validiateForm() {
     if (!dialogEventTemplate.value || !vekozCalendarRef.value) {
         return
@@ -261,10 +272,18 @@ async function getCalendarEvents(payload: any) {
 }
 
 async function getMemberOrganizationList() {
+    // 取得用戶組織列表
     const result = await repoOrganizationMeber.getMemberOrganizationList()
-    if (result) {
-        memberOrganizationList.value = result.items
+    if (!result) {
+        return
+    }
+    memberOrganizationList.value = result.items
 
+    // 勾選組織
+    const preferenceOrgs = repoUser.preference.event.organizerIds
+    if (preferenceOrgs) {
+        selectedOrganizationIds.value = preferenceOrgs
+    } else {
         selectedOrganizationIds.value = result.items.map((org: IOrganization) => {
             return org.id ?? ''
         })
