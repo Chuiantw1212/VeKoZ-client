@@ -43,6 +43,13 @@ export default defineStore('organizationMember', () => {
         })
         return response.json()
     }
+    async function patchMemberColor(body: IOrganizationMember): Promise<IOrganizationMember> {
+        const response = await defaultApi.authRequest(`/organization/member/calendar-color`, {
+            method: 'PATCH',
+            body,
+        })
+        return response.json()
+    }
     async function deleteOrganizationMember(body: IOrganizationMember) {
         const response = await defaultApi.authRequest(`/organization/member`, {
             method: 'DELETE',
@@ -56,6 +63,7 @@ export default defineStore('organizationMember', () => {
         getOrganizationMembership,
         postNewMember,
         patchMember,
+        patchMemberColor,
         deleteOrganizationMember,
     }
 })

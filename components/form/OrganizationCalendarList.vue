@@ -1,8 +1,8 @@
 <template>
-    <el-table :data="memberships" style="width: 100%">
+    <el-table class="pickr" :data="memberships" style="width: 100%">
         <el-table-column prop="color" label="顏色">
             <template #default="{ row }">
-                <input class="pickr" ref="pickrRef" :id="`pickr-${row.organizationId}`"></input>
+                <input ref="pickrRef" :id="`pickr-${row.organizationId}`"></input>
             </template>
         </el-table-column>
         <el-table-column prop="organizationName" label="名稱" />
@@ -16,6 +16,8 @@
 <script setup lang="ts">
 import type Pickr from '@simonwep/pickr'
 import type { IOrganizationMember } from '@/types/organization'
+const emit = defineEmits(['memberChange'])
+const repoOrganizationMeber = useRepoOrganizationMember()
 const { $Pickr } = useNuxtApp()
 const pickrRef = ref() // 只是用來偵測選染完成
 
@@ -50,7 +52,7 @@ function initializePickr() {
         const options: Pickr.Options = {
             el: element,
             theme: 'nano', // or 'monolith', or 'nano'
-            default: '#42445a',
+            default: membership.calendarColor ?? '#42445a',
 
             /**
              * 仿照 Google Calendar 顏色
@@ -86,22 +88,21 @@ function initializePickr() {
                 'rgb(124, 124, 124)',
                 'rgb(165, 153, 140)'
             ],
-
-            components: {
-                // preview: true,
-                interaction: {
-                    // hex: true,
-                    //     save: true,
-                }
-            }
         }
 
         const pickr = ($Pickr as any).create(options)
         pickr.on('change', (instance: any) => {
             pickr.applyColor()
             pickr.hide()
-            if (memberships.value[index]) {
-                memberships.value[index].calendarColor = instance.toHEXA() as any
+            const changedMember = memberships.value[index]
+            if (changedMember) {
+                const newColor = instance.toHEXA().toString() as any
+                changedMember.calendarColor = newColor
+                repoOrganizationMeber.patchMemberColor({
+                    id: changedMember.id,
+                    organizationId: changedMember.organizationId,
+                    calendarColor: newColor,
+                })
             }
         })
     })
