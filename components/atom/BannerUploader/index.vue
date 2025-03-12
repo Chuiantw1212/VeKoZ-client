@@ -176,6 +176,10 @@ async function handleFiles(event: any) {
     .inputGroup__label--disabled {
         cursor: unset;
 
+        .label__content {
+            display: none;
+        }
+
         &:hover {
             .label__content {
                 visibility: hidden;

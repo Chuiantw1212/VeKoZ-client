@@ -44,12 +44,12 @@
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :icon="Delete" text
-                    @click="deleteEvent()">
+                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="eventDisabled"
+                    :icon="Delete" text @click="deleteEvent()">
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
-                    active-text="已公開" inactive-text="非公開" :disabled="eventEnded" @change="validiateForm()" />
+                    active-text="已公開" inactive-text="非公開" :disabled="eventDisabled" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogEventTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogEventTemplate.isPublic">
@@ -62,7 +62,7 @@
             <template #default>
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
-                    <FormEventTemplate ref="formRef" v-model="dialogEventTemplate.designs" :disabled="eventEnded"
+                    <FormEventTemplate ref="formRef" v-model="dialogEventTemplate.designs" :disabled="eventDisabled"
                         :onchange="handleEventFormChange">
                     </FormEventTemplate>
                 </el-container>
@@ -116,7 +116,7 @@ const eventDialogIsOpen = ref<boolean>(false)
 const dialogEventTemplate = ref<IEventSingle>({
     designs: []
 })
-const eventEnded = ref<boolean>(false)
+const eventDisabled = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 // Hooks
@@ -392,19 +392,23 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
     isLoading.value = true
     const eventTemplate: IEventSingle = await repoEvent.getEvent(eventId)
+    dialogEventTemplate.value = eventTemplate
     isLoading.value = false
+
     if (eventTemplate.designs) {
-        dialogEventTemplate.value = eventTemplate
         const designDates = eventTemplate.designs.find(design => {
             return design.formField === 'dates'
         })
         if (designDates) {
+            eventDisabled.value = false
+
             const startTime = new Date(designDates.value[0]).getTime()
             const currentTime = new Date().getTime()
-            if (currentTime >= startTime) {
-                eventEnded.value = true
-            } else {
-                eventEnded.value = false
+            const isEnded = currentTime >= startTime
+
+            const hasNoAuth = !eventTemplate.allowMethods?.includes('PATCH')
+            if (isEnded || hasNoAuth) {
+                eventDisabled.value = true
             }
         }
         eventDialogIsOpen.value = true
@@ -421,7 +425,7 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 }
 
 async function openNewCalendarEvent() {
-    eventEnded.value = false
+    // eventDisabled.value = false
     loadTemplateDialogIsOpen.value = false
 
     // 給定新月曆所選擇的值
