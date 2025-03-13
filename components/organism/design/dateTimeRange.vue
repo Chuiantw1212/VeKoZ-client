@@ -81,11 +81,11 @@ onMounted(() => {
 })
 
 watch(() => customDesign.value.startDate, (newValue) => {
-    handleChange(newValue)
+    handleChange()
 }, { deep: true })
 
 watch(() => customDesign.value.endDate, (newValue) => {
-    handleChange(newValue)
+    handleChange()
 }, { deep: true })
 
 // methods
@@ -111,7 +111,6 @@ function setDefaultValue() {
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
-    // handleChange(mergedItem)
 }
 
 function getDefaultTime() {
@@ -130,10 +129,10 @@ function getDefaultTime() {
     }
 }
 
-async function handleChange(templateDesign: any) {
+async function handleChange() {
     isLoading.value = true // 增強體驗
     repoUI.debounce(props.id, async function () {
-        await props.onchange(templateDesign)
+        await props.onchange(customDesign.value)
         isLoading.value = false
     })
 }

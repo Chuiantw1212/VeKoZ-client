@@ -23,8 +23,8 @@
                             </div>
                         </div>
                     </template>
-                    startDate: {{eventTemplate.startDate}}
-                    endDate: {{eventTemplate.endDate}}
+                    <!-- startDate: {{eventTemplate.startDate}}
+                    endDate: {{eventTemplate.endDate}} -->
                     <FormEventTemplate v-model="eventTemplate" :isDesigning="true" :onchange="handleDesignChanged"
                         @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
@@ -206,10 +206,10 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
 }
 
 async function handleDesignChanged(templateDesign: ITemplateDesign) {
-    if (templateDesign.formField === 'dates') {
-        eventTemplate.value.startDate = templateDesign.startDate
-        eventTemplate.value.endDate = templateDesign.endDate
-    }
+    // if (templateDesign.formField === 'dates') {
+    //     eventTemplate.value.startDate = templateDesign.startDate
+    //     eventTemplate.value.endDate = templateDesign.endDate
+    // }
     repoEventTemplate.patchEventTemplateDesign(templateDesign)
 }
 

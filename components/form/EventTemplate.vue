@@ -4,7 +4,7 @@
 
         </slot>
     </div>
-    <!-- {{ template.designs }} -->
+    <!-- template.startDate :{{ template.startDate }} -->
     <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in template.designs">
             <!-- 必填且限量的欄位 -->
