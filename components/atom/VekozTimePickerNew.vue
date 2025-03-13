@@ -43,8 +43,8 @@ const props = defineProps({
 
 // Hooks
 onMounted(() => {
-    setTimes()
-    setStartDate()
+    setStartTimes()
+    setEndTimes()
 })
 
 watch(() => startDate.value, (newValue) => {
@@ -81,18 +81,7 @@ function setStartDate() {
     const newStartTime = newStartDate.getTime()
     endDate.value = new Date(newStartTime + duration)
 
-    const displayTime = displayStart.value.split(':')
-    const newHour = Number(displayTime[0])
-    const newMinutes = Number(displayTime[1])
-    for (let hour = newHour; hour <= 23; hour++) {
-        minutes.value.forEach((minute: string) => {
-            const hourString = String(hour).padStart(2, '0')
-            const minuteString = minute
-            if (hour !== newHour || Number(minute) > newMinutes) {
-                endTimes.value.push(`${hourString}:${minuteString}`)
-            }
-        })
-    }
+    setEndTimes()
 }
 
 function setEndDate() {
@@ -127,12 +116,27 @@ function convertDisplayToDate(display: string) {
     return newDate
 }
 
-function setTimes() {
+function setStartTimes() {
     for (let hour = 6; hour <= 23; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
             startTimes.value.push(`${hourString}:${minuteString}`)
+        })
+    }
+}
+
+function setEndTimes() {
+    const displayTime = displayStart.value.split(':')
+    const newHour = Number(displayTime[0]) ?? 6
+    const newMinutes = Number(displayTime[1]) ?? 23
+    for (let hour = newHour; hour <= 23; hour++) {
+        minutes.value.forEach((minute: string) => {
+            const hourString = String(hour).padStart(2, '0')
+            const minuteString = minute
+            if (hour !== newHour || Number(minute) > newMinutes) {
+                endTimes.value.push(`${hourString}:${minuteString}`)
+            }
         })
     }
 }
