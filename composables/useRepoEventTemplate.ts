@@ -51,7 +51,7 @@ export default defineStore('eventTemplate', () => {
         })
         return response.text()
     }
-    async function patchEventTemplate(template: IEventTemplate) {
+    async function patchEventTemplate(template: any) {
         if (!template.id || !template.organizerId) {
             throw '資料未提共完整'
         }

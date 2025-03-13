@@ -23,9 +23,8 @@
                             </div>
                         </div>
                     </template>
-                    <FormEventTemplate v-model="eventTemplate.designs" :organizerId="eventTemplate.organizerId"
-                        :isDesigning="true" :onchange="handleDesignChanged" @remove="removeDesign($event)"
-                        @dragstart="setTemplateTemp($event)">
+                    <FormEventTemplate v-model="eventTemplate" :isDesigning="true" :onchange="handleDesignChanged"
+                        @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
                             <div class="eventTemplate__designItem" @drop="insertTemplate($event, defaultProps.index)"
                                 @dragover="allowDrop($event)"
@@ -152,7 +151,7 @@ async function patchEventTemplate() {
         await repoEventTemplate.patchEventTemplate({
             id: eventTemplate.value.id,
             name: eventTemplate.value.name,
-            organizerId: eventTemplate.value.organizerId
+            organizerId: eventTemplate.value.organizerId,
         })
         isBtnLoading.value = false
     })
@@ -302,11 +301,17 @@ function cancelDragging() {
 
 async function getEventTemplate(templateId: string) {
     const result = await repoEventTemplate.getEventTemplate(templateId)
-    // type fix
-    if (result) {
-        Object.assign(eventTemplate.value, result)
-        templateSavingForm.value.organizerId = result.organizerId
+    if (!result) {
+        return
     }
+    if (result.startDate) {
+        result.startDate = new Date(result.startDate)
+    }
+    if (result.endDate) {
+        result.endDate = new Date(result.endDate)
+    }
+    Object.assign(eventTemplate.value, result)
+    templateSavingForm.value.organizerId = result.organizerId
 }
 </script>
 <style lang="scss" scoped>

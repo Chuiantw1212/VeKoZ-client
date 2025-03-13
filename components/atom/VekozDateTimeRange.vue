@@ -4,9 +4,10 @@
         <!-- date instanceOf Date {{ date instanceof Date }} -->
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
-            @change="onDateChanged()" @clear="checkClearDate()"></el-date-picker>
+            @clear="checkClearDate()"></el-date-picker>
         <!-- {{ endDate }} -->
-        <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate">
+        <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate"
+            :minDate="minDate" :maxDate="maxDate">
         </AtomVekozTimePickerNew>
     </div>
 </template>
@@ -26,7 +27,13 @@ const props = defineProps({
     disabledDate: {
         type: Boolean,
         defualt: false,
-    }
+    },
+    minDate: {
+        type: Date,
+    },
+    maxDate: {
+        type: Date,
+    },
 })
 
 // Hooks
@@ -100,21 +107,7 @@ function getTime(incomingDate: Date | string) {
         minute: base * 15
     }
 }
-function getDefaultTime() {
-    const currentDate = new Date()
-    let hour = currentDate.getHours()
-    const minute = currentDate.getMinutes()
-    let base = minute / 15
-    base = Math.ceil(base)
-    if (base === 4) {
-        hour += 1
-        base = 0
-    }
-    return {
-        hour,
-        minute: base * 15
-    }
-}
+
 defineExpose({
     setDate,
 })

@@ -67,8 +67,9 @@
                             </el-input-number>
                         </div>
                         <div class="body__lower">
-                            <AtomVekozDateTimeRange v-model:start-date="offer.validFrom"
-                                v-model:end-date="offer.validThrough" ref="dateTimeRangeRef" :disabledDate="true">
+                            <AtomVekozDateTimeRange v-model:start-date="offer.validFrom" :minDate="props.startDate"
+                                :maxDate="props.endDate" v-model:end-date="offer.validThrough" ref="dateTimeRangeRef"
+                                :disabledDate="true">
                             </AtomVekozDateTimeRange>
                             <el-input v-model="offer.description" type="textarea"
                                 placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
@@ -145,10 +146,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
-    validFrom: {
+    startDate: {
         type: Date,
     },
-    validThrough: {
+    endDate: {
         type: Date,
     },
 })
@@ -207,7 +208,6 @@ function removeOffer(index: number) {
 }
 
 function setDate(incomingDate: Date) {
-    // console.log(dateTimeRangeRefs.value)
     dateTimeRangeRefs.value.forEach((rangeComponent: any) => {
         rangeComponent.setDate(incomingDate)
     })

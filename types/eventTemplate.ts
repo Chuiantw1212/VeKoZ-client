@@ -4,10 +4,12 @@ export interface IEventTemplate extends IEventTemplateQuery {
     uid?: string,
     id?: string,
     eventId?: string, // 已創建的event才會有, 編輯中或是樣板不會有
-    designs?: ITemplateDesign[],
+    designs: ITemplateDesign[], // 簡化前端 FromEventTemplate if
     designIds?: string[],
     name?: string,
     lastmod?: any,
+    startDate?: Date,
+    endDate?: Date,
     organizerLogo?: string,
     organizerName?: string,
 }
@@ -39,8 +41,8 @@ export interface ITemplateDesign {
     memberIds?: string[],
     memberNames?: string[],
     // 時間
-    startDate?: Date | null,
-    endDate?: Date | null,
+    startDate?: Date,
+    endDate?: Date,
     // 線下地點
     placeId?: string, // entities
     placeName?: string,
