@@ -52,7 +52,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: '請輸入別名'
+        default: '請輸入名稱'
     },
     onchange: {
         type: Function,

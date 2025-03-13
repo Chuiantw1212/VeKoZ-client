@@ -14,7 +14,7 @@
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignHeader1>
             <OrganismDesignDateTimeRange v-if="item.type === 'dateTimeRange'" v-model="templateDesigns[index]"
-                :onchange="onchange" :isDesigning="props.isDesigning" :disabled="props.disabled"
+                :onchange="dateOnChanged" :isDesigning="props.isDesigning" :disabled="props.disabled"
                 :required="item.required" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
                 @mouseout="emit('mouseout')">
@@ -37,6 +37,7 @@
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
                 @mouseout="emit('mouseout')">
             </OrganismDesignTextarea>
+
             <!-- 限量的欄位 -->
             <OrganismDesignBanner v-if="item.type === 'banner'" v-model="templateDesigns[index]" :onchange="onchange"
                 form-field="banner" :required="item.required" :isDesigning="props.isDesigning"
@@ -60,6 +61,7 @@
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignEventGroup>
+
             <!-- 非必填寫欄位 -->
             <OrganismDesignInput v-if="item.type === 'input'" v-model="templateDesigns[index]" :onchange="onchange"
                 :isDesigning="props.isDesigning" :disabled="props.disabled" @dragstart="handleDragStart(index)"
@@ -92,6 +94,7 @@
                 @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
                 @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignOffer>
+
             <!-- 拖曳釋放區域 -->
             <slot :index="Number(index + 1)">
 
@@ -102,6 +105,7 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
+import type { Item } from 'ckeditor5'
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
 const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
     type: Array,
@@ -160,6 +164,18 @@ watch(() => templateDesigns.value, () => {
 }, { immediate: true, deep: true })
 
 // methods
+function dateOnChanged(item: ITemplateDesign) {
+    props.onchange(item)
+    if (item.formField === 'dates') {
+        const offerDesigns: ITemplateDesign[] = templateDesigns.value.filter(design => {
+            return design.type === 'offers'
+        })
+        offerDesigns.forEach(offers => {
+            
+        })
+    }
+}
+
 async function validate() {
     return await formRef.value?.validate()
 }

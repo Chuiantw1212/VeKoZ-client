@@ -3,15 +3,19 @@
         <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="disabledDate" @blur="setDate()" @change="setDate()"
             @clear="checkClearDate()"></el-date-picker>
-        <AtomVekozTimePicker class="dateTimeRange__time" v-model="dateRange">
-        </AtomVekozTimePicker>
+        <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate">
+        </AtomVekozTimePickerNew>
     </div>
 </template>
 <script setup lang="ts">
 const date = ref<Date>()
 
-const dateRange = defineModel<Date[]>({
-    default: [new Date(), new Date()]
+const startDate = defineModel<Date>('startDate', {
+    default: new Date()
+})
+
+const endDate = defineModel<Date>('endDate', {
+    default: new Date()
 })
 
 const props = defineProps({

@@ -24,14 +24,14 @@
         <template #title>活動群組管理</template>
       </el-menu-item>
     </NuxtLink> -->
-    <!-- <NuxtLink to="/host/offer">
+    <NuxtLink to="/host/offer">
       <el-menu-item index="host-offer">
         <el-icon>
           <Tickets />
         </el-icon>
         <template #title>票券銷售設定</template>
       </el-menu-item>
-    </NuxtLink> -->
+    </NuxtLink>
     <!-- <NuxtLink to="/host/order">
       <el-menu-item index="host-order">
         <el-icon>

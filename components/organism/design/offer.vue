@@ -68,13 +68,8 @@
                         </div>
                         <div class="body__lower">
                             <AtomVekozDateTimeRange :disabledDate="true"></AtomVekozDateTimeRange>
-                            <!-- <div> -->
-                            <!-- <el-date-picker></el-date-picker>
-                                <AtomVekozTimePicker v-model="validTimes">
-                                </AtomVekozTimePicker> -->
-                            <!-- </div> -->
-                            <!-- </el-form-item> -->
-                            <el-input type="textarea" placeholder="請輸入"></el-input>
+                            <el-input type="textarea" placeholder="請輸入描述" :maxlength="150"
+                                :show-word-limit="true"></el-input>
                         </div>
                     </div>
                     <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
@@ -151,6 +146,8 @@ const newOffer = ref<IOffer>({
     name: '',
     inventoryMaxValue: null,
     price: null,
+    validFrom: null,
+    validThrough: null,
 })
 
 onMounted(() => {
