@@ -23,13 +23,13 @@ const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
 const displayEnd = ref<string>('')
 
-const startDate = defineModel<Date>('startDate', {
+const startDate = defineModel<Date | null>('startDate', {
     type: Date,
     required: true,
     default: new Date(),
 })
 
-const endDate = defineModel<Date>('endDate', {
+const endDate = defineModel<Date | null>('endDate', {
     type: Date,
     required: true,
     default: new Date(),
@@ -40,6 +40,11 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
+})
+
+// Hooks
+onMounted(() => {
+    setHours()
 })
 
 watch(() => startDate.value, (newValue) => {
@@ -108,10 +113,6 @@ function setHours() {
         })
     }
 }
-
-onMounted(() => {
-    setHours()
-})
 </script>
 <style lang="scss" scoped>
 .timeRangePicker {

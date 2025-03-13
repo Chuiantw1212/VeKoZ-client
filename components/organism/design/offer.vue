@@ -67,7 +67,9 @@
                             </el-input-number>
                         </div>
                         <div class="body__lower">
-                            <AtomVekozDateTimeRange :disabledDate="true"></AtomVekozDateTimeRange>
+                            <AtomVekozDateTimeRange v-model:start-date="offer.validFrom"
+                                v-model:end-date="offer.validThrough" :disabledDate="true">
+                            </AtomVekozDateTimeRange>
                             <el-input type="textarea" placeholder="請輸入描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>
                         </div>
