@@ -140,11 +140,23 @@ function setStartTimes() {
     }
     startTimes.value = []
     const minHour = minDateInstance?.getHours() ?? 6
-    for (let hour = minHour; hour <= 23; hour++) {
+
+    let maxDateInstance = props.maxDate
+    if (maxDateInstance && !(maxDateInstance instanceof Date)) {
+        maxDateInstance = new Date(maxDateInstance)
+    }
+    const maxHours = maxDateInstance?.getHours() ?? 23
+    const maxMinutes = maxDateInstance?.getMinutes() ?? 45
+
+    for (let hour = minHour; hour <= maxHours; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
-            startTimes.value.push(`${hourString}:${minuteString}`)
+            
+            const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
+            if (isSmallerThanMax) {
+                startTimes.value.push(`${hourString}:${minuteString}`)
+            }
         })
     }
 }
