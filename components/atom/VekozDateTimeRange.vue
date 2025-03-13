@@ -5,7 +5,7 @@
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
             @change="onDateChanged()" @clear="checkClearDate()"></el-date-picker>
-        <!-- {{ startDate }} -->
+        <!-- {{ endDate }} -->
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate">
         </AtomVekozTimePickerNew>
     </div>

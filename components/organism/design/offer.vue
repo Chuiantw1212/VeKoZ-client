@@ -70,7 +70,7 @@
                             <AtomVekozDateTimeRange v-model:start-date="offer.validFrom"
                                 v-model:end-date="offer.validThrough" ref="dateTimeRangeRef" :disabledDate="true">
                             </AtomVekozDateTimeRange>
-                            <el-input type="textarea" placeholder="請輸入描述" :maxlength="150"
+                            <el-input v-model="offer.description" type="textarea" placeholder="請輸入描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>
                         </div>
                     </div>
@@ -149,6 +149,7 @@ const newOffer = ref<IOffer>({
     name: '',
     inventoryMaxValue: null,
     price: null,
+    description: '',
     validFrom: null,
     validThrough: null,
 })

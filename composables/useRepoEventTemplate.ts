@@ -45,6 +45,7 @@ export default defineStore('eventTemplate', () => {
         const response = await defaultApi.authRequest(`/event/template/${template.id}`, {
             method: 'PATCH',
             body: {
+                organizerId: template.organizerId,
                 designIds: templateDesignIds
             },
         })
