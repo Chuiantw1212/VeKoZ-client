@@ -6,19 +6,20 @@
         </el-icon>
         <!-- instanceOf Date {{ modelValue[0] instanceof Date }} -->
         <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
-            @change="setStatDate()">
-            <option v-for="time in times" class="select__option">{{ time }}</option>
+            @change="setStartDate()">
+            <option v-for="time in startTimes" class="select__option">{{ time }}</option>
         </select>
         -
         <!-- {{ displayEnd }} -->
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
-            <option v-for="time in times" class="select__option">{{ time }}</option>
+            <option v-for="time in endTimes" class="select__option">{{ time }}</option>
         </select>
     </div>
 </template>
 <script setup lang="ts">
 import { Clock } from '@element-plus/icons-vue'
-const times = ref<string[]>([])
+const startTimes = ref<string[]>([])
+const endTimes = ref<string[]>([])
 const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
 const displayEnd = ref<string>('')
@@ -42,7 +43,8 @@ const props = defineProps({
 
 // Hooks
 onMounted(() => {
-    setHours()
+    setTimes()
+    setStartDate()
 })
 
 watch(() => startDate.value, (newValue) => {
@@ -65,9 +67,22 @@ watch(() => endDate.value, (newValue) => {
 
 
 // Methods
-function setStatDate() {
+function setStartDate() {
     const isoString = convertDisplayToDate(displayStart.value)
     startDate.value = isoString
+
+    const displayTime = displayStart.value.split(':')
+    const newHour = Number(displayTime[0])
+    const newMinutes = Number(displayTime[1])
+    for (let hour = newHour; hour <= 23; hour++) {
+        minutes.value.forEach((minute: string) => {
+            const hourString = String(hour).padStart(2, '0')
+            const minuteString = minute
+            if (hour !== newHour || Number(minute) > newMinutes) {
+                endTimes.value.push(`${hourString}:${minuteString}`)
+            }
+        })
+    }
 }
 
 function setEndDate() {
@@ -91,9 +106,9 @@ function convertIsoToDisplayTime(isoString: string) {
 }
 
 function convertDisplayToDate(display: string) {
-    const times = display.split(':')
-    const newHour = Number(times[0])
-    const newMinutes = Number(times[1])
+    const displayTime = display.split(':')
+    const newHour = Number(displayTime[0])
+    const newMinutes = Number(displayTime[1])
     let newDate: Date = new Date()
     const dateString = String(startDate.value)
     newDate = new Date(dateString)
@@ -102,12 +117,12 @@ function convertDisplayToDate(display: string) {
     return newDate
 }
 
-function setHours() {
+function setTimes() {
     for (let hour = 6; hour <= 23; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
-            times.value.push(`${hourString}:${minuteString}`)
+            startTimes.value.push(`${hourString}:${minuteString}`)
         })
     }
 }
