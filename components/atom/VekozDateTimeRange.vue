@@ -5,7 +5,10 @@
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
             @clear="checkClearDate()"></el-date-picker>
-        <!-- {{ endDate }} -->
+        <!-- startDate {{ startDate }}
+        endDate {{ endDate }}
+        minDate {{ minDate }}
+        maxDate {{ maxDate }} -->
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate"
             :minDate="minDate" :maxDate="maxDate">
         </AtomVekozTimePickerNew>
@@ -43,10 +46,19 @@ onMounted(() => {
 
 // Methods
 function setDefaultValue() {
-    if (startDate.value) {
-        date.value = new Date(startDate.value)
-    } else {
-        date.value = new Date()
+    if (!startDate.value && props.minDate) {
+        let copiedDate = props.minDate
+        if (!(copiedDate instanceof Date)) {
+            copiedDate = new Date(props.minDate)
+        }
+        startDate.value = new Date(copiedDate.getTime())
+    }
+    if (!endDate.value && props.maxDate) {
+        let copiedDate = props.maxDate
+        if (!(copiedDate instanceof Date)) {
+            copiedDate = new Date(props.maxDate)
+        }
+        endDate.value = new Date(copiedDate.getTime())
     }
 }
 function disablePastDays(date: Date) {

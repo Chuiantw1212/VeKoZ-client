@@ -139,7 +139,7 @@ watch(() => repoUser.userInfo.preference, async (preference) => {
     isCardLoading.value = false
 }, { immediate: true, })
 
-// methods
+// Methods
 async function getCurrentMembership(organizerId: string) {
     const membersip = await repoOrganizationMeber.getOrganizationMembership(organizerId)
     currentMembership.value = membersip
@@ -204,6 +204,10 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
 }
 
 async function handleDesignChanged(templateDesign: ITemplateDesign) {
+    if (templateDesign.formField === 'dates') {
+        eventTemplate.value.startDate = templateDesign.startDate
+        eventTemplate.value.endDate = templateDesign.endDate
+    }
     repoEventTemplate.patchEventTemplateDesign(templateDesign)
 }
 

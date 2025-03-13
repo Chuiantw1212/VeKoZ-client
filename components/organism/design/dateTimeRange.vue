@@ -75,12 +75,17 @@ const props = defineProps({
 })
 
 // Hooks
-onMounted(() => {
-    setDefaultValue()
-})
+// onMounted(() => {
+//     setDefaultValue()
+// })
 
-watch(() => customDesign.value, (newValue) => {
-    setDefaultValue()
+watch(() => customDesign.value.startDate, (newValue) => {
+    // setDefaultValue()
+    handleChange(newValue)
+}, { deep: true })
+
+watch(() => customDesign.value.endDate, (newValue) => {
+    // setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
@@ -136,12 +141,12 @@ function setDefaultValue() {
 //     customDesign.value.endDate = newEndDate
 // }
 
-function checkClearDate() {
-    if (customDesign.value) {
-        customDesign.value.startDate = null
-        customDesign.value.endDate = null
-    }
-}
+// function checkClearDate() {
+//     if (customDesign.value) {
+//         customDesign.value.startDate = null
+//         customDesign.value.endDate = null
+//     }
+// }
 
 function getDefaultTime() {
     const currentDate = new Date()
