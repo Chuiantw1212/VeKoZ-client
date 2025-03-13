@@ -10,13 +10,13 @@
             <slot name="default"></slot>
         </div>
         <template v-if="required">
-            <el-button v-loading="loading" class="toolbar__btn" type="info" size="small" :disabled="true"
+            <el-button v-loading="loading" class="toolbar__btn" type="info" :disabled="true"
                 @click="emit('remove')">
                 必填
             </el-button>
         </template>
         <template v-if="!required">
-            <el-button v-loading="loading" class="toolbar__btn" size="small" @click="emit('remove')">
+            <el-button v-loading="loading" class="toolbar__btn" @click="emit('remove')">
                 <el-icon>
                     <Delete />
                 </el-icon>
@@ -53,7 +53,7 @@ const props = defineProps({
 .toolbar {
     display: flex;
     gap: 12px;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
 
     .toolbar__draggable {

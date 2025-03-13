@@ -70,16 +70,19 @@
                             <AtomVekozDateTimeRange v-model:start-date="offer.validFrom"
                                 v-model:end-date="offer.validThrough" ref="dateTimeRangeRef" :disabledDate="true">
                             </AtomVekozDateTimeRange>
-                            <el-input v-model="offer.description" type="textarea" placeholder="請輸入描述" :maxlength="150"
+                            <el-input v-model="offer.description" type="textarea"
+                                placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>
                         </div>
                     </div>
-                    <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
+                    <el-button v-if="index === 0" class="offer__btn" type="success" plain :disabled="disabled"
+                        @click="createOffer()">
                         <el-icon>
                             <Plus />
                         </el-icon>
                     </el-button>
-                    <el-button v-else class="offer__btn" :disabled="disabled" @click="removeOffer(index)">
+                    <el-button v-else class="offer__btn" type="danger" plain :disabled="disabled"
+                        @click="removeOffer(index)">
                         <el-icon>
                             <Close />
                         </el-icon>
@@ -141,6 +144,12 @@ const props = defineProps({
     formField: {
         type: String,
         default: '',
+    },
+    validFrom: {
+        type: Date,
+    },
+    validThrough: {
+        type: Date,
     },
 })
 
@@ -252,6 +261,7 @@ defineExpose({
 
     .offer__btn {
         width: fit-content;
+        height: 100%;
     }
 }
 </style>

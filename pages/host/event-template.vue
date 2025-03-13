@@ -39,7 +39,7 @@
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isLarge" :span="8">
-                <el-card class="vekoz-card" body-class="card__body card__body--205">
+                <el-card class="vekoz-card" body-class="card__body card__body--205" @mouseout="cancelDragging()">
                     <template #header>
                         <div class="vekoz-card-header">
                             請拖曳以下元件 到 指定位置
@@ -47,7 +47,7 @@
                     </template>
                     <FormDesignDragging v-if="currentMembership?.allowMethods?.includes('POST')"
                         :model-value="eventTemplate.designs" @dragstart="setTemplateItem($event)"
-                        @mouseenter="setTemplateItem($event)" @mouseout="cancelDragging()">
+                        @mouseenter="setTemplateItem($event)">
                     </FormDesignDragging>
                     <el-button v-else :icon="WarnTriangleFilled" :disabled="true">
                         需要新增權限
@@ -241,6 +241,8 @@ async function insertTemplate(ev: Event, destinationIndex = 0) {
     }
     // 插入元素
     const templateDesign: ITemplateDesign = JSON.parse(JSON.stringify(templateTemp.value.item)) // 必須深拷貝，不然會在清除站存資料時影響到模板
+    templateDesign.organizerId = currentMembership.value?.organizationId
+
     // 先更新資料庫再更新畫面
     const hasSource = templateTemp.value.index !== -1
     const sourceIndex = Number(templateTemp.value.index)
