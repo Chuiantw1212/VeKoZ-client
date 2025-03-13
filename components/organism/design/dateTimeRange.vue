@@ -20,6 +20,7 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
+                <!-- {{ customDesign }} -->
                 <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate"
                     v-model:end-date="customDesign.endDate">
                 </AtomVekozDateTimeRange>
@@ -75,78 +76,43 @@ const props = defineProps({
 })
 
 // Hooks
-// onMounted(() => {
-//     setDefaultValue()
-// })
+onMounted(() => {
+    setDefaultValue()
+})
 
 watch(() => customDesign.value.startDate, (newValue) => {
-    // setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
 watch(() => customDesign.value.endDate, (newValue) => {
-    // setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
 // methods
-function disablePastDays(date: Date) {
-    if (date) {
-        const currentTime = new Date().getTime()
-        return currentTime >= date.getTime()
-    }
-}
-
 function setDefaultValue() {
-    if (customDesign.value.hasOwnProperty('value')) {
-        if (customDesign.value.value) {
-            date.value = new Date(customDesign.value.value[0])
-        } else {
-            date.value = new Date()
-        }
+    if (customDesign.value.hasOwnProperty('startDate')) {
         return
     }
+    const currentDateInstance = new Date()
+    const currentYear = currentDateInstance.getFullYear()
+    const currentMonth = currentDateInstance.getMonth()
+    const currentDate = currentDateInstance.getDate()
+    const defaultTime = getDefaultTime()
 
-    const startDate = new Date()
-    const endDate = new Date()
-    const currentHour = new Date().getHours()
-    endDate.setHours(currentHour + 1)
+    // 這邊設定最初始的時間
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         label: '時間日期',
-        startDate,
-        endDate,
+        startDate: new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute),
+        endDate: new Date(currentYear, currentMonth, currentDate, defaultTime.hour + 1, defaultTime.minute),
     }
     if (props.formField) {
         defaultValue.formField = props.formField
     }
     const mergedItem = Object.assign(defaultValue, customDesign.value)
     customDesign.value = mergedItem
+    // handleChange(mergedItem)
 }
-
-// function setDate() {
-//     if (!customDesign.value || !date.value) {
-//         return
-//     }
-//     const newYear = date.value.getFullYear()
-//     const newMonth = date.value.getMonth()
-//     const newDate = date.value.getDate()
-//     const defaultTime = getDefaultTime()
-//     const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
-//     const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
-//     if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
-//         return
-//     }
-//     customDesign.value.startDate = newStartDate
-//     customDesign.value.endDate = newEndDate
-// }
-
-// function checkClearDate() {
-//     if (customDesign.value) {
-//         customDesign.value.startDate = null
-//         customDesign.value.endDate = null
-//     }
-// }
 
 function getDefaultTime() {
     const currentDate = new Date()

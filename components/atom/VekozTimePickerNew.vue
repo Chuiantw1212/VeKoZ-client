@@ -181,11 +181,11 @@ function setEndTimes() {
 
             const isLargerThanStart = !(hour === startHour && Number(minute) <= startMinutes)
             const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
-            // console.log({
-            //     maxDateInstance,
-            //     minute,
-            //     maxMinutes
-            // })
+            console.log({
+                maxDateInstance,
+                minute,
+                maxMinutes
+            })
             if (isLargerThanStart && isSmallerThanMax) {
                 endTimes.value.push(`${hourString}:${minuteString}`)
             }

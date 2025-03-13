@@ -23,6 +23,8 @@
                             </div>
                         </div>
                     </template>
+                    startDate: {{eventTemplate.startDate}}
+                    endDate: {{eventTemplate.endDate}}
                     <FormEventTemplate v-model="eventTemplate" :isDesigning="true" :onchange="handleDesignChanged"
                         @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">

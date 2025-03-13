@@ -125,6 +125,7 @@ onMounted(() => {
 
     .timeRangePicker__select {
         border: 0px;
+        appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
         text-indent: 1px;
