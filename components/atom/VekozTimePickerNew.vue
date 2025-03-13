@@ -68,8 +68,18 @@ watch(() => endDate.value, (newValue) => {
 
 // Methods
 function setStartDate() {
-    const isoString = convertDisplayToDate(displayStart.value)
-    startDate.value = isoString
+    let duration = 0
+    if (startDate.value instanceof Date && endDate.value instanceof Date) {
+        const startTime = startDate.value.getTime()
+        const endTime = endDate.value.getTime()
+        duration = endTime - startTime
+    }
+
+    const newStartDate = convertDisplayToDate(displayStart.value)
+    startDate.value = newStartDate
+
+    const newStartTime = newStartDate.getTime()
+    endDate.value = new Date(newStartTime + duration)
 
     const displayTime = displayStart.value.split(':')
     const newHour = Number(displayTime[0])
@@ -86,8 +96,8 @@ function setStartDate() {
 }
 
 function setEndDate() {
-    const isoString = convertDisplayToDate(displayEnd.value)
-    endDate.value = isoString
+    const newEndDate = convertDisplayToDate(displayEnd.value)
+    endDate.value = newEndDate
 }
 
 function convertIsoToDisplayTime(isoString: string) {
