@@ -196,8 +196,11 @@ function removeOffer(index: number) {
     customDesign.value.offers?.splice(index, 1)
 }
 
-function setDate() {
-    console.log(dateTimeRangeRefs.value)
+function setDate(incomingDate: Date) {
+    // console.log(dateTimeRangeRefs.value)
+    dateTimeRangeRefs.value.forEach((rangeComponent: any) => {
+        rangeComponent.setDate(incomingDate)
+    })
 }
 
 defineExpose({

@@ -4,12 +4,12 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')" :model="customDesign">
         <div class="dateTimeRange">
-            <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
+            <!-- <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
                 :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()" :disabled="disabled"
                 @clear="checkClearDate()"></el-date-picker>
             <AtomVekozTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
                 :placeholder="placeholder" :disabled="disabled">
-            </AtomVekozTimePicker>
+            </AtomVekozTimePicker> -->
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -20,11 +20,9 @@
         </template>
         <template v-slot:default>
             <div class="dateTimeRange">
-                <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                    :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()"
-                    @clear="checkClearDate()"></el-date-picker>
-                <AtomVekozTimePicker class="dateTimeRange__time" v-model="customDesign.value">
-                </AtomVekozTimePicker>
+                <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate"
+                    v-model:end-date="customDesign.endDate">
+                </AtomVekozDateTimeRange>
             </div>
         </template>
     </MoleculeDesignToolbar>
@@ -111,7 +109,8 @@ function setDefaultValue() {
     const defaultValue: ITemplateDesign = {
         type: 'dateTimeRange',
         label: '時間日期',
-        value: [startDate, endDate]
+        startDate,
+        endDate,
     }
     if (props.formField) {
         defaultValue.formField = props.formField
@@ -120,27 +119,27 @@ function setDefaultValue() {
     customDesign.value = mergedItem
 }
 
-function setDate() {
-    if (!customDesign.value || !date.value) {
-        return
-    }
-    const newYear = date.value.getFullYear()
-    const newMonth = date.value.getMonth()
-    const newDate = date.value.getDate()
-    const defaultTime = getDefaultTime()
-    const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
-    const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
-    if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
-        return
-    }
-    const newStartISO = newStartDate
-    const newEndISO = newEndDate
-    customDesign.value.value = [newStartISO, newEndISO]
-}
+// function setDate() {
+//     if (!customDesign.value || !date.value) {
+//         return
+//     }
+//     const newYear = date.value.getFullYear()
+//     const newMonth = date.value.getMonth()
+//     const newDate = date.value.getDate()
+//     const defaultTime = getDefaultTime()
+//     const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
+//     const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
+//     if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
+//         return
+//     }
+//     customDesign.value.startDate = newStartDate
+//     customDesign.value.endDate = newEndDate
+// }
 
 function checkClearDate() {
     if (customDesign.value) {
-        customDesign.value.value = []
+        customDesign.value.startDate = null
+        customDesign.value.endDate = null
     }
 }
 

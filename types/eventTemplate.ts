@@ -39,8 +39,8 @@ export interface ITemplateDesign {
     memberIds?: string[],
     memberNames?: string[],
     // 時間
-    startDate?: Date,
-    endDate?: Date,
+    startDate?: Date | null,
+    endDate?: Date | null,
     // 線下地點
     placeId?: string, // entities
     placeName?: string,

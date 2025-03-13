@@ -169,17 +169,21 @@ watch(() => templateDesigns.value, () => {
 function dateOnChanged(item: ITemplateDesign) {
     props.onchange(item)
     if (item.formField === 'dates') {
-        const newDate = item.value[0]
-        offerRefs.value.forEach((component: any) => {
-            component.setDate(newDate)
+        // const newDate = item.value[0]
+        const startDate = item.startDate
+        // console.log({
+        //     startDate
+        // })
+        offerRefs.value.forEach((offerComponent: any) => {
+            offerComponent.setDate(startDate)
         })
-        console.log(offerRefs.value)
-        // const offerDesigns: ITemplateDesign[] = templateDesigns.value.filter(design => {
-        //     return design.type === 'offers'
-        // })
-        // offerDesigns.forEach(offers => {
+        // console.log(offerRefs.value)
+        // // const offerDesigns: ITemplateDesign[] = templateDesigns.value.filter(design => {
+        // //     return design.type === 'offers'
+        // // })
+        // // offerDesigns.forEach(offers => {
 
-        // })
+        // // })
     }
 }
 
