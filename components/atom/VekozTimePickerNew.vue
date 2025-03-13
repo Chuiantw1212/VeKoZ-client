@@ -3,13 +3,13 @@
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
-        {{ displayEnd }}
+        <!-- {{ displayEnd }} -->
         <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
             @change="setStartDate()">
             <option v-for="time in startTimes" class="select__option">{{ time }}</option>
         </select>
         -
-        {{ displayEnd }}
+        <!-- {{ displayEnd }} -->
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in endTimes" class="select__option">{{ time }}</option>
         </select>
@@ -50,21 +50,11 @@ const props = defineProps({
  * 在上面的watcher會先被執行
  */
 watch(() => startDate.value, (newValue) => {
-    if (newValue) {
-        const startTime = String(newValue)
-        displayStart.value = convertIsoToDisplayTime(startTime)
-    } else {
-        displayStart.value = ''
-    }
+    displayStart.value = convertIsoToDisplayTime(newValue)
 }, { deep: true, immediate: true })
 
 watch(() => endDate.value, (newValue) => {
-    if (newValue) {
-        const endTime = String(newValue)
-        displayEnd.value = convertIsoToDisplayTime(endTime)
-    } else {
-        displayEnd.value = ''
-    }
+    displayEnd.value = convertIsoToDisplayTime(newValue)
 }, { deep: true, immediate: true })
 
 watch(() => props.minDate, () => {
@@ -106,8 +96,18 @@ function setEndDate() {
     endDate.value = newEndDate
 }
 
-function convertIsoToDisplayTime(isoString: string) {
-    const currentDate = new Date(isoString)
+function convertIsoToDisplayTime(isoString: Date | string | null) {
+    if (!isoString) {
+        return ''
+    }
+    let currentDate = isoString
+    if (!(isoString instanceof Date)) {
+        currentDate = new Date(isoString ?? '')
+    }
+    if (typeof currentDate === 'string') {
+        return ''
+    }
+
     let hour = currentDate.getHours()
     const minute = currentDate.getMinutes()
     let base = minute / 15
