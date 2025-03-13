@@ -23,14 +23,12 @@ const minutes = ref<string[]>(['00', '15', '30', '45',])
 const displayStart = ref<string>('')
 const displayEnd = ref<string>('')
 
-const startDate = defineModel<Date | null>('startDate', {
-    type: Date,
+const startDate = defineModel<Date | string | null>('startDate', {
     required: true,
     default: new Date(),
 })
 
-const endDate = defineModel<Date | null>('endDate', {
-    type: Date,
+const endDate = defineModel<Date | string | null>('endDate', {
     required: true,
     default: new Date(),
 })

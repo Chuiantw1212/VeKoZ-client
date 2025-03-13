@@ -1,18 +1,21 @@
 <template>
     <div class="dateTimeRange">
+        <!-- typeof date {{ typeof date }} -->
+        <!-- date instanceOf Date {{ date instanceof Date }} -->
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
             @change="onDateChanged()" @clear="checkClearDate()"></el-date-picker>
+        <!-- {{ startDate }} -->
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate">
         </AtomVekozTimePickerNew>
     </div>
 </template>
 <script setup lang="ts">
 const date = ref<Date>()
-const startDate = defineModel<Date | null>('startDate', {
+const startDate = defineModel<Date | string | null>('startDate', {
     default: new Date()
 })
-const endDate = defineModel<Date | null>('endDate', {
+const endDate = defineModel<Date | string | null>('endDate', {
     default: new Date()
 })
 const props = defineProps({
@@ -51,6 +54,7 @@ function checkClearDate() {
 }
 function setDate(incomingDate: Date) {
     date.value = incomingDate
+    onDateChanged()
 }
 function onDateChanged() {
     if (!startDate.value || !endDate.value || !date.value) {
@@ -59,14 +63,37 @@ function onDateChanged() {
     const newYear = date.value.getFullYear()
     const newMonth = date.value.getMonth()
     const newDate = date.value.getDate()
-    const defaultTime = getDefaultTime()
-    const newStartDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour, defaultTime.minute)
-    const newEndDate: Date = new Date(newYear, newMonth, newDate, defaultTime.hour + 1, defaultTime.minute)
-    if (isNaN(newStartDate.getTime()) || isNaN(newEndDate.getTime())) {
+    const startTime = getTime(startDate.value)
+    const endTime = getTime(endDate.value)
+    if (startTime) {
+        const newStartDate: Date = new Date(newYear, newMonth, newDate, startTime.hour, startTime.minute)
+        startDate.value = newStartDate
+    }
+    if (endTime) {
+        const newEndDate: Date = new Date(newYear, newMonth, newDate, endTime.hour + 1, endTime.minute)
+        endDate.value = newEndDate
+    }
+}
+function getTime(incomingDate: Date | string) {
+    if (!incomingDate) {
         return
     }
-    startDate.value = newStartDate
-    endDate.value = newEndDate
+    let date = incomingDate
+    if (!(date instanceof Date)) {
+        date = new Date(incomingDate)
+    }
+    let hour = date.getHours()
+    const minute = date.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    return {
+        hour,
+        minute: base * 15
+    }
 }
 function getDefaultTime() {
     const currentDate = new Date()

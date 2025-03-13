@@ -179,7 +179,9 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
         case '':
         case 'default': {
             delete loadedTemplate.id
-            setDefaultTemplate()
+            delete eventTemplate.value.designIds
+            const defaultTemplate = await repoEventTemplate.getEventTemplateDefault()
+            eventTemplate.value.designs = defaultTemplate.designs
             await postEventTemplate()
             break;
         }
@@ -200,12 +202,6 @@ async function loadTemplate(loadedTemplate: IEventTemplate) {
         repoUser.patchUserPreference('eventTemplate', patch)
         getCurrentMembership(eventTemplate.value.organizerId)
     }
-}
-
-async function setDefaultTemplate() {
-    delete eventTemplate.value.designIds
-    const defaultTemplate = await repoEventTemplate.getEventTemplateDefault()
-    eventTemplate.value.designs = defaultTemplate.designs
 }
 
 async function handleDesignChanged(templateDesign: ITemplateDesign) {
@@ -304,6 +300,7 @@ function cancelDragging() {
 
 async function getEventTemplate(templateId: string) {
     const result = await repoEventTemplate.getEventTemplate(templateId)
+    // type fix
     if (result) {
         Object.assign(eventTemplate.value, result)
         templateSavingForm.value.organizerId = result.organizerId
