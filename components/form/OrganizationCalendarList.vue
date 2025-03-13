@@ -110,10 +110,4 @@ function initializePickr() {
 </script>
 <style lang="scss" scoped>
 @import '@simonwep/pickr/dist/themes/nano.min.css';
-
-.pickr {
-    :deep(.pcr-swatches) {
-        margin-bottom: .6em;
-    }
-}
 </style>

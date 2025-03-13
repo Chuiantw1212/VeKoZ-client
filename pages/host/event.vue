@@ -195,7 +195,6 @@ async function validiateForm() {
     }
     // Fail fallback to private
     // calendarEvent.setProp('backgroundColor', 'lightblue')
-    // calendarEvent.setProp('classNames', ['blue-text-event'])
 }
 
 function trimOrganizationName(item: IOrganizationMember) {
@@ -386,12 +385,15 @@ async function handleEventCalendarChange(changeInfo: IChangeInfo) {
 }
 
 function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
-    const title = String(event.name || '未命名')
-    // const todos = '1/2'
+    const selectedMembership = memberOrganizationList.value.find(membership => {
+        return membership.organizationId === event.organizerId
+    })
+
     /**
      * Event Object
      * https://fullcalendar.io/docs/event-object
      */
+    const title = String(event.name || '未命名')
     const iFullCalendarEvent: IFullCalendarEvent = {
         id: String(event.id),
         title: `${title}`,
@@ -400,14 +402,8 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         startStr: '',
         endStr: '',
         editable: event.eventStatus !== 'ended',
-        backgroundColor: 'lightblue',
+        backgroundColor: selectedMembership?.calendarColor,
         // textColor: 'lightblue',
-        classNames: ['blue-text-event']
-    }
-    if (event.isPublic || true) {
-        delete iFullCalendarEvent.backgroundColor
-        // delete iFullCalendarEvent.textColor
-        delete iFullCalendarEvent.classNames
     }
     const startDate = event.startDate
     if (startDate instanceof Date) {
@@ -555,9 +551,5 @@ async function deleteEvent() {
     .event__todoList {
         margin-top: 20px;
     }
-}
-
-:deep(.blue-text-event) {
-    color: lightblue;
 }
 </style>

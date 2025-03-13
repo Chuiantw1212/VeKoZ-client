@@ -14,7 +14,7 @@ import listPlugin from '@fullcalendar/list';
 import multiMonthPlugin from '@fullcalendar/multimonth'
 import interactionPlugin from '@fullcalendar/interaction';
 import type { IEventCreation } from '~/types/event';
-import type { IFullCalendarEvent, IChangeInfo, IEventClickInfo } from '~/types/fullCalendar';
+import type { IFullCalendarEvent, IEventClickInfo } from '~/types/fullCalendar';
 
 const emit = defineEmits(['create', 'eventChange', 'eventClick', 'datesSet', 'mounted'])
 const repoUI = useRepoUI()
