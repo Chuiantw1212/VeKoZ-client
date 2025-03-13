@@ -29,10 +29,10 @@ const props = defineProps({
         defualt: false,
     },
     minDate: {
-        type: Date,
+        type: [String, Date],
     },
     maxDate: {
-        type: Date,
+        type: [String, Date],
     },
 })
 

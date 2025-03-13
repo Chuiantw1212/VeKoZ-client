@@ -39,10 +39,10 @@ const props = defineProps({
         default: false
     },
     minDate: {
-        type: Date,
+        type: [String, Date],
     },
     maxDate: {
-        type: Date,
+        type: [String, Date],
     },
 })
 
@@ -135,14 +135,14 @@ function convertDisplayToDate(display: string) {
 
 function setStartTimes() {
     let minDateInstance = props.minDate
-    if (minDateInstance && !(minDateInstance instanceof Date)) {
+    if (minDateInstance && !(minDateInstance instanceof Date) || typeof minDateInstance === 'string') {
         minDateInstance = new Date(minDateInstance)
     }
     startTimes.value = []
     const minHour = minDateInstance?.getHours() ?? 6
 
     let maxDateInstance = props.maxDate
-    if (maxDateInstance && !(maxDateInstance instanceof Date)) {
+    if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
         maxDateInstance = new Date(maxDateInstance)
     }
     const maxHours = maxDateInstance?.getHours() ?? 23
@@ -152,7 +152,7 @@ function setStartTimes() {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
-            
+
             const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
             if (isSmallerThanMax) {
                 startTimes.value.push(`${hourString}:${minuteString}`)
@@ -168,7 +168,7 @@ function setEndTimes() {
     endTimes.value = []
 
     let maxDateInstance = props.maxDate
-    if (maxDateInstance && !(maxDateInstance instanceof Date)) {
+    if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
         maxDateInstance = new Date(maxDateInstance)
     }
     const maxHours = maxDateInstance?.getHours() ?? 23
