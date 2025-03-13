@@ -149,7 +149,7 @@ async function drawQrCode() {
     }
     QRCode.toCanvas(document.getElementById('qrCanvas'), url, options, function (error) {
         if (error) console.error(error)
-        console.log('success!');
+        // console.log('success!');
     })
 }
 

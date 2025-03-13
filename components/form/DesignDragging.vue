@@ -116,7 +116,7 @@ function setOnEnter(event: any) {
     emit('mouseenter', event)
 }
 function setOnDrag(event: any) {
-    console.log('setOnDrag', event)
+    // console.log('setOnDrag', event)
     emit('dragstart', event)
 }
 </script>

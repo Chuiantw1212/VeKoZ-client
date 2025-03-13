@@ -216,9 +216,9 @@ function setCalendarView() {
 }
 async function handleDatesSet(datesSetArg: DatesSetArg) {
     const { start, endStr, view } = datesSetArg
-    console.log({
-        datesSetArg
-    })
+    // console.log({
+    //     datesSetArg
+    // })
     const type = view.type as 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
     const preferenceEvnet: IPreferenceEvent = {
         calendarViewType: type,

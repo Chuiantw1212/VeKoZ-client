@@ -89,10 +89,11 @@
                 @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
                 @mouseout="emit('mouseout')">
             </OrganismDesignEditor>
-            <OrganismDesignOffer v-if="item.type === 'offers'" v-model="templateDesigns[index]" :onchange="onchange"
-                :isDesigning="props.isDesigning" :disabled="props.disabled" :required="item.required"
-                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
-                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+            <OrganismDesignOffer v-if="item.type === 'offers'" v-model="templateDesigns[index]" ref="offerRef"
+                :onchange="onchange" :isDesigning="props.isDesigning" :disabled="props.disabled"
+                :required="item.required" @dragstart="handleDragStart(index)" @remove="handleRemove(index)"
+                @moveUp="handleUp(index)" @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)"
+                @mouseout="emit('mouseout')">
             </OrganismDesignOffer>
 
             <!-- 拖曳釋放區域 -->
@@ -105,8 +106,9 @@
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { FormInstance } from 'element-plus'
-import type { Item } from 'ckeditor5'
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
+const offerRefs = useTemplateRef('offerRef')
+
 const templateDesigns = defineModel<ITemplateDesign[]>('modelValue', {
     type: Array,
     default: function () {
@@ -167,12 +169,17 @@ watch(() => templateDesigns.value, () => {
 function dateOnChanged(item: ITemplateDesign) {
     props.onchange(item)
     if (item.formField === 'dates') {
-        const offerDesigns: ITemplateDesign[] = templateDesigns.value.filter(design => {
-            return design.type === 'offers'
+        const newDate = item.value[0]
+        offerRefs.value.forEach((component: any) => {
+            component.setDate(newDate)
         })
-        offerDesigns.forEach(offers => {
-            
-        })
+        console.log(offerRefs.value)
+        // const offerDesigns: ITemplateDesign[] = templateDesigns.value.filter(design => {
+        //     return design.type === 'offers'
+        // })
+        // offerDesigns.forEach(offers => {
+
+        // })
     }
 }
 

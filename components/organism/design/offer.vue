@@ -68,7 +68,7 @@
                         </div>
                         <div class="body__lower">
                             <AtomVekozDateTimeRange v-model:start-date="offer.validFrom"
-                                v-model:end-date="offer.validThrough" :disabledDate="true">
+                                v-model:end-date="offer.validThrough" ref="dateTimeRangeRef" :disabledDate="true">
                             </AtomVekozDateTimeRange>
                             <el-input type="textarea" placeholder="請輸入描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>
@@ -96,7 +96,8 @@ import type { IOffer } from '~/types/offer'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-const validTimes = ref([])
+// const dateTimeRangeRef = ref()
+const dateTimeRangeRefs = useTemplateRef('dateTimeRangeRef')
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
@@ -194,6 +195,14 @@ function createOffer() {
 function removeOffer(index: number) {
     customDesign.value.offers?.splice(index, 1)
 }
+
+function setDate() {
+    console.log(dateTimeRangeRefs.value)
+}
+
+defineExpose({
+    setDate
+})
 </script>
 <style lang="scss" scoped>
 .offerList {

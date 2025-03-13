@@ -1,8 +1,8 @@
 <template>
     <div class="dateTimeRange">
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
-            :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="setDate()" @change="setDate()"
-            @clear="checkClearDate()"></el-date-picker>
+            :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
+            @change="onDateChanged()" @clear="checkClearDate()"></el-date-picker>
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate">
         </AtomVekozTimePickerNew>
     </div>
@@ -49,7 +49,10 @@ function checkClearDate() {
     startDate.value = null
     endDate.value = null
 }
-function setDate() {
+function setDate(incomingDate: Date) {
+    date.value = incomingDate
+}
+function onDateChanged() {
     if (!startDate.value || !endDate.value || !date.value) {
         return
     }
@@ -80,6 +83,9 @@ function getDefaultTime() {
         minute: base * 15
     }
 }
+defineExpose({
+    setDate,
+})
 </script>
 <style lang="scss" scoped>
 .dateTimeRange {

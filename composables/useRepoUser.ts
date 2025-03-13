@@ -95,10 +95,6 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
-        console.log({
-            fieldName,
-            newValue,
-        })
         if (!preference.value || !userInfo.value.id) {
             return
         }
