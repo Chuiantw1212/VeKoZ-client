@@ -7,9 +7,9 @@
             <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
                 :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()" :disabled="disabled"
                 @clear="checkClearDate()"></el-date-picker>
-            <AtomVenoniaTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
+            <AtomVekozTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
                 :placeholder="placeholder" :disabled="disabled">
-            </AtomVenoniaTimePicker>
+            </AtomVekozTimePicker>
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
@@ -23,8 +23,8 @@
                 <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
                     :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()"
                     @clear="checkClearDate()"></el-date-picker>
-                <AtomVenoniaTimePicker class="dateTimeRange__time" v-model="customDesign.value">
-                </AtomVenoniaTimePicker>
+                <AtomVekozTimePicker class="dateTimeRange__time" v-model="customDesign.value">
+                </AtomVekozTimePicker>
             </div>
         </template>
     </MoleculeDesignToolbar>

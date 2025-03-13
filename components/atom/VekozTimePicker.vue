@@ -118,6 +118,7 @@ onMounted(() => {
     border-radius: 4px;
     gap: 4px;
     width: fit-content;
+    // width: 100%;
     padding: 0 10px;
     color: rgb(96, 98, 102);
     // transform: translateY(2px);

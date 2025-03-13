@@ -4,20 +4,22 @@
         <div v-if="customDesign" class="offerList">
             <div v-for="(offer, index) in customDesign.offers" class="offer">
                 <template v-if="!disabled">
-                    <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
-                        :maxlength="20" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
-                        :max="60" :disabled="disabled" controls-position="right">
-                        <template #suffix>
-                            <span>張</span>
-                        </template>
-                    </el-input-number>
-                    <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                        :disabled="disabled" controls-position="right">
-                        <template #suffix>
-                            <span>元</span>
-                        </template>
-                    </el-input-number>
+                    <div>
+                        <el-input class="offer__name" placeholder="票券名" v-model="offer.name" :disabled="disabled"
+                            :maxlength="20" :show-word-limit="true"></el-input>
+                        <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
+                            :max="60" :disabled="disabled" controls-position="right">
+                            <template #suffix>
+                                <span>張</span>
+                            </template>
+                        </el-input-number>
+                        <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
+                            :disabled="disabled" controls-position="right">
+                            <template #suffix>
+                                <span>元</span>
+                            </template>
+                        </el-input-number>
+                    </div>
                     <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                         <el-icon>
                             <Plus />
@@ -47,20 +49,34 @@
         <template v-slot:default>
             <div class="offerList">
                 <div v-for="(offer, index) in customDesign.offers" class="offer">
-                    <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
-                        :disabled="disabled" :maxlength="20" :show-word-limit="true"></el-input>
-                    <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue" :min="0"
-                        :max="60" :disabled="disabled" controls-position="right">
-                        <template #suffix>
-                            <span>張</span>
-                        </template>
-                    </el-input-number>
-                    <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                        :disabled="disabled" controls-position="right">
-                        <template #suffix>
-                            <span>元</span>
-                        </template>
-                    </el-input-number>
+                    <div class="offer__body">
+                        <div class="body__upper">
+                            <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
+                                :disabled="disabled" :maxlength="20" :show-word-limit="true"></el-input>
+                            <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue"
+                                :min="0" :max="60" :disabled="disabled" controls-position="right">
+                                <template #suffix>
+                                    <span>張</span>
+                                </template>
+                            </el-input-number>
+                            <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
+                                :disabled="disabled" controls-position="right">
+                                <template #suffix>
+                                    <span>元</span>
+                                </template>
+                            </el-input-number>
+                        </div>
+                        <div class="body__lower">
+                            <AtomVekozDateTimeRange :disabledDate="true"></AtomVekozDateTimeRange>
+                            <!-- <div> -->
+                            <!-- <el-date-picker></el-date-picker>
+                                <AtomVekozTimePicker v-model="validTimes">
+                                </AtomVekozTimePicker> -->
+                            <!-- </div> -->
+                            <!-- </el-form-item> -->
+                            <el-input type="textarea" placeholder="請輸入"></el-input>
+                        </div>
+                    </div>
                     <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                         <el-icon>
                             <Plus />
@@ -83,6 +99,7 @@ import type { IOffer } from '~/types/offer'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
+const validTimes = ref([])
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
@@ -191,6 +208,23 @@ function removeOffer(index: number) {
     display: flex;
     gap: 4px;
     width: 100%;
+
+    .offer__body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .body__upper {
+            display: flex;
+            gap: 4px;
+        }
+
+        .body__lower {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+    }
 
     .offer__name {
         flex: 1;
