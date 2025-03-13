@@ -201,6 +201,12 @@ async function handleChange(templateDesign: any) {
     }, 1000)
 }
 function createOffer() {
+    if (props.startDate) {
+        newOffer.value.validFrom = props.startDate
+    }
+    if (props.endDate) {
+        newOffer.value.validThrough = props.endDate
+    }
     customDesign.value.offers?.push(newOffer.value)
 }
 function removeOffer(index: number) {
