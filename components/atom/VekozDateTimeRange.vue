@@ -1,7 +1,7 @@
 <template>
     <div class="dateTimeRange">
-        <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-            :disabled-date="disablePastDays" :disabled="disabledDate" @blur="setDate()" @change="setDate()"
+        <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
+            :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="setDate()" @change="setDate()"
             @clear="checkClearDate()"></el-date-picker>
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate">
         </AtomVekozTimePickerNew>
@@ -26,7 +26,19 @@ const props = defineProps({
     }
 })
 
+// Hooks
+onMounted(() => {
+    setDefaultValue()
+})
+
 // Methods
+function setDefaultValue() {
+    if (startDate.value) {
+        date.value = new Date(startDate.value)
+    } else {
+        date.value = new Date()
+    }
+}
 function disablePastDays(date: Date) {
     if (date) {
         const currentTime = new Date().getTime()
