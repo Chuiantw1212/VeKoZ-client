@@ -69,11 +69,17 @@ watch(() => endDate.value, (newValue) => {
 // Methods
 function setStartDate() {
     let duration = 0
-    if (startDate.value instanceof Date && endDate.value instanceof Date) {
-        const startTime = startDate.value.getTime()
-        const endTime = endDate.value.getTime()
-        duration = endTime - startTime
+    let startDateInstance = startDate.value
+    if (!(startDateInstance instanceof Date)) {
+        startDateInstance = new Date(startDate.value ?? '')
     }
+    let endDateInstance = endDate.value
+    if (!(endDateInstance instanceof Date)) {
+        endDateInstance = new Date(endDate.value ?? '')
+    }
+    const startTime = startDateInstance.getTime()
+    const endTime = endDateInstance.getTime()
+    duration = endTime - startTime
 
     const newStartDate = convertDisplayToDate(displayStart.value)
     startDate.value = newStartDate

@@ -60,17 +60,22 @@ function onDateChanged() {
     if (!startDate.value || !endDate.value || !date.value) {
         return
     }
-    const newYear = date.value.getFullYear()
-    const newMonth = date.value.getMonth()
-    const newDate = date.value.getDate()
+    let newDateInstance = date.value
+    if (!(newDateInstance instanceof Date)) {
+        newDateInstance = new Date(date.value)
+    }
+    const newYear = newDateInstance.getFullYear()
+    const newMonth = newDateInstance.getMonth()
+    const newDate = newDateInstance.getDate()
     const startTime = getTime(startDate.value)
     const endTime = getTime(endDate.value)
+
     if (startTime) {
         const newStartDate: Date = new Date(newYear, newMonth, newDate, startTime.hour, startTime.minute)
         startDate.value = newStartDate
     }
     if (endTime) {
-        const newEndDate: Date = new Date(newYear, newMonth, newDate, endTime.hour + 1, endTime.minute)
+        const newEndDate: Date = new Date(newYear, newMonth, newDate, endTime.hour, endTime.minute)
         endDate.value = newEndDate
     }
 }
