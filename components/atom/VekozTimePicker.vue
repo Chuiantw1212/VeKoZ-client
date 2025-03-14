@@ -10,7 +10,7 @@
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>
         -
-        <!-- {{ displayEnd }} -->
+        {{ displayEnd }}
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in times" class="select__option">{{ time }}</option>
         </select>

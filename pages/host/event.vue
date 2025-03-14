@@ -528,16 +528,18 @@ async function cancelEventEditing() {
 }
 
 async function deleteEvent() {
-    isLoading.value = true
-    if (dialogEventTemplate.value.id) {
-        await repoEvent.deleteEvent({
-            id: dialogEventTemplate.value.id,
-        })
-        // vekozCalendarRef.value?.removeAllEvents()
-        // await getEventList()
-        eventDialogIsOpen.value = false
-        isLoading.value = false
+    if (!dialogEventTemplate.value.id) {
+        return
     }
+    isLoading.value = true
+    await repoEvent.deleteEvent({
+        id: dialogEventTemplate.value.id,
+        organizerId: dialogEventTemplate.value.organizerId,
+    })
+    const calendarEvent = vekozCalendarRef.value?.getEventById(dialogEventTemplate.value.id)
+    calendarEvent?.remove()
+    eventDialogIsOpen.value = false
+    isLoading.value = false
 }
 </script>
 

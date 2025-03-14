@@ -80,6 +80,9 @@ function setDefaultValue() {
             endDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour + 1, defaultTime.minute)
         }
     }
+    if (typeof endDate.value === 'string') {
+        endDate.value = new Date(endDate.value)
+    }
 }
 
 function getDefaultTime() {

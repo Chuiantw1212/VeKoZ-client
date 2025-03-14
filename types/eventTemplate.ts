@@ -2,7 +2,6 @@ import type { IOffer } from "./offer"
 
 export interface IEventTemplate extends IEventTemplateQuery {
     uid?: string,
-    id?: string,
     eventId?: string, // 已創建的event才會有, 編輯中或是樣板不會有
     designs: ITemplateDesign[], // 簡化前端 FromEventTemplate if
     designIds?: string[],
@@ -15,6 +14,7 @@ export interface IEventTemplate extends IEventTemplateQuery {
 }
 
 export interface IEventTemplateQuery {
+    id?: string,
     organizerId?: string,
 }
 

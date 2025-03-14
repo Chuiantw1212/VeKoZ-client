@@ -180,16 +180,16 @@ function setStartTimes() {
 
     // console.log(minHour)
     startTimes.value = []
-    // console.log('minHour', minHour)
-    // console.log('maxHours', maxHours)
+    console.log('minHour', minHour)
+    console.log('maxHours', maxHours)
     for (let hour = minHour; hour <= maxHours; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
 
-            // const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
+            const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
             const isLargerThanStart = !(hour === minHour && Number(minute) < maxMinutes)
-            if (isLargerThanStart) {
+            if (isSmallerThanMax && isLargerThanStart) {
                 startTimes.value.push(`${hourString}:${minuteString}`)
             }
         })
@@ -287,8 +287,16 @@ function setEndTimes() {
     }
 
     const endTime = getTime(endDate.value)
+    const firstOption = endTimes.value[0]
     const lastOption = endTimes.value[endTimes.value.length - 1]
-    if (lastOption && endTime) {
+    if (firstOption && lastOption && endTime) {
+        // Min Time
+        const minTime = firstOption.split(':')
+        const minHour = Number(minTime[0])
+        const minMinutes = Number(minTime[1])
+        const minTotalMins = minHour * 60 + minMinutes
+
+        // Max Time
         const maxTime = lastOption.split(':')
         const maxHour = Number(maxTime[0])
         const maxMinutes = Number(maxTime[1])
@@ -299,7 +307,7 @@ function setEndTimes() {
         //     maxTotalMins,
         //     defaultEndMins
         // })
-        if (maxTotalMins < defaultEndMins) {
+        if (maxTotalMins < defaultEndMins || minTotalMins > defaultEndMins) {
             if (endDate.value instanceof Date) {
                 endDate.value.setHours(maxHour, maxMinutes, 0, 0)
                 displayEnd.value = convertIsoToDisplayTime(endDate.value)

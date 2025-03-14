@@ -92,6 +92,9 @@ async function getMemberOganizationList() {
     const result = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['GET'],
     })
+    if (!result) {
+        return
+    }
     membershipList.value = result.items
     const onlyOrg = membershipList.value[0]
     if (result.total === 0 && onlyOrg) {
@@ -137,7 +140,7 @@ async function deleteTemplate(template: IEventTemplate) {
     isLoading.value = true
     await repoEventTemplate.deleteEventTemplate({
         organizerId: template.organizerId,
-        id: template.id
+        id: template.id,
     })
     isLoading.value = false
     getEventTemplateList()
