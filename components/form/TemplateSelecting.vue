@@ -13,29 +13,35 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table v-if="templateList.length" :data="templateList" style="width: 100%">
-            <el-table-column prop="organizerLogo" label="組織商標">
-                <template #default="{ row }">
-                    <template v-if="row.organizerLogo">
-                        <el-avatar :src="row.organizerLogo"></el-avatar>
+        <template v-if="selectedMemberCanPost">
+            <el-table v-if="templateList.length" :data="templateList" style="width: 100%">
+                <el-table-column prop="organizerLogo" label="組織商標">
+                    <template #default="{ row }">
+                        <template v-if="row.organizerLogo">
+                            <el-avatar :src="row.organizerLogo"></el-avatar>
+                        </template>
+                        <template v-else>
+                            -
+                        </template>
                     </template>
-                    <template v-else>
-                        -
+                </el-table-column>
+                <el-table-column prop="name" label="模板名稱" />
+                <el-table-column prop="" label="選擇">
+                    <template #default="{ row }">
+                        <el-button size="small" @click="selectTemplate(row)">
+                            套用
+                        </el-button>
                     </template>
-                </template>
-            </el-table-column>
-            <el-table-column prop="name" label="模板名稱" />
-            <el-table-column prop="" label="選擇">
-                <template #default="{ row }">
-                    <el-button size="small" @click="selectTemplate(row)">
-                        套用
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+                </el-table-column>
+            </el-table>
+        </template>
+        <el-empty v-else description="沒有新增權限">
+
+        </el-empty>
     </div>
 </template>
 <script setup lang="ts">
+import { fa } from 'element-plus/es/locale/index.mjs';
 import type { IEventTemplate } from '~/types/eventTemplate';
 import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization';
 
@@ -48,7 +54,6 @@ const isLoading = ref<boolean>(false)
 const membershipForm = ref<IOrganizationMemberQuery>({
     organizationId: '',
 })
-const selectedOrganizerLogo = ref<string>('')
 
 const eventTemplate = defineModel<IEventTemplate>('modelValue', {
     type: Object,
@@ -59,6 +64,8 @@ const eventTemplate = defineModel<IEventTemplate>('modelValue', {
 })
 
 const membershipList = ref<IOrganizationMember[]>([])
+const selectedOrganizerLogo = ref<string>('')
+const selectedMemberCanPost = ref<boolean>(false)
 const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
@@ -78,9 +85,9 @@ function setDefaultValue() {
 
 async function getOrganizationMemberships() {
     const response = await repoOrganizationMember.getMemberOrganizationList({
-        allowMethods: ['POST'],
+        allowMethods: ['GET'], // 先抓到全部組織，再檢視權限
     })
-    membershipList.value = response.items
+    membershipList.value = response?.items ?? []
 
     // 給予預設organizerId
     const organizerId = repoUser.userInfo.preference?.event.organizerId
@@ -117,9 +124,14 @@ async function getOrganizerTemplateList() {
     const selectedOrganizer = membershipList.value.find(membership => {
         return membership.organizationId === membershipForm.value.organizationId
     })
-    if (selectedOrganizer) {
-        selectedOrganizerLogo.value = selectedOrganizer.organizationLogo ?? ""
+    if (!selectedOrganizer) {
+        return
     }
+    selectedMemberCanPost.value = selectedOrganizer.allowMethods?.includes('POST') ?? false
+    if (!selectedMemberCanPost.value) {
+        return
+    }
+    selectedOrganizerLogo.value = selectedOrganizer.organizationLogo ?? ""
 
     isLoading.value = true
     const result: IEventTemplate[] = await repoEventTemplate.getEventTemplateList({
