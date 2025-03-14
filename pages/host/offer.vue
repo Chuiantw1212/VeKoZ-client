@@ -38,12 +38,12 @@ const repoOrganization = useRepoOrganization()
 const ongoingOfferGroups = ref<any>({})
 const endedOfferGroups = ref<any>({})
 const organizationList = ref<IOrganization[]>([])
+
 // Hooks
 onMounted(() => {
     getOrganizationList()
     getOfferList()
 })
-
 
 // Methods
 async function getOrganizationList() {
@@ -53,9 +53,13 @@ async function getOrganizationList() {
 
 async function getOfferList() {
     const result: IOffer[] = await repoOffer.getOfferList()
-    const currentDate = new Date()
+    const currentDate = new Date().toISOString()
 
     const ongoingOffers = result.filter(offer => {
+        console.log({
+            validThrough: offer.validThrough,
+            currentDate
+        })
         return offer.validThrough >= currentDate
     })
     ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => String(categoryId))

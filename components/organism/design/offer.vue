@@ -78,10 +78,12 @@
                             </el-input-number>
                         </div>
                         <div class="body__lower">
+                            <!-- <el-form-item label="測試"> -->
                             <AtomVekozDateTimeRange v-model:start-date="offer.validFrom" :minDate="props.startDate"
                                 :maxDate="props.endDate" v-model:end-date="offer.validThrough" ref="dateTimeRangeRef"
                                 :disabledDate="true">
                             </AtomVekozDateTimeRange>
+                            <!-- </el-form-item> -->
                             <el-input v-model="offer.description" type="textarea"
                                 placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>

@@ -180,8 +180,8 @@ function setStartTimes() {
 
     // console.log(minHour)
     startTimes.value = []
-    console.log('minHour', minHour)
-    console.log('maxHours', maxHours)
+    // console.log('minHour', minHour)
+    // console.log('maxHours', maxHours)
     for (let hour = minHour; hour <= maxHours; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')

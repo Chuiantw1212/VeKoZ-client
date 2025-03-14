@@ -1,10 +1,11 @@
 <template>
     <el-card class="offerList__item">
+        <!-- {{groupOffers}} -->
         <template #header>
             <div class="card__header">
                 {{ getDate(groupOffers[0]) }}
-                {{ groupOffers[0].categoryName }}
-                <!-- {{ trimLongString(groupOffers[0].eventName) }} -->
+                {{ groupOffers[0].eventName }}
+                ({{ groupOffers[0].categoryName }})
                 <div class="header__btnGroup">
                     <el-tooltip v-model:visible="shareTooltipVisible" content="連結已複製" trigger="click">
                         <el-button :icon="Share" class="btnGroup__btn"
@@ -18,11 +19,11 @@
         </template>
         <el-form>
             <el-row :gutter="20">
-                <el-col :span="formFieldSpan">
+                <!-- <el-col :span="formFieldSpan">
                     <el-form-item label="活動名稱">
                         {{ groupOffers[0].eventName }}
                     </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="formFieldSpan">
                     <el-form-item label="活動時間">
                         {{ getTimes(groupOffers[0]) }}

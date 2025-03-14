@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="isLoading">
         <el-form :model="membershipForm">
             <el-row>
                 <el-col>
@@ -34,6 +34,9 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-empty v-else description="請先建立模板">
+
+            </el-empty>
         </template>
         <el-empty v-else description="沒有新增權限">
 
@@ -108,16 +111,6 @@ async function selectTemplate(template: IEventTemplate) {
         eventTemplate.value = result
     }
     isLoading.value = false
-}
-
-async function selectDefaultTemplate() {
-    const defaultTemplate = await repoEventTemplate.getEventTemplateDefault()
-    const newTemplate: IEventTemplate = {
-        id: '',
-        designs: defaultTemplate.designs,
-    }
-    const result = await repoEventTemplate.postEventTemplate(newTemplate)
-    eventTemplate.value = result
 }
 
 async function getOrganizerTemplateList() {

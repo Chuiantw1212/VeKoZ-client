@@ -177,6 +177,7 @@ defineExpose({
     flex-wrap: wrap;
     align-items: center;
     gap: 4px;
+    width: fit-content;
 
     .dateTimeRange__date {
         flex: 1;

@@ -308,7 +308,6 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
     if (!vekozCalendarRef.value) {
         return
     }
-    isDialogPatchLoading.value = true
     /**
      * calendarEvent.call Will trigger handleEventCalendarChange
      */
@@ -346,6 +345,7 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             break;
         }
     }
+    isDialogPatchLoading.value = true
     await repoEvent.patchEventForm(templateDesign)
     isDialogPatchLoading.value = false
 }
@@ -484,9 +484,9 @@ async function openNewCalendarEvent() {
     const dateDesign = dialogEventTemplate.value.designs?.find(design => {
         return design.formField === 'dates'
     })
-    if (dateDesign?.value) {
-        if (dateDesign.value[0]) {
-            const startDate = new Date(dateDesign.value[0] ?? '')
+    if (dateDesign?.startDate) {
+        if (dateDesign.startDate) {
+            const startDate = new Date(dateDesign.startDate ?? '')
             startDate.setFullYear(selectedYear)
             startDate.setMonth(selectedMonth)
             startDate.setDate(selectedDate)
@@ -494,17 +494,17 @@ async function openNewCalendarEvent() {
             const originalStartMinues = startDate.getMinutes()
             const defaultStartHour = Math.max(originalStartHour, 6)
             startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-            dateDesign.value[0] = startDate
+            dateDesign.startDate = startDate
         }
-        if (dateDesign.value[1]) {
-            const endDate = new Date(dateDesign.value[1] ?? '')
+        if (dateDesign.endDate) {
+            const endDate = new Date(dateDesign.endDate ?? '')
             const originalEndHour = endDate.getHours()
             const originalEndMinues = endDate.getMinutes()
             endDate.setFullYear(selectedYear)
             endDate.setMonth(selectedMonth)
             endDate.setDate(selectedDate)
             endDate.setHours(originalEndHour, originalEndMinues, 0, 0)
-            dateDesign.value[1] = endDate
+            dateDesign.endDate = endDate
         }
     }
 
