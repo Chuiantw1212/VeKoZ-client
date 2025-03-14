@@ -7,7 +7,7 @@
                         <div class="vekoz-card-header">
                             <div class="header__btnGroup">
                                 <el-button :icon="FolderOpened" :disabled="isLoading" @click="orgListVisible = true">
-                                    開啓組織
+                                    打開組織
                                 </el-button>
                                 <!-- <el-button   :icon="Postcard"
                                     @click="organizationDialogVisible = true">
@@ -92,7 +92,7 @@ import useRepoOrganization from '~/composables/useRepoOrganization'
 import type { IPublicInfoCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const isLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(true) // 預設true避免閃動阻擋操作
 const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 

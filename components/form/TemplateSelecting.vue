@@ -41,7 +41,6 @@
     </div>
 </template>
 <script setup lang="ts">
-import { fa } from 'element-plus/es/locale/index.mjs';
 import type { IEventTemplate } from '~/types/eventTemplate';
 import type { IOrganizationMember, IOrganizationMemberQuery } from '~/types/organization';
 
@@ -69,14 +68,15 @@ const selectedMemberCanPost = ref<boolean>(false)
 const templateList = ref<IEventTemplate[]>([])
 
 // Hooks
-onMounted(() => {
+onMounted(async () => {
+    await getOrganizationMemberships()
     setDefaultValue()
-    getOrganizationMemberships()
 })
 
 // Methods
 function setDefaultValue() {
     const organizerId = repoUser.userInfo.preference?.event.organizerId
+    // console.log('??', organizerId)
     if (organizerId) {
         membershipForm.value.organizationId = organizerId
         getOrganizerTemplateList()
@@ -124,6 +124,7 @@ async function getOrganizerTemplateList() {
     const selectedOrganizer = membershipList.value.find(membership => {
         return membership.organizationId === membershipForm.value.organizationId
     })
+    // console.log('??', selectedOrganizer)
     if (!selectedOrganizer) {
         return
     }

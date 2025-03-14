@@ -306,10 +306,10 @@ async function getMemberOrganizationList() {
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
-    isDialogPatchLoading.value = true
     if (!vekozCalendarRef.value) {
         return
     }
+    isDialogPatchLoading.value = true
     /**
      * calendarEvent.call Will trigger handleEventCalendarChange
      */
