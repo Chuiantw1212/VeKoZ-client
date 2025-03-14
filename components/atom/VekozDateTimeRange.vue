@@ -116,7 +116,7 @@ function onDateChanged() {
         return
     }
 
-    console.log('assign?')
+    // console.log('assign?')
     let newDateInstance = date.value
     if (!(newDateInstance instanceof Date)) {
         newDateInstance = new Date(date.value)

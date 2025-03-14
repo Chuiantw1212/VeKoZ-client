@@ -172,10 +172,10 @@ function setStartTimes() {
         maxDateInstance = new Date(maxDateInstance)
     }
     let maxHours = 23
-    let maxMinutes = 45
+    let maxMinutes = 0
     if (isValidDate(maxDateInstance)) {
         maxHours = maxDateInstance?.getHours() ?? 23
-        maxMinutes = maxDateInstance?.getMinutes() ?? 45
+        maxMinutes = maxDateInstance?.getMinutes() ?? 0
     }
 
     // console.log(minHour)
@@ -197,6 +197,10 @@ function setStartTimes() {
 
     const startTime = getTime(startDate.value)
     const firstOption = startTimes.value[0]
+    // console.log({
+    //     startTime,
+    //     firstOption
+    // })
     if (firstOption && startTime) {
         const minTime = firstOption.split(':')
         const minHour = Number(minTime[0])
@@ -204,10 +208,17 @@ function setStartTimes() {
         const minTotalMins = minHour * 60 + minMinutes
 
         const defaultStartMins = startTime.hour * 60 + startTime.minute
+        // console.log({
+        //     minTotalMins,
+        //     defaultStartMins
+        // })
         if (minTotalMins > defaultStartMins) {
+            // console.log('?', startDate.value instanceof Date)
             if (startDate.value instanceof Date) {
                 startDate.value.setHours(minHour, minMinutes, 0, 0)
+                displayStart.value = convertIsoToDisplayTime(startDate.value)
             }
+            // console.log('?', startDate.value)
         }
     }
 }
@@ -276,17 +287,22 @@ function setEndTimes() {
     }
 
     const endTime = getTime(endDate.value)
-    const lastOption = endTimes.value[endTimes.value.length]
+    const lastOption = endTimes.value[endTimes.value.length - 1]
     if (lastOption && endTime) {
         const maxTime = lastOption.split(':')
         const maxHour = Number(maxTime[0])
         const maxMinutes = Number(maxTime[1])
         const maxTotalMins = maxHour * 60 + maxMinutes
 
-        const defaultStartMins = endTime.hour * 60 + endTime.minute
-        if (maxTotalMins < defaultStartMins) {
+        const defaultEndMins = endTime.hour * 60 + endTime.minute
+        // console.log({
+        //     maxTotalMins,
+        //     defaultEndMins
+        // })
+        if (maxTotalMins < defaultEndMins) {
             if (endDate.value instanceof Date) {
                 endDate.value.setHours(maxHour, maxMinutes, 0, 0)
+                displayEnd.value = convertIsoToDisplayTime(endDate.value)
             }
         }
     }
