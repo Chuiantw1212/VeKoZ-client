@@ -1,5 +1,6 @@
 <template>
     <div class="dateTimeRange">
+        <!-- date {{  date }} -->
         <!-- typeof date {{ typeof date }} -->
         <!-- date instanceOf Date {{ date instanceof Date }} -->
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
@@ -63,6 +64,11 @@ function setDefaultValue() {
             startDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
         }
     }
+    if (typeof startDate.value === 'string') {
+        startDate.value = new Date(startDate.value)
+    }
+    date.value = startDate.value
+
     if (!endDate.value) {
         if (props.maxDate) {
             let copiedDate = props.maxDate
