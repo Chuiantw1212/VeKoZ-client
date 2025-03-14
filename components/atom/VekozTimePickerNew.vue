@@ -187,11 +187,50 @@ function setStartTimes() {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
 
-            const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
-            if (isSmallerThanMax) {
+            // const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
+            const isLargerThanStart = !(hour === minHour && Number(minute) < maxMinutes)
+            if (isLargerThanStart) {
                 startTimes.value.push(`${hourString}:${minuteString}`)
             }
         })
+    }
+
+    const startTime = getTime(startDate.value)
+    const firstOption = startTimes.value[0]
+    if (firstOption && startTime) {
+        const minTime = firstOption.split(':')
+        const minHour = Number(minTime[0])
+        const minMinutes = Number(minTime[1])
+        const minTotalMins = minHour * 60 + minMinutes
+
+        const defaultStartMins = startTime.hour * 60 + startTime.minute
+        if (minTotalMins > defaultStartMins) {
+            if (startDate.value instanceof Date) {
+                startDate.value.setHours(minHour, minMinutes, 0, 0)
+            }
+        }
+    }
+}
+
+function getTime(incomingDate: Date | string | null) {
+    if (!incomingDate) {
+        return
+    }
+    let date = incomingDate
+    if (!(date instanceof Date)) {
+        date = new Date(incomingDate)
+    }
+    let hour = date.getHours()
+    const minute = date.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    return {
+        hour,
+        minute: base * 15
     }
 }
 
@@ -222,7 +261,7 @@ function setEndTimes() {
             const hourString = String(hour).padStart(2, '0')
             const minuteString = minute
 
-            const isLargerThanStart = !(hour === startHour && Number(minute) <= startMinutes)
+            const isLargerThanStart = !(hour === startHour && Number(minute) < startMinutes)
             const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
             // console.log({
             //     hour,
@@ -234,6 +273,22 @@ function setEndTimes() {
                 endTimes.value.push(`${hourString}:${minuteString}`)
             }
         })
+    }
+
+    const endTime = getTime(endDate.value)
+    const lastOption = endTimes.value[endTimes.value.length]
+    if (lastOption && endTime) {
+        const maxTime = lastOption.split(':')
+        const maxHour = Number(maxTime[0])
+        const maxMinutes = Number(maxTime[1])
+        const maxTotalMins = maxHour * 60 + maxMinutes
+
+        const defaultStartMins = endTime.hour * 60 + endTime.minute
+        if (maxTotalMins < defaultStartMins) {
+            if (endDate.value instanceof Date) {
+                endDate.value.setHours(maxHour, maxMinutes, 0, 0)
+            }
+        }
     }
 }
 </script>
