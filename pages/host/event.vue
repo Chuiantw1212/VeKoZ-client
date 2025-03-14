@@ -139,13 +139,13 @@ const orgCalendarModalVisible = ref<boolean>(false)
  * 觸發來源
  * 初始化&更新月曆組織
  */
-watch((() => repoUser.preference.event), () => {
+watch((() => repoUser.preference.event), async (eventSetting) => {
     isLoading.value = true
-    repoUI.debounce('preferenceEventChanged', async () => {
+    if (eventSetting.organizerIds) {
         await getMemberOrganizationList()
         setCalendarView()
-        isLoading.value = false
-    })
+    }
+    isLoading.value = false
 }, { immediate: true, deep: true })
 
 // Methods
