@@ -113,8 +113,8 @@ function setDate(incomingDate: Date) {
     onDateChanged()
 }
 function onDateChanged() {
-    console.log('startDate.value', startDate.value)
-    console.log('date.value', date.value)
+    // console.log('startDate.value', startDate.value)
+    // console.log('date.value', date.value)
     if (!startDate.value || !endDate.value) {
         return
     }

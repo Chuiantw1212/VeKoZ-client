@@ -134,8 +134,10 @@ const formModel = ref<{ [key: string]: any }>({})
 const formRules = ref<{ [key: string]: any }>({})
 
 // Hooks
-watch(() => template.value.designs, () => {
-    // 設定檢核
+onMounted(async () => {
+    /**
+     * 動態檢核必須使用mounted設定，才不會出錯
+     */
     template.value.designs.forEach(design => {
         if (design.formField) {
             switch (design.formField) {
@@ -160,14 +162,14 @@ watch(() => template.value.designs, () => {
             }
         }
     })
-}, { immediate: true, deep: true })
+    requestAnimationFrame(waitThenClearValidate)
+})
 
 // methods
 function dateOnChanged(item: ITemplateDesign) {
     props.onchange(item)
     const startDate = item.startDate
     offerRefs.value.forEach((offerComponent: any) => {
-        console.log('dateOnChanged', startDate)
         offerComponent.setDate(startDate)
     })
     const endDate = item.endDate
@@ -176,6 +178,18 @@ function dateOnChanged(item: ITemplateDesign) {
     }
     if (endDate && endDate instanceof Date) {
         template.value.endDate = endDate
+    }
+}
+
+async function clearValidate() {
+    requestAnimationFrame(waitThenClearValidate)
+}
+
+async function waitThenClearValidate() {
+    if (formRef.value) {
+        formRef.value?.clearValidate()
+    } else {
+        requestAnimationFrame(waitThenClearValidate)
     }
 }
 
@@ -215,6 +229,7 @@ function handleDown(index: number) {
 }
 defineExpose({
     validate,
+    clearValidate,
 })
 </script>
 <style lang="scss" scoped>

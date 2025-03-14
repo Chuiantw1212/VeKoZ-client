@@ -70,8 +70,8 @@
             <template #default>
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
-                    <FormEventTemplate ref="formRef" v-model="dialogEventTemplate" :disabled="eventDisabled"
-                        :onchange="handleEventFormChange">
+                    <FormEventTemplate ref="formRef" v-if="eventDialogIsOpen" v-model="dialogEventTemplate"
+                        :disabled="eventDisabled" :onchange="handleEventFormChange">
                     </FormEventTemplate>
                 </el-container>
             </template>
