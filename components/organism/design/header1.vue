@@ -3,6 +3,7 @@
     <el-form-item v-if="!props.isDesigning" class="formItem"
         :class="{ 'formItem--center': customDesign.alignment === 'center' }" :label="customDesign.label"
         :required="required" :prop="customDesign.formField" @dragstart="emit('dragstart')">
+        <!-- {{customDesign}} -->
         <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder" :maxlength="30"
             :show-word-limit="true" size="large" :disabled="disabled"></el-input>
     </el-form-item>

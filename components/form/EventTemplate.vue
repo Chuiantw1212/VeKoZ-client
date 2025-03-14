@@ -4,7 +4,8 @@
 
         </slot>
     </div>
-    <!-- template.startDate :{{ template.startDate }} -->
+    <!-- formModel:{{ formModel }} -->
+    <!-- formRules :{{ formRules }} -->
     <el-form ref="formRef" class="designForm" label-width="auto" :model="formModel" :rules="formRules">
         <template v-for="(item, index) in template.designs">
             <!-- 必填且限量的欄位 -->
@@ -138,6 +139,30 @@ onMounted(async () => {
     setFormRules()
 })
 
+watch(() => template.value.designs, (designs: ITemplateDesign[]) => {
+    designs.forEach(design => {
+        switch (design.formField) {
+            case 'organizer': {
+                formModel.value[design.formField] = design.organizationId
+                break;
+            }
+            case 'performers': {
+                formModel.value[design.formField] = design.memberIds
+                break;
+            }
+            case 'dates':
+            case 'name':
+            case 'banner':
+            default: {
+                if (design.formField) {
+                    console.log('?', design.formField)
+                    formModel.value[design.formField] = design.value
+                }
+            }
+        }
+    })
+}, { deep: true })
+
 // methods
 function setFormRules() {
     /**
@@ -145,22 +170,6 @@ function setFormRules() {
      */
     template.value.designs.forEach(design => {
         if (design.formField) {
-            switch (design.formField) {
-                case 'organizer': {
-                    formModel.value[design.formField] = design.organizationId
-                    break;
-                }
-                case 'performers': {
-                    formModel.value[design.formField] = design.memberIds
-                    break;
-                }
-                case 'dates':
-                case 'name':
-                case 'banner':
-                default: {
-                    formModel.value[design.formField] = design.value
-                }
-            }
             formRules.value[design.formField] = {
                 required: true,
                 message: `${design.label}為必填`
