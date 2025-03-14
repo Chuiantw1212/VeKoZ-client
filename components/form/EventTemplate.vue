@@ -165,17 +165,18 @@ watch(() => template.value.designs, () => {
 // methods
 function dateOnChanged(item: ITemplateDesign) {
     props.onchange(item)
-    console.log('executed', item)
-    // if (item.formField === 'dates') {
     const startDate = item.startDate
     offerRefs.value.forEach((offerComponent: any) => {
+        console.log('dateOnChanged', startDate)
         offerComponent.setDate(startDate)
     })
     const endDate = item.endDate
-
-    template.value.startDate = startDate
-    template.value.endDate = endDate
-    // }
+    if (startDate && startDate instanceof Date) {
+        template.value.startDate = startDate
+    }
+    if (endDate && endDate instanceof Date) {
+        template.value.endDate = endDate
+    }
 }
 
 async function validate() {

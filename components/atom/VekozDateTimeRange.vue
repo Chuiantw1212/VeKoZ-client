@@ -5,8 +5,8 @@
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
             :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
             @clear="checkClearDate()"></el-date-picker>
-        <!-- startDate {{ startDate }}
-        endDate {{ endDate }} -->
+        startDate {{ startDate }}
+        endDate {{ endDate }}
         <!-- minDate {{ minDate }}
         maxDate {{ maxDate }} -->
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate"
@@ -46,21 +46,52 @@ onMounted(() => {
 
 // Methods
 function setDefaultValue() {
-    if (!startDate.value && props.minDate) {
-        let copiedDate = props.minDate
-        if (!(copiedDate instanceof Date)) {
-            copiedDate = new Date(props.minDate)
+    const currentDateInstance = new Date()
+    const currentYear = currentDateInstance.getFullYear()
+    const currentMonth = currentDateInstance.getMonth()
+    const currentDate = currentDateInstance.getDate()
+    const defaultTime = getDefaultTime()
+
+    if (!startDate.value) {
+        if (props.minDate) {
+            let copiedDate = props.minDate
+            if (!(copiedDate instanceof Date)) {
+                copiedDate = new Date(props.minDate)
+            }
+            startDate.value = new Date(copiedDate.getTime())
+        } else {
+            startDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
         }
-        startDate.value = new Date(copiedDate.getTime())
     }
-    if (!endDate.value && props.maxDate) {
-        let copiedDate = props.maxDate
-        if (!(copiedDate instanceof Date)) {
-            copiedDate = new Date(props.maxDate)
+    if (!endDate.value) {
+        if (props.maxDate) {
+            let copiedDate = props.maxDate
+            if (!(copiedDate instanceof Date)) {
+                copiedDate = new Date(props.maxDate)
+            }
+            endDate.value = new Date(copiedDate.getTime())
+        } else {
+            endDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour + 1, defaultTime.minute)
         }
-        endDate.value = new Date(copiedDate.getTime())
     }
 }
+
+function getDefaultTime() {
+    const currentDate = new Date()
+    let hour = currentDate.getHours()
+    const minute = currentDate.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    return {
+        hour,
+        minute: base * 15
+    }
+}
+
 function disablePastDays(date: Date) {
     if (date) {
         const currentTime = new Date().getTime()
@@ -76,9 +107,16 @@ function setDate(incomingDate: Date) {
     onDateChanged()
 }
 function onDateChanged() {
-    if (!startDate.value || !endDate.value || !date.value) {
+    console.log('startDate.value', startDate.value)
+    console.log('date.value', date.value)
+    if (!startDate.value || !endDate.value) {
         return
     }
+    if (!date.value) {
+        return
+    }
+
+    console.log('assign?')
     let newDateInstance = date.value
     if (!(newDateInstance instanceof Date)) {
         newDateInstance = new Date(date.value)

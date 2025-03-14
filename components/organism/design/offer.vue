@@ -157,14 +157,14 @@ const props = defineProps({
 })
 
 // Hooks
-const newOffer = ref<IOffer>({
-    name: '',
-    inventoryMaxValue: null,
-    price: null,
-    description: '',
-    validFrom: null,
-    validThrough: null,
-})
+class Offer {
+    name: string = '';
+    inventoryMaxValue: number | null = null;
+    price: number | null = null;
+    description: string = '';
+    validFrom: Date | null = null;
+    validThrough: Date | null = null;
+}
 
 onMounted(() => {
     setDefaultValue()
@@ -181,11 +181,12 @@ function setDefaultValue() {
     if (customDesign.value.offers) {
         return
     }
+    const newOffer = getNewOffer()
     const defaultValue: ITemplateDesign = {
         type: 'offers',
         label: '票券群組',
         offers: [
-            newOffer.value,
+            newOffer,
         ],
     }
     if (props.formField) {
@@ -202,14 +203,22 @@ async function handleChange(templateDesign: any) {
         isLoading.value = false
     }, 1000)
 }
+function getNewOffer() {
+    const newOffer = new Offer()
+    if (props.startDate && props.startDate instanceof Date) {
+        newOffer.validFrom = props.startDate
+    }
+    if (props.endDate && props.endDate instanceof Date) {
+        newOffer.validThrough = props.endDate
+    }
+    return newOffer
+}
 function createOffer() {
-    if (props.startDate) {
-        newOffer.value.validFrom = props.startDate
-    }
-    if (props.endDate) {
-        newOffer.value.validThrough = props.endDate
-    }
-    customDesign.value.offers?.push(newOffer.value)
+    /**
+     * 預設的第一個Offer會沒有值
+     */
+    const newOffer = getNewOffer()
+    customDesign.value.offers?.push(newOffer)
 }
 function removeOffer(index: number) {
     customDesign.value.offers?.splice(index, 1)

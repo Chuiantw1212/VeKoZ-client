@@ -90,7 +90,7 @@ watch(() => customDesign.value.endDate, (newValue) => {
 
 // methods
 function setDefaultValue() {
-    if (customDesign.value.hasOwnProperty('startDate')) {
+    if (customDesign.value.startDate && customDesign.value.endDate) {
         return
     }
     const currentDateInstance = new Date()

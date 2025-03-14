@@ -3,7 +3,6 @@
         <el-icon color="#a8abb2" size="14px">
             <Clock />
         </el-icon>
-        <!-- {{ displayEnd }} -->
         <select v-model="displayStart" class="timeRangePicker__select" :disabled="props.disabled"
             @change="setStartDate()">
             <option v-for="time in startTimes" class="select__option">{{ time }}</option>
@@ -13,10 +12,13 @@
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in endTimes" class="select__option">{{ time }}</option>
         </select>
+        {{ startTimes }}
     </div>
 </template>
 <script setup lang="ts">
 import { Clock } from '@element-plus/icons-vue'
+const debounceTimerId = ref()
+const debounceFunc = ref()
 const startTimes = ref<string[]>([])
 const endTimes = ref<string[]>([])
 const minutes = ref<string[]>(['00', '15', '30', '45',])
@@ -46,6 +48,10 @@ const props = defineProps({
     },
 })
 
+onMounted(() => {
+    setTimOptions()
+})
+
 /**
  * 在上面的watcher會先被執行
  */
@@ -58,13 +64,11 @@ watch(() => endDate.value, (newValue) => {
 }, { deep: true, immediate: true })
 
 watch(() => props.minDate, () => {
-    setStartTimes()
-    setEndTimes()
+    setTimOptions()
 }, { immediate: true })
 
 watch(() => props.maxDate, () => {
-    setStartTimes()
-    setEndTimes()
+    setTimOptions()
 }, { immediate: true })
 
 // Methods
@@ -133,21 +137,51 @@ function convertDisplayToDate(display: string) {
     return newDate
 }
 
+function setTimOptions() {
+    debounce(() => {
+        setStartTimes()
+        setEndTimes()
+    })
+}
+
+function debounce(func: Function, timeout = 300) {
+    const existedTimer = debounceTimerId.value
+    if (existedTimer) {
+        clearTimeout(existedTimer);
+    }
+    const newTimer = setTimeout(() => {
+        debounceFunc.value()
+        debounceTimerId.value = ''
+    }, timeout);
+    debounceTimerId.value = newTimer
+    debounceFunc.value = func
+}
+
 function setStartTimes() {
-    let minDateInstance = props.minDate
+    let minDateInstance = props.minDate ?? ''
     if (minDateInstance && !(minDateInstance instanceof Date) || typeof minDateInstance === 'string') {
         minDateInstance = new Date(minDateInstance)
     }
-    startTimes.value = []
-    const minHour = minDateInstance?.getHours() ?? 6
+    let minHour = 6
+    if (isValidDate(minDateInstance)) {
+        minHour = minDateInstance.getHours()
+    }
 
     let maxDateInstance = props.maxDate
     if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
         maxDateInstance = new Date(maxDateInstance)
     }
-    const maxHours = maxDateInstance?.getHours() ?? 23
-    const maxMinutes = maxDateInstance?.getMinutes() ?? 45
+    let maxHours = 23
+    let maxMinutes = 45
+    if (isValidDate(maxDateInstance)) {
+        maxHours = maxDateInstance?.getHours() ?? 23
+        maxMinutes = maxDateInstance?.getMinutes() ?? 45
+    }
 
+    // console.log(minHour)
+    startTimes.value = []
+    // console.log('minHour', minHour)
+    // console.log('maxHours', maxHours)
     for (let hour = minHour; hour <= maxHours; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
@@ -161,6 +195,10 @@ function setStartTimes() {
     }
 }
 
+function isValidDate(d: any) {
+    return d instanceof Date && !isNaN(d.getTime());
+}
+
 function setEndTimes() {
     const displayTime = displayStart.value.split(':')
     const startHour = Number(displayTime[0]) ?? 6
@@ -171,9 +209,14 @@ function setEndTimes() {
     if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
         maxDateInstance = new Date(maxDateInstance)
     }
-    const maxHours = maxDateInstance?.getHours() ?? 23
-    const maxMinutes = maxDateInstance?.getMinutes() ?? 45
+    let maxHours = 23
+    let maxMinutes = 45
+    if (isValidDate(maxDateInstance)) {
+        maxHours = maxDateInstance?.getHours() ?? 23
+        maxMinutes = maxDateInstance?.getMinutes() ?? 45
+    }
 
+    // console.log(startHour)
     for (let hour = startHour; hour <= maxHours; hour++) {
         minutes.value.forEach((minute: string) => {
             const hourString = String(hour).padStart(2, '0')
