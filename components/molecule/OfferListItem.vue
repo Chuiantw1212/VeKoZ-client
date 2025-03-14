@@ -46,7 +46,7 @@
                         <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇"
                             @change="patchOfferCategory(groupOffers[0])" :disabled="checkOfferIsOver(groupOffers[0])">
                             <el-option v-for="(item, index) in props.organizationList" :key="index"
-                                :label="`${item.name}`" :value="item.id" />
+                                :label="`${item.name}`" :value="String(item.id)" />
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -61,12 +61,14 @@
         </el-form>
         <el-divider>票券個別設定</el-divider>
         <el-descriptions v-for="offer in groupOffers" :title="offer.name" :column="2" label-width="auto">
+            <!-- <el-descriptions-item label="ID">{{ offer.id }}</el-descriptions-item> -->
             <el-descriptions-item label="票價">{{ offer.price }}</el-descriptions-item>
             <el-descriptions-item label="數量">{{ offer.inventoryValue }} / {{ offer.inventoryMaxValue
             }}</el-descriptions-item>
             <el-descriptions-item :colspan="2" label="描述">
-                <el-input v-model="offer.description" placeholder="將顯示在購票畫面" :maxlength="120" :show-word-limit="true"
-                    type="textarea" :rows="3" @change="patchOffer(offer)"></el-input>
+                {{ offer.description }}
+                <!-- <el-input v-model="offer.description" placeholder="將顯示在購票畫面" :maxlength="120" :show-word-limit="true"
+                    type="textarea" :rows="3" @change="patchOffer(offer)"></el-input> -->
             </el-descriptions-item>
         </el-descriptions>
     </el-card>
@@ -94,8 +96,8 @@ const groupOffers = defineModel('modelValue', {
 })
 const props = defineProps({
     organizationList: {
-        type: Array,
-        default: [] as IOrganization[],
+        type: Array as PropType<IOrganization[]>,
+        default: () => [],
         required: true,
     }
 })
