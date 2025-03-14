@@ -95,7 +95,8 @@ export default defineStore('user', () => {
         return response
     }
     async function patchUserPreference(fieldName: string, newValue: any) {
-        if (!preference.value || !userInfo.value.id) {
+        const sameValue = preference.value[fieldName] === newValue
+        if (sameValue || !preference.value || !userInfo.value.id) {
             return
         }
         if (newValue === Object(newValue)) {

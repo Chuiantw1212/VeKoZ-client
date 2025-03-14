@@ -5,7 +5,7 @@
                 <el-card v-loading.lock="isLoading">
                     <MoleculeVekozCalendar ref="vekozCalendarRef" @create="openNewEventDialog"
                         @eventChange="handleEventCalendarChange" @event-click="handleEventClick"
-                        @dates-set="handleDatesSet" @mounted="getCalendarEvents">
+                        @dates-set="handleDatesSet">
                     </MoleculeVekozCalendar>
                 </el-card>
             </el-col>
@@ -107,7 +107,7 @@ const repoOrganizationMeber = useRepoOrganizationMember()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
 const repoGoogle = useRepoGoogle()
-const isLoading = ref<boolean>(false)
+const isLoading = ref<boolean>(true)
 // Data Calendar
 const calendarStatus = ref<string[]>(['public', 'private'])
 const googleCalendarEventIds = ref<string[]>([])
@@ -139,13 +139,11 @@ const orgCalendarModalVisible = ref<boolean>(false)
  * 觸發來源
  * 初始化&更新月曆組織
  */
-watch((() => repoUser.preference.event), async (eventSetting) => {
-    isLoading.value = true
-    if (eventSetting.organizerIds) {
+watch((() => repoUser.preference.event.organizerIds), async (organizerIds) => {
+    if (organizerIds) {
         await getMemberOrganizationList()
         setCalendarView()
     }
-    isLoading.value = false
 }, { immediate: true, deep: true })
 
 // Methods
@@ -225,18 +223,13 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     }
 
     // 更新偏好
-    repoUser.patchUserPreference('event', preferenceEvnet)
-
-    // 移除所有事件資料
-    const calendarEvents: EventApi[] | undefined = vekozCalendarRef.value?.getEvents()
-    if (calendarEvents) {
-        calendarEvents.forEach(event => {
-            event.remove()
+    isLoading.value = true
+    repoUI.debounce(`handleDatesSet`, () => {
+        repoUser.patchUserPreference('event', preferenceEvnet)
+        getCalendarEvents({
+            start
         })
-    }
-
-    getCalendarEvents({
-        start
+        isLoading.value = false
     })
     // // Remove Google Calendar Events
     // const calendarEvent = vekozCalendarRef.value.getEventById(String(templateDesign.eventId))
@@ -263,14 +256,20 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
 }
 
 async function getCalendarEvents(payload: any) {
-    const start = payload.start
+    // 移除所有事件資料
+    const calendarEvents: EventApi[] | undefined = vekozCalendarRef.value?.getEvents()
+    if (calendarEvents) {
+        calendarEvents.forEach(event => {
+            event.remove()
+        })
+    }
 
     // 抓取當月事件資料
     vekozEventList.value = []
     selectedOrganizationIds.value.forEach(async (organizerId: string) => {
         const orgEventList = await repoEvent.getEventList({
             organizerId: organizerId,
-            startDate: start,
+            startDate: payload.start,
             allowMethods: ['GET'],
         })
         vekozEventList.value.push(...orgEventList)
