@@ -4,12 +4,9 @@
     <el-form-item v-if="!props.isDesigning" :label="customDesign.label" :required="required"
         :prop="customDesign.formField" @dragstart="emit('dragstart')" :model="customDesign">
         <div class="dateTimeRange">
-            <!-- <el-date-picker class="dateTimeRange__date" :placeholder="placeholder" v-model="date"
-                :disabled-date="disablePastDays" @blur="setDate()" @change="setDate()" :disabled="disabled"
-                @clear="checkClearDate()"></el-date-picker>
-            <AtomVekozTimePicker v-if="customDesign" class="dateTimeRange__time" v-model="customDesign.value"
-                :placeholder="placeholder" :disabled="disabled">
-            </AtomVekozTimePicker> -->
+            <!-- {{ customDesign }} -->
+            <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate" v-model:end-date="customDesign.endDate">
+            </AtomVekozDateTimeRange>
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->

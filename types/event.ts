@@ -18,7 +18,7 @@ export interface IEventSingle extends IEventFromList {
     locationAddress?: string,
     virtualLocationName?: string,
     virtualLocationValue?: string,
-    designs?: ITemplateDesign[],
+    designs: ITemplateDesign[], // 避免v-model判定出錯不為選填
 }
 
 export interface IEventFromList extends IEventQuery {
