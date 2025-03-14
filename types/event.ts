@@ -33,8 +33,8 @@ export interface IEventFromList extends IEventQuery {
 
 export interface IEventQuery {
     id?: string,
-    startDate?: Date,
-    endDate?: Date,
+    startDate?: Date | string, // 透過網路回傳必為字串
+    endDate?: Date | string, // 透過網路回傳必為字串
     startHour?: string,
     locationAddressRegion?: string,
     hasVirtualLocation?: boolean,

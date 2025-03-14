@@ -112,7 +112,9 @@ async function getEvent() {
     if (!id) {
         return
     }
-    const result = await repoEvent.getEvent(String(id))
+    const result = await repoEvent.getEvent({
+        id: String(id),
+    })
     event.value = result
     if (result.designs) {
         const eventDesign = result.designs.find(design => {

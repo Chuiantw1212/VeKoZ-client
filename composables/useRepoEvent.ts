@@ -43,9 +43,10 @@ export default defineStore('event', () => {
         })
         return response.json()
     }
-    async function getEvent(eventId: string): Promise<IEventSingle> {
-        const response = await defaultApi.authRequest(`/event/${eventId}`, {
+    async function getEvent(params: IEventQuery): Promise<IEventSingle> {
+        const response = await defaultApi.authRequest(`/event`, {
             method: 'GET',
+            params,
         })
         return response.json()
     }

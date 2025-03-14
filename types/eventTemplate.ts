@@ -7,8 +7,8 @@ export interface IEventTemplate extends IEventTemplateQuery {
     designIds?: string[],
     name?: string,
     lastmod?: any,
-    startDate?: Date,
-    endDate?: Date,
+    startDate?: Date | string,
+    endDate?: Date | string,
     organizerLogo?: string,
     organizerName?: string,
 }

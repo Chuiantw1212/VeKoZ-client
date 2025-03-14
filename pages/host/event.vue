@@ -429,41 +429,32 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
 async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const eventId = eventClickInfo.event.id
     eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
-    isLoading.value = true
-    const eventTemplate: IEventSingle = await repoEvent.getEvent(eventId)
     const selectedEventMaster = vekozEventList.value.find(event => {
         return event.id === eventId
     })
-    if (selectedEventMaster) {
-        const relatedMembership = memberOrganizationList.value.find(item => {
-            return item.organizationId === selectedEventMaster?.organizerId
-        })
-        eventTemplate.allowMethods = relatedMembership?.allowMethods
+    if (!selectedEventMaster) {
+        return
     }
+
+    // Get Event 
+    isLoading.value = true
+    const eventTemplate: IEventSingle = await repoEvent.getEvent({
+        id: eventId,
+        organizerId: selectedEventMaster.organizerId,
+    })
     dialogEventTemplate.value = eventTemplate
     isLoading.value = false
 
-    if (eventTemplate.designs) {
-        const designDates = eventTemplate.designs.find(design => {
-            return design.formField === 'dates'
-        })
-        if (designDates) {
-            eventDisabled.value = false
-
-            const startTime = new Date(designDates.value[0]).getTime()
-            const currentTime = new Date().getTime()
-            const isEnded = currentTime >= startTime
-
-            const hasNoAuth = !eventTemplate.allowMethods?.includes('PATCH')
-            if (isEnded || hasNoAuth) {
-                eventDisabled.value = true
-            }
-        }
-        eventDialogIsOpen.value = true
-    } else {
-        const calendarEvent = vekozCalendarRef.value?.getEventById(eventId)
-        calendarEvent?.remove()
+    // 開放編輯與否
+    const startTime = new Date(eventTemplate.startDate as string).getTime()
+    const currentTime = new Date().getTime()
+    const isEnded = currentTime >= startTime
+    const hasNoAuth = !eventTemplate.allowMethods?.includes('PATCH')
+    eventDisabled.value = false
+    if (isEnded || hasNoAuth) {
+        eventDisabled.value = true
     }
+    eventDialogIsOpen.value = true
 }
 
 async function openNewEventDialog(eventCreation: IEventCreation) {
