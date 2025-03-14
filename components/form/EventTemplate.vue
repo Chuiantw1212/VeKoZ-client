@@ -135,6 +135,11 @@ const formRules = ref<{ [key: string]: any }>({})
 
 // Hooks
 onMounted(async () => {
+    setFormRules()
+})
+
+// methods
+function setFormRules() {
     /**
      * 動態檢核必須使用mounted設定，才不會出錯
      */
@@ -163,9 +168,8 @@ onMounted(async () => {
         }
     })
     requestAnimationFrame(waitThenClearValidate)
-})
+}
 
-// methods
 function dateOnChanged(item: ITemplateDesign) {
     props.onchange(item)
     const startDate = item.startDate

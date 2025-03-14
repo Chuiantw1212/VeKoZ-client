@@ -473,40 +473,53 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
 }
 
 async function openNewCalendarEvent() {
-    // eventDisabled.value = false
     loadTemplateDialogIsOpen.value = false
+
+    const dateDesign = dialogEventTemplate.value.designs?.find(design => {
+        return design.formField === 'dates'
+    })
+    if (!dateDesign) {
+        return
+    }
 
     // 給定新月曆所選擇的值
     const selectedDateInstance = calendarEventCreation.value.date
     const selectedYear = selectedDateInstance.getFullYear()
     const selectedMonth = selectedDateInstance.getMonth()
     const selectedDate = selectedDateInstance.getDate()
-    const dateDesign = dialogEventTemplate.value.designs?.find(design => {
-        return design.formField === 'dates'
-    })
-    if (dateDesign?.startDate) {
-        if (dateDesign.startDate) {
-            const startDate = new Date(dateDesign.startDate ?? '')
-            startDate.setFullYear(selectedYear)
-            startDate.setMonth(selectedMonth)
-            startDate.setDate(selectedDate)
-            const originalStartHour = startDate.getHours()
-            const originalStartMinues = startDate.getMinutes()
-            const defaultStartHour = Math.max(originalStartHour, 6)
-            startDate.setHours(defaultStartHour, originalStartMinues, 0, 0)
-            dateDesign.startDate = startDate
-        }
-        if (dateDesign.endDate) {
-            const endDate = new Date(dateDesign.endDate ?? '')
-            const originalEndHour = endDate.getHours()
-            const originalEndMinues = endDate.getMinutes()
-            endDate.setFullYear(selectedYear)
-            endDate.setMonth(selectedMonth)
-            endDate.setDate(selectedDate)
-            endDate.setHours(originalEndHour, originalEndMinues, 0, 0)
-            dateDesign.endDate = endDate
-        }
+    const currentTime = getTime(selectedDateInstance)
+    if (!currentTime) {
+        return
     }
+    if (dateDesign.startDate) {
+        // 模板有預設值
+        let startDate = dateDesign.startDate
+        if (!(startDate instanceof Date)) {
+            startDate = new Date(dateDesign.startDate)
+        }
+        const originalHour = startDate.getHours()
+        const originalMinues = startDate.getMinutes()
+        dateDesign.startDate = new Date(selectedYear, selectedMonth, selectedDate, originalHour, originalMinues)
+    } else {
+        // 模板無預設值
+        dateDesign.startDate = new Date(selectedYear, selectedMonth, selectedDate, currentTime.hour, currentTime.minute)
+    }
+    if (dateDesign.endDate) {
+        // 模板有預設值
+        let endDate = dateDesign.endDate
+        if (!(endDate instanceof Date)) {
+            endDate = new Date(dateDesign.endDate)
+        }
+        const originalHour = endDate.getHours()
+        const originalMinues = endDate.getMinutes()
+        dateDesign.endDate = new Date(selectedYear, selectedMonth, selectedDate, originalHour, originalMinues)
+    } else {
+        // 模板無預設值
+        dateDesign.endDate = new Date(selectedYear, selectedMonth, selectedDate, currentTime.hour + 1, currentTime.minute)
+    }
+
+    dialogEventTemplate.value.startDate = dateDesign.startDate
+    dialogEventTemplate.value.endDate = dateDesign.endDate
 
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
     vekozEventList.value.push(newEvent)
@@ -516,6 +529,28 @@ async function openNewCalendarEvent() {
     vekozCalendarRef.value?.addEvent(calendarEvent)
 
     eventDialogIsOpen.value = true
+}
+
+function getTime(incomingDate: Date | string | null) {
+    if (!incomingDate) {
+        return
+    }
+    let date = incomingDate
+    if (!(date instanceof Date)) {
+        date = new Date(incomingDate)
+    }
+    let hour = date.getHours()
+    const minute = date.getMinutes()
+    let base = minute / 15
+    base = Math.ceil(base)
+    if (base === 4) {
+        hour += 1
+        base = 0
+    }
+    return {
+        hour,
+        minute: base * 15
+    }
 }
 
 async function cancelEventEditing() {
