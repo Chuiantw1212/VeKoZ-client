@@ -53,7 +53,7 @@ const props = defineProps({
     },
     namePlaceholder: {
         type: String,
-        default: '微課室',
+        default: '請輸入描述，例：微課室',
     },
     valuePlaceHolder: {
         type: String,
@@ -85,7 +85,7 @@ function setDefaultValue() {
     }
     const defaultValue: ITemplateDesign = {
         type: 'url',
-        label: '',
+        label: '網址連結',
         urlName: '',
         urlValue: '',
     }

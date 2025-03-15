@@ -194,17 +194,19 @@ defineExpose({
 <style lang="scss" scoped>
 .dateTimeRange {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     align-items: center;
     gap: 4px;
     width: fit-content;
 
     .dateTimeRange__date {
         flex: 1;
+        // width: fit-content;
     }
 
     .dateTimeRange__time {
         flex: 1;
+        // width: fit-content;
     }
 }
 </style>

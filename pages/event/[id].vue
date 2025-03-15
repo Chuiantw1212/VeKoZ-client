@@ -4,7 +4,7 @@
         <el-row class="event__mt" :gutter="repoUI.isLarge ? 20 : 0">
             <el-col :span="mainSpan">
                 <img v-if="event.banner" class="event__banner " :src="event.banner">
-                <el-card class="event__mt">
+                <el-card>
                     <h1 class="event__title">{{ event.name }}</h1>
                     <el-descriptions :column="1">
                         <el-descriptions-item>{{ event.description }}</el-descriptions-item>
@@ -12,14 +12,14 @@
                             {{ getDate(event) }}
                             {{ getTimes(event) }}
                         </el-descriptions-item>
-                        <el-descriptions-item label="地點">
+                        <el-descriptions-item v-if="event.locationAddress" label="地點">
                             {{ event.locationAddress }}
                             <a target="_blank"
                                 :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
                                 <el-button :icon="LocationFilled" text circle></el-button>
                             </a>
                         </el-descriptions-item>
-                        <el-descriptions-item label="視訊連結">
+                        <el-descriptions-item v-if="event.virtualLocationValue" label="視訊連結">
                             <a target="_blank" :src="event.virtualLocationValue">{{ event.virtualLocationName }}</a>
                         </el-descriptions-item>
                     </el-descriptions>
@@ -27,7 +27,7 @@
                 <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
                     <el-carousel-item v-for="(item, key) in cardUnits" :key="key">
                         <el-card class="side__card">
-                            <NuxtLink :to="`/${item.link}`">
+                            <NuxtLink :to="`/${item.link}`" target="_blank">
                                 <div class="card__logo" :style="{ 'background-image': `url(${item.image})` }"></div>
                                 <div class="organization__body">
                                     <div class="organizationNameGroup">
