@@ -52,7 +52,7 @@
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="eventDisabled"
+                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="eventDeletable"
                     :icon="Delete" text @click="deleteEvent()">
                 </el-button>
                 |
@@ -128,6 +128,7 @@ const dialogEventTemplate = ref<IEventSingle>({
     designs: []
 })
 const eventDisabled = ref<boolean>(false)
+const eventDeletable = ref<boolean>(false)
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 
@@ -449,11 +450,20 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const startTime = new Date(eventTemplate.startDate as string).getTime()
     const currentTime = new Date().getTime()
     const isEnded = currentTime >= startTime
-    const hasNoAuth = !eventTemplate.allowMethods?.includes('PATCH')
+    const hasNoPatch = !eventTemplate.allowMethods?.includes('PATCH')
+    const hasDelete = eventTemplate.allowMethods?.includes('DELETE')
     eventDisabled.value = false
-    if (isEnded || hasNoAuth) {
+    if (isEnded || hasNoPatch) {
         eventDisabled.value = true
     }
+
+    // 開放刪除與否
+    eventDeletable.value = true
+    if (!isEnded && hasDelete) {
+        eventDeletable.value = false
+    }
+
+    // 打開彈窗
     eventDialogIsOpen.value = true
 }
 

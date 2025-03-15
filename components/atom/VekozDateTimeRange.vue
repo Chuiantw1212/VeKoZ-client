@@ -64,8 +64,21 @@ function setDefaultValue() {
             startDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
         }
     }
+    console.log('wtf ', typeof startDate.value)
     if (typeof startDate.value === 'string') {
-        startDate.value = new Date(startDate.value)
+        // console.log('why ', typeof startDate.value)
+        const formatStartDate = new Date(startDate.value)
+        // console.log('formatStartDate ', formatStartDate instanceof Date)
+        startDate.value = formatStartDate
+    }
+    console.log('startDate.value', startDate.value)
+    console.log('typeof ', typeof startDate.value)
+    console.log('instanceOf ', startDate.value instanceof Date)
+    if (startDate.value instanceof Date) {
+        const isValidStart = !isNaN(startDate.value.getTime())
+        if (!isValidStart) {
+            startDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
+        }
     }
     date.value = startDate.value
 
@@ -82,6 +95,12 @@ function setDefaultValue() {
     }
     if (typeof endDate.value === 'string') {
         endDate.value = new Date(endDate.value)
+    }
+    if (endDate.value instanceof Date) {
+        const isValidEnd = !isNaN(endDate.value.getTime())
+        if (!isValidEnd) {
+            endDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
+        }
     }
 }
 
@@ -133,6 +152,7 @@ function onDateChanged() {
     const newYear = newDateInstance.getFullYear()
     const newMonth = newDateInstance.getMonth()
     const newDate = newDateInstance.getDate()
+
     const startTime = getTime(startDate.value)
     const endTime = getTime(endDate.value)
 

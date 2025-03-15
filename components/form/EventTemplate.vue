@@ -155,7 +155,7 @@ watch(() => template.value.designs, (designs: ITemplateDesign[]) => {
             case 'banner':
             default: {
                 if (design.formField) {
-                    console.log('?', design.formField)
+                    // console.log('?', design.formField)
                     formModel.value[design.formField] = design.value
                 }
             }
