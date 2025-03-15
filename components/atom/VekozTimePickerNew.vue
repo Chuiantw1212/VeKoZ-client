@@ -85,7 +85,7 @@ function setStartDate() {
             endDate.value = new Date(currentYear, currentMonth, currentDate, currentTime.hour + 1, currentTime.minute, 0, 0)
         }
     }
-    console.log(startDate.value)
+    // console.log(startDate.value)
     if (!startDate.value || !endDate.value) {
         // 清除type error
         return
@@ -225,28 +225,50 @@ function setStartTimes() {
 
     const startTime = getTime(startDate.value)
     const firstOption = startTimes.value[0]
+    const lastOption = startTimes.value[startTimes.value.length - 1]
     // console.log({
     //     startTime,
     //     firstOption
     // })
-    if (firstOption && startTime) {
+    if (firstOption && lastOption && startTime) {
+        // Min Time
         const minTime = firstOption.split(':')
         const minHour = Number(minTime[0])
         const minMinutes = Number(minTime[1])
         const minTotalMins = minHour * 60 + minMinutes
 
+        // Max Time
+        const maxTime = lastOption.split(':')
+        const maxHour = Number(maxTime[0])
+        const maxMinutes = Number(maxTime[1])
+        const maxTotalMins = maxHour * 60 + maxMinutes
+
         const defaultStartMins = startTime.hour * 60 + startTime.minute
+
+        const isTooEarly = minTotalMins > defaultStartMins
+        const isTooLate = maxTotalMins < defaultStartMins
         // console.log({
         //     minTotalMins,
         //     defaultStartMins
         // })
-        if (minTotalMins > defaultStartMins) {
+        if (isTooEarly) {
             // console.log('?', startDate.value instanceof Date)
             if (startDate.value instanceof Date) {
                 startDate.value.setHours(minHour, minMinutes, 0, 0)
                 displayStart.value = convertIsoToDisplayTime(startDate.value)
             }
             // console.log('?', startDate.value)
+        }
+        if (isTooLate) {
+            // console.log({
+            //     isTooLate,
+            //     maxHour,
+            //     maxMinutes
+            // })
+            if (startDate.value instanceof Date) {
+                startDate.value.setHours(maxHour, maxMinutes, 0, 0)
+                displayStart.value = convertIsoToDisplayTime(startDate.value)
+            }
         }
     }
 }
@@ -318,11 +340,11 @@ function setEndTimes() {
         // })
 
         if (isTooEarly) {
-            console.log({
-                isTooEarly,
-                minHour,
-                minMinutes
-            })
+            // console.log({
+            //     isTooEarly,
+            //     minHour,
+            //     minMinutes
+            // })
             if (endDate.value instanceof Date) {
                 endDate.value.setHours(minHour + 1, minMinutes, 0, 0)
                 displayEnd.value = convertIsoToDisplayTime(endDate.value)
