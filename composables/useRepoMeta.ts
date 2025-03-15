@@ -16,7 +16,7 @@ export default defineStore('meta', () => {
         const newPromise = await new Promise((resolve, reject) => {
             repoUI.debounce(`getMetaSelectById-${id}`, async () => {
                 if (map.value[id]) {
-                    return map.value[id]
+                    resolve(map.value[id])
                 }
                 const response = await defaultApi.request(`/meta/select/${id}`, {
                     method: 'GET',

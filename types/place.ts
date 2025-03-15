@@ -1,11 +1,18 @@
 /**
- * https://schema.org/Place
+ * https://schema.org/Organization
  */
-export interface IPlace {
-    id?: string,
-    name: string,
-    address: string,
-    addressRegion: string,
-    description: string,
-    publicAccess: boolean, // default by false
+
+export interface IPlace extends IPlaceQuery {
+    name?: string;
+    uid?: string;
+    description?: string,
+    addressRegion?: string, // 第一級行政區
+    address?: string,
+}
+
+export interface IPlaceQuery {
+    id?: string; // doc id
+    organizationId?: string,
+    organizationName?: string,
+    organizationIds?: string[]
 }

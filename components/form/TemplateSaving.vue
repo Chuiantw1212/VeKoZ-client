@@ -51,7 +51,9 @@ async function getMemberOganizationList() {
     const result = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['POST'],
     })
-    membershipList.value = result.items
+    if (result) {
+        membershipList.value = result.items
+    }
 }
 
 async function validate() {

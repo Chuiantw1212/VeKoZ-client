@@ -1,30 +1,32 @@
 import { defineStore } from 'pinia'
 import useVekozApi from './useVekozApi'
+import type { IPlace, IPlaceQuery } from '~/types/place'
 
 export default defineStore('place', () => {
     const defaultApi = useVekozApi()
-    async function getPlaceList() {
+    async function getPlaceList(params: IPlaceQuery) {
         const response = await defaultApi.authRequest(`/place/list`, {
             method: 'GET',
+            params,
         })
         return response.json()
     }
-    async function postPlace(body: any) {
+    async function postPlace(body: IPlace) {
         const response = await defaultApi.authRequest(`/place`, {
             method: 'POST',
             body,
         })
         return response
     }
-    async function putPlace(body: any) {
-        const response = await defaultApi.authRequest(`/place/${body.id}`, {
-            method: 'PUT',
+    async function patchPlace(body: IPlace) {
+        const response = await defaultApi.authRequest(`/place`, {
+            method: 'PATCH',
             body,
         })
         return response
     }
-    async function deletePlace(id: string) {
-        const response = await defaultApi.authRequest(`/place/${id}`, {
+    async function deletePlace(body: IPlace) {
+        const response = await defaultApi.authRequest(`/place`, {
             method: 'DELETE',
         })
         return response
@@ -32,7 +34,7 @@ export default defineStore('place', () => {
     return {
         getPlaceList,
         postPlace,
-        putPlace,
+        patchPlace,
         deletePlace,
     }
 })

@@ -1,24 +1,31 @@
 <template>
-    <el-form class="placeForm" :model="form" label-width="auto">
-        <el-form-item label="連動既存地點">
-            <el-input placeholder="TODO搜尋現有地址" :maxlength="30" :show-word-limit="true" :disabled="true" :prefix-icon="Search">
-            </el-input>
+    <el-form-item label="連動既存地點">
+        <el-input placeholder="TODO搜尋現有地址" :maxlength="30" :show-word-limit="true" :disabled="true"
+            :prefix-icon="Search">
+        </el-input>
+    </el-form-item>
+    <el-divider></el-divider>
+    <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
+        <el-form-item label="所屬組織" prop="organizationId">
+            <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
+                <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
+                    :value="String(item.organizationId)" />
+            </el-select>
         </el-form-item>
-        <el-divider></el-divider>
-        <el-form-item label="地點名稱">
+        <el-form-item label="地點名稱" prop="name">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
-        <el-form-item label="地點描述">
-            <el-input v-model="form.description" placeholder="請輸入" maxlength=" 150" type="textarea"
-            :show-word-limit="true"></el-input>
+        <el-form-item label="地點描述" prop="description">
+            <el-input v-model="form.description" placeholder="請輸入描述、附近地標、接駁資訊等等" maxlength=" 150" type="textarea"
+                :show-word-limit="true"></el-input>
         </el-form-item>
-        <el-form-item label="所在城市">
+        <el-form-item label="所在城市" prop="addressRegion">
             <el-select v-model="form.addressRegion" placeholder="請選擇">
                 <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
             </el-select>
         </el-form-item>
-        <el-form-item label="詳細地址">
+        <el-form-item label="詳細地址" prop="address">
             <el-input v-model="form.address" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
                 :maxlength="120"></el-input>
         </el-form-item>
@@ -33,35 +40,65 @@
 </template>
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
+import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
-const embedApiKey = ref<string>('AIzaSyAb9Vd0fh6OvobZfp0NQEupj3LV_-KW0gc')
+
 const emit = defineEmits(['update:modelValue'])
+const embedApiKey = ref<string>('AIzaSyAb9Vd0fh6OvobZfp0NQEupj3LV_-KW0gc')
 const repoPlace = useRepoPlace()
 const repoMeta = useRepoMeta()
-const props = defineProps({
-    modelValue: {
-        type: Object,
-        default: () => { }
-    }
-})
-const form = computed({
-    get() {
-        return props.modelValue
-    },
-    set(newValue) {
-        emit('update:modelValue', newValue)
+const repoOrganizationMember = useRepoOrganizationMember()
+const repoUser = useRepoUser()
+
+const form = defineModel<IPlace>('modelValue', {
+    default: {
+        organizationId: 'public',
     }
 })
 
-const placeList = ref<IPlace[]>([])
+const membershipList = ref<IOrganizationMember[]>([])
+
+// const placeList = ref<IPlace[]>([])
 const taiwanRegions = ref<any[]>([])
 
-onMounted(() => {
-    getPlaceList()
+// Hooks
+onMounted(async () => {
     getMetaTaiwanCities()
+    // getPlaceList()
+    getMemberOrganizationList()
 })
+const formRules = {
+    // organizationId: { required: true, message: '歸屬組織必填' },
+    name: { required: true, message: '地點名稱必填' },
+    description: { required: true, message: '地點描述必填' },
+    addressRegion: { required: true, message: '所在城市必填' },
+    address: { required: true, message: '詳細地址必填' },
+}
 
-// methods
+// Methods
+async function handleOrganizationChanged(organizationId: string) {
+    repoUser.patchUserPreference('place', {
+        organizationId,
+    })
+    repoPlace
+}
+
+async function getMemberOrganizationList() {
+    const result = await repoOrganizationMember.getMemberOrganizationList({
+        allowMethods: ['GET'],
+    })
+    if (result) {
+        membershipList.value = [
+            {
+                organizationId: 'public',
+                // organizationId: 'any',
+                organizationName: '無歸屬組織',
+            },
+            ...result.items
+        ]
+    }
+}
+
 function getMapSrc() {
     const apiKey = embedApiKey.value
     const address = form.value.address
@@ -69,10 +106,10 @@ function getMapSrc() {
     return src
 }
 
-async function getPlaceList() {
-    const result = await repoPlace.getPlaceList()
-    placeList.value = result
-}
+// async function getPlaceList() {
+//     const result = await repoPlace.getPlaceList()
+//     placeList.value = result
+// }
 
 async function getMetaTaiwanCities() {
     const result = await repoMeta.getMetaSelectById('taiwan')
