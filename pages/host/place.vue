@@ -7,7 +7,7 @@
         <!-- <el-alert type="info" show-icon :closable="false">
         TODO: 等待後臺開發，再行推廣空間的畫面。
     </el-alert> -->
-        <el-table class="mt-20" :data="tableItems">
+        <el-table :key="id" class="mt-20" :data="tableItems">
             <el-table-column prop="organizationName" label="來源組織">
                 <template #default="{ row }">
                     <div class="place__fr">
@@ -15,7 +15,6 @@
                         {{ row.organizationName }}
                     </div>
                 </template>
-
             </el-table-column>
             <el-table-column prop="name" label="地點名稱" />
             <el-table-column prop="address" label="地址" />
@@ -80,8 +79,17 @@ watch(() => repoUser.userInfo, async () => {
         await getMemberOrganizationList()
         await getPlaceList()
         isLoading.value = false
+        id.value = crypto.randomUUID()
     }, 1000)
 }, { immediate: true })
+// watch(() => repoUser.preference, async () => {
+//     // nextTick(() => {
+//     setTimeout(() => {
+//         id.value = crypto.randomUUID()
+
+//     }, 1000)
+//     // })
+// },)
 
 // Methods
 async function getMemberOrganizationList() {
