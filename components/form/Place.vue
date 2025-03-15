@@ -2,7 +2,7 @@
     <el-alert type="info" show-icon :closable="false">
         <ol>
             <li>
-                郊山、廣場等公共空間，無歸屬任何組織
+                郊山、廣場、借來的場地，任何常用但是沒有控制權的空間，無歸屬任何組織
             </li>
             <li>
                 未來連動既存地點，可以將沒有管理權限的地點加入常用地點
@@ -76,10 +76,11 @@ const taiwanRegions = ref<any[]>([])
 
 // Hooks
 onMounted(async () => {
+    // 每次開窗觸發
     getMetaTaiwanCities()
-    // getPlaceList()
     getMemberOrganizationList()
 })
+
 const formRules = {
     // organizationId: { required: true, message: '歸屬組織必填' },
     name: { required: true, message: '地點名稱必填' },

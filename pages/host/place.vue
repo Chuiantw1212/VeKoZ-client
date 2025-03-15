@@ -1,43 +1,44 @@
 <template>
-    <h1>地點管理</h1>
-    <div class="place__ui">
-        <ElButton @click="openNewDialog()">新增地點</ElButton>
-    </div>
-    <!-- <el-alert type="info" show-icon :closable="false">
+    <div v-loading="isLoading" class="place">
+        <div class="place__ui">
+            <!-- 篩選條件 -->
+            <ElButton @click="openNewDialog()">新增地點</ElButton>
+        </div>
+        <!-- <el-alert type="info" show-icon :closable="false">
         TODO: 等待後臺開發，再行推廣空間的畫面。
     </el-alert> -->
+        <el-table class="mt-20" :data="tableItems">
+            <el-table-column prop="organizationName" label="來源組織">
+                <template #default="{ row }">
+                    <div class="place__fr">
+                        <el-avatar :src="row.organizationLogo"></el-avatar>
+                        {{ row.organizationName }}
+                    </div>
+                </template>
 
-    <el-table class="mt-20" :data="tableItems">
-        <el-table-column prop="organizationName" label="來源組織">
-            <template #default="{ row }">
-                <div class="place__fr">
-                    <el-avatar :src="row.organizationLogo"></el-avatar>
-                    {{ row.organizationName }}
-                </div>
-            </template>
+            </el-table-column>
+            <el-table-column prop="name" label="地點名稱" />
+            <el-table-column prop="address" label="地址" />
+            <el-table-column prop="description" label="描述" />
+            <el-table-column fixed="right" label="功能">
+                <template #default="{ row }">
+                    <el-button :icon="Edit" plain circle @click="editPlaceDialog(row)"></el-button>
+                    <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
 
-        </el-table-column>
-        <el-table-column prop="name" label="地點名稱" />
-        <el-table-column prop="address" label="地址" />
-        <el-table-column prop="description" label="描述" />
-        <el-table-column fixed="right" label="功能">
-            <template #default="{ row }">
-                <el-button :icon="Edit" plain circle @click="editPlaceDialog(row)"></el-button>
-                <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
 
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
-
-    <VenoniaDialog v-model="placeDialog.visibility" class="event__template">
+    <VenoniaDialog v-model="placeDialogVisible" class="event__template">
         <template #header>
             地點設定
         </template>
-        <FormPlace v-if="placeDialog.visibility" v-model="form" :mode="placeDialog.mode">
+        <FormPlace v-if="placeDialogVisible" v-model="form">
         </FormPlace>
         <template #footer>
-            <el-button @click="placeDialog.visibility = false">取消</el-button>
+            <el-button @click="placeDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">
                 確認
             </el-button>
@@ -52,8 +53,12 @@ import type { IPlace } from '~/types/place'
 import { Edit, Delete } from '@element-plus/icons-vue'
 
 // Data
+const id = ref<string>(crypto.randomUUID())
+const isLoading = ref<boolean>(true)
 const repoPlace = useRepoPlace()
 const repoOrganizationMember = useRepoOrganizationMember()
+const repoUser = useRepoUser()
+const repoUI = useRepoUI()
 
 const tableItems = ref([])
 const membershipList = ref<IOrganizationMember[]>([])
@@ -66,16 +71,17 @@ const form = ref<IPlace>({
     organizationName: '無歸屬組織',
 })
 
-const placeDialog = reactive({
-    visibility: false,
-    mode: '',
-})
+const placeDialogVisible = ref<boolean>(false)
 
 // Hooks
-onMounted(async () => {
-    await getMemberOrganizationList()
-    getPlaceList()
-})
+watch(() => repoUser.userInfo, async () => {
+    isLoading.value = true
+    repoUI.debounce(id.value, async () => {
+        await getMemberOrganizationList()
+        await getPlaceList()
+        isLoading.value = false
+    }, 1000)
+}, { immediate: true })
 
 // Methods
 async function getMemberOrganizationList() {
@@ -103,8 +109,7 @@ function openNewDialog() {
         organizationId: 'public',
         organizationName: '無歸屬組織',
     }
-    placeDialog.visibility = true
-    placeDialog.mode = 'ADD'
+    placeDialogVisible.value = true
 }
 
 function editPlaceDialog(item: IPlace) {
@@ -113,29 +118,27 @@ function editPlaceDialog(item: IPlace) {
         organizationName: '無歸屬組織',
     }
     Object.assign(form.value, item)
-    placeDialog.visibility = true
-    placeDialog.mode = 'EDIT'
+    placeDialogVisible.value = true
 }
 
 async function hanelDialogConfirm() {
-    if (placeDialog.mode === 'ADD') {
-        postPlace()
-    }
-    if (placeDialog.mode === 'EDIT') {
+    if (form.value.id) {
         patchPlace()
+    } else {
+        postPlace()
     }
 }
 
 async function postPlace() {
     await repoPlace.postPlace(form.value)
     getPlaceList()
-    placeDialog.visibility = false
+    placeDialogVisible.value = false
 }
 
 async function patchPlace() {
     await repoPlace.patchPlace(form.value)
     getPlaceList()
-    placeDialog.visibility = false
+    placeDialogVisible.value = false
 }
 
 async function deletePlace(row: IPlace) {
