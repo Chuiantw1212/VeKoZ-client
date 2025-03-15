@@ -5,10 +5,10 @@
             </el-input>
         </el-form-item>
         <el-divider></el-divider>
-        <el-form-item label="名稱">
+        <el-form-item label="地點名稱">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
         </el-form-item>
-        <el-form-item label="描述">
+        <el-form-item label="地點描述">
             <el-input v-model="form.description" placeholder="請輸入" maxlength=" 150" type="textarea"
             :show-word-limit="true"></el-input>
         </el-form-item>
