@@ -7,7 +7,8 @@
         TODO: 等待後臺開發，再行推廣空間的畫面。
     </el-alert>
 
-    <el-table class="mt-20" :data="tableItems" style="width: 100%">
+    <el-table class="mt-20" :data="tableItems">
+        <el-table-column prop="organizerId" label="來源組織" />
         <el-table-column prop="name" label="地點名稱" />
         <el-table-column prop="address" label="地址" />
         <el-table-column prop="description" label="描述" />

@@ -1,10 +1,23 @@
 <template>
-    <el-form-item label="連動既存地點">
+    <el-alert type="info" show-icon :closable="false">
+        <ol>
+            <li>
+                郊山、廣場等公共空間，無歸屬任何組織
+            </li>
+            <li>
+                未來連動既存地點，可以將沒有管理權限的地點加入常用地點
+            </li>
+        </ol>
+        <!-- 
+        1. 連動後的地點，uid將為自己，但是要被原屬的地點透過sourceId更新
+        -->
+    </el-alert>
+    <!-- <el-form-item class="mt-20" label="連動既存地點">
         <el-input placeholder="TODO搜尋現有地址" :maxlength="30" :show-word-limit="true" :disabled="true"
             :prefix-icon="Search">
         </el-input>
     </el-form-item>
-    <el-divider></el-divider>
+    <el-divider>地點詳細資料</el-divider> -->
     <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
         <el-form-item label="所屬組織" prop="organizationId">
             <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
@@ -92,7 +105,7 @@ async function getMemberOrganizationList() {
             {
                 organizationId: 'public',
                 // organizationId: 'any',
-                organizationName: '無歸屬組織',
+                organizationName: '無歸屬任何組織',
             },
             ...result.items
         ]
@@ -119,8 +132,16 @@ async function getMetaTaiwanCities() {
 
 </script>
 <style lang="scss" scoped>
+.placeForm {
+    margin-top: 20px;
+}
+
 .placeForm__iframe {
     width: 100%;
     height: 450px;
+}
+
+.mt-20 {
+    margin-top: 20px;
 }
 </style>
