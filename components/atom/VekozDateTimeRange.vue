@@ -64,16 +64,16 @@ function setDefaultValue() {
             startDate.value = new Date(currentYear, currentMonth, currentDate, defaultTime.hour, defaultTime.minute)
         }
     }
-    console.log('wtf ', typeof startDate.value)
+    // console.log('wtf ', typeof startDate.value)
     if (typeof startDate.value === 'string') {
         // console.log('why ', typeof startDate.value)
         const formatStartDate = new Date(startDate.value)
         // console.log('formatStartDate ', formatStartDate instanceof Date)
         startDate.value = formatStartDate
     }
-    console.log('startDate.value', startDate.value)
-    console.log('typeof ', typeof startDate.value)
-    console.log('instanceOf ', startDate.value instanceof Date)
+    // console.log('startDate.value', startDate.value)
+    // console.log('typeof ', typeof startDate.value)
+    // console.log('instanceOf ', startDate.value instanceof Date)
     if (startDate.value instanceof Date) {
         const isValidStart = !isNaN(startDate.value.getTime())
         if (!isValidStart) {

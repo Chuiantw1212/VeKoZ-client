@@ -8,6 +8,7 @@
             <option v-for="time in startTimes" class="select__option">{{ time }}</option>
         </select>
         -
+        <!-- {{ endDate }} -->
         <!-- {{ displayEnd }} -->
         <select v-model="displayEnd" class="timeRangePicker__select" :disabled="props.disabled" @change="setEndDate()">
             <option v-for="time in endTimes" class="select__option">{{ time }}</option>
@@ -73,17 +74,38 @@ watch(() => props.maxDate, () => {
 
 // Methods
 function setStartDate() {
+    if (!startDate.value || !isValidDate(startDate.value) || !endDate.value || !isValidDate(endDate.value)) {
+        const currentDateInstance = new Date()
+        const currentYear = currentDateInstance.getFullYear()
+        const currentMonth = currentDateInstance.getMonth()
+        const currentDate = currentDateInstance.getDate()
+        const currentTime = getTime(currentDateInstance)
+        if (currentTime) {
+            startDate.value = new Date(currentYear, currentMonth, currentDate, currentTime.hour, currentTime.minute, 0, 0)
+            endDate.value = new Date(currentYear, currentMonth, currentDate, currentTime.hour + 1, currentTime.minute, 0, 0)
+        }
+    }
+    console.log(startDate.value)
+    if (!startDate.value || !endDate.value) {
+        // 清除type error
+        return
+    }
     let duration = 0
-    let startDateInstance = startDate.value
-    if (!(startDateInstance instanceof Date)) {
-        startDateInstance = new Date(startDate.value ?? '')
+    // let startDateInstance = startDate.value
+    // if (startDate.value) {
+    if (!(startDate.value instanceof Date)) {
+        startDate.value = new Date(startDate.value)
     }
-    let endDateInstance = endDate.value
-    if (!(endDateInstance instanceof Date)) {
-        endDateInstance = new Date(endDate.value ?? '')
+    // }
+    // let endDateInstance = endDate.value
+    // if (endDate.value) {
+    if (!(endDate.value instanceof Date)) {
+        endDate.value = new Date(endDate.value)
     }
-    const startTime = startDateInstance.getTime()
-    const endTime = endDateInstance.getTime()
+    // }
+
+    const startTime = startDate.value.getTime()
+    const endTime = endDate.value.getTime()
     duration = endTime - startTime
 
     const newStartDate = convertDisplayToDate(displayStart.value)
@@ -92,8 +114,14 @@ function setStartDate() {
     const newStartTime = newStartDate.getTime()
     endDate.value = new Date(newStartTime + duration)
 
-    setEndTimes()
+    nextTick(() => {
+        setEndTimes()
+    })
 }
+
+// function isValidDate(d: any) {
+//     return d instanceof Date && !isNaN(d.getTime());
+// }
 
 function setEndDate() {
     const newEndDate = convertDisplayToDate(displayEnd.value)
@@ -223,6 +251,97 @@ function setStartTimes() {
     }
 }
 
+function setEndTimes() {
+    const displayTime = displayStart.value.split(':')
+    const startHour = Number(displayTime[0]) ?? 6
+    const startMinutes = Number(displayTime[1]) ?? 45
+    endTimes.value = []
+
+    let maxDateInstance = props.maxDate
+    if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
+        maxDateInstance = new Date(maxDateInstance)
+    }
+    let maxHours = 23
+    let maxMinutes = 45
+    if (isValidDate(maxDateInstance)) {
+        maxHours = maxDateInstance?.getHours() ?? 23
+        maxMinutes = maxDateInstance?.getMinutes() ?? 45
+    }
+
+    for (let hour = startHour; hour <= maxHours; hour++) {
+        minutes.value.forEach((minute: string) => {
+            const hourString = String(hour).padStart(2, '0')
+            const minuteString = minute
+
+            const isLargerThanStart = !(hour === startHour && Number(minute) < startMinutes)
+            const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
+            if (isLargerThanStart && isSmallerThanMax) {
+                endTimes.value.push(`${hourString}:${minuteString}`)
+            }
+        })
+    }
+
+    const endTime = getTime(endDate.value)
+    // console.log(endTimes.value)
+
+    const firstOption = endTimes.value[0]
+    const lastOption = endTimes.value[endTimes.value.length - 1]
+    if (firstOption && lastOption && endTime) {
+        // Min Time
+        const minTime = firstOption.split(':')
+        const minHour = Number(minTime[0])
+        const minMinutes = Number(minTime[1])
+        const minTotalMins = minHour * 60 + minMinutes
+        // console.log({
+        //     minTotalMins,
+        // })
+
+        // Max Time
+        const maxTime = lastOption.split(':')
+        const maxHour = Number(maxTime[0])
+        const maxMinutes = Number(maxTime[1])
+        const maxTotalMins = maxHour * 60 + maxMinutes
+        // console.log({
+        //     maxTotalMins,
+        // })
+
+        const defaultEndMins = endTime.hour * 60 + endTime.minute
+        // console.log({
+        //     defaultEndMins
+        // })
+        const isTooEarly = minTotalMins > defaultEndMins
+        const isTooLate = maxTotalMins < defaultEndMins
+        // console.log({
+        //     isTooEarly,
+        //     isTooLate,
+        //     endTime,
+        // })
+
+        if (isTooEarly) {
+            console.log({
+                isTooEarly,
+                minHour,
+                minMinutes
+            })
+            if (endDate.value instanceof Date) {
+                endDate.value.setHours(minHour + 1, minMinutes, 0, 0)
+                displayEnd.value = convertIsoToDisplayTime(endDate.value)
+            }
+        }
+        if (isTooLate) {
+            // console.log({
+            //     isTooLate,
+            //     maxHour,
+            //     maxMinutes
+            // })
+            if (endDate.value instanceof Date) {
+                endDate.value.setHours(maxHour, maxMinutes, 0, 0)
+                displayEnd.value = convertIsoToDisplayTime(endDate.value)
+            }
+        }
+    }
+}
+
 function getTime(incomingDate: Date | string | null) {
     if (!incomingDate) {
         return
@@ -249,72 +368,6 @@ function isValidDate(d: any) {
     return d instanceof Date && !isNaN(d.getTime());
 }
 
-function setEndTimes() {
-    const displayTime = displayStart.value.split(':')
-    const startHour = Number(displayTime[0]) ?? 6
-    const startMinutes = Number(displayTime[1]) ?? 45
-    endTimes.value = []
-
-    let maxDateInstance = props.maxDate
-    if (maxDateInstance && !(maxDateInstance instanceof Date) || typeof maxDateInstance === 'string') {
-        maxDateInstance = new Date(maxDateInstance)
-    }
-    let maxHours = 23
-    let maxMinutes = 45
-    if (isValidDate(maxDateInstance)) {
-        maxHours = maxDateInstance?.getHours() ?? 23
-        maxMinutes = maxDateInstance?.getMinutes() ?? 45
-    }
-
-    // console.log(startHour)
-    for (let hour = startHour; hour <= maxHours; hour++) {
-        minutes.value.forEach((minute: string) => {
-            const hourString = String(hour).padStart(2, '0')
-            const minuteString = minute
-
-            const isLargerThanStart = !(hour === startHour && Number(minute) < startMinutes)
-            const isSmallerThanMax = !(hour === maxHours && Number(minute) > maxMinutes)
-            // console.log({
-            //     hour,
-            //     maxHours,
-            //     minute,
-            //     maxMinutes
-            // })
-            if (isLargerThanStart && isSmallerThanMax) {
-                endTimes.value.push(`${hourString}:${minuteString}`)
-            }
-        })
-    }
-
-    const endTime = getTime(endDate.value)
-    const firstOption = endTimes.value[0]
-    const lastOption = endTimes.value[endTimes.value.length - 1]
-    if (firstOption && lastOption && endTime) {
-        // Min Time
-        const minTime = firstOption.split(':')
-        const minHour = Number(minTime[0])
-        const minMinutes = Number(minTime[1])
-        const minTotalMins = minHour * 60 + minMinutes
-
-        // Max Time
-        const maxTime = lastOption.split(':')
-        const maxHour = Number(maxTime[0])
-        const maxMinutes = Number(maxTime[1])
-        const maxTotalMins = maxHour * 60 + maxMinutes
-
-        const defaultEndMins = endTime.hour * 60 + endTime.minute
-        // console.log({
-        //     maxTotalMins,
-        //     defaultEndMins
-        // })
-        if (maxTotalMins < defaultEndMins || minTotalMins > defaultEndMins) {
-            if (endDate.value instanceof Date) {
-                endDate.value.setHours(maxHour, maxMinutes, 0, 0)
-                displayEnd.value = convertIsoToDisplayTime(endDate.value)
-            }
-        }
-    }
-}
 </script>
 <style lang="scss" scoped>
 .timeRangePicker {
