@@ -43,11 +43,12 @@
                 </el-col>
                 <el-col :span="formFieldSpan">
                     <el-form-item label="售票單位">
-                        <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇"
+                        {{ groupOffers[0].sellerName }}
+                        <!-- <el-select v-model="groupOffers[0].sellerId" placeholder="請選擇"
                             @change="patchOfferCategory(groupOffers[0])" :disabled="checkOfferIsOver(groupOffers[0])">
                             <el-option v-for="(item, index) in props.organizationList" :key="index"
                                 :label="`${item.name}`" :value="String(item.id)" />
-                        </el-select>
+                        </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="formFieldSpan">

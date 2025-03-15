@@ -173,6 +173,7 @@ async function validiateForm() {
             if (isValid) {
                 await repoEvent.patchEventCalendar({
                     id: dialogEventTemplate.value.id,
+                    organizerId: dialogEventTemplate.value.organizerId,
                     isPublic: true,
                 })
                 calendarEvent.setProp('backgroundColor', '')
@@ -182,6 +183,7 @@ async function validiateForm() {
         } else {
             await repoEvent.patchEventCalendar({
                 id: dialogEventTemplate.value.id,
+                organizerId: dialogEventTemplate.value.organizerId,
                 isPublic: false,
             })
         }
@@ -189,6 +191,7 @@ async function validiateForm() {
         dialogEventTemplate.value.isPublic = false
         await repoEvent.patchEventCalendar({
             id: dialogEventTemplate.value.id,
+            organizerId: dialogEventTemplate.value.organizerId,
             isPublic: false,
         })
     }
