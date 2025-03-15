@@ -14,5 +14,6 @@ export interface IPlaceQuery {
     id?: string; // doc id
     organizationId?: string,
     organizationName?: string,
+    organizationLogo?: string,
     organizationIds?: string[]
 }

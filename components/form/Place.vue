@@ -93,7 +93,13 @@ async function handleOrganizationChanged(organizationId: string) {
     repoUser.patchUserPreference('place', {
         organizationId,
     })
-    repoPlace
+    const selectedMembership = membershipList.value.find(member => {
+        return member.organizationId === organizationId
+    })
+    if (selectedMembership) {
+        form.value.organizationLogo = selectedMembership.organizationLogo
+        form.value.organizationName = selectedMembership.organizationName
+    }
 }
 
 async function getMemberOrganizationList() {

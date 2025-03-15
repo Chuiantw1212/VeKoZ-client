@@ -1,22 +1,30 @@
 <template>
-    <div class="venonia-header">
-        <h1>地點管理</h1>
+    <h1>地點管理</h1>
+    <div class="place__ui">
         <ElButton @click="openNewDialog()">新增地點</ElButton>
     </div>
-    <el-alert type="info" show-icon :closable="false">
+    <!-- <el-alert type="info" show-icon :closable="false">
         TODO: 等待後臺開發，再行推廣空間的畫面。
-    </el-alert>
+    </el-alert> -->
 
     <el-table class="mt-20" :data="tableItems">
-        <el-table-column prop="organizerId" label="來源組織" />
+        <el-table-column prop="organizationName" label="來源組織">
+            <template #default="{ row }">
+                <div class="place__fr">
+                    <el-avatar :src="row.organizationLogo"></el-avatar>
+                    {{ row.organizationName }}
+                </div>
+            </template>
+
+        </el-table-column>
         <el-table-column prop="name" label="地點名稱" />
         <el-table-column prop="address" label="地址" />
         <el-table-column prop="description" label="描述" />
         <el-table-column fixed="right" label="功能">
             <template #default="{ row }">
-                <el-button link type="primary" size="small" @click="editPlaceDialog(row)">編輯空間</el-button>
-                <el-button link type="danger" size="small" @click="deletePlace(row)">
-                    刪除
+                <el-button :icon="Edit" plain circle @click="editPlaceDialog(row)"></el-button>
+                <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
+
                 </el-button>
             </template>
         </el-table-column>
@@ -41,6 +49,7 @@
 import VenoniaDialog from '~/components/atom/VekozDialog.vue'
 import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
+import { Edit, Delete } from '@element-plus/icons-vue'
 
 // Data
 const repoPlace = useRepoPlace()
@@ -84,7 +93,7 @@ async function getPlaceList() {
     })
     if (organizationIds) {
         tableItems.value = await repoPlace.getPlaceList({
-            organizationIds: [...organizationIds, 'public'],
+            organizationIds: organizationIds,
         })
     }
 }
@@ -151,6 +160,17 @@ async function deletePlace(row: IPlace) {
 }
 </script>
 <style lang="scss" scoped>
+.place__fr {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.place__ui {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .mt-20 {
     margin-top: 20px;
 }
