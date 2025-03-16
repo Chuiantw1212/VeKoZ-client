@@ -5,7 +5,7 @@
     <el-form class="placeForm" label-width="auto">
         <!-- https://element-plus.org/en-US/component/select.html#remote-search -->
         <el-form-item label="空間管理組織" prop="organizationId">
-            <el-select v-model="searchForm.name" filterable remote reserve-keyword :remote-method="getOrganizationList"
+            <el-select v-model="searchForm.name" filterable remote reserve-keyword :loading="isLoading" :remote-method="getOrganizationList"
                 placeholder="請選擇">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="`${item.name}`"
                     :value="String(item.name)" @click="selectOrganization(item)" />
@@ -57,7 +57,9 @@ const searchForm = ref<IOrganizationQuery>({
     name: '',
 })
 const selectedPlaceId = ref<string>()
-const currentPlace = ref<IPlace>({})
+const currentPlace = defineModel<IPlace>('modelValue', {
+    required: true,
+})
 const organizationList = ref<IOrganization[]>([])
 const placeList = ref<IPlace[]>([])
 const isLoading = ref<boolean>(false)
@@ -77,6 +79,8 @@ async function onPlaceChanged(placeId: string) {
         return place.id === placeId
     })
     if (selectedPlace) {
+        // 不使用以下刪除，而是沿用過去組織的id取代新欄位
+        // delete selectedPlace.id // 觸發為新增
         currentPlace.value = selectedPlace
     }
 }
