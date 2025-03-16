@@ -54,7 +54,7 @@
         </FormPlaceConnecting>
         <template #footer>
             <el-button @click="connectPlaceDialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="hanelDialogConfirm()">
+            <el-button type="primary" @click="postPlace()">
                 確認
             </el-button>
         </template>
@@ -86,7 +86,6 @@ const placeForm = ref<IPlace>({
     organizationId: 'public',
     organizationName: '無歸屬組織',
 })
-
 const addPlaceDialogVisible = ref<boolean>(false)
 const connectPlaceDialogVisible = ref<boolean>(false)
 
@@ -165,6 +164,9 @@ async function hanelDialogConfirm() {
     }
 }
 
+/**
+ * 新增或是連動
+ */
 async function postPlace() {
     await repoPlace.postPlace(placeForm.value)
     getPlaceList()
