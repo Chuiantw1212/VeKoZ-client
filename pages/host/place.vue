@@ -2,7 +2,8 @@
     <div v-loading="isLoading" class="place">
         <div class="place__ui">
             <!-- 篩選條件 -->
-            <ElButton @click="openNewDialog()">新增地點</ElButton>
+            <ElButton :icon="AddLocation" @click="openNewDialog()">新增地點</ElButton>
+            <!-- <ElButton :icon="Connection" @click="openConnectDialog()">連動既有地點</ElButton> -->
         </div>
         <!-- <el-alert type="info" show-icon :closable="false">
         TODO: 等待後臺開發，再行推廣空間的畫面。
@@ -31,14 +32,28 @@
         </el-table>
     </div>
 
-    <VenoniaDialog v-model="placeDialogVisible" class="event__template">
+    <VenoniaDialog v-model="addPlaceDialogVisible" class="event__template">
         <template #header>
-            地點設定
+            地點新增
         </template>
-        <FormPlace v-if="placeDialogVisible" v-model="form">
+        <FormPlace v-if="addPlaceDialogVisible" v-model="placeForm">
         </FormPlace>
         <template #footer>
-            <el-button @click="placeDialogVisible = false">取消</el-button>
+            <el-button @click="addPlaceDialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="hanelDialogConfirm()">
+                確認
+            </el-button>
+        </template>
+    </VenoniaDialog>
+
+    <VenoniaDialog v-model="addPlaceDialogVisible" class="event__template">
+        <template #header>
+            地點新增
+        </template>
+        <FormPlace v-if="addPlaceDialogVisible" v-model="placeForm">
+        </FormPlace>
+        <template #footer>
+            <el-button @click="addPlaceDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">
                 確認
             </el-button>
@@ -50,7 +65,7 @@
 import VenoniaDialog from '~/components/atom/VekozDialog.vue'
 import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
-import { Edit, Delete } from '@element-plus/icons-vue'
+import { Edit, Delete, AddLocation, Connection } from '@element-plus/icons-vue'
 
 // Data
 const id = ref<string>(crypto.randomUUID())
@@ -63,7 +78,7 @@ const repoUI = useRepoUI()
 const tableItems = ref([])
 const membershipList = ref<IOrganizationMember[]>([])
 
-const form = ref<IPlace>({
+const placeForm = ref<IPlace>({
     name: '',
     address: '',
     description: '',
@@ -71,7 +86,8 @@ const form = ref<IPlace>({
     organizationName: '無歸屬組織',
 })
 
-const placeDialogVisible = ref<boolean>(false)
+const addPlaceDialogVisible = ref<boolean>(false)
+const connectPlaceDialogVisible = ref<boolean>(false)
 
 // Hooks
 watch(() => repoUser.userInfo, async () => {
@@ -83,14 +99,6 @@ watch(() => repoUser.userInfo, async () => {
         id.value = crypto.randomUUID()
     }, 1000)
 }, { immediate: true })
-// watch(() => repoUser.preference, async () => {
-//     // nextTick(() => {
-//     setTimeout(() => {
-//         id.value = crypto.randomUUID()
-
-//     }, 1000)
-//     // })
-// },)
 
 // Methods
 function checkPlaceDeletable(place: IPlace) {
@@ -128,24 +136,28 @@ async function getPlaceList() {
 }
 
 function openNewDialog() {
-    form.value = {
+    placeForm.value = {
         organizationId: 'public',
         organizationName: '無歸屬組織',
     }
-    placeDialogVisible.value = true
+    addPlaceDialogVisible.value = true
 }
 
 function editPlaceDialog(item: IPlace) {
-    form.value = {
+    placeForm.value = {
         organizationId: 'public',
         organizationName: '無歸屬組織',
     }
-    Object.assign(form.value, item)
-    placeDialogVisible.value = true
+    Object.assign(placeForm.value, item)
+    addPlaceDialogVisible.value = true
+}
+
+function openConnectDialog() {
+    connectPlaceDialogVisible.value = true
 }
 
 async function hanelDialogConfirm() {
-    if (form.value.id) {
+    if (placeForm.value.id) {
         patchPlace()
     } else {
         postPlace()
@@ -153,15 +165,15 @@ async function hanelDialogConfirm() {
 }
 
 async function postPlace() {
-    await repoPlace.postPlace(form.value)
+    await repoPlace.postPlace(placeForm.value)
     getPlaceList()
-    placeDialogVisible.value = false
+    addPlaceDialogVisible.value = false
 }
 
 async function patchPlace() {
-    await repoPlace.patchPlace(form.value)
+    await repoPlace.patchPlace(placeForm.value)
     getPlaceList()
-    placeDialogVisible.value = false
+    addPlaceDialogVisible.value = false
 }
 
 async function deletePlace(row: IPlace) {
