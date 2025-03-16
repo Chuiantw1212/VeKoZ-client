@@ -14,6 +14,7 @@ export interface IPlaceQuery {
     id?: string; // doc id
     organizationId?: string,
     organizationIds?: string[] // 集合多個組織的地點一起做分頁查詢
+    email?: string, // 建立者的email，關聯使用
     organizationName?: string,
     organizationLogo?: string,
 }

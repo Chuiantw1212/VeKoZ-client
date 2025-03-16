@@ -6,13 +6,14 @@
         <!-- https://element-plus.org/en-US/component/select.html#remote-search -->
         <el-form-item label="空間管理組織" prop="organizationId">
             <el-select v-model="searchForm.name" filterable remote reserve-keyword :loading="isLoading"
-                :remote-method="getOrganizationList" placeholder="請選擇">
+                :remote-method="getOrganizationList" placeholder="請輸入組織名稱">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="`${item.name}`"
                     :value="String(item.name)" @click="selectOrganization(item)" />
             </el-select>
         </el-form-item>
         <el-form-item label="組織所屬空間">
-            <el-select v-model="selectedPlaceId" placeholder="請選擇" @change="onPlaceChanged($event)">
+            <el-select v-model="selectedPlaceId" placeholder="請選擇" :disabled="!searchForm.name"
+                @change="onPlaceChanged($event)">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="`${item.name}`"
                     :value="String(item.id)" />
             </el-select>

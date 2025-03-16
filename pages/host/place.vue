@@ -2,13 +2,18 @@
     <div v-loading="isLoading" class="place">
         <div class="place__ui">
             <!-- 篩選條件 -->
-            <ElButton :icon="AddLocation" @click="openNewDialog()">新增地點</ElButton>
             <ElButton :icon="Connection" @click="openConnectDialog()">連動既有地點</ElButton>
+            <ElButton :icon="AddLocation" @click="openNewDialog()">自行新增地點</ElButton>
         </div>
-        <!-- <el-alert type="info" show-icon :closable="false">
-        TODO: 等待後臺開發，再行推廣空間的畫面。
-    </el-alert> -->
-        <el-table :key="id" class="mt-20" :data="tableItems">
+        <el-divider>已連動地點</el-divider>
+        <el-table :key="id" class="mt-20" :data="syncTableItems">
+            <el-table-column prop="addressRegion" label="縣市">
+                <template #default="{ row }">
+                    {{ getRegionLabel(row.addressRegion) }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="address" label="地址" />
+            <el-table-column prop="name" label="地點名稱" />
             <el-table-column prop="organizationName" label="來源組織">
                 <template #default="{ row }">
                     <div class="place__fr">
@@ -17,9 +22,36 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="name" label="地點名稱" />
+            <!-- <el-table-column prop="description" label="描述" /> -->
+            <el-table-column fixed="right" label="功能">
+                <template #default="{ row }">
+                    <el-button :icon="Edit" plain circle :disabled="checkPlaceEditable(row)"
+                        @click="editPlaceDialog(row)"></el-button>
+                    <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
+                        @click="deletePlace(row)">
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <el-divider>已新增地點</el-divider>
+        <el-table :key="id" class="mt-20" :data="controlledTableItems">
+            <el-table-column prop="addressRegion" label="縣市">
+                <template #default="{ row }">
+                    {{ getRegionLabel(row.addressRegion) }}
+                </template>
+            </el-table-column>
             <el-table-column prop="address" label="地址" />
-            <el-table-column prop="description" label="描述" />
+            <el-table-column prop="name" label="地點名稱" />
+            <el-table-column prop="organizationName" label="來源組織">
+                <template #default="{ row }">
+                    <div class="place__fr">
+                        <el-avatar :src="row.organizationLogo"></el-avatar>
+                        {{ row.organizationName }}
+                    </div>
+                </template>
+            </el-table-column>
+            <!-- <el-table-column prop="description" label="描述" /> -->
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
                     <el-button :icon="Edit" plain circle :disabled="checkPlaceEditable(row)"
@@ -31,7 +63,6 @@
             </el-table-column>
         </el-table>
     </div>
-
     <VenoniaDialog v-model="addPlaceDialogVisible" class="event__template">
         <template #header>
             地點新增
@@ -67,6 +98,7 @@ import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import { Edit, Delete, AddLocation, Connection } from '@element-plus/icons-vue'
 import { FormPlaceAdding } from '#components'
+import type { ISelectOption } from '~/types/meta'
 
 // Data
 const id = ref<string>(crypto.randomUUID())
@@ -75,8 +107,11 @@ const repoPlace = useRepoPlace()
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUser = useRepoUser()
 const repoUI = useRepoUI()
+const repoMeta = useRepoMeta()
 
-const tableItems = ref([])
+const taiwanRegions = ref<ISelectOption[]>([])
+const syncTableItems = ref<IPlace[]>([])
+const controlledTableItems = ref<IPlace[]>([])
 const membershipList = ref<IOrganizationMember[]>([])
 
 const placeForm = ref<IPlace>({
@@ -90,9 +125,13 @@ const addPlaceDialogVisible = ref<boolean>(false)
 const connectPlaceDialogVisible = ref<boolean>(false)
 
 // Hooks
+onMounted(() => {
+    getMetaSelectById()
+})
 watch(() => repoUser.userInfo, async () => {
     isLoading.value = true
     repoUI.debounce(id.value, async () => {
+        getSyncPlaces()
         await getMemberOrganizationList()
         await getPlaceList()
         isLoading.value = false
@@ -101,6 +140,24 @@ watch(() => repoUser.userInfo, async () => {
 }, { immediate: true })
 
 // Methods
+async function getSyncPlaces() {
+    syncTableItems.value = await repoPlace.getPlaceList({
+        email: repoUser.userInfo.email,
+    })
+}
+
+function getRegionLabel(region: string) {
+    const matchedRegion = taiwanRegions.value.find(item => {
+        return item.value === region
+    })
+    return matchedRegion?.label
+}
+
+async function getMetaSelectById() {
+    const result = await repoMeta.getMetaSelectById('taiwan')
+    taiwanRegions.value = result
+}
+
 function checkPlaceDeletable(place: IPlace) {
     const placeOrganization = membershipList.value.find(member => {
         return member.organizationId === place.organizationId
@@ -129,8 +186,8 @@ async function getPlaceList() {
         return member.organizationId ?? ''
     })
     if (organizationIds) {
-        tableItems.value = await repoPlace.getPlaceList({
-            organizationIds: organizationIds,
+        controlledTableItems.value = await repoPlace.getPlaceList({
+            organizationIds: [...organizationIds, 'public'],
         })
     }
 }
