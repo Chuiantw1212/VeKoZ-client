@@ -47,8 +47,8 @@
             <template #header>
                 <el-avatar :src="dialogEventTemplate.organizerLogo"></el-avatar>
                 <el-text size="large">
-                    活動編輯
-                    ({{ dialogEventTemplate.id }})
+                    {{ dialogEventTemplate.organizerName }}的活動
+                    <!-- ({{ dialogEventTemplate.id }}) -->
                 </el-text>
             </template>
             <template #headerUI>

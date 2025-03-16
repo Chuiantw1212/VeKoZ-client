@@ -41,8 +41,10 @@
                         </el-card>
                     </el-carousel-item>
                 </el-carousel>
+                <!-- {{ editorDesign.value }} -->
                 <el-card class="event__mt">
-                    <div v-html="editorDesign.value"></div>
+                    <AtomVenoniaEditor :model-value="editorDesign.value" :toolbar="[]" :disabled="true"></AtomVenoniaEditor>
+                    <!-- <div v-html="editorDesign.value"></div> -->
                 </el-card>
                 <!-- <el-card class="event__mt">
                     活動群組
