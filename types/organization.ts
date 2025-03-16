@@ -1,9 +1,8 @@
 import type { IPagination } from "./ui"
 
-export interface IOrganization {
+export interface IOrganization extends IOrganizationQuery {
     id?: string,
     seoName?: string,
-    name?: string,
     description?: string,
     logo?: any,
     banner?: any,
@@ -13,6 +12,11 @@ export interface IOrganization {
     lastmod?: string,
     designs?: any[],
     founderId?: string,
+    keywords?: string[],
+}
+
+export interface IOrganizationQuery {
+    name?: string,
 }
 
 /**

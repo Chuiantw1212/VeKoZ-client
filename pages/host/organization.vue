@@ -142,6 +142,7 @@ async function getOrganizationMemberships() {
         const organization = await repoOrganization.getOrganization(String(organizationId))
         currentPublicInfo.value = convertPublicInfo(organization)
     }
+    isLoading.value = false
 }
 
 async function createOrganization() {

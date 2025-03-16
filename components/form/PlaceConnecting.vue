@@ -16,18 +16,19 @@
         -->
     </el-alert>
     <el-form class="placeForm" :model="searchForm" label-width="auto" :rules="searchFormRules">
+        <!-- https://element-plus.org/en-US/component/select.html#remote-search -->
         <el-form-item label="空間管理組織" prop="organizationId">
-            <el-input placeholder="搜尋現有組織" :maxlength="30" :show-word-limit="true" :prefix-icon="Search">
-            </el-input>
-            <!-- <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
-                <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
-                    :value="String(item.organizationId)" />
-            </el-select> -->
+            <el-select v-model="searchForm.name" filterable remote reserve-keyword
+                :remote-method="getOrganizationList" placeholder="請選擇">
+                <el-option v-for="(item, index) in organizationList" :key="index" :label="`${item.name}`"
+                    :value="String(item.id)" />
+            </el-select>
         </el-form-item>
         <el-form-item label="組織所屬空間" prop="name">
             <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" :disabled="true" />
         </el-form-item>
     </el-form>
+    <el-divider>空間資訊</el-divider>
     <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
         <!--  -->
         <el-form-item label="地點名稱" prop="name">
@@ -58,20 +59,21 @@
 </template>
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
-import type { IOrganizationMember } from '~/types/organization'
+import type { IOrganization, IOrganizationMember, IOrganizationQuery } from '~/types/organization'
 import type { IPlace, IPlaceQuery } from '~/types/place'
 
 const emit = defineEmits(['update:modelValue'])
 const embedApiKey = ref<string>('AIzaSyAb9Vd0fh6OvobZfp0NQEupj3LV_-KW0gc')
 const repoPlace = useRepoPlace()
 const repoMeta = useRepoMeta()
+const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUser = useRepoUser()
 
-const searchForm = ref<IPlaceQuery>()
-// const searchForm = defineModel<IPlaceQuery>('modelValue', {
-//     default: {}
-// })
+const organizationList = ref<IOrganization[]>([])
+const searchForm = ref<IOrganizationQuery>({
+    name: '',
+})
 
 const form = defineModel<IPlace>('modelValue', {
     default: {
@@ -148,7 +150,12 @@ async function getMetaTaiwanCities() {
     taiwanRegions.value = result
 }
 
-
+async function getOrganizationList(name: string) {
+    const result = await repoOrganization.getOrganizationList({
+        name,
+    })
+    organizationList.value = result
+}
 </script>
 <style lang="scss" scoped>
 .placeForm {
