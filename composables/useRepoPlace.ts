@@ -25,9 +25,10 @@ export default defineStore('place', () => {
         })
         return response
     }
-    async function deletePlace(body: IPlace) {
+    async function deletePlace(params: IPlaceQuery) {
         const response = await defaultApi.authRequest(`/place`, {
             method: 'DELETE',
+            params,
         })
         return response
     }

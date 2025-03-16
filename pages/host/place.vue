@@ -192,6 +192,7 @@ async function deletePlace(row: IPlace) {
     if (result === 'confirm') {
         await repoPlace.deletePlace({
             id: row.id,
+            organizationId: row.organizationId,
         })
         getPlaceList()
     }
