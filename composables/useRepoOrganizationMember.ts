@@ -5,6 +5,11 @@ import type { IPagination } from '~/types/ui'
 
 export default defineStore('organizationMember', () => {
     const defaultApi = useVekozApi()
+    /**
+     * 取得用戶所有的組織全縣，不做分頁
+     * @param params 
+     * @returns 
+     */
     async function getMemberOrganizationList(params?: IOrganizationMemberQuery): Promise<IMemberListRes | undefined> {
         try {
             const response = await defaultApi.authRequest(`/member/organization/list`, {
