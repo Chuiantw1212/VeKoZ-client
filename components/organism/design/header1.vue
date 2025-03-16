@@ -1,15 +1,13 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" class="formItem"
-        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :label="customDesign.label"
-        :required="required" :prop="customDesign.formField" @dragstart="emit('dragstart')">
+    <el-form-item v-if="!props.isDesigning" class="formItem" :label="customDesign.label" :required="required"
+        :prop="customDesign.formField" @dragstart="emit('dragstart')">
         <!-- {{customDesign}} -->
         <el-input v-if="customDesign" v-model="customDesign.value" :placeholder="placeholder" :maxlength="30"
             :show-word-limit="true" size="large" :disabled="disabled"></el-input>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign" class="formItem"
-        :class="{ 'formItem--center': customDesign.alignment === 'center' }" :loading="isLoading" :required="required"
+    <MoleculeDesignToolbar v-else-if="customDesign" class="formItem" :loading="isLoading" :required="required"
         @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-if="props.showLabel" v-model="customDesign.label" :maxlength="8" :show-word-limit="true"

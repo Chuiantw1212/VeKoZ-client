@@ -21,9 +21,10 @@
             <el-table-column prop="description" label="描述" />
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" plain circle @click="editPlaceDialog(row)"></el-button>
-                    <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
-
+                    <el-button :icon="Edit" plain circle :disabled="checkPlaceEditable(row)"
+                        @click="editPlaceDialog(row)"></el-button>
+                    <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
+                        @click="deletePlace(row)">
                     </el-button>
                 </template>
             </el-table-column>
@@ -92,6 +93,20 @@ watch(() => repoUser.userInfo, async () => {
 // },)
 
 // Methods
+function checkPlaceDeletable(place: IPlace) {
+    const placeOrganization = membershipList.value.find(member => {
+        return member.organizationId === place.organizationId
+    })
+    return !placeOrganization?.allowMethods?.includes('DELETE')
+}
+
+function checkPlaceEditable(place: IPlace) {
+    const placeOrganization = membershipList.value.find(member => {
+        return member.organizationId === place.organizationId
+    })
+    return !placeOrganization?.allowMethods?.includes('PATCH')
+}
+
 async function getMemberOrganizationList() {
     const result = await repoOrganizationMember.getMemberOrganizationList({
         allowMethods: ['GET'],
