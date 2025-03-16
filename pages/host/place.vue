@@ -3,7 +3,7 @@
         <div class="place__ui">
             <!-- 篩選條件 -->
             <ElButton :icon="AddLocation" @click="openNewDialog()">新增地點</ElButton>
-            <!-- <ElButton :icon="Connection" @click="openConnectDialog()">連動既有地點</ElButton> -->
+            <ElButton :icon="Connection" @click="openConnectDialog()">連動既有地點</ElButton>
         </div>
         <!-- <el-alert type="info" show-icon :closable="false">
         TODO: 等待後臺開發，再行推廣空間的畫面。
@@ -36,8 +36,8 @@
         <template #header>
             地點新增
         </template>
-        <FormPlace v-if="addPlaceDialogVisible" v-model="placeForm">
-        </FormPlace>
+        <FormPlaceAdding v-if="addPlaceDialogVisible" v-model="placeForm">
+        </FormPlaceAdding>
         <template #footer>
             <el-button @click="addPlaceDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">
@@ -46,14 +46,14 @@
         </template>
     </VenoniaDialog>
 
-    <VenoniaDialog v-model="addPlaceDialogVisible" class="event__template">
+    <VenoniaDialog v-model="connectPlaceDialogVisible" class="event__template">
         <template #header>
-            地點新增
+            地點連動
         </template>
-        <FormPlace v-if="addPlaceDialogVisible" v-model="placeForm">
-        </FormPlace>
+        <!-- <FormPlace v-if="connectPlaceDialogVisible" v-model="placeForm">
+        </FormPlace> -->
         <template #footer>
-            <el-button @click="addPlaceDialogVisible = false">取消</el-button>
+            <el-button @click="connectPlaceDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">
                 確認
             </el-button>
@@ -66,6 +66,7 @@ import VenoniaDialog from '~/components/atom/VekozDialog.vue'
 import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
 import { Edit, Delete, AddLocation, Connection } from '@element-plus/icons-vue'
+import { FormPlaceAdding } from '#components'
 
 // Data
 const id = ref<string>(crypto.randomUUID())
