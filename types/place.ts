@@ -13,7 +13,7 @@ export interface IPlace extends IPlaceQuery {
 export interface IPlaceQuery {
     id?: string; // doc id
     organizationId?: string,
+    organizationIds?: string[] // 集合多個組織的地點一起做分頁查詢
     organizationName?: string,
     organizationLogo?: string,
-    organizationIds?: string[]
 }

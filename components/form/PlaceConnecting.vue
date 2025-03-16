@@ -21,11 +21,14 @@
             <el-select v-model="searchForm.name" filterable remote reserve-keyword
                 :remote-method="getOrganizationList" placeholder="請選擇">
                 <el-option v-for="(item, index) in organizationList" :key="index" :label="`${item.name}`"
-                    :value="String(item.id)" />
+                    :value="String(item.name)" @click="selectOrganization(item)" />
             </el-select>
         </el-form-item>
-        <el-form-item label="組織所屬空間" prop="name">
-            <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" :disabled="true" />
+        <el-form-item label="組織所屬空間">
+            <el-select v-model="selectedPlaceId" placeholder="請選擇">
+                <el-option v-for="(item, index) in placeList" :key="index" :label="`${item.name}`"
+                    :value="String(item.id)" />
+            </el-select>
         </el-form-item>
     </el-form>
     <el-divider>空間資訊</el-divider>
@@ -63,17 +66,22 @@ import type { IOrganization, IOrganizationMember, IOrganizationQuery } from '~/t
 import type { IPlace, IPlaceQuery } from '~/types/place'
 
 const emit = defineEmits(['update:modelValue'])
+const id = ref<string>(crypto.randomUUID())
 const embedApiKey = ref<string>('AIzaSyAb9Vd0fh6OvobZfp0NQEupj3LV_-KW0gc')
 const repoPlace = useRepoPlace()
 const repoMeta = useRepoMeta()
 const repoOrganization = useRepoOrganization()
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUser = useRepoUser()
+const repoUI = useRepoUI()
 
-const organizationList = ref<IOrganization[]>([])
 const searchForm = ref<IOrganizationQuery>({
     name: '',
 })
+const selectedPlaceId = ref<string>()
+const organizationList = ref<IOrganization[]>([])
+const placeList = ref<IPlace[]>([])
+const isLoading = ref<boolean>(false)
 
 const form = defineModel<IPlace>('modelValue', {
     default: {
@@ -82,9 +90,8 @@ const form = defineModel<IPlace>('modelValue', {
 })
 
 const membershipList = ref<IOrganizationMember[]>([])
-
-// const placeList = ref<IPlace[]>([])
 const taiwanRegions = ref<any[]>([])
+
 
 // Hooks
 onMounted(async () => {
@@ -104,6 +111,13 @@ const formRules = {
 }
 
 // Methods
+async function selectOrganization(organization: IOrganization) {
+    const result = await repoPlace.getPlaceList({
+        organizationId: organization.id
+    })
+    placeList.value = result
+}
+
 async function handleOrganizationChanged(organizationId: string) {
     repoUser.patchUserPreference('place', {
         organizationId,
@@ -151,10 +165,17 @@ async function getMetaTaiwanCities() {
 }
 
 async function getOrganizationList(name: string) {
-    const result = await repoOrganization.getOrganizationList({
-        name,
+    if (!String(name).trim()) {
+        return
+    }
+    isLoading.value = true
+    repoUI.debounce(id.value, async () => {
+        const result = await repoOrganization.getOrganizationList({
+            name,
+        })
+        organizationList.value = result
+        isLoading.value = false
     })
-    organizationList.value = result
 }
 </script>
 <style lang="scss" scoped>
