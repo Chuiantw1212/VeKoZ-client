@@ -50,8 +50,8 @@
         <template #header>
             地點連動
         </template>
-        <!-- <FormPlace v-if="connectPlaceDialogVisible" v-model="placeForm">
-        </FormPlace> -->
+        <FormPlaceConnecting v-if="connectPlaceDialogVisible" v-model="placeForm">
+        </FormPlaceConnecting>
         <template #footer>
             <el-button @click="connectPlaceDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">

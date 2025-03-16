@@ -1,6 +1,9 @@
 <template>
+    <!-- <el-form-item class="mt-20" label="連動既存地點">
+    </el-form-item>
+    <el-divider>地點詳細資料</el-divider> -->
     <el-alert type="info" show-icon :closable="false">
-        郊山、廣場、借來的場地，任何常用但是沒有控制權的空間，無歸屬任何組織
+        連動空間管理夥伴的既存地點。比如：X樹屋。
         <!-- <ol>
             <li>
             </li>
@@ -12,34 +15,36 @@
         1. 連動後的地點，uid將為自己，但是要被原屬的地點透過sourceId更新
         -->
     </el-alert>
-    <!-- <el-form-item class="mt-20" label="連動既存地點">
-        <el-input placeholder="TODO搜尋現有地址" :maxlength="30" :show-word-limit="true" :disabled="true"
-            :prefix-icon="Search">
-        </el-input>
-    </el-form-item>
-    <el-divider>地點詳細資料</el-divider> -->
-    <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
-        <el-form-item label="所屬組織" prop="organizationId">
-            <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
+    <el-form class="placeForm" :model="searchForm" label-width="auto" :rules="searchFormRules">
+        <el-form-item label="空間管理組織" prop="organizationId">
+            <el-input placeholder="搜尋現有組織" :maxlength="30" :show-word-limit="true" :prefix-icon="Search">
+            </el-input>
+            <!-- <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
                 <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                     :value="String(item.organizationId)" />
-            </el-select>
+            </el-select> -->
         </el-form-item>
+        <el-form-item label="組織所屬空間" prop="name">
+            <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" :disabled="true" />
+        </el-form-item>
+    </el-form>
+    <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
+        <!--  -->
         <el-form-item label="地點名稱" prop="name">
-            <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
+            <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" :disabled="true" />
         </el-form-item>
         <el-form-item label="地點描述" prop="description">
-            <el-input v-model="form.description" placeholder="請輸入描述、附近地標、接駁資訊等等" maxlength=" 150" type="textarea"
-                :show-word-limit="true"></el-input>
+            <el-input v-model="form.description" :disabled="true" placeholder="請輸入描述、附近地標、接駁資訊等等" maxlength=" 150"
+                type="textarea" :show-word-limit="true"></el-input>
         </el-form-item>
         <el-form-item label="所在城市" prop="addressRegion">
-            <el-select v-model="form.addressRegion" placeholder="請選擇">
+            <el-select v-model="form.addressRegion" :disabled="true" placeholder="請選擇">
                 <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
             </el-select>
         </el-form-item>
         <el-form-item label="詳細地址" prop="address">
-            <el-input v-model="form.address" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
+            <el-input v-model="form.address" :disabled="true" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
                 :maxlength="120"></el-input>
         </el-form-item>
         <!-- <el-col>
@@ -54,7 +59,7 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
 import type { IOrganizationMember } from '~/types/organization'
-import type { IPlace } from '~/types/place'
+import type { IPlace, IPlaceQuery } from '~/types/place'
 
 const emit = defineEmits(['update:modelValue'])
 const embedApiKey = ref<string>('AIzaSyAb9Vd0fh6OvobZfp0NQEupj3LV_-KW0gc')
@@ -62,6 +67,11 @@ const repoPlace = useRepoPlace()
 const repoMeta = useRepoMeta()
 const repoOrganizationMember = useRepoOrganizationMember()
 const repoUser = useRepoUser()
+
+const searchForm = ref<IPlaceQuery>()
+// const searchForm = defineModel<IPlaceQuery>('modelValue', {
+//     default: {}
+// })
 
 const form = defineModel<IPlace>('modelValue', {
     default: {
@@ -80,6 +90,8 @@ onMounted(async () => {
     getMetaTaiwanCities()
     getMemberOrganizationList()
 })
+
+const searchFormRules = {}
 
 const formRules = {
     // organizationId: { required: true, message: '歸屬組織必填' },
