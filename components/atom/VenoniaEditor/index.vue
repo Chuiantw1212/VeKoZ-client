@@ -41,8 +41,8 @@ const props = defineProps({
                 'italic',
                 'fontColor',
                 '|',
-                'link',
-                'mediaEmbed',
+                // 'link',
+                // 'mediaEmbed',
                 'htmlEmbed',
                 {
                     label: '更多',
@@ -98,6 +98,20 @@ async function initializeCKEditor() {
                 position: 'border',
                 label: 'Venonia'
             }
+        },
+        htmlEmbed: {
+            showPreviews: true,
+            // sanitizeHtml: ( inputHtml ) => {
+            //     // Strip unsafe elements and attributes, for example:
+            //     // the `<script>` elements and `on*` attributes.
+            //     const outputHtml = sanitize( inputHtml );
+
+            //     return {
+            //         html: outputHtml,
+            //         // true or false depending on whether the sanitizer stripped anything.
+            //         hasChanged: true
+            //     };
+            // }
         },
     }
 
