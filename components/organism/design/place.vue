@@ -14,8 +14,8 @@
         <!-- </el-form-item> -->
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
-        @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
@@ -68,6 +68,10 @@ const props = defineProps({
         default: false
     },
     disabled: {
+        type: Boolean,
+        default: false
+    },
+    required: {
         type: Boolean,
         default: false
     },

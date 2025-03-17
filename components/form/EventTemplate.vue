@@ -47,9 +47,9 @@
                 @mouseout="emit('mouseout')">
             </OrganismDesignBanner>
             <OrganismDesignPlace v-if="item.type === 'place'" v-model="template.designs[index]" :onchange="onchange"
-                :isDesigning="props.isDesigning" :disabled="props.disabled" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+                :required="item.required" :isDesigning="props.isDesigning" :disabled="props.disabled"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignPlace>
             <OrganismDesignUrl v-if="item.type === 'virtualLocation'" v-model="template.designs[index]"
                 :onchange="onchange" form-field="virtualLocation" :isDesigning="props.isDesigning"
@@ -75,9 +75,9 @@
                 @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignNumber>
             <OrganismDesignUrl v-if="item.type === 'url'" v-model="template.designs[index]" :onchange="onchange"
-                :isDesigning="props.isDesigning" :disabled="props.disabled" @dragstart="handleDragStart(index)"
-                @remove="handleRemove(index)" @moveUp="handleUp(index)" @moveDown="handleDown(index)"
-                @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
+                :isDesigning="props.isDesigning" :disabled="props.disabled" :required="item.required"
+                @dragstart="handleDragStart(index)" @remove="handleRemove(index)" @moveUp="handleUp(index)"
+                @moveDown="handleDown(index)" @mouseenter="emit('mouseenter', item.type)" @mouseout="emit('mouseout')">
             </OrganismDesignUrl>
             <OrganismDesignDivider v-if="item.type === 'divider'" v-model="template.designs[index]" :onchange="onchange"
                 :isDesigning="props.isDesigning" :disabled="props.disabled" @dragstart="handleDragStart(index)"
