@@ -30,8 +30,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="formFieldSpan">
-                    <el-form-item label="活動隱私性">
-                        {{ groupOffers[0].eventIsPublic ? '已公開' : '非公開' }}
+                    <el-form-item label="活動私密性">
+                        {{ groupOffers[0].eventIsPublic ? '公開' : '非公開' }}
                     </el-form-item>
                 </el-col>
             </el-row>

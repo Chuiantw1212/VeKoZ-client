@@ -15,8 +15,10 @@
                         <el-descriptions-item v-if="event.locationAddress" label="地點">
                             {{ event.locationAddress }}
                             <a target="_blank"
-                                :to="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
-                                <el-button :icon="LocationFilled" text circle></el-button>
+                                :href="`https://www.google.com/maps/search/?api=1&query=${event.locationAddress}`">
+                                <el-button :icon="LocationFilled" text circle>
+
+                                </el-button>
                             </a>
                         </el-descriptions-item>
                         <el-descriptions-item v-if="event.virtualLocationValue" label="視訊連結">
@@ -43,7 +45,8 @@
                 </el-carousel>
                 <!-- {{ editorDesign.value }} -->
                 <el-card class="event__mt">
-                    <AtomVenoniaEditor :model-value="editorDesign.value" :toolbar="[]" :disabled="true"></AtomVenoniaEditor>
+                    <AtomVenoniaEditor :model-value="editorDesign.value" :toolbar="[]" :disabled="true">
+                    </AtomVenoniaEditor>
                     <!-- <div v-html="editorDesign.value"></div> -->
                 </el-card>
                 <!-- <el-card class="event__mt">

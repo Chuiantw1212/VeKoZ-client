@@ -276,7 +276,7 @@ async function initializeUserForm(newValue: IUser) {
     //     const defaultDesigns: IUserDesign[] = [
     //         {
     //             type: 'avatar',
-    //             value: 'https://storage.googleapis.com/public.venonia.com/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
+    //             value: 'https://storage.googleapis.com/public.vekoz.org/organization/B5TtVn9U2op8zXR2hIOA/logo/65d42353-7353-4d73-be75-c10d426273a0.jpeg',
     //             required: true,
     //             formField: 'avatar',
     //         },

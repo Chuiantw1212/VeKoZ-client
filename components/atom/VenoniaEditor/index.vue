@@ -1,6 +1,6 @@
 <template>
     <ClientOnly>
-        <div class="ckeditor">
+        <div class="ckeditor" :class="{ 'ckeditor--disabled': disabled }">
             <div :id="`editor-${id}`" ref="editorRef">
             </div>
         </div>
@@ -160,6 +160,16 @@ onBeforeUnmount(() => {
     // 移除scroll貼頂效果
     :deep(.ck.ck-sticky-panel.ck-sticky-panel__content_sticky) {
         top: 0;
+    }
+}
+
+.ckeditor--disabled {
+    :deep(.ck-editor__editable) {
+        border: none;
+    }
+
+    :deep(.ck-sticky-panel__content) {
+        border: none !important;
     }
 }
 </style>

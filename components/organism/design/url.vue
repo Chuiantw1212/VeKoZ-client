@@ -61,7 +61,7 @@ const props = defineProps({
     },
     valuePlaceHolder: {
         type: String,
-        default: 'https://venonia.com',
+        default: 'https://vekoz.org',
     },
     onchange: {
         type: Function,
