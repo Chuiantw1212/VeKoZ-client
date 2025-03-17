@@ -131,9 +131,11 @@ async function getOrganizationList(name: string) {
         const ids = membershipList.value.map(item => String(item.organizationId))
         const result = await repoOrganization.getOrganizationList({
             name,
-            excludeIds: ids,
         })
-        organizationList.value = result
+        const notJoinedItems = result.filter(org => {
+            return !ids.includes(String(org.id))
+        })
+        organizationList.value = notJoinedItems
         isLoading.value = false
     })
 }
