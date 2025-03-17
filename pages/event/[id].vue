@@ -26,19 +26,24 @@
                         </el-descriptions-item>
                     </el-descriptions>
                 </el-card>
-                <el-carousel :interval="4000" :autoplay="false" type="card" height="160px">
+                <el-carousel :autoplay="false" type="card" height="160px">
                     <el-carousel-item v-for="(item, key) in cardUnits" :key="key">
                         <el-card class="side__card">
-                            <NuxtLink :to="`/${item.link}`" target="_blank">
-                                <div class="card__logo" :style="{ 'background-image': `url(${item.image})` }"></div>
-                                <div class="organization__body">
-                                    <div class="organizationNameGroup">
-                                        <div class="card__name">
+                            <NuxtLink class="card__body" :to="`${item.link}`" target="_blank">
+                                <el-avatar :src="item.image"></el-avatar>
+                                <table>
+                                    <tr>
+                                        <td colspan="3">
+
                                             {{ item.name }}
-                                        </div>
-                                        <!-- <div>已有?人追隨</div> -->
-                                    </div>
-                                </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>X場活動</td>
+                                        <td>XX人追蹤</td>
+                                        <!-- <td>近期評價4.8</td> -->
+                                    </tr>
+                                </table>
                             </NuxtLink>
                         </el-card>
                     </el-carousel-item>
@@ -136,9 +141,9 @@ async function getEvent() {
     result.performerIds?.forEach(async id => {
         const user = await repoUser.getUserPublicInfo(id)
         const cardUnit: IEventCarouselCard = {
-            name: user.name,
+            name: user.name ?? '未公開的神祕用戶',
             image: user.avatar,
-            link: user.seoName,
+            link: user.seoName ? `/${user.seoName}` : '',
         }
         cardUnits.value.push(cardUnit)
     })
@@ -210,6 +215,15 @@ function getTimes(event: IEventSingle) {
     .side__card {
         margin-top: 20px;
         text-align: center;
+
+        .card__body {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            text-decoration: none;
+        }
 
         .organization__body {
             display: flex;
