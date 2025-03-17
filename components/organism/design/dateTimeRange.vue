@@ -5,13 +5,14 @@
         :prop="customDesign.formField" @dragstart="emit('dragstart')" :model="customDesign">
         <div class="dateTimeRange">
             <!-- {{ customDesign }} -->
-            <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate" v-model:end-date="customDesign.endDate">
+            <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate" v-model:end-date="customDesign.endDate"
+                :disabled="disabled">
             </AtomVekozDateTimeRange>
         </div>
     </el-form-item>
     <!-- 樣板編輯專用 -->
-    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" @dragstart="emit('dragstart')"
-        @remove="emit('remove')" @moveUp="emit('moveUp')" :required="required" @moveDown="emit('moveDown')">
+    <MoleculeDesignToolbar v-else-if="customDesign" :loading="isLoading" :required="required"
+        @dragstart="emit('dragstart')" @remove="emit('remove')" @moveUp="emit('moveUp')" @moveDown="emit('moveDown')">
         <template v-slot:label>
             <el-input v-model="customDesign.label" :maxlength="8" :show-word-limit="true" placeholder="欄位名稱"></el-input>
         </template>
@@ -19,7 +20,7 @@
             <div class="dateTimeRange">
                 <!-- {{ customDesign }} -->
                 <AtomVekozDateTimeRange v-model:start-date="customDesign.startDate"
-                    v-model:end-date="customDesign.endDate">
+                    v-model:end-date="customDesign.endDate" :disabled="disabled">
                 </AtomVekozDateTimeRange>
             </div>
         </template>

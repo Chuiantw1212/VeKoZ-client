@@ -4,14 +4,14 @@
         <!-- typeof date {{ typeof date }} -->
         <!-- date instanceOf Date {{ date instanceof Date }} -->
         <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
-            :disabled-date="disablePastDays" :disabled="props.disabledDate" @blur="onDateChanged()"
+            :disabled-date="disablePastDays" :disabled="props.disabled" @blur="onDateChanged()"
             @clear="checkClearDate()"></el-date-picker>
         <!-- startDate {{ startDate }}
         endDate {{ endDate }} -->
         <!-- minDate {{ minDate }}
         maxDate {{ maxDate }} -->
         <AtomVekozTimePickerNew class="dateTimeRange__time" v-model:startDate="startDate" v-model:endDate="endDate"
-            :minDate="minDate" :maxDate="maxDate">
+            :minDate="minDate" :maxDate="maxDate" :disabled="props.disabled">
         </AtomVekozTimePickerNew>
     </div>
 </template>
@@ -37,6 +37,10 @@ const props = defineProps({
     },
     maxDate: {
         type: [String, Date],
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     },
 })
 

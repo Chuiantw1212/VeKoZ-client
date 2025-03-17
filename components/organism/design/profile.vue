@@ -24,7 +24,7 @@
                 </AtomAvatarUploader>
             </div>
             <template v-if="isDesigning && !disabled">
-                <el-input class="content__header" v-model="publicInfo.name" :maxlength="30" placeholder="請輸入組織名稱"
+                <el-input class="content__header" v-model="publicInfo.name" :maxlength="30" placeholder="請輸入名稱"
                     :show-word-limit="true" type="textarea" size="large" :disabled="disabled"
                     @change="handleChange"></el-input>
             </template>
@@ -34,7 +34,7 @@
             <!-- <div class="content__followers">XXX人追隨</div> -->
             <template v-if="isDesigning && !disabled">
                 <el-input v-model="publicInfo.description" :maxlength="120" :show-word-limit="true" type="textarea"
-                    :rows="6" :disabled="disabled" @change="handleChange" placeholder="請輸入簡介"></el-input>
+                    :rows="6" :disabled="disabled" @change="handleChange" placeholder="請輸入描述"></el-input>
             </template>
             <template v-else>
                 <pre class="content__desc">{{ publicInfo.description }}</pre>

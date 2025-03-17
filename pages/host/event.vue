@@ -56,7 +56,7 @@
                 </el-button>
                 |
                 <el-switch v-loading="isDialogPatchLoading" v-model="dialogEventTemplate.isPublic" inline-prompt
-                    active-text="已公開" inactive-text="非公開" :disabled="eventDisabled" @change="validiateForm()" />
+                    active-text="已公開" inactive-text="非公開" :disabled="!eventPatchable" @change="validiateForm()" />
                 |
                 <NuxtLink :to="`/event/${dialogEventTemplate.id}`" target="_blank">
                     <el-button :icon="View" text :disabled="!dialogEventTemplate.isPublic">
@@ -70,7 +70,7 @@
                 <!-- 用v-if避免更新請求重複派送 -->
                 <el-container v-loading.lock="isLoading" v-if="eventDialogIsOpen">
                     <FormEventTemplate ref="formRef" v-if="eventDialogIsOpen" v-model="dialogEventTemplate"
-                        :disabled="eventDisabled" :onchange="handleEventFormChange">
+                        :disabled="!eventPatchable" :onchange="handleEventFormChange">
                     </FormEventTemplate>
                 </el-container>
             </template>
@@ -126,8 +126,10 @@ const eventDialogIsOpen = ref<boolean>(false)
 const dialogEventTemplate = ref<IEventSingle>({
     designs: []
 })
-const eventDisabled = ref<boolean>(false)
+// const eventDisabled = ref<boolean>(false)
 const eventDeletable = ref<boolean>(false)
+const eventPatchable = ref<boolean>(false)
+
 const loadTemplateDialogIsOpen = ref<boolean>(false)
 const formRef = ref<FormInstance>()
 
@@ -308,7 +310,7 @@ async function getMemberOrganizationList() {
 }
 
 async function handleEventFormChange(templateDesign: ITemplateDesign) {
-    if (!vekozCalendarRef.value) {
+    if (!vekozCalendarRef.value || !eventPatchable.value) {
         return
     }
     /**
@@ -356,6 +358,10 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
 }
 
 async function handleEventCalendarChange(changeInfo: IChangeInfo) {
+    if (!eventPatchable.value) {
+        return
+    }
+
     const event: IFullCalendarEvent = changeInfo.event
     const eventId = changeInfo.event.id
     const startDate = new Date(event.startStr ?? '')
@@ -454,18 +460,23 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     const startTime = new Date(eventTemplate.startDate as string).getTime()
     const currentTime = new Date().getTime()
     const isEnded = currentTime >= startTime
-    const hasNoPatch = !eventTemplate.allowMethods?.includes('PATCH')
+    const hasPatch = eventTemplate.allowMethods?.includes('PATCH')
     const hasDelete = eventTemplate.allowMethods?.includes('DELETE')
-    eventDisabled.value = false
-    if (isEnded || hasNoPatch) {
-        eventDisabled.value = true
-    }
 
-    // 開放刪除與否
-    eventDeletable.value = true
-    if (!isEnded && hasDelete) {
-        eventDeletable.value = false
+    eventPatchable.value = false
+    if (!isEnded && hasPatch) {
+        eventPatchable.value = true
     }
+    // eventDisabled.value = false
+    // if (isEnded || hasNoPatch) {
+    //     eventDisabled.value = true
+    // }
+
+    // // 開放刪除與否
+    // eventDeletable.value = true
+    // if (!isEnded && hasDelete) {
+    //     eventDeletable.value = false
+    // }
 
     // 打開彈窗
     eventDialogIsOpen.value = true

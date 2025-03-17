@@ -396,7 +396,7 @@ function isValidDate(d: any) {
     display: inline-flex;
     align-items: center;
     height: 30px;
-    border: 1px solid lightgray;
+    border: 1px solid rgb(228, 231, 237);
     border-radius: 4px;
     gap: 4px;
     width: fit-content;
