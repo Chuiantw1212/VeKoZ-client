@@ -46,8 +46,13 @@
             <el-table-column prop="organizationName" label="來源組織">
                 <template #default="{ row }">
                     <div class="place__fr">
-                        <el-avatar :src="row.organizationLogo"></el-avatar>
-                        {{ row.organizationName }}
+                        <el-avatar v-if="row.organizationLogo" :src="row.organizationLogo"></el-avatar>
+                        <template v-if="row.organizationId === 'public'">
+                            無歸屬組織
+                        </template>
+                        <template v-else>
+                            {{ row.organizationName }}
+                        </template>
                     </div>
                 </template>
             </el-table-column>
@@ -183,7 +188,9 @@ function checkEditDisabled(place: IPlace) {
     const placeOrganization = membershipList.value.find(member => {
         return member.organizationId === place.organizationId
     })
-    return !placeOrganization?.allowMethods?.includes('PATCH')
+    const allowPatch = placeOrganization?.allowMethods?.includes('PATCH')
+    const isPublic = place.organizationId === 'public'
+    return !(allowPatch || isPublic)
 }
 
 async function getMemberOrganizationList() {
