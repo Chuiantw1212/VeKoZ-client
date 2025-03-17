@@ -332,18 +332,20 @@ async function handleEventFormChange(templateDesign: ITemplateDesign) {
             })
             if (changedEvent) {
                 let startTime: number = 0
-                if (typeof templateDesign.value[0] === 'string') {
-                    startTime = new Date(templateDesign.value[0]).getTime()
-                } else {
-                    startTime = templateDesign.value[0].getTime()
+                if (typeof templateDesign.startDate === 'string') {
+                    startTime = new Date(templateDesign.startDate).getTime()
+                } else if (templateDesign.startDate instanceof Date) {
+                    startTime = templateDesign.startDate.getTime()
                 }
                 const nowTime = new Date().getTime()
                 if (nowTime >= startTime) {
                     return
                 }
-                changedEvent.startDate = templateDesign.value[0]
-                changedEvent.endDate = templateDesign.value[1]
-                calendarEvent.setDates(templateDesign.value[0], templateDesign.value[1])
+                if (templateDesign.startDate && templateDesign.endDate) {
+                    changedEvent.startDate = templateDesign.startDate
+                    changedEvent.endDate = templateDesign.endDate
+                    calendarEvent.setDates(templateDesign.startDate, templateDesign.endDate)
+                }
             }
             break;
         }

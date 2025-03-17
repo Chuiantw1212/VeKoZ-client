@@ -137,7 +137,7 @@ function setLocationValues(placeId: string) {
         return
     }
     const selectedItem = placeList.value.find(item => {
-        return item.name === placeId
+        return item.id === placeId
     })
     if (selectedItem && customDesign.value) {
         customDesign.value.placeName = selectedItem.name
