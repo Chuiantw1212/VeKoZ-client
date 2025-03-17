@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="組織所屬空間">
             <el-select v-model="selectedPlaceId" placeholder="請選擇" :disabled="!searchForm.name"
-                @change="onPlaceChanged($event)">
+                @change="onPlaceChanged()">
                 <el-option v-for="(item, index) in placeList" :key="index" :label="`${item.name}`"
                     :value="String(item.id)" />
             </el-select>
@@ -78,9 +78,9 @@ onMounted(async () => {
 })
 
 // Methods
-async function onPlaceChanged(placeId: string) {
+async function onPlaceChanged() {
     const selectedPlace = placeList.value.find(place => {
-        return place.id === placeId
+        return place.id === selectedPlaceId.value
     })
     if (selectedPlace) {
         // 不刪除任何資料，只改變uid?，而是沿用過去組織的id取代新欄位
@@ -93,6 +93,10 @@ async function selectOrganization(organization: IOrganization) {
         organizationId: organization.id
     })
     placeList.value = result
+    if (result.length === 1) {
+        selectedPlaceId.value = result[0].id
+        onPlaceChanged()
+    }
 }
 
 async function getMemberOrganizationList() {

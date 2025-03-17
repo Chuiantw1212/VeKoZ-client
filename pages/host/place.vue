@@ -264,6 +264,7 @@ async function postPlace(source = '') {
         getCreatedPlaceList()
     }
     addPlaceDialogVisible.value = false
+    connectPlaceDialogVisible.value = false
 }
 
 async function patchPlace() {
