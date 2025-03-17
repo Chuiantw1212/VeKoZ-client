@@ -1,52 +1,35 @@
 <template>
     <el-alert type="info" show-icon :closable="false">
         郊山、廣場、借來的場地，任何常用但是沒有控制權的空間，無歸屬任何組織
-        <!-- <ol>
-            <li>
-            </li>
-            <li>
-                未來連動既存地點，可以將沒有管理權限的地點加入常用地點
-            </li>
-        </ol> -->
-        <!-- 
-        1. 連動後的地點，uid將為自己，但是要被原屬的地點透過sourceId更新
-        -->
     </el-alert>
-    <!-- <el-form-item class="mt-20" label="連動既存地點">
-        <el-input placeholder="TODO搜尋現有地址" :maxlength="30" :show-word-limit="true" :disabled="true"
-            :prefix-icon="Search">
-        </el-input>
-    </el-form-item>
-    <el-divider>地點詳細資料</el-divider> -->
     <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
         <el-form-item label="所屬組織" prop="organizationId">
-            <el-select v-model="form.organizationId" placeholder="請選擇" @change="handleOrganizationChanged($event)">
+            <el-input v-if="disabled" :model-value="form.organizationName" :disabled="disabled">
+            </el-input>
+            <el-select v-else v-model="form.organizationId" placeholder="請選擇" :disabled="disabled"
+                @change="handleOrganizationChanged($event)">
                 <el-option v-for="(item, index) in membershipList" :key="index" :label="`${item.organizationName}`"
                     :value="String(item.organizationId)" />
             </el-select>
         </el-form-item>
         <el-form-item label="地點名稱" prop="name">
-            <el-input v-model="form.name" placeholder="請輸入" :maxlength="30" :show-word-limit="true" />
+            <el-input v-model="form.name" placeholder="請輸入" :disabled="disabled" :maxlength="30"
+                :show-word-limit="true" />
         </el-form-item>
         <el-form-item label="地點描述" prop="description">
             <el-input v-model="form.description" placeholder="請輸入描述、附近地標、接駁資訊等等" maxlength=" 150" type="textarea"
-                :show-word-limit="true"></el-input>
+                :show-word-limit="true" :disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item label="所在城市" prop="addressRegion">
-            <el-select v-model="form.addressRegion" placeholder="請選擇">
+            <el-select v-model="form.addressRegion" :disabled="disabled" placeholder="請選擇">
                 <el-option v-for="(item, index) in taiwanRegions" :key="index" :label="`${item.label}`"
                     :value="item.value" />
             </el-select>
         </el-form-item>
         <el-form-item label="詳細地址" prop="address">
-            <el-input v-model="form.address" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
-            :maxlength="120"></el-input>
+            <el-input v-model="form.address" :disabled="disabled" placeholder="輸入GoolgeMap可用地址" :show-word-limit="true"
+                :maxlength="120"></el-input>
         </el-form-item>
-        <!-- <el-col>
-            <el-form-item :span="12" label="地址能見度">
-                <el-switch v-model="form.publicAccess" inline-prompt active-text="購票前可見" inactive-text="購票後可見" />
-            </el-form-item>
-        </el-col> -->
     </el-form>
     <el-divider>用戶視角 Google Map</el-divider>
     <iframe class="placeForm__iframe" :src="getMapSrc()" loading="lazy"
@@ -70,9 +53,14 @@ const form = defineModel<IPlace>('modelValue', {
     }
 })
 
-const membershipList = ref<IOrganizationMember[]>([])
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    }
+})
 
-// const placeList = ref<IPlace[]>([])
+const membershipList = ref<IOrganizationMember[]>([])
 const taiwanRegions = ref<any[]>([])
 
 // Hooks

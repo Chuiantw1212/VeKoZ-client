@@ -25,7 +25,9 @@
             <!-- <el-table-column prop="description" label="描述" /> -->
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" plain circle :disabled="checkPlaceEditable(row)"
+                    <el-button v-if="checkEditDisabled(row)" :icon="View" plain circle
+                        @click="viewPlaceDialog(row)"></el-button>
+                    <el-button v-else :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
                     <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
                         @click="deletePlace(row)">
@@ -54,7 +56,7 @@
             <!-- <el-table-column prop="description" label="描述" /> -->
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" plain circle :disabled="checkPlaceEditable(row)"
+                    <el-button :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
                     <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
                         @click="deletePlace(row)">
@@ -63,15 +65,29 @@
             </el-table-column>
         </el-table>
     </div>
+
     <VenoniaDialog v-model="addPlaceDialogVisible" class="event__template">
         <template #header>
-            地點新增
+            地點編輯
         </template>
         <FormPlaceAdding v-if="addPlaceDialogVisible" v-model="placeForm">
         </FormPlaceAdding>
         <template #footer>
             <el-button @click="addPlaceDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="hanelDialogConfirm()">
+                確認
+            </el-button>
+        </template>
+    </VenoniaDialog>
+
+    <VenoniaDialog v-model="viewPlaceDialogVisible" class="event__template">
+        <template #header>
+            地點檢視
+        </template>
+        <FormPlaceAdding v-if="viewPlaceDialogVisible" :model-value="placeForm" :disabled="true">
+        </FormPlaceAdding>
+        <template #footer>
+            <el-button type="primary" @click="viewPlaceDialogVisible = false">
                 確認
             </el-button>
         </template>
@@ -96,7 +112,7 @@
 import VenoniaDialog from '~/components/atom/VekozDialog.vue'
 import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
-import { Edit, Delete, AddLocation, Connection } from '@element-plus/icons-vue'
+import { View, Edit, Delete, AddLocation, Connection } from '@element-plus/icons-vue'
 import { FormPlaceAdding } from '#components'
 import type { ISelectOption } from '~/types/meta'
 
@@ -122,6 +138,7 @@ const placeForm = ref<IPlace>({
     organizationName: '無歸屬組織',
 })
 const addPlaceDialogVisible = ref<boolean>(false)
+const viewPlaceDialogVisible = ref<boolean>(false)
 const connectPlaceDialogVisible = ref<boolean>(false)
 
 // Hooks
@@ -131,8 +148,8 @@ onMounted(() => {
 watch(() => repoUser.userInfo, async () => {
     isLoading.value = true
     repoUI.debounce(id.value, async () => {
-        getSyncPlaces()
         await getMemberOrganizationList()
+        await getSyncPlaces()
         await getPlaceList()
         isLoading.value = false
         id.value = crypto.randomUUID()
@@ -165,7 +182,7 @@ function checkPlaceDeletable(place: IPlace) {
     return !placeOrganization?.allowMethods?.includes('DELETE')
 }
 
-function checkPlaceEditable(place: IPlace) {
+function checkEditDisabled(place: IPlace) {
     const placeOrganization = membershipList.value.find(member => {
         return member.organizationId === place.organizationId
     })
@@ -198,6 +215,15 @@ function openNewDialog() {
         organizationName: '無歸屬組織',
     }
     addPlaceDialogVisible.value = true
+}
+
+function viewPlaceDialog(item: IPlace) {
+    placeForm.value = {
+        organizationId: 'public',
+        organizationName: '無歸屬組織',
+    }
+    Object.assign(placeForm.value, item)
+    viewPlaceDialogVisible.value = true
 }
 
 function editPlaceDialog(item: IPlace) {
