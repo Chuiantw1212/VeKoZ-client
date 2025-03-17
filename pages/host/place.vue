@@ -26,7 +26,7 @@
                         @click="viewPlaceDialog(row)"></el-button>
                     <el-button v-else :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
-                    <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
+                    <el-button :icon="Delete" plain circle type="danger" @click="deleteSyncPlace(row)">
                     </el-button>
                 </template>
             </el-table-column>
@@ -60,8 +60,8 @@
                 <template #default="{ row }">
                     <el-button :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
-                    <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
-                        @click="deletePlace(row)">
+                    <el-button :icon="Delete" plain circle type="danger" :disabled="checkDeleteDiasbled(row)"
+                        @click="deleteCreatedPlace(row)">
                     </el-button>
                 </template>
             </el-table-column>
@@ -103,7 +103,7 @@
         </FormPlaceConnecting>
         <template #footer>
             <el-button @click="connectPlaceDialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="postPlace()">
+            <el-button type="primary" @click="postPlace('connection')">
                 確認
             </el-button>
         </template>
@@ -151,15 +151,15 @@ watch(() => repoUser.userInfo, async () => {
     isLoading.value = true
     repoUI.debounce(id.value, async () => {
         await getMemberOrganizationList()
-        await getSyncPlaces()
-        await getPlaceList()
+        await getConnectedPlaces()
+        await getCreatedPlaceList()
         isLoading.value = false
         id.value = crypto.randomUUID()
     }, 1000)
 }, { immediate: true })
 
 // Methods
-async function getSyncPlaces() {
+async function getConnectedPlaces() {
     syncTableItems.value = await repoPlace.getPlaceList({
         email: repoUser.userInfo.email,
     })
@@ -177,11 +177,13 @@ async function getMetaSelectById() {
     taiwanRegions.value = result
 }
 
-function checkPlaceDeletable(place: IPlace) {
+function checkDeleteDiasbled(place: IPlace) {
     const placeOrganization = membershipList.value.find(member => {
         return member.organizationId === place.organizationId
     })
-    return !placeOrganization?.allowMethods?.includes('DELETE')
+    const allowDelete = placeOrganization?.allowMethods?.includes('DELETE')
+    const isPublic = place.organizationId === 'public'
+    return !(allowDelete || isPublic)
 }
 
 function checkEditDisabled(place: IPlace) {
@@ -202,7 +204,7 @@ async function getMemberOrganizationList() {
     }
 }
 
-async function getPlaceList() {
+async function getCreatedPlaceList() {
     const organizationIds = membershipList.value.map(member => {
         return member.organizationId ?? ''
     })
@@ -254,19 +256,32 @@ async function hanelDialogConfirm() {
 /**
  * 新增或是連動
  */
-async function postPlace() {
+async function postPlace(source = '') {
     await repoPlace.postPlace(placeForm.value)
-    getPlaceList()
+    if (source === 'connection') {
+        getConnectedPlaces()
+    } else {
+        getCreatedPlaceList()
+    }
     addPlaceDialogVisible.value = false
 }
 
 async function patchPlace() {
     await repoPlace.patchPlace(placeForm.value)
-    getPlaceList()
+    getConnectedPlaces()
+    getCreatedPlaceList()
     addPlaceDialogVisible.value = false
 }
 
-async function deletePlace(row: IPlace) {
+async function deleteSyncPlace(row: IPlace) {
+    await repoPlace.deletePlace({
+        id: row.id,
+        organizationId: row.organizationId,
+    })
+    getConnectedPlaces()
+}
+
+async function deleteCreatedPlace(row: IPlace) {
     if (!row.id) {
         return
     }
@@ -284,7 +299,7 @@ async function deletePlace(row: IPlace) {
             id: row.id,
             organizationId: row.organizationId,
         })
-        getPlaceList()
+        getCreatedPlaceList()
     }
 }
 </script>
