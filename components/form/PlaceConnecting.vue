@@ -1,6 +1,9 @@
 <template>
     <el-alert type="info" show-icon :closable="false">
-        連動空間管理夥伴的既存地點。比如：X樹屋。
+        <ul>
+            <li>連動空間管理夥伴的既存地點。比如：X樹屋，某某館。</li>
+            <li>資訊會隨著夥伴更新而更新。</li>
+        </ul>
     </el-alert>
     <el-form class="placeForm" label-width="auto">
         <!-- https://element-plus.org/en-US/component/select.html#remote-search -->
@@ -80,9 +83,7 @@ async function onPlaceChanged(placeId: string) {
         return place.id === placeId
     })
     if (selectedPlace) {
-        // 不使用以下刪除，而是沿用過去組織的id取代新欄位
-        delete selectedPlace.organizationId
-        // delete selectedPlace.id // 觸發為新增
+        // 不刪除任何資料，只改變uid?，而是沿用過去組織的id取代新欄位
         currentPlace.value = selectedPlace
     }
 }
@@ -127,8 +128,10 @@ async function getOrganizationList(name: string) {
     }
     isLoading.value = true
     repoUI.debounce(id.value, async () => {
+        const ids = membershipList.value.map(item => String(item.organizationId))
         const result = await repoOrganization.getOrganizationList({
             name,
+            excludeIds: ids,
         })
         organizationList.value = result
         isLoading.value = false

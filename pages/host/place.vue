@@ -1,11 +1,9 @@
 <template>
     <div v-loading="isLoading" class="place">
-        <div class="place__ui">
-            <!-- 篩選條件 -->
+        <div class="place__headerGroup">
+            <h2>已連動地點</h2>
             <ElButton :icon="Connection" @click="openConnectDialog()">連動既有地點</ElButton>
-            <ElButton :icon="AddLocation" @click="openNewDialog()">自行新增地點</ElButton>
         </div>
-        <el-divider>已連動地點</el-divider>
         <el-table :key="id" class="mt-20" :data="syncTableItems">
             <el-table-column prop="addressRegion" label="縣市">
                 <template #default="{ row }">
@@ -22,21 +20,21 @@
                     </div>
                 </template>
             </el-table-column>
-            <!-- <el-table-column prop="description" label="描述" /> -->
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
                     <el-button v-if="checkEditDisabled(row)" :icon="View" plain circle
                         @click="viewPlaceDialog(row)"></el-button>
                     <el-button v-else :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
-                    <el-button :icon="Delete" plain circle type="danger" :disabled="checkPlaceDeletable(row)"
-                        @click="deletePlace(row)">
+                    <el-button :icon="Delete" plain circle type="danger" @click="deletePlace(row)">
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
-
-        <el-divider>已新增地點</el-divider>
+        <div class="place__headerGroup">
+            <h2>已新增地點</h2>
+            <ElButton :icon="AddLocation" @click="openNewDialog()">自行新增地點</ElButton>
+        </div>
         <el-table :key="id" class="mt-20" :data="controlledTableItems">
             <el-table-column prop="addressRegion" label="縣市">
                 <template #default="{ row }">
@@ -53,7 +51,6 @@
                     </div>
                 </template>
             </el-table-column>
-            <!-- <el-table-column prop="description" label="描述" /> -->
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
                     <el-button :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
@@ -285,6 +282,12 @@ async function deletePlace(row: IPlace) {
 }
 </script>
 <style lang="scss" scoped>
+.place__headerGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .place__fr {
     display: flex;
     align-items: center;

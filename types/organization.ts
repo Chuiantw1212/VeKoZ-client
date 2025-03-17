@@ -17,6 +17,7 @@ export interface IOrganization extends IOrganizationQuery {
 
 export interface IOrganizationQuery {
     name?: string,
+    excludeIds?: string[],
 }
 
 /**

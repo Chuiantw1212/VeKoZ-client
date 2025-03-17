@@ -1,6 +1,12 @@
 <template>
     <el-alert type="info" show-icon :closable="false">
-        郊山、廣場、借來的場地，任何常用但是沒有控制權的空間，無歸屬任何組織
+        <ul>
+            <li>
+                郊山、廣場、借來的場地，任何常用但是沒有控制權的空間，無歸屬任何組織
+            </li>
+            <li>這個功能主要是空間擁有者，以及早期用戶沒有連動來源時使用。</li>
+        </ul>
+
     </el-alert>
     <el-form class="placeForm" :model="form" label-width="auto" :rules="formRules">
         <el-form-item label="所屬組織" prop="organizationId">
