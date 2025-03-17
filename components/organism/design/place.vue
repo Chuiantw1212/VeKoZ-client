@@ -37,11 +37,16 @@
 </template>
 <script setup lang="ts">
 import type { ITemplateDesign } from '~/types/eventTemplate'
+import type { IOrganizationMember } from '~/types/organization'
 import type { IPlace } from '~/types/place'
+
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const repoPlace = useRepoPlace()
 const isLoading = ref(false)
 const repoUI = useRepoUI()
+const repoUser = useRepoUser()
+const repoOrganizationMember = useRepoOrganizationMember()
+const membershipList = ref<IOrganizationMember[]>([])
 
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
@@ -84,12 +89,19 @@ const placeList = ref<IPlace[]>([])
 // Hooks
 onMounted(() => {
     setDefaultValue()
-    getPlaceList()
 })
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
+watch(() => repoUser.userInfo, async () => {
+    isLoading.value = true
+    repoUI.debounce(props.id, async () => {
+        await getMemberOrganizationList()
+        getPlaceList()
+        isLoading.value = false
+    }, 1000)
+}, { immediate: true })
 
 // methods
 function setDefaultValue() {
@@ -136,8 +148,43 @@ function setLocationValues(placeId: string) {
 }
 
 async function getPlaceList() {
-    const result = await repoPlace.getPlaceList()
-    placeList.value = result
+    const results = await Promise.all([
+        getConnectedPlaces(),
+        getCreatedPlaceList(),
+    ])
+    const items = results.reduce((pre, current) => {
+        return [...pre, ...current]
+    }, [])
+    placeList.value = items
+}
+
+async function getMemberOrganizationList() {
+    const result = await repoOrganizationMember.getMemberOrganizationList({
+        allowMethods: ['GET'],
+    })
+    if (result) {
+        membershipList.value = result.items
+    }
+}
+
+async function getConnectedPlaces() {
+    const items = await repoPlace.getPlaceList({
+        email: repoUser.userInfo.email,
+    })
+    return items
+}
+
+async function getCreatedPlaceList() {
+    const organizationIds = membershipList.value.map(member => {
+        return member.organizationId ?? ''
+    })
+    if (organizationIds) {
+        const items = await repoPlace.getPlaceList({
+            organizationIds: [...organizationIds, 'public'],
+        })
+        return items
+    }
+    return []
 }
 </script>
 <style lang="scss" scoped>

@@ -48,11 +48,10 @@
                 <el-avatar :src="dialogEventTemplate.organizerLogo"></el-avatar>
                 <el-text size="large">
                     {{ dialogEventTemplate.organizerName }}的活動
-                    <!-- ({{ dialogEventTemplate.id }}) -->
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="eventDeletable"
+                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="false"
                     :icon="Delete" text @click="deleteEvent()">
                 </el-button>
                 |

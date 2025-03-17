@@ -58,7 +58,9 @@
             </el-table-column>
             <el-table-column fixed="right" label="功能">
                 <template #default="{ row }">
-                    <el-button :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
+                    <el-button v-if="checkEditDisabled(row)" :icon="View" plain circle
+                        @click="viewPlaceDialog(row)"></el-button>
+                    <el-button v-else :icon="Edit" plain circle :disabled="checkEditDisabled(row)"
                         @click="editPlaceDialog(row)"></el-button>
                     <el-button :icon="Delete" plain circle type="danger" :disabled="checkDeleteDiasbled(row)"
                         @click="deleteCreatedPlace(row)">
