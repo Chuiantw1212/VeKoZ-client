@@ -13,9 +13,9 @@
                 <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <!-- <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="openQrCode()">
+            <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="postFollowAction()">
                 追隨
-            </el-button> -->
+            </el-button>
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
@@ -56,8 +56,13 @@ import type { FormInstance } from 'element-plus'
 import type { IUser } from '~/types/user';
 import QRCode, { type QRCodeRenderersOptions } from 'qrcode'
 import type { IPublicInfoCard } from '~/types/ui';
-const repoUI = useRepoUI()
+import type { IFollowAction } from '~/types/followAction';
+
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
+const repoUI = useRepoUI()
+const repoUser = useRepoUser()
+const repoFollowAction = useRepoFollowAction()
+
 const isLoading = ref<boolean>(false)
 const isQrCodeDialogOpen = ref<boolean>(false)
 const shareTooltipVisible = ref(false)
@@ -94,6 +99,10 @@ const props = defineProps({
     disabled: {
         type: Boolean,
         default: false,
+    },
+    type: {
+        type: String,
+        default: '',
     },
 })
 
@@ -134,6 +143,29 @@ onMounted(() => {
 // }, { immediate: true, deep: true })
 
 // methods
+async function postFollowAction() {
+    if (!repoUser.userInfo.id) {
+        // 註冊介面
+        return
+    }
+    const user = repoUser.userInfo
+    const followAction: IFollowAction = {
+        // Follower
+        id: user.id,
+        name: user.name,
+        image: user.avatar,
+        // Followee
+        followeeId: publicInfo.value.id,
+        followeeName: publicInfo.value.name,
+        followeeType: props.type,
+        followeeImage: publicInfo.value.image,
+    }
+    const result = await repoFollowAction.postFollowAction(followAction)
+    console.log({
+        result
+    })
+}
+
 function openQrCode() {
     isQrCodeDialogOpen.value = true
     nextTick(() => {
