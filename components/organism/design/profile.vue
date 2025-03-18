@@ -13,10 +13,11 @@
                 <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <el-button v-if="hasFollowed" :icon="CollectionTag" @click="deleteFollowAction()">
+            <el-button v-if="hasFollowed" :icon="StarFilled" color="#4285F4" @click="deleteFollowAction()">
                 已追隨
             </el-button>
-            <el-button v-else :icon="CollectionTag" :disabled="isDesigning || disabled" @click="postFollowAction()">
+            <el-button v-else :icon="Star" plain color="#4285F4" :disabled="isDesigning || disabled"
+                @click="postFollowAction()">
                 追隨
             </el-button>
         </div>
@@ -54,7 +55,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
+import { Menu, Share, Star, StarFilled } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
 // import type { IUser } from '~/types/user';
 import { getAuth, onAuthStateChanged, type Unsubscribe, type User, } from "firebase/auth"
@@ -132,21 +133,30 @@ function addFirebaseListener() {
     const auth = getAuth()
     unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
         if (firebaseUser?.emailVerified) {
+            repoUser.getUser()
             const count = await repoUserFollow.getFollowAction({
                 followeeSeoName: publicInfo.value.seoName,
             })
-            hasFollowed.value = count !== 0
+            if (count) {
+                hasFollowed.value = true
+            }
         }
     })
 }
 
 async function deleteFollowAction() {
+    isLoading.value = true
     const count = await repoUserFollow.deleteFollowAction({
         followeeSeoName: publicInfo.value.seoName,
     })
+    isLoading.value = false
+    if (count) {
+        hasFollowed.value = false
+    }
 }
 
 async function postFollowAction() {
+    // console.log(repoUser.userInfo)
     if (!repoUser.userInfo.id) {
         // 註冊介面
         return
@@ -164,10 +174,12 @@ async function postFollowAction() {
         followeeType: props.type,
         followeeImage: publicInfo.value.image,
     }
+    isLoading.value = true
     const result = await repoUserFollow.postFollowAction(followAction)
-    console.log({
-        result
-    })
+    isLoading.value = false
+    if (result) {
+        hasFollowed.value = true
+    }
 }
 
 function openQrCode() {
