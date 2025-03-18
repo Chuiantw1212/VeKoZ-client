@@ -35,18 +35,19 @@ onMounted(() => {
     getEvents()
 })
 
-const organizatoinId = computed(() => {
-    const organizationId: string = route.params.organizationId as string
-    return organizationId
+const seoName = computed(() => {
+    const seoName: string = route.params.seoName as string
+    return seoName
 })
 
 // Methods
 async function getOrganization() {
-    const organization = await repoOrganization.getOrganization(organizatoinId.value)
+    const organization = await repoOrganization.getOrganization(seoName.value)
     if (organization) {
         organizationProfile.value = {
             id: String(organization.id),
             name: organization.name,
+            seoName:organization.seoName??String(organization.id),
             description: organization.description,
             image: organization.logo,
             banner: organization.banner,
@@ -58,7 +59,7 @@ async function getOrganization() {
 
 async function getEvents() {
     const events = await repoEvent.getEventList({
-        organizerId: organizatoinId.value,
+        organizerId: seoName.value,
         isPublic: true,
     })
     eventList.value = events

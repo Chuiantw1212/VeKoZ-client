@@ -3,6 +3,7 @@ export interface IFollowAction {
     followeeId?: string,
     followeeType?: string,
     followeeName?: string,
+    followeeSeoName?: string,
     followeeImage?: string,
     id?: string,// userId
     name?: string,
