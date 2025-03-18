@@ -13,7 +13,7 @@
                 <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <el-button v-if="hasFollowed" :icon="CollectionTag">
+            <el-button v-if="hasFollowed" :icon="CollectionTag" @click="deleteFollowAction()">
                 已追隨
             </el-button>
             <el-button v-else :icon="CollectionTag" :disabled="isDesigning || disabled" @click="postFollowAction()">
@@ -140,8 +140,13 @@ function addFirebaseListener() {
     })
 }
 
+async function deleteFollowAction() {
+    const count = await repoUserFollow.deleteFollowAction({
+        followeeSeoName: publicInfo.value.seoName,
+    })
+}
+
 async function postFollowAction() {
-    console.log(repoUser.userInfo)
     if (!repoUser.userInfo.id) {
         // 註冊介面
         return

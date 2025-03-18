@@ -18,8 +18,16 @@ export default defineStore('userFollow', () => {
         })
         return response.json()
     }
+    async function deleteFollowAction(body: IFollowAction) {
+        const response = await defaultApi.authRequest(`/user/follow`, {
+            method: 'DELETE',
+            body,
+        })
+        return response.json()
+    }
     return {
         getFollowAction,
         postFollowAction,
+        deleteFollowAction,
     }
 })
