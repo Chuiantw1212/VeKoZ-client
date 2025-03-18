@@ -10,6 +10,7 @@ export interface IPublicInfoCard {
     name?: string,
     image?: any,
     banner?: any,
+    entity?: string,
     description?: string,
     sameAs?: string[],
     urlPath?: string, // 瀏覽使用

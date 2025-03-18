@@ -13,9 +13,13 @@
                 <el-button text circle :icon="Menu" @click="openQrCode()">
                 </el-button>
             </div>
-            <!-- <el-button :icon="CollectionTag" :disabled="isDesigning || disabled" @click="openQrCode()">
+            <el-button v-if="hasFollowed" :icon="StarFilled" color="#4285F4" @click="deleteFollowAction()">
+                已追隨
+            </el-button>
+            <el-button v-else :icon="Star" plain color="#4285F4" :disabled="isDesigning || disabled"
+                @click="postFollowAction()">
                 追隨
-            </el-button> -->
+            </el-button>
         </div>
         <div class="publicInfo__headerGroup" :class="{ 'publicInfo__headerGroup--hasBanner': publicInfo.banner }">
             <div class="publicInfo__avatar">
@@ -51,16 +55,19 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Menu, Share, CollectionTag } from '@element-plus/icons-vue';
+import { Menu, Share, Star, StarFilled } from '@element-plus/icons-vue';
 import type { FormInstance } from 'element-plus'
-import type { IUser } from '~/types/user';
+// import type { IUser } from '~/types/user';
+import { getAuth, onAuthStateChanged, type Unsubscribe, type User, } from "firebase/auth"
 import QRCode, { type QRCodeRenderersOptions } from 'qrcode'
 import type { IPublicInfoCard } from '~/types/ui';
-const repoUI = useRepoUI()
+import type { IFollowAction } from '~/types/userFollow';
+
 const emit = defineEmits(['update:modelValue', 'focus', 'dragstart', 'remove', 'change', 'mouseenter', 'mouseout'])
-const isLoading = ref<boolean>(false)
-const isQrCodeDialogOpen = ref<boolean>(false)
-const shareTooltipVisible = ref(false)
+const unsuber = ref<Unsubscribe>()
+const repoUI = useRepoUI()
+const repoUser = useRepoUser()
+const repoUserFollow = useRepoUserFollow()
 
 const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
     type: Object,
@@ -72,11 +79,6 @@ const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
         banner: '',
     },
 })
-watch(() => publicInfo.value, (newValue) => {
-    if (!newValue.sameAs) {
-        newValue.sameAs = []
-    }
-}, { immediate: true, })
 
 const props = defineProps({
     id: {
@@ -95,45 +97,90 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    type: {
+        type: String,
+        default: '',
+    },
 })
 
 const formRef = ref<FormInstance>()
 const formModel = ref<{ [key: string]: any }>({})
 const formRules = ref<{ [key: string]: any }>({})
+const isLoading = ref<boolean>(false)
+const isQrCodeDialogOpen = ref<boolean>(false)
+const shareTooltipVisible = ref(false)
+const hasFollowed = ref<boolean>(false)
 
 // Hooks
 onMounted(() => {
-    // drawQrCode()
+    addFirebaseListener()
 })
 
-// watch(() => templateDesigns.value, () => {
-//     templateDesigns.value.forEach(design => {
-//         if (design.formField) {
-//             switch (design.formField) {
-//                 case 'organizer': {
-//                     formModel.value[design.formField] = design.organizationId
-//                     break;
-//                 }
-//                 case 'performers': {
-//                     formModel.value[design.formField] = design.memberIds
-//                     break;
-//                 }
-//                 case 'dates':
-//                 case 'name':
-//                 case 'banner':
-//                 default: {
-//                     formModel.value[design.formField] = design.value
-//                 }
-//             }
-//             formRules.value[design.formField] = {
-//                 required: true,
-//                 message: `${design.label}為必填`
-//             }
-//         }
-//     })
-// }, { immediate: true, deep: true })
+onBeforeUnmount(() => {
+    if (unsuber.value) {
+        unsuber.value()
+    }
+})
 
-// methods
+watch(() => publicInfo.value, (newValue) => {
+    if (!newValue.sameAs) {
+        newValue.sameAs = []
+    }
+}, { immediate: true, })
+
+// Methods
+function addFirebaseListener() {
+    const auth = getAuth()
+    unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+        if (firebaseUser?.emailVerified) {
+            repoUser.getUser()
+            const count = await repoUserFollow.getFollowAction({
+                followeeSeoName: publicInfo.value.seoName,
+            })
+            if (count) {
+                hasFollowed.value = true
+            }
+        }
+    })
+}
+
+async function deleteFollowAction() {
+    isLoading.value = true
+    const count = await repoUserFollow.deleteFollowAction({
+        followeeSeoName: publicInfo.value.seoName,
+    })
+    isLoading.value = false
+    if (count) {
+        hasFollowed.value = false
+    }
+}
+
+async function postFollowAction() {
+    // console.log(repoUser.userInfo)
+    if (!repoUser.userInfo.id) {
+        // 註冊介面
+        return
+    }
+    const user = repoUser.userInfo
+    const followAction: IFollowAction = {
+        // Follower
+        id: user.id,
+        name: user.name,
+        image: user.avatar,
+        // Followee
+        followeeId: publicInfo.value.id,
+        followeeSeoName: publicInfo.value.seoName ?? publicInfo.value.id,
+        followeeType: props.type,
+        followeeImage: publicInfo.value.image,
+    }
+    isLoading.value = true
+    const result = await repoUserFollow.postFollowAction(followAction)
+    isLoading.value = false
+    if (result) {
+        hasFollowed.value = true
+    }
+}
+
 function openQrCode() {
     isQrCodeDialogOpen.value = true
     nextTick(() => {

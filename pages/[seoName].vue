@@ -44,7 +44,7 @@ async function getUserSeoInfoInfo() {
         banner: user.banner,
         image: user.avatar,
         seoName: user.seoName,
-        id: String(user.id),
+        id: user.id ?? '',
         sameAs: user.sameAs
     }
 }

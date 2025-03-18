@@ -1,7 +1,7 @@
 <template>
     <div class="userProfilePage">
         <OrganismDesignProfile class="userProfilePage__landing" v-model="publicInfo" :onchange="onchange"
-            :isDesigning="isDesigning" :disabled="disabled">
+            :isDesigning="isDesigning" :disabled="disabled" :type="props.type">
         </OrganismDesignProfile>
         <!-- <OrganismDesignSocialMedia v-if="publicInfo.sameAs" v-model="publicInfo.sameAs">
         </OrganismDesignSocialMedia> -->
