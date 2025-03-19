@@ -9,7 +9,7 @@
             </span>
         </el-menu-item>
     </NuxtLink>
-    <!-- <NuxtLink to="/follows">
+    <NuxtLink to="/follows">
         <el-menu-item class="menu__item" index="2">
             <el-icon>
                 <Collection />
@@ -18,7 +18,7 @@
                 追隨訂閱
             </span>
         </el-menu-item>
-    </NuxtLink> -->
+    </NuxtLink>
     <NuxtLink to="/tickets">
         <el-menu-item class="menu__item" index="3">
             <el-icon>

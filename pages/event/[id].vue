@@ -113,6 +113,7 @@ onMounted(() => {
     getEvent()
     getOfferList()
 })
+
 // Methods
 async function getOfferList() {
     const { id } = route.params as any
