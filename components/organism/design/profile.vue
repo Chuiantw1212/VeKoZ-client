@@ -35,7 +35,7 @@
             <template v-else>
                 <pre class="content__header">{{ publicInfo.name }}</pre>
             </template>
-            <!-- <div class="content__followers">XXX人追隨</div> -->
+            <div class="content__followers">XXX人追隨</div>
             <template v-if="isDesigning && !disabled">
                 <el-input v-model="publicInfo.description" :maxlength="120" :show-word-limit="true" type="textarea"
                     :rows="6" :disabled="disabled" @change="handleChange" placeholder="請輸入描述"></el-input>
