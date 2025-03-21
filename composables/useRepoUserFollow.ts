@@ -11,6 +11,13 @@ export default defineStore('userFollow', () => {
         })
         return response.json()
     }
+    async function getFollowActionList(params: IFollowAction) {
+        const response = await defaultApi.authRequest(`/user/follow/list`, {
+            method: 'GET',
+            params,
+        })
+        return response.json()
+    }
     async function postFollowAction(body: IFollowAction): Promise<IFollowAction> {
         const response = await defaultApi.authRequest(`/user/follow`, {
             method: 'POST',
@@ -27,6 +34,7 @@ export default defineStore('userFollow', () => {
     }
     return {
         getFollowAction,
+        getFollowActionList,
         postFollowAction,
         deleteFollowAction,
     }

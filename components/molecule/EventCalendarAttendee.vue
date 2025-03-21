@@ -20,7 +20,7 @@ const emit = defineEmits(['create', 'eventChange', 'eventClick', 'datesSet', 'mo
 const repoUI = useRepoUI()
 const calendarRef = ref()
 const calendarInstance = ref<CalendarApi>()
-const viewTypes = ref<string[]>(['dayGridMonth', 'timeGridWeek', 'listYear'])
+const viewTypes = ref<string[]>(['dayGridMonth', 'timeGridWeek',])
 const props = defineProps({
     id: {
         type: String,
@@ -85,15 +85,10 @@ function initializeCalendar() {
         multiMonthMaxColumns: 1, // force a single column
         height: idealHeight,
         views: {
-            listYear: {
-                type: 'list',
-                duration: { year: 1 },
-                buttonText: '全年列表'
-            },
             timeGridWeek: {
                 type: 'timeGrid',
                 duration: { week: 1 },
-                buttonText: '未來一週'
+                buttonText: '週'
             },
         }
     });
