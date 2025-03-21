@@ -185,15 +185,16 @@ watch(() => repoUser.userInfo, (newValue) => {
 // Methods
 function patchUser() {
     repoUI.debounce(`patchUser-${id.value}`, async () => {
-        if (typeof userTemplate.value.avatar !== 'string') {
-            const publicUrl = await repoUser.putUserAvatar(userTemplate.value.avatar)
-            userTemplate.value.avatar = publicUrl
+        if (typeof userPublicInfo.value.image !== 'string') {
+            const publicUrl = await repoUser.putUserAvatar(userPublicInfo.value.image)
+            userPublicInfo.value.image = publicUrl
         }
         await repoUser.patchUser({
-            avatar: userTemplate.value.avatar,
-            seoTitle: userTemplate.value.seoTitle,
-            description: userTemplate.value.description,
-            sameAs: userTemplate.value.sameAs,
+            avatar: userPublicInfo.value.image,
+            seoTitle: userPublicInfo.value.title,
+            seoSubtitle: userPublicInfo.value.subtitle,
+            description: userPublicInfo.value.description,
+            sameAs: userPublicInfo.value.sameAs,
         })
         // renderKey.value = crypto.randomUUID() // 不可增加
     })
@@ -267,6 +268,7 @@ async function initializeUserForm(newValue: IUser) {
     userPublicInfo.value = {
         id: String(userInfoCopy.id),
         title: userInfoCopy.seoTitle || userInfoCopy.name,
+        subtitle: userInfoCopy.seoSubtitle || '',
         description: userInfoCopy.description,
         urlPath: userInfoCopy.seoName || userInfoCopy.id,
         image: userInfoCopy.avatar,

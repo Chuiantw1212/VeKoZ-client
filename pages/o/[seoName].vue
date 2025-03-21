@@ -47,10 +47,11 @@ async function getOrganization() {
         organizationProfile.value = {
             id: String(organization.id),
             title: organization.name,
+            // subtitle: organization.seoSubtitle || '',
+            banner: organization.banner,
+            image: organization.logo,
             seoName: organization.seoName ?? String(organization.id),
             description: organization.description,
-            image: organization.logo,
-            banner: organization.banner,
             urlPath: `o/${organization.id}`,
             sameAs: organization.sameAs,
             followerCount: organization.followerCount,

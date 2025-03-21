@@ -28,15 +28,16 @@
                 </AtomAvatarUploader>
             </div>
             <template v-if="isDesigning && !disabled">
-                <el-input class="content__header" v-model="publicInfo.title" :maxlength="10" placeholder="請輸入標題"
+                <el-input class="content__title" v-model="publicInfo.title" :maxlength="10" placeholder="請輸入標題"
                     :show-word-limit="true" type="textarea" :rows="1" size="large" :disabled="disabled"
                     @change="handleChange"></el-input>
-                <el-input class="content__header" v-model="publicInfo.subtitle" :maxlength="20" placeholder="請輸入副標題"
-                    :show-word-limit="true" type="textarea" :rows="1" size="large" :disabled="disabled"
+                <el-input class="content__subtitle" v-model="publicInfo.subtitle" :maxlength="20" placeholder="請輸入副標題"
+                    :show-word-limit="true" type="textarea" :rows="1" :disabled="disabled"
                     @change="handleChange"></el-input>
             </template>
             <template v-else>
-                <pre class="content__header">{{ publicInfo.title }}</pre>
+                <pre class="content__title">{{ publicInfo.title }}</pre>
+                <pre class="content__subtitle">{{ publicInfo.subtitle }}</pre>
             </template>
             <div v-if="publicInfo.followerCount" class="content__followers">{{ publicInfo.followerCount }}人追隨</div>
             <template v-if="isDesigning && !disabled">
@@ -293,7 +294,7 @@ defineExpose({
         justify-content: center;
     }
 
-    .content__header {
+    .content__title {
         text-align: center;
         font-size: 18px;
         font-weight: bold;
@@ -301,6 +302,20 @@ defineExpose({
 
         :deep(.el-input__inner) {
             font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+
+    .content__subtitle {
+        text-align: center;
+        // font-size: 14px;
+        font-weight: bold;
+        margin-top: 0px;
+        // margin-bottom: 0px;
+
+        :deep(.el-input__inner) {
+            // font-size: 14px;
             text-align: center;
             font-weight: bold;
         }

@@ -6,7 +6,7 @@
                 {{ name }}
             </div>
         </div>
-        <label class="inputGroup__label" :class="{ 'inputGroup__label--disabled': disabled, }">
+        <label class="inputGroup__label" :key="renderKey" :class="{ 'inputGroup__label--disabled': disabled, }">
             <div v-if="typeof localValue === 'string' || localValue.type" class="label__image"
                 :style="{ width: size, height: size, 'background-image': getImageSrc() }">
             </div>
@@ -21,6 +21,7 @@
 import isURL from 'validator/lib/isURL'
 import { Buffer } from 'buffer/'
 import placeholderImage from './placeholder.png'
+const renderKey = ref<string>(crypto.randomUUID())
 const localValue = defineModel('modelValue', {
     default: function () {
         return {
@@ -49,6 +50,13 @@ const props = defineProps({
     placeholder: {
         default: placeholderImage
     }
+})
+
+// Hooks
+watch(() => localValue.value, () => {
+    setTimeout(() => {
+        renderKey.value = crypto.randomUUID()
+    }, 300) // 不知道為什麼會渲染失敗
 })
 
 // Methods
