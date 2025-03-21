@@ -35,13 +35,12 @@
                                     <tbody>
                                         <tr>
                                             <td colspan="3">
-
                                                 {{ item.name }}
                                             </td>
                                         </tr>
-                                        <tr v-if="item.followerCount">
+                                        <tr>
                                             <td>X場活動</td>
-                                            <td>{{ item.followerCount }}人追蹤</td>
+                                            <td v-if="item.followerCount">{{ item.followerCount }}人追蹤</td>
                                             <!-- <td>近期評價4.8</td> -->
                                         </tr>
                                     </tbody>
@@ -227,6 +226,7 @@ function getTimes(event: IEventSingle) {
             justify-content: center;
             color: black;
             text-decoration: none;
+            height: 98px;
         }
 
         .organization__body {
