@@ -232,11 +232,10 @@ async function confirmUserSeoInfo() {
 
 
 function patchUserIsPublic() {
-
-    // repoUser.patchUser({
-    //     id: userTemplate.value.id,
-    //     isPublic: userTemplate.value.isPublic
-    // })
+    repoUser.patchUser({
+        id: userTemplate.value.id,
+        isPublic: userTemplate.value.isPublic
+    })
 }
 
 function openPrivateInfo() {
@@ -267,13 +266,13 @@ async function initializeUserForm(newValue: IUser) {
     delete userInfoCopy.preference
     userPublicInfo.value = {
         id: String(userInfoCopy.id),
-        name: userInfoCopy.seoTitle,
+        name: userInfoCopy.seoTitle || userInfoCopy.name,
         description: userInfoCopy.description,
         urlPath: userInfoCopy.seoName || userInfoCopy.id,
         image: userInfoCopy.avatar,
         sameAs: userInfoCopy.sameAs,
     }
-  
+
     // if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
     //     const defaultDesigns: IUserDesign[] = [
     //         {

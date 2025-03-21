@@ -39,7 +39,7 @@ async function getUserSeoInfoInfo() {
     const { seoName } = route.params as any
     const user = await repoUser.getUserSeoInfo(seoName)
     userForm.value = {
-        name: user.seoTitle,
+        name: user.seoTitle || user.name,
         description: user.description,
         banner: user.banner,
         image: user.avatar,
