@@ -31,8 +31,13 @@ export interface IUserPreference {
     menuType?: UserType,
     isFullScreen?: boolean,
     // 個別管理畫面的偏好
+    follow: IPreferenceFollow,
     event: IPreferenceEvent,
     eventTemplate: IPreferenceEventTemplate,
+}
+
+export interface IPreferenceFollow {
+    
 }
 
 export interface IPreferenceEvent {

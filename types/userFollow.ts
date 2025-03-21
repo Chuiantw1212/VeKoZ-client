@@ -8,4 +8,5 @@ export interface IFollowAction {
     id?: string,// userId
     name?: string,
     image?: string,
+    calendarColor?: string,
 }
