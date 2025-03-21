@@ -77,6 +77,7 @@ const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
         description: '',
         image: '',
         banner: '',
+        followerCount: 0,
     },
 })
 
@@ -154,6 +155,9 @@ async function deleteFollowAction() {
     isLoading.value = false
     if (count) {
         hasFollowed.value = false
+        if (publicInfo.value.followerCount) {
+            publicInfo.value.followerCount -= 1
+        }
     }
 }
 
@@ -180,6 +184,11 @@ async function postFollowAction() {
     isLoading.value = false
     if (result) {
         hasFollowed.value = true
+        if (publicInfo.value.followerCount) {
+            publicInfo.value.followerCount += 1
+        } else {
+            publicInfo.value.followerCount = 1
+        }
     }
 }
 

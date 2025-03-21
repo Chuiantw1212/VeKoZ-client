@@ -11,7 +11,7 @@ export default defineStore('userFollow', () => {
         })
         return response.json()
     }
-    async function postFollowAction(body: IFollowAction) {
+    async function postFollowAction(body: IFollowAction): Promise<IFollowAction> {
         const response = await defaultApi.authRequest(`/user/follow`, {
             method: 'POST',
             body,
