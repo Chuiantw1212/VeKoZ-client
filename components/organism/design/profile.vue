@@ -134,11 +134,13 @@ function addFirebaseListener() {
     unsuber.value = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
         if (firebaseUser?.emailVerified) {
             repoUser.getUser()
-            const count = await repoUserFollow.getFollowAction({
-                followeeSeoName: publicInfo.value.seoName,
-            })
-            if (count) {
-                hasFollowed.value = true
+            if (publicInfo.value.seoName) {
+                const count = await repoUserFollow.getFollowAction({
+                    followeeSeoName: publicInfo.value.seoName,
+                })
+                if (count) {
+                    hasFollowed.value = true
+                }
             }
         }
     })

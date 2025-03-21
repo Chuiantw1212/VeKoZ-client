@@ -53,6 +53,7 @@ async function getOrganization() {
             banner: organization.banner,
             urlPath: `o/${organization.id}`,
             sameAs: organization.sameAs,
+            followerCount: organization.followerCount,
         }
     }
 }

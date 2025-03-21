@@ -30,8 +30,8 @@
                     <el-carousel-item v-for="(item, key) in cardUnits" :key="key">
                         <el-card class="side__card">
                             <NuxtLink class="card__body" :to="`${item.link}`" target="_blank">
-                                <el-avatar :src="item.image"></el-avatar>
-                                <table>
+                                <el-avatar class="body__avatar" :src="item.image"></el-avatar>
+                                <table class="body__table">
                                     <tbody>
                                         <tr>
                                             <td colspan="3">
@@ -221,12 +221,17 @@ function getTimes(event: IEventSingle) {
 
         .card__body {
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            // gap: 20px;
             align-items: center;
             justify-content: center;
             color: black;
             text-decoration: none;
             height: 98px;
+
+            .body__avatar {
+                min-height: 40px;
+            }
         }
 
         .organization__body {

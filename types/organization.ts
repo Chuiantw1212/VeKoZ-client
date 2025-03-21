@@ -13,6 +13,7 @@ export interface IOrganization extends IOrganizationQuery {
     designs?: any[],
     founderId?: string,
     keywords?: string[],
+    followerCount?: number,
 }
 
 export interface IOrganizationQuery {
