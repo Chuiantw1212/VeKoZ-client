@@ -24,7 +24,7 @@ const route = useRoute()
 const repoUser = useRepoUser()
 const userForm = ref<IPublicInfoCard>({
     id: '',
-    name: '',
+    title: '',
     description: '',
     seoName: '',
 })
@@ -39,7 +39,8 @@ async function getUserSeoInfoInfo() {
     const { seoName } = route.params as any
     const user = await repoUser.getUserSeoInfo(seoName)
     userForm.value = {
-        name: user.seoTitle || user.name,
+        title: user.seoTitle || user.name,
+        subtitle: user.seoSubtitle || '',
         description: user.description,
         banner: user.banner,
         image: user.avatar,

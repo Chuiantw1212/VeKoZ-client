@@ -266,7 +266,7 @@ async function initializeUserForm(newValue: IUser) {
     delete userInfoCopy.preference
     userPublicInfo.value = {
         id: String(userInfoCopy.id),
-        name: userInfoCopy.seoTitle || userInfoCopy.name,
+        title: userInfoCopy.seoTitle || userInfoCopy.name,
         description: userInfoCopy.description,
         urlPath: userInfoCopy.seoName || userInfoCopy.id,
         image: userInfoCopy.avatar,

@@ -46,8 +46,8 @@ async function getOrganization() {
     if (organization) {
         organizationProfile.value = {
             id: String(organization.id),
-            name: organization.name,
-            seoName:organization.seoName??String(organization.id),
+            title: organization.name,
+            seoName: organization.seoName ?? String(organization.id),
             description: organization.description,
             image: organization.logo,
             banner: organization.banner,

@@ -28,12 +28,15 @@
                 </AtomAvatarUploader>
             </div>
             <template v-if="isDesigning && !disabled">
-                <el-input class="content__header" v-model="publicInfo.name" :maxlength="30" placeholder="請輸入名稱"
-                    :show-word-limit="true" type="textarea" size="large" :disabled="disabled"
+                <el-input class="content__header" v-model="publicInfo.title" :maxlength="10" placeholder="請輸入標題"
+                    :show-word-limit="true" type="textarea" :rows="1" size="large" :disabled="disabled"
+                    @change="handleChange"></el-input>
+                <el-input class="content__header" v-model="publicInfo.subtitle" :maxlength="20" placeholder="請輸入副標題"
+                    :show-word-limit="true" type="textarea" :rows="1" size="large" :disabled="disabled"
                     @change="handleChange"></el-input>
             </template>
             <template v-else>
-                <pre class="content__header">{{ publicInfo.name }}</pre>
+                <pre class="content__header">{{ publicInfo.title }}</pre>
             </template>
             <div v-if="publicInfo.followerCount" class="content__followers">{{ publicInfo.followerCount }}人追隨</div>
             <template v-if="isDesigning && !disabled">
@@ -73,7 +76,8 @@ const publicInfo = defineModel<IPublicInfoCard>('modelValue', {
     type: Object,
     required: true,
     default: {
-        name: '',
+        title: '',
+        subtitle: '',
         description: '',
         image: '',
         banner: '',
@@ -175,7 +179,7 @@ async function postFollowAction() {
         image: user.avatar,
         // Followee
         followeeId: publicInfo.value.id,
-        followeeName: publicInfo.value.name,
+        followeeName: publicInfo.value.title,
         followeeSeoName: publicInfo.value.seoName ?? publicInfo.value.id,
         followeeType: props.type,
         followeeImage: publicInfo.value.image,
@@ -222,7 +226,7 @@ async function handleChange() {
 async function shareLink() {
     const openInLineExternal = `openExternalBrowser=1`
     const {
-        name,
+        title,
         description,
         urlPath,
     } = publicInfo.value
@@ -232,7 +236,7 @@ async function shareLink() {
     shareTooltipVisible.value = true
     if (navigator.share) {
         await navigator.share({
-            title: name,
+            title,
             text: description,
             url,
         });

@@ -16,6 +16,7 @@ export interface IUser {
     description?: string,
     seoName?: string,
     seoTitle?: string,
+    seoSubtitle?: string,
     isPublic?: false,
     designs?: any[],
     sameAs?: string[],

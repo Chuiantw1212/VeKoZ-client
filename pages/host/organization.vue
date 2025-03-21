@@ -159,7 +159,7 @@ function convertPublicInfo(item: IOrganization): IPublicInfoCard {
         id: item.id ?? '',
         banner: item.banner,
         image: item.logo,
-        name: item.name,
+        title: item.name,
         description: item.description,
         sameAs: item.sameAs,
         urlPath: `o/${item.seoName || item.id}`

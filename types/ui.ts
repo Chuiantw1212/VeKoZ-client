@@ -8,7 +8,8 @@ export interface IEventCarouselCard {
 export interface IPublicInfoCard {
     id: string, // 太重要
     seoName?: string,
-    name?: string,
+    title?: string,
+    subtitle?: string,
     image?: any,
     banner?: any,
     entity?: string,
