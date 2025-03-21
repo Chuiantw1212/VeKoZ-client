@@ -175,6 +175,7 @@ async function postFollowAction() {
         image: user.avatar,
         // Followee
         followeeId: publicInfo.value.id,
+        followeeName: publicInfo.value.name,
         followeeSeoName: publicInfo.value.seoName ?? publicInfo.value.id,
         followeeType: props.type,
         followeeImage: publicInfo.value.image,

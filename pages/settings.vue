@@ -195,7 +195,7 @@ function patchUser() {
             description: userTemplate.value.description,
             sameAs: userTemplate.value.sameAs,
         })
-        renderKey.value = crypto.randomUUID()
+        // renderKey.value = crypto.randomUUID() // 不可增加
     })
 }
 
@@ -232,10 +232,11 @@ async function confirmUserSeoInfo() {
 
 
 function patchUserIsPublic() {
-    repoUser.patchUser({
-        id: userTemplate.value.id,
-        isPublic: userTemplate.value.isPublic
-    })
+
+    // repoUser.patchUser({
+    //     id: userTemplate.value.id,
+    //     isPublic: userTemplate.value.isPublic
+    // })
 }
 
 function openPrivateInfo() {
@@ -272,6 +273,7 @@ async function initializeUserForm(newValue: IUser) {
         image: userInfoCopy.avatar,
         sameAs: userInfoCopy.sameAs,
     }
+  
     // if (!userInfoCopy.designs?.length && !userTemplate.value.designs.length) {
     //     const defaultDesigns: IUserDesign[] = [
     //         {

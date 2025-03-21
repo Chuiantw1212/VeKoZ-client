@@ -1,17 +1,15 @@
 <template>
     <div>
-        <ol>
-            <li>
-                追蹤與訂閱的講者或主辦
-                這邊會是個月例
-            </li>
-            <li>
-                追蹤自定義關鍵字
-            </li>
-            <li>
-                取消訂閱也在這
-            </li>
-            <li></li>
-        </ol>
+        <el-row :gutter="20">
+            <el-col :span="repoUI.isXLarge ? 19 : 24">
+                <MoleculeEventCalendarAttendee></MoleculeEventCalendarAttendee>
+            </el-col>
+            <el-col v-if="repoUI.isXLarge" :span="5">
+                <el-card></el-card>
+            </el-col>
+        </el-row>
     </div>
 </template>
+<script lang="ts" setup>
+const repoUI = useRepoUI()
+</script>

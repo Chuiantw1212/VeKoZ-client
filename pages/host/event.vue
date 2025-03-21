@@ -3,10 +3,10 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
-                    <MoleculeVekozCalendar ref="vekozCalendarRef" @create="openNewEventDialog"
+                    <MoleculeEventCalendarOrganizer ref="vekozCalendarRef" @create="openNewEventDialog"
                         @eventChange="handleEventCalendarChange" @event-click="handleEventClick"
                         @dates-set="handleDatesSet">
-                    </MoleculeVekozCalendar>
+                    </MoleculeEventCalendarOrganizer>
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">

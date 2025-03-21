@@ -97,7 +97,7 @@ const eventList = ref<IEventFromList[]>([])
 
 // Hooks
 watch(() => publicInfo.value.id, (value) => {
-    getEventList()
+    // getEventList()
 }, { immediate: true })
 
 // methods
