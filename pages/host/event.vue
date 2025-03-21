@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
-                    <MoleculeEventCalendar ref="vekozCalendarRef" @create="openNewEventDialog"
+                    <MoleculeEventCalendar ref="vekozCalendarRef" :editable="true" @create="openNewEventDialog"
                         @eventChange="handleEventCalendarChange" @event-click="handleEventClick"
                         @dates-set="handleDatesSet">
                     </MoleculeEventCalendar>
@@ -20,10 +20,9 @@
                         </div>
                     </template>
                     <AtomVekozCheckboxGroup v-model="selectedOrganizationIds" :items="memberOrganizationList"
-                        :item-label="'organizationName'" :item-value="'organizationId'"
-                        @change="updatePreferneceOrgs()">
+                        :item-label="'organizationName'" :item-value="'organizationId'" @change="updatePrefernece()">
                     </AtomVekozCheckboxGroup>
-                    <!-- <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePreferneceOrgs()">
+                    <!-- <el-checkbox-group v-model="selectedOrganizationIds" @change="updatePrefernece()">
                         <template v-for="(item) in memberOrganizationList">
                             <el-checkbox :value="item.organizationId" :label="trimOrganizationName(item)" />
                         </template>
@@ -153,7 +152,7 @@ function openOrgCalendarModal() {
     orgCalendarModalVisible.value = true
 }
 
-function updatePreferneceOrgs() {
+function updatePrefernece() {
     const preference: IPreferenceEvent = {
         organizerIds: selectedOrganizationIds.value,
     }

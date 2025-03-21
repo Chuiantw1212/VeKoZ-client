@@ -2,7 +2,7 @@
     <div class="follows">
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
-                <MoleculeEventCalendar ref="vekozCalendarRef" :editable="true" @dates-set="handleDatesSet">
+                <MoleculeEventCalendar ref="vekozCalendarRef" @dates-set="handleDatesSet">
                 </MoleculeEventCalendar>
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
@@ -15,8 +15,10 @@
                             </el-button>
                         </div>
                     </template>
-                    <AtomVekozCheckboxGroup v-if="followList.length" v-model="selectedFollowList" :items="followList"
-                        :item-label="'followeeName'" :item-value="'followeeId'">
+                    <!-- <el-divider>組織</el-divider>
+                    <el-divider>講師</el-divider> -->
+                    <AtomVekozCheckboxGroup v-if="followList.length" v-model="selectedFolloweeIds" :items="followList"
+                        :item-label="'followeeName'" :item-value="'followeeId'" @change="updatePrefernece()">
                     </AtomVekozCheckboxGroup>
                     <el-empty v-else description="沒有訂閱的行事曆"></el-empty>
                 </el-card>
@@ -45,8 +47,6 @@ const repoEvent = useRepoEvent()
 const vekozCalendarRef = ref<CalendarApi>()
 const followModalVisible = ref<boolean>(false)
 const isLoading = ref<boolean>(true)
-
-const selectedFollowList = ref<IFollowAction[]>([])
 const followList = ref<IFollowAction[]>([])
 const eventMap = ref<{ [key: string]: IEventFromList[] }>()
 const selectedFolloweeIds = ref<string[]>([])
@@ -61,24 +61,34 @@ watch(() => repoUser.userInfo.id, async (isLoggedIn) => {
     }
 }, { immediate: true })
 
-
 // Methods
+function updatePrefernece() {
+    const preference: IPreferenceFollow = {
+        followeeIds: selectedFolloweeIds.value,
+    }
+    repoUser.patchUserPreference('follow', preference)
+}
+
 async function getFollowList() {
     const result = await repoUserFollow.getFollowActionList({
         id: repoUser.userInfo.id,
     })
     followList.value = result
-    result.forEach((followAction: IFollowAction) => {
-        switch (followAction.followeeType) {
-            case 'user': {
-                break;
-            }
-            case 'organization': {
-                getOrganizationEvents(String(followAction.followeeId))
-                break;
-            }
-        }
-    })
+
+    // 從偏好讀取已選擇的組織/人
+
+
+    // result.forEach((followAction: IFollowAction) => {
+    //     switch (followAction.followeeType) {
+    //         case 'user': {
+    //             break;
+    //         }
+    //         case 'organization': {
+    //             getOrganizationEvents(String(followAction.followeeId))
+    //             break;
+    //         }
+    //     }
+    // })
 }
 
 function setCalendarView() {
@@ -103,8 +113,13 @@ async function handleDatesSet(datesSetArg: DatesSetArg) {
     isLoading.value = true
     repoUI.debounce(`handleDatesSet`, () => {
         repoUser.patchUserPreference('follow', preferenceEvnet)
+        getCalendarEvents({
+            start
+        })
+        isLoading.value = false
     })
 }
+
 async function getCalendarEvents(payload: any) {
     // 移除所有事件資料
     const calendarEvents: EventApi[] | undefined = vekozCalendarRef.value?.getEvents()

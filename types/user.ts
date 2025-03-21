@@ -37,6 +37,7 @@ export interface IUserPreference {
 }
 
 export interface IPreferenceFollow {
+    followeeIds?: string[],
     calendarViewType?: 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
 }
 

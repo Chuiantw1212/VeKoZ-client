@@ -106,12 +106,12 @@ function initializeCalendar() {
             listYear: {
                 type: 'list',
                 duration: { year: 1 },
-                buttonText: '全年列表'
+                buttonText: '年'
             },
             timeGridWeek: {
                 type: 'timeGrid',
                 duration: { week: 1 },
-                buttonText: '未來一週'
+                buttonText: '週'
             },
         }
     });
