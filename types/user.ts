@@ -37,7 +37,7 @@ export interface IUserPreference {
 }
 
 export interface IPreferenceFollow {
-    
+    calendarViewType?: 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
 }
 
 export interface IPreferenceEvent {

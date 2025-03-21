@@ -25,6 +25,10 @@ const props = defineProps({
     id: {
         type: String,
         default: crypto.randomUUID()
+    },
+    editable: {
+        type: Boolean,
+        default: false,
     }
 })
 
@@ -32,15 +36,19 @@ const props = defineProps({
 onMounted(() => {
     initializeCalendar()
     nextTick(() => {
-        listenToDateCell(true)
-        listenToFcButton(true)
+        if (props.editable) {
+            listenToDateCell(true)
+            listenToFcButton(true)
+        }
         resizeCalendar()
     })
 })
 
 onBeforeUnmount(() => {
-    listenToDateCell(false)
-    listenToFcButton(false)
+    if (props.editable) {
+        listenToDateCell(false)
+        listenToFcButton(false)
+    }
 })
 
 watch(() => repoUI.isResizing, (newValue: boolean, oldValue: boolean) => {

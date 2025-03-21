@@ -3,10 +3,10 @@
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
                 <el-card v-loading.lock="isLoading">
-                    <MoleculeEventCalendarOrganizer ref="vekozCalendarRef" @create="openNewEventDialog"
+                    <MoleculeEventCalendar ref="vekozCalendarRef" @create="openNewEventDialog"
                         @eventChange="handleEventCalendarChange" @event-click="handleEventClick"
                         @dates-set="handleDatesSet">
-                    </MoleculeEventCalendarOrganizer>
+                    </MoleculeEventCalendar>
                 </el-card>
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
@@ -217,6 +217,7 @@ function setCalendarView() {
         vekozCalendarRef.value?.changeView(calendarViewType)
     }
 }
+
 async function handleDatesSet(datesSetArg: DatesSetArg) {
     const { start, endStr, view } = datesSetArg
     // console.log({
