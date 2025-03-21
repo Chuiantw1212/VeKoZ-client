@@ -76,19 +76,14 @@ async function getFollowList() {
     followList.value = result
 
     // 從偏好讀取已選擇的組織/人
-
-
-    // result.forEach((followAction: IFollowAction) => {
-    //     switch (followAction.followeeType) {
-    //         case 'user': {
-    //             break;
-    //         }
-    //         case 'organization': {
-    //             getOrganizationEvents(String(followAction.followeeId))
-    //             break;
-    //         }
-    //     }
-    // })
+    const followeeIds = repoUser.preference.follow.followeeIds
+    if (followeeIds) {
+        selectedFolloweeIds.value = followeeIds
+    } else {
+        selectedFolloweeIds.value = result.items.map((followAction: IFollowAction) => {
+            return followAction.followeeId ?? ''
+        })
+    }
 }
 
 function setCalendarView() {
