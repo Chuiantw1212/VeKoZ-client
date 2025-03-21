@@ -27,7 +27,7 @@
 
         <AtomVekozDialog v-model="followModalVisible" :showClose="true">
             <template #header>
-                組織行事曆
+                行事曆設定
             </template>
             <FormUserFollowList v-model="followList"></FormUserFollowList>
         </AtomVekozDialog>
@@ -146,7 +146,7 @@ async function getCalendarEvents(payload: any) {
 }
 
 function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
-    const selectedMembership = followList.value.find(followAction => {
+    const selectedFollowAction = followList.value.find(followAction => {
         return followAction.followeeId === event.organizerId
     })
 
@@ -163,7 +163,7 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         startStr: '',
         endStr: '',
         editable: event.eventStatus !== 'ended',
-        backgroundColor: selectedMembership?.calendarColor,
+        backgroundColor: selectedFollowAction?.calendarColor,
         // textColor: 'lightblue',
     }
     const startDate = event.startDate

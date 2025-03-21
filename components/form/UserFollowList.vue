@@ -2,15 +2,15 @@
     <el-table class="pickr" :data="followActions" style="width: 100%">
         <el-table-column prop="color" label="顏色">
             <template #default="{ row }">
-                <input ref="pickrRef" :id="`pickr-${row.organizationId}`"></input>
+                <input ref="pickrRef" :id="`pickr-${row.followeeId}`"></input>
             </template>
         </el-table-column>
-        <el-table-column prop="organizationName" label="名稱" />
-        <el-table-column prop="" label="GoogleCalendarId">
+        <el-table-column prop="followeeName" label="名稱" />
+        <!-- <el-table-column prop="" label="GoogleCalendarId">
             <template #default>
                 開發中
             </template>
-        </el-table-column>
+        </el-table-column> -->
     </el-table>
 </template>
 <script setup lang="ts">
@@ -19,6 +19,7 @@ import type { IFollowAction } from '~/types/userFollow'
 const emit = defineEmits(['memberChange'])
 const { $Pickr } = useNuxtApp()
 const pickrRef = ref() // 只是用來偵測選染完成
+const repoUserFollow = useRepoUserFollow()
 
 const followActions = defineModel<IFollowAction[]>({
     type: Array,
@@ -41,7 +42,7 @@ function waitForRenderCompleted() {
     }
 }
 
-function initializePickr() {
+async function initializePickr() {
     followActions.value.forEach((item, index) => {
         const element = document.querySelector(`#pickr-${item.followeeId}`) as HTMLElement
         /**
@@ -51,7 +52,7 @@ function initializePickr() {
         const options: Pickr.Options = {
             el: element,
             theme: 'nano', // or 'monolith', or 'nano'
-            default: item.calendarColor ?? '#42445a',
+            default: item.calendarColor ?? '#0275ff',
 
             /**
              * 仿照 Google Calendar 顏色
@@ -93,15 +94,15 @@ function initializePickr() {
         pickr.on('change', (instance: any) => {
             pickr.applyColor()
             pickr.hide()
-            const changedMember = followActions.value[index]
-            if (changedMember) {
+            const changedFollowAction = followActions.value[index]
+            if (changedFollowAction) {
                 const newColor = instance.toHEXA().toString() as any
-                changedMember.calendarColor = newColor
-                // repoOrganizationMeber.patchMemberColor({
-                //     id: changedMember.id,
-                //     organizationId: changedMember.organizationId,
-                //     calendarColor: newColor,
-                // })
+                changedFollowAction.calendarColor = newColor
+                repoUserFollow.patchFollowActionColor({
+                    id: changedFollowAction.id,
+                    followeeId: changedFollowAction.followeeId,
+                    calendarColor: newColor,
+                })
             }
         })
     })

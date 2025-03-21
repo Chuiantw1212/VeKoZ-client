@@ -3,7 +3,8 @@
         <template v-for="(item) in props.items">
             <label :id="item[itemValue]">
                 <input class="group__input" type="checkbox" v-model="modelValue" :id="item[itemValue]"
-                    :value="item[itemValue]" :style="{ 'accent-color': `${item.calendarColor} !important` }" />
+                    :value="item[itemValue]"
+                    :style="{ 'accent-color': `${item.calendarColor ?? '#0275ff'} !important` }" />
                 {{ item[itemLabel] }}
             </label>
         </template>

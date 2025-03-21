@@ -25,6 +25,13 @@ export default defineStore('userFollow', () => {
         })
         return response.json()
     }
+    async function patchFollowActionColor(body: IFollowAction): Promise<IFollowAction> {
+        const response = await defaultApi.authRequest(`/user/follow`, {
+            method: 'PATCH',
+            body,
+        })
+        return response.json()
+    }
     async function deleteFollowAction(params: IFollowAction) {
         const response = await defaultApi.authRequest(`/user/follow`, {
             method: 'DELETE',
@@ -36,6 +43,7 @@ export default defineStore('userFollow', () => {
         getFollowAction,
         getFollowActionList,
         postFollowAction,
+        patchFollowActionColor,
         deleteFollowAction,
     }
 })
