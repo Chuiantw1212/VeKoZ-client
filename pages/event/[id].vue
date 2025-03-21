@@ -32,17 +32,19 @@
                             <NuxtLink class="card__body" :to="`${item.link}`" target="_blank">
                                 <el-avatar :src="item.image"></el-avatar>
                                 <table>
-                                    <tr>
-                                        <td colspan="3">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="3">
 
-                                            {{ item.name }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>X場活動</td>
-                                        <td>XX人追蹤</td>
-                                        <!-- <td>近期評價4.8</td> -->
-                                    </tr>
+                                                {{ item.name }}
+                                            </td>
+                                        </tr>
+                                        <tr v-if="item.followerCount">
+                                            <td>X場活動</td>
+                                            <td>{{ item.followerCount }}人追蹤</td>
+                                            <!-- <td>近期評價4.8</td> -->
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </NuxtLink>
                         </el-card>
@@ -145,6 +147,7 @@ async function getEvent() {
             name: user.name ?? '未公開的神祕用戶',
             image: user.avatar,
             link: user.seoName ? `/${user.seoName}` : '',
+            followerCount: user.followerCount,
         }
         cardUnits.value.push(cardUnit)
     })

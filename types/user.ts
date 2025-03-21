@@ -18,7 +18,8 @@ export interface IUser {
     seoTitle?: string,
     isPublic?: false,
     designs?: any[],
-    sameAs?: string[]
+    sameAs?: string[],
+    followerCount?: number,
 }
 
 export interface IUserPreference {

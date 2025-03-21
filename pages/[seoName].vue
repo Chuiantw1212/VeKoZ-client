@@ -45,7 +45,8 @@ async function getUserSeoInfoInfo() {
         image: user.avatar,
         seoName: user.seoName,
         id: user.id ?? '',
-        sameAs: user.sameAs
+        sameAs: user.sameAs,
+        followerCount: user.followerCount,
     }
 }
 </script>

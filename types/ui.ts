@@ -2,6 +2,7 @@ export interface IEventCarouselCard {
     name?: string,
     link?: string,
     image?: string,
+    followerCount?: number,
 }
 
 export interface IPublicInfoCard {
@@ -14,6 +15,7 @@ export interface IPublicInfoCard {
     description?: string,
     sameAs?: string[],
     urlPath?: string, // 瀏覽使用
+    followerCount?: number,
 }
 
 export interface IPagination {
