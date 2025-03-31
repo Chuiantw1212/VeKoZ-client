@@ -488,9 +488,13 @@ async function openNewEventDialog(eventCreation: IEventCreation) {
     loadTemplateDialogIsOpen.value = true
 }
 
+/**
+ * 用模板建立新事件
+ */
 async function openNewCalendarEvent() {
     loadTemplateDialogIsOpen.value = false
 
+    // console.log(dialogEventTemplate.value)
     const dateDesign = dialogEventTemplate.value.designs?.find(design => {
         return design.formField === 'dates'
     })
@@ -540,11 +544,18 @@ async function openNewCalendarEvent() {
     const newEvent = await repoEvent.postEvent(dialogEventTemplate.value)
     vekozEventList.value.push(newEvent)
     dialogEventTemplate.value = newEvent // 呈現給使用者編輯使用
+    eventDialogIsOpen.value = true
+    const membership = memberOrganizationList.value.find((membership: IOrganizationMember) => {
+        return membership.id === dialogEventTemplate.value.organizerId
+    })
+    if (membership?.allowMethods?.includes('PATCH')) {
+        eventPatchable.value = true
+    }
 
+    // 附加到fullCalendar上
     const calendarEvent = parseFullCalendarEvent(newEvent)
     vekozCalendarRef.value?.addEvent(calendarEvent)
 
-    eventDialogIsOpen.value = true
 }
 
 function getTime(incomingDate: Date | string | null) {
