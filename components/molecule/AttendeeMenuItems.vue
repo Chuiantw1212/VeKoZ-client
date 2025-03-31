@@ -1,6 +1,6 @@
 <template>
     <NuxtLink to="/">
-        <el-menu-item class="menu__item" index="1">
+        <el-menu-item class="menu__item" index="index">
             <el-icon>
                 <Search />
             </el-icon>
@@ -10,7 +10,7 @@
         </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/follows">
-        <el-menu-item class="menu__item" index="2">
+        <el-menu-item class="menu__item" index="follows">
             <el-icon>
                 <Collection />
             </el-icon>
@@ -20,7 +20,7 @@
         </el-menu-item>
     </NuxtLink>
     <NuxtLink to="/tickets">
-        <el-menu-item class="menu__item" index="3">
+        <el-menu-item class="menu__item" index="tickets">
             <el-icon>
                 <Ticket />
             </el-icon>
@@ -34,6 +34,11 @@
 <script setup lang="ts">
 import { Search, Collection, Setting, Ticket } from '@element-plus/icons-vue'
 const repoUI = useRepoUI()
+// const route = useRoute()
+
+// onMounted(() => {
+
+// })
 </script>
 <style lang="scss">
 .menu__item {

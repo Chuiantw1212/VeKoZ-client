@@ -18,7 +18,7 @@
                     <!-- <el-divider>組織</el-divider>
                     <el-divider>講師</el-divider> -->
                     <AtomVekozCheckboxGroup v-if="followList.length" v-model="selectedFolloweeIds" :items="followList"
-                        :item-label="'followeeName'" :item-value="'followeeId'" @change="updatePrefernece()">
+                        :item-label="'followeeName'" :item-value="'followeeId'" @change="onFolloweeIdsChanged()">
                     </AtomVekozCheckboxGroup>
                     <el-empty v-else description="沒有訂閱的行事曆"></el-empty>
                 </el-card>
@@ -62,11 +62,17 @@ watch(() => repoUser.userInfo.id, async (isLoggedIn) => {
 }, { immediate: true })
 
 // Methods
-function updatePrefernece() {
+function onFolloweeIdsChanged() {
     const preference: IPreferenceFollow = {
         followeeIds: selectedFolloweeIds.value,
     }
     repoUser.patchUserPreference('follow', preference)
+
+    selectedFolloweeIds.value.forEach(async (id) => {
+        const result = await repoEvent.getEventList({
+            organizerId: id,
+        })
+    })
 }
 
 async function getFollowList() {
@@ -80,7 +86,7 @@ async function getFollowList() {
     if (followeeIds) {
         selectedFolloweeIds.value = followeeIds
     } else {
-        selectedFolloweeIds.value = result.items.map((followAction: IFollowAction) => {
+        selectedFolloweeIds.value = result.map((followAction: IFollowAction) => {
             return followAction.followeeId ?? ''
         })
     }

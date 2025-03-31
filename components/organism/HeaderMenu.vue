@@ -1,18 +1,13 @@
 <template>
     <el-menu :default-active="activeIndex" class="headerMenu" mode="horizontal" :ellipsis="false"
         :menu-trigger="'click'">
-        <!-- <el-menu-item v-if="repoUser.preference.menuType === 'host'" class="headerMenu__toggle" @click="repoUI.toggleMenu()">
-            <el-icon>
-                <More />
-            </el-icon>
-        </el-menu-item> -->
         <NuxtLink v-if="repoUser.preference.menuType === 'host'" to="/host">
-            <el-menu-item class="headerMenu__logo">
+            <el-menu-item class="headerMenu__logo" index="host">
                 <img src="@/assets/logo/140_60_admin.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
         <NuxtLink v-else to="/">
-            <el-menu-item class="headerMenu__logo">
+            <el-menu-item class="headerMenu__logo" index="index">
                 <img src="@/assets/logo/140_60.png" class="logo__image" alt="Element logo" />
             </el-menu-item>
         </NuxtLink>
@@ -29,12 +24,15 @@
 
 <script lang="ts" setup>
 import { MoleculeAttendeeMenuItems } from '#components'
+const route = useRoute()
 const repoUI = useRepoUI()
 const repoUser = useRepoUser()
-const activeIndex = ref('1')
+const activeIndex = ref<string>('index')
 
 // Hooks
-const router = useRouter()
+onMounted(() => {
+    activeIndex.value = String(route.name)
+})
 const isFullScreen = computed(() => {
     return repoUser.preference.isFullScreen ?? false
 })

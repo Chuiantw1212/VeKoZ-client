@@ -1,13 +1,13 @@
 <template>
     <NuxtLink v-if="repoUser.preference.menuType" to="/settings">
-        <el-menu-item index="4" class="headerMenu__firstItem">
+        <el-menu-item index="settings" class="headerMenu__firstItem">
             <!-- <OrganismUserAuth></OrganismUserAuth> -->
             <el-avatar v-if="repoUser.userInfo.id" :size="32" :src="repoUser.userInfo.avatar" />
             <el-avatar v-else :size="32" :src="defaultAvatar" />
         </el-menu-item>
     </NuxtLink>
     <NuxtLink v-else-if="route.name !== 'signin'" to="/signin">
-        <el-menu-item index="4" class="headerMenu__firstItem">
+        <el-menu-item index="signin" class="headerMenu__firstItem">
             登入
         </el-menu-item>
     </NuxtLink>
