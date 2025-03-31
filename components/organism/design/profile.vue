@@ -156,6 +156,7 @@ async function deleteFollowAction() {
     isLoading.value = true
     const count = await repoUserFollow.deleteFollowAction({
         followeeSeoName: publicInfo.value.seoName,
+        followeeType: props.type,
     })
     isLoading.value = false
     if (count) {
