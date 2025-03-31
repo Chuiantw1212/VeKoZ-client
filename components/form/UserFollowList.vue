@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import type Pickr from '@simonwep/pickr'
 import type { IFollowAction } from '~/types/userFollow'
-const emit = defineEmits(['memberChange'])
+const emit = defineEmits(['change'])
 const { $Pickr } = useNuxtApp()
 const pickrRef = ref() // 只是用來偵測選染完成
 const repoUserFollow = useRepoUserFollow()
@@ -98,11 +98,13 @@ async function initializePickr() {
             if (changedFollowAction) {
                 const newColor = instance.toHEXA().toString() as any
                 changedFollowAction.calendarColor = newColor
-                repoUserFollow.patchFollowActionColor({
+                const actionPatch = {
                     id: changedFollowAction.id,
                     followeeId: changedFollowAction.followeeId,
                     calendarColor: newColor,
-                })
+                }
+                repoUserFollow.patchFollowActionColor(actionPatch)
+                emit('change', actionPatch)
             }
         })
     })

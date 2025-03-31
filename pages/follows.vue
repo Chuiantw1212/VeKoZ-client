@@ -29,7 +29,7 @@
             <template #header>
                 行事曆設定
             </template>
-            <FormUserFollowList v-model="followList"></FormUserFollowList>
+            <FormUserFollowList v-model="followList" @change="changeFollowAction($event)"></FormUserFollowList>
         </AtomVekozDialog>
     </div>
 </template>
@@ -48,12 +48,11 @@ const vekozCalendarRef = ref<CalendarApi>()
 const followModalVisible = ref<boolean>(false)
 const isLoading = ref<boolean>(true)
 const followList = ref<IFollowAction[]>([])
-const eventMap = ref<{ [key: string]: IEventFromList[] }>()
 const selectedFolloweeIds = ref<string[]>([])
 const vekozEventList = ref<IEventFromList[]>([])
 
 // Hooks
-watch(() => repoUser.userInfo.id, async (isLoggedIn) => {
+watch(() => repoUser.preference.follow.followeeIds, async (isLoggedIn) => {
     if (isLoggedIn) {
         await getFollowList()
         setCalendarView()
@@ -62,16 +61,23 @@ watch(() => repoUser.userInfo.id, async (isLoggedIn) => {
 }, { immediate: true })
 
 // Methods
+/**
+ * 觸發watcher
+ */
 function onFolloweeIdsChanged() {
     const preference: IPreferenceFollow = {
         followeeIds: selectedFolloweeIds.value,
     }
     repoUser.patchUserPreference('follow', preference)
+}
 
-    selectedFolloweeIds.value.forEach(async (id) => {
-        const result = await repoEvent.getEventList({
-            organizerId: id,
-        })
+function changeFollowAction(followAction: IFollowAction) {
+    const relatedEvents = vekozEventList.value.filter(event => {
+        return event.organizerId === followAction.followeeId
+    })
+    relatedEvents.forEach(followeeEvent => {
+        const calendarEvent = vekozCalendarRef.value?.getEventById(String(followeeEvent.id))
+        calendarEvent?.setProp('backgroundColor', followAction.calendarColor)
     })
 }
 
@@ -100,11 +106,12 @@ function setCalendarView() {
     }
 }
 
+/**
+ * 連動取得月曆事件
+ * @param datesSetArg 
+ */
 async function handleDatesSet(datesSetArg: DatesSetArg) {
-    const { start, endStr, view } = datesSetArg
-    // console.log({
-    //     datesSetArg
-    // })
+    const { start, view } = datesSetArg
     const type = view.type as 'dayGridMonth' | 'dayGridWeek' | 'listWeek'
     const preferenceEvnet: IPreferenceFollow = {
         calendarViewType: type,
@@ -139,7 +146,6 @@ async function getCalendarEvents(payload: any) {
             allowMethods: ['GET'],
         })
         vekozEventList.value.push(...orgEventList)
-        // vekozEventMap.value[organizerId] = orgEventList
 
         const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
             return parseFullCalendarEvent(event)
@@ -170,7 +176,6 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         endStr: '',
         editable: event.eventStatus !== 'ended',
         backgroundColor: selectedFollowAction?.calendarColor,
-        // textColor: 'lightblue',
     }
     const startDate = event.startDate
     if (startDate instanceof Date) {
@@ -188,16 +193,7 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         iFullCalendarEvent.end = new Date(String(endDate))
         iFullCalendarEvent.endStr = endDate
     }
-    // if (currentTime >= iFullCalendarEvent.end.getTime()) {
-    //     iFullCalendarEvent.editable = false
-    // }
     return iFullCalendarEvent
-}
-
-async function getOrganizationEvents(organizerId: string) {
-    const result = await repoEvent.getEventList({
-        organizerId,
-    })
 }
 
 function openCalendarModal() {

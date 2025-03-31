@@ -10,6 +10,7 @@ export default defineStore('user', () => {
     const userInfo = ref<IUser>({})
     const preference = ref<IUserPreference>({
         event: {},
+        follow: {},
         eventTemplate: {
             organizerId: '',
             templateId: '',
