@@ -173,7 +173,12 @@ async function getCalendarEvents(payload: any) {
         vekozEventList.value.push(...fetchedEventList)
 
         const fullCalendarEventList: IFullCalendarEvent[] = fetchedEventList.map(event => {
-            return parseFullCalendarEvent(event)
+            const parsedEvent = parseFullCalendarEvent(event)
+            const selectedFollowAction = followList.value.find(followAction => {
+                return followAction.followeeId === event.organizerId
+            })
+            parsedEvent.backgroundColor = selectedFollowAction?.calendarColor
+            return parsedEvent
         })
 
         fullCalendarEventList.forEach(event => {
@@ -182,11 +187,7 @@ async function getCalendarEvents(payload: any) {
     })
 }
 
-function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
-    const selectedFollowAction = followList.value.find(followAction => {
-        return followAction.followeeId === event.organizerId
-    })
-
+function parseFullCalendarEvent(event: IEventFromList,): IFullCalendarEvent {
     /**
      * Event Object
      * https://fullcalendar.io/docs/event-object
@@ -200,7 +201,6 @@ function parseFullCalendarEvent(event: IEventFromList): IFullCalendarEvent {
         startStr: '',
         endStr: '',
         editable: event.eventStatus !== 'ended',
-        backgroundColor: selectedFollowAction?.calendarColor,
     }
     const startDate = event.startDate
     if (startDate instanceof Date) {
