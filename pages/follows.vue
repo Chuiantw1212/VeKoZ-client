@@ -139,15 +139,35 @@ async function getCalendarEvents(payload: any) {
 
     // 抓取當月事件資料
     vekozEventList.value = []
-    selectedFolloweeIds.value.forEach(async (organizerId: string) => {
-        const orgEventList = await repoEvent.getEventList({
-            organizerId: organizerId,
-            startDate: payload.start,
-            allowMethods: ['GET'],
+    selectedFolloweeIds.value.forEach(async (followeeId: string) => {
+        const relatedFollowAction = followList.value.find((action: IFollowAction) => {
+            return action.followeeId === followeeId
         })
-        vekozEventList.value.push(...orgEventList)
+        if (!relatedFollowAction) {
+            return
+        }
 
-        const fullCalendarEventList: IFullCalendarEvent[] = orgEventList.map(event => {
+        let fetchedEventList: IEventFromList[] = []
+        switch (relatedFollowAction.followeeType) {
+            case 'user': {
+                break;
+            }
+            case 'organization': {
+                fetchedEventList = await repoEvent.getEventList({
+                    organizerId: relatedFollowAction.followeeId,
+                    startDate: payload.start,
+                    allowMethods: ['GET'],
+                })
+                break;
+            }
+            default: {
+
+            }
+        }
+
+        vekozEventList.value.push(...fetchedEventList)
+
+        const fullCalendarEventList: IFullCalendarEvent[] = fetchedEventList.map(event => {
             return parseFullCalendarEvent(event)
         })
 
