@@ -8,7 +8,7 @@ interface requestOptions {
     method: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH',
     body?: any,
     params?: object,
-    headers?: object,
+    headers?: any,
     responseType?: string,
 }
 
@@ -23,46 +23,60 @@ export default defineStore('api', {
     },
     actions: {
         async setToken() {
-            let auth: Auth = null as any
-            if (import.meta.client) {
-                auth = await new Promise((resolve) => {
-                    const step = function () {
-                        try {
-                            const auth = getAuth()
-                            if (auth && auth.currentUser) {
-                                resolve(auth)
-                            } else {
-                                window.requestAnimationFrame(step)
-                            }
-                        } catch (error: any) {
-                            alert(error.message)
-                            console.log(error)
+            if (!import.meta.client) {
+                return
+            }
+
+            // Check Login
+            const auth: Auth = await new Promise((resolve) => {
+                const step = function () {
+                    try {
+                        const auth = getAuth()
+                        if (auth && auth.currentUser) {
+                            resolve(auth)
+                        } else {
                             window.requestAnimationFrame(step)
                         }
-                    }
-                    step()
-                })
-                if (auth && auth.currentUser) {
-                    if (!this.token) {
-                        try {
-                            const idTokenResult = await auth.currentUser.getIdTokenResult(true)
-                            this.token = idTokenResult.token
-                            this.refreshTimerId = setTimeout(() => {
-                                this.refreshTimerId = '' as any
-                                this.token = ''
-                                this.setToken()
-                            }, 3500 * 1000)
-                        } catch (error: any) {
-                            console.log(error.message)
-                            return
-                        }
+                    } catch (error: any) {
+                        alert(error.message)
+                        console.log(error)
+                        window.requestAnimationFrame(step)
                     }
                 }
+                step()
+            })
+
+            // Set idToken
+            if (auth && auth.currentUser) {
+                if (!this.token) {
+                    try {
+                        const idTokenResult = await auth.currentUser.getIdTokenResult(true)
+                        this.token = idTokenResult.token
+                        this.refreshTimerId = setTimeout(() => {
+                            this.refreshTimerId = '' as any
+                            this.token = ''
+                            this.setToken()
+                        }, 3500 * 1000)
+                    } catch (error: any) {
+                        console.log(error.message)
+                    }
+                    // finally {
+                    // }
+                }
+                return this.token
             }
+
         },
         async authRequest(url: string, options: requestOptions) {
             try {
-                await this.setToken()
+                const token = await this.setToken()
+                if (options.headers) {
+                    options.headers.Authorization = `Bearer ${token}`
+                } else {
+                    options.headers = {
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
                 return await this.request(url, options)
             } catch (error) {
                 console.trace(error)
@@ -83,7 +97,6 @@ export default defineStore('api', {
             // Build Headers
             const headersFinale: any = {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.token}`,
                 ...headers
             }
 

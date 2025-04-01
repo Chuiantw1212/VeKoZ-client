@@ -150,6 +150,11 @@ async function getCalendarEvents(payload: any) {
         let fetchedEventList: IEventFromList[] = []
         switch (relatedFollowAction.followeeType) {
             case 'user': {
+                fetchedEventList = await repoEvent.getEventList({
+                    performerIds: [String(relatedFollowAction.followeeId)],
+                    startDate: payload.start,
+                    allowMethods: ['GET'],
+                })
                 break;
             }
             case 'organization': {
