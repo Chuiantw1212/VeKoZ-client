@@ -56,7 +56,7 @@ async function getOrganizationList() {
 
 async function getOfferList() {
     const offererIds = organizationList.value.map(organization => {
-        return String(organization.id)
+        return String(organization.organizationId)
     })
 
     const result: IOffer[] = await repoOffer.getOfferList({
