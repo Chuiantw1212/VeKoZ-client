@@ -148,12 +148,24 @@ async function getCalendarEvents(payload: any) {
         }
 
         let fetchedEventList: IEventFromList[] = []
+        let fullCalendarEventList: IFullCalendarEvent[] = []
         switch (relatedFollowAction.followeeType) {
             case 'user': {
                 fetchedEventList = await repoEvent.getEventList({
                     performerIds: [String(relatedFollowAction.followeeId)],
                     startDate: payload.start,
                     allowMethods: ['GET'],
+                })
+                fullCalendarEventList = fetchedEventList.map(event => {
+                    console.log({
+                        event
+                    })
+                    const parsedEvent = parseFullCalendarEvent(event)
+                    const selectedFollowAction = followList.value.find(followAction => {
+                        return event.performerIds?.includes(String(followAction.followeeId))
+                    })
+                    parsedEvent.backgroundColor = selectedFollowAction?.calendarColor
+                    return parsedEvent
                 })
                 break;
             }
@@ -163,27 +175,26 @@ async function getCalendarEvents(payload: any) {
                     startDate: payload.start,
                     allowMethods: ['GET'],
                 })
+                fullCalendarEventList = fetchedEventList.map(event => {
+                    const parsedEvent = parseFullCalendarEvent(event)
+                    const selectedFollowAction = followList.value.find(followAction => {
+                        return followAction.followeeId === event.organizerId
+                    })
+                    parsedEvent.backgroundColor = selectedFollowAction?.calendarColor
+                    return parsedEvent
+                })
                 break;
             }
             default: {
-
+                alert('followeeType例外')
             }
         }
-
-        vekozEventList.value.push(...fetchedEventList)
-
-        const fullCalendarEventList: IFullCalendarEvent[] = fetchedEventList.map(event => {
-            const parsedEvent = parseFullCalendarEvent(event)
-            const selectedFollowAction = followList.value.find(followAction => {
-                return followAction.followeeId === event.organizerId
-            })
-            parsedEvent.backgroundColor = selectedFollowAction?.calendarColor
-            return parsedEvent
-        })
 
         fullCalendarEventList.forEach(event => {
             vekozCalendarRef.value?.addEvent(event)
         })
+        vekozEventList.value.push(...fetchedEventList)
+
     })
 }
 
