@@ -2,7 +2,8 @@
     <div class="follows">
         <el-row :gutter="20">
             <el-col :span="repoUI.isXLarge ? 19 : 24">
-                <MoleculeEventCalendar ref="vekozCalendarRef" @dates-set="handleDatesSet">
+                <MoleculeEventCalendar ref="vekozCalendarRef" @dates-set="handleDatesSet"
+                    @event-click="handleEventClick">
                 </MoleculeEventCalendar>
             </el-col>
             <el-col v-if="repoUI.isXLarge" :span="5">
@@ -36,14 +37,15 @@
 <script lang="ts" setup>
 import { More } from '@element-plus/icons-vue'
 import type { CalendarApi, DatesSetArg, EventApi } from '@fullcalendar/core/index.js'
-import type { IEventFromList } from '~/types/event'
-import type { IFullCalendarEvent } from '~/types/fullCalendar'
+import type { IEventFromList, } from '~/types/event'
+import type { IEventClickInfo, IFullCalendarEvent } from '~/types/fullCalendar'
 import type { IPreferenceFollow } from '~/types/user'
 import type { IFollowAction } from '~/types/userFollow'
 const repoUI = useRepoUI()
 const repoUserFollow = useRepoUserFollow()
 const repoUser = useRepoUser()
 const repoEvent = useRepoEvent()
+const router = useRouter()
 const vekozCalendarRef = ref<CalendarApi>()
 const followModalVisible = ref<boolean>(false)
 const isLoading = ref<boolean>(true)
@@ -61,6 +63,28 @@ watch(() => repoUser.preference.follow.followeeIds, async (isLoggedIn) => {
 }, { immediate: true })
 
 // Methods
+async function handleEventClick(eventClickInfo: IEventClickInfo) {
+    const eventId = eventClickInfo.event.id
+    // const routeData = router.resolve({ name: 'event', });
+    // const href = routeData.href
+    const { origin } = window.location
+    window.open(`${origin}/event/${eventId}`, '_blank');
+    // eventClickInfo.event.name = eventClickInfo.event.title // Full Calendar Event轉換
+    // const selectedEventMaster = vekozEventList.value.find(event => {
+    //     return event.id === eventId
+    // })
+    // if (!selectedEventMaster) {
+    //     return
+    // }
+    // isLoading.value = true
+    // const eventTemplate: IEventSingle = await repoEvent.getEvent({
+    //     id: eventId,
+    //     organizerId: selectedEventMaster.organizerId,
+    // })
+    // dialogEventTemplate.value = eventTemplate
+    // isLoading.value = false
+}
+
 /**
  * 觸發watcher
  */
@@ -157,9 +181,6 @@ async function getCalendarEvents(payload: any) {
                     allowMethods: ['GET'],
                 })
                 fullCalendarEventList = fetchedEventList.map(event => {
-                    console.log({
-                        event
-                    })
                     const parsedEvent = parseFullCalendarEvent(event)
                     const selectedFollowAction = followList.value.find(followAction => {
                         return event.performerIds?.includes(String(followAction.followeeId))
