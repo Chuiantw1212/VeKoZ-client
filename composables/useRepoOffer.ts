@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import useVekozApi from './useVekozApi'
-import type { IOffer, IPatchOffer } from '~/types/offer'
+import type { IOffer, IOfferQuery, IPatchOffer } from '~/types/offer'
 
 export default defineStore('offer', () => {
     const defaultApi = useVekozApi()
-    async function getOfferList(params?: object): Promise<IOffer[]> {
+    async function getOfferList(params?: IOfferQuery): Promise<IOffer[]> {
         const response = await defaultApi.authRequest(`/offer/list`, {
             method: 'GET',
             params

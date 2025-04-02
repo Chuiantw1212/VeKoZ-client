@@ -31,35 +31,44 @@
 </template>
 <script setup lang="ts">
 import type { IOffer } from '~/types/offer';
-import type { IOrganization } from '~/types/organization';
+import type { IMemberListRes, IOrganization, IOrganizationMember } from '~/types/organization';
 const repoUI = useRepoUI()
 const repoOffer = useRepoOffer()
 const repoOrganization = useRepoOrganization()
+const repoMember = useRepoOrganizationMember()
 const ongoingOfferGroups = ref<any>({})
 const endedOfferGroups = ref<any>({})
-const organizationList = ref<IOrganization[]>([])
+const organizationList = ref<IOrganizationMember[]>([])
 
 // Hooks
-onMounted(() => {
-    getOrganizationList()
-    getOfferList()
+onMounted(async () => {
+    await getOrganizationList()
+    await getOfferList()
 })
 
 // Methods
 async function getOrganizationList() {
-    const organizations = await repoOrganization.getOrganizationList()
-    organizationList.value = organizations
+    const result = await repoMember.getMemberOrganizationList()
+    if (result) {
+        organizationList.value = result.items
+    }
 }
 
 async function getOfferList() {
-    const result: IOffer[] = await repoOffer.getOfferList()
+    const offererIds = organizationList.value.map(organization => {
+        return String(organization.id)
+    })
+
+    const result: IOffer[] = await repoOffer.getOfferList({
+        offererIds,
+    })
     const currentDate = new Date().toISOString()
 
     const ongoingOffers = result.filter(offer => {
-        console.log({
-            validThrough: offer.validThrough,
-            currentDate
-        })
+        // console.log({
+        //     validThrough: offer.validThrough,
+        //     currentDate
+        // })
         return offer.validThrough >= currentDate
     })
     ongoingOfferGroups.value = Object.groupBy(ongoingOffers, ({ categoryId }) => String(categoryId))
