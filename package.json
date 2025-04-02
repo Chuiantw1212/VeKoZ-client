@@ -2,7 +2,7 @@
   "name": "venonia",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.6.2",
+  "packageManager": "pnpm@10.7.1",
   "version": "0.1.0",
   "description": "Element Plus with Nuxt 3 Minimal Starter",
   "repository": {
