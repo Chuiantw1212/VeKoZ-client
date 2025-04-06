@@ -1,11 +1,36 @@
 <template>
     <el-table class="pickr" :data="memberships" style="width: 100%">
+        <!-- <el-table-column prop="organizationLogo" label="">
+            <template #default="{ row }">
+                <el-avatar v-if="row.organizationLogo" :src="row.organizationLogo"></el-avatar>
+                <template v-else>
+                    -
+                </template>
+</template>
+</el-table-column> -->
+        <el-table-column prop="organizationName" label="名稱">
+            <template #default="{ row }">
+                <div class="organizationName__wrap">
+                    <el-avatar v-if="row.organizationLogo" :src="row.organizationLogo"></el-avatar>
+                    {{ row.organizationName }}
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column prop="allowMethods" label="通用權限">
+            <template #default="{ row }">
+                <el-checkbox-group v-model="row.allowMethods" :disabled="true">
+                    <el-checkbox v-for="auth in authOptions" :disabled="auth.disabled" :key="auth.value"
+                        :label="auth.label" :value="auth.value">
+                        {{ auth.label }}
+                    </el-checkbox>
+                </el-checkbox-group>
+            </template>
+        </el-table-column>
         <el-table-column prop="color" label="顏色">
             <template #default="{ row }">
                 <input ref="pickrRef" :id="`pickr-${row.organizationId}`"></input>
             </template>
         </el-table-column>
-        <el-table-column prop="organizationName" label="名稱" />
         <el-table-column prop="" label="GoogleCalendarId">
             <template #default>
                 開發中
@@ -20,6 +45,25 @@ const emit = defineEmits(['memberChange'])
 const repoOrganizationMeber = useRepoOrganizationMember()
 const { $Pickr } = useNuxtApp()
 const pickrRef = ref() // 只是用來偵測選染完成
+const authOptions = [
+    {
+        label: '1.檢視',
+        value: 'GET',
+        disabled: true,
+    },
+    {
+        label: '2.修改',
+        value: 'PATCH'
+    },
+    {
+        label: '3.新增',
+        value: 'POST',
+    },
+    {
+        label: '4.刪除',
+        value: 'DELETE'
+    },
+]
 
 const memberships = defineModel<IOrganizationMember[]>({
     type: Array,
@@ -110,4 +154,10 @@ function initializePickr() {
 </script>
 <style lang="scss" scoped>
 @import '@simonwep/pickr/dist/themes/nano.min.css';
+
+.organizationName__wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 </style>
