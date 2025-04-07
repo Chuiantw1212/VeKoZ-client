@@ -50,7 +50,7 @@
                 </el-text>
             </template>
             <template #headerUI>
-                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="false"
+                <el-button v-if="dialogEventTemplate.id" v-loading="isDialogPatchLoading" :disabled="eventDeletable"
                     :icon="Delete" text @click="deleteEvent()">
                 </el-button>
                 |
@@ -472,11 +472,11 @@ async function handleEventClick(eventClickInfo: IEventClickInfo) {
     //     eventDisabled.value = true
     // }
 
-    // // 開放刪除與否
-    // eventDeletable.value = true
-    // if (!isEnded && hasDelete) {
-    //     eventDeletable.value = false
-    // }
+    // 開放刪除與否
+    eventDeletable.value = true
+    if (!isEnded && hasDelete) {
+        eventDeletable.value = false
+    }
 
     // 打開彈窗
     eventDialogIsOpen.value = true
