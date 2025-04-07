@@ -54,6 +54,9 @@ const isFullScreen = computed(() => {
 
     .defaultLayout__aside {
         width: fit-content;
+        height: 100%;
+        position: sticky;
+        top: 60px;
     }
 }
 

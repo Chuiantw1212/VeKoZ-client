@@ -1,9 +1,22 @@
 <template>
     <div class="eventTemplate">
+        <el-row>
+            <el-col>
+
+            </el-col>
+            <el-col>
+                <el-button size="small" @click="loadTemplateDialog.isOpen = true" :icon="FolderOpened">
+                    打開模板
+                </el-button>
+                <el-button size="small" :icon="FolderAdd" @click="openSaveDialog">
+                    另存新檔
+                </el-button>
+            </el-col>
+        </el-row>
         <el-row :gutter="20">
-            <el-col :span="repoUI.isLarge ? 16 : 24">
-                <el-card v-loading="isCardLoading" class="vekoz-card" body-class="card__body card__body--205">
-                    <template #header>
+            <el-col>
+                <el-card v-loading="isCardLoading" class="vekoz-card">
+                    <!-- <template #header>
                         <div class="vekoz-card-header">
                             <div class="header__titleGroup">
                                 <el-avatar v-if="eventTemplate.organizerLogo"
@@ -22,9 +35,7 @@
                                 </el-button>
                             </div>
                         </div>
-                    </template>
-                    <!-- startDate: {{eventTemplate.startDate}}
-                    endDate: {{eventTemplate.endDate}} -->
+                    </template> -->
                     <FormEventTemplate v-model="eventTemplate" :isDesigning="true" :onchange="handleDesignChanged"
                         @remove="removeDesign($event)" @dragstart="setTemplateTemp($event)">
                         <template #default="defaultProps">
@@ -39,7 +50,7 @@
                     </div>
                 </el-card>
             </el-col>
-            <el-col v-if="repoUI.isLarge" :span="8">
+            <!-- <el-col>
                 <el-card class="vekoz-card" body-class="card__body card__body--205" @mouseout="cancelDragging()">
                     <template #header>
                         <div class="vekoz-card-header">
@@ -54,7 +65,7 @@
                         需要新增權限
                     </el-button>
                 </el-card>
-            </el-col>
+            </el-col> -->
         </el-row>
         <AtomVekozDialog v-model="loadTemplateDialog.isOpen" :showClose="true">
             <template #default>

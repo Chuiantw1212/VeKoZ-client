@@ -102,11 +102,18 @@ async function getEventList() {
     isLoading.value = true
     repoUI.debounce(`${id.value}-search`, async () => {
         const startDate = form.value.startDate
-        startDate?.setHours(0, 0, 0, 0)
+        if (startDate instanceof Date) {
+            startDate?.setHours(0, 0, 0, 0)
+        }
         const endDate = form.value.endDate
-        endDate?.setHours(24, 0, 0, 0)
+        if (endDate instanceof Date) {
+            endDate?.setHours(24, 0, 0, 0)
+        }
         const result = await repoEvent.getEventList(form.value)
-        eventList.value = result
+        eventList.value = []
+        for (let i = 0; i < 20; i++) {
+            eventList.value.push(...result)
+        }
         isLoading.value = false
     }, 500)
 }
