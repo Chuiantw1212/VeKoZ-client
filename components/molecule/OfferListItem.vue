@@ -51,13 +51,13 @@
                         </el-select> -->
                     </el-form-item>
                 </el-col>
-                <el-col :span="formFieldSpan">
+                <!-- <el-col :span="formFieldSpan">
                     <el-form-item label="票券剩餘數量">
-                        <el-switch v-model="groupOffers[0].eventIsPublic" inline-prompt active-text="對外公開"
+                        <el-switch inline-prompt active-text="對外公開"
                             inactive-text="對外隱藏" @change="patchOfferCategory(groupOffers[0])"
                             :disabled="checkOfferIsOver(groupOffers[0])" />
                     </el-form-item>
-                </el-col>
+                </el-col> -->
             </el-row>
         </el-form>
         <el-divider>票券個別設定</el-divider>

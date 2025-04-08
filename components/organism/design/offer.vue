@@ -5,7 +5,7 @@
             <div v-for="(offer, index) in customDesign.offers" class="offer">
                 <template v-if="!disabled">
                     <el-card class="offer__card">
-                        <el-form class="offer__body" :model="offer" :rules="offerRules">
+                        <el-form ref="offers" class="offer__body" :model="offer" :rules="offerRules">
                             <el-row class="body__row">
                                 <el-col :span="8">
                                     <el-form-item prop="name">
@@ -96,12 +96,10 @@
                             </el-input-number>
                         </div>
                         <div class="body__lower">
-                            <!-- <el-form-item label="測試"> -->
                             <AtomVekozDateTimeRange v-model:start-date="offer.validFrom" :minDate="props.startDate"
                                 :maxDate="props.endDate" v-model:end-date="offer.validThrough" ref="dateTimeRangeRef"
                                 :disabledDate="true">
                             </AtomVekozDateTimeRange>
-                            <!-- </el-form-item> -->
                             <el-input v-model="offer.description" type="textarea"
                                 placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
                                 :show-word-limit="true"></el-input>
@@ -126,14 +124,14 @@
 </template>
 <script setup lang="ts">
 import { Plus, Close } from '@element-plus/icons-vue'
-import type { FormRules } from 'element-plus'
+import type { FormContext, FormInstance, FormRules } from 'element-plus'
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOffer } from '~/types/offer'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
 const dateTimeRangeRefs = useTemplateRef('dateTimeRangeRef')
-const formItemRef = ref()
+const offerRefs = useTemplateRef('offers')
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'offers',
@@ -208,7 +206,6 @@ watch(() => customDesign.value, (newValue) => {
 const offerRules = ref<FormRules<any>>({
     name: [
         { required: true, message: '票券名稱為必填', },
-        { validator: customValidate }
     ],
     inventoryMaxValue: [
         { required: true, message: '數量為必填', },
@@ -219,10 +216,6 @@ const offerRules = ref<FormRules<any>>({
 })
 
 // Methods
-function customValidate(rule: any, value: any, callback: any) {
-    console.log('validation executed')
-}
-
 function setDefaultValue() {
     if (customDesign.value.offers) {
         return
@@ -276,23 +269,14 @@ function setDate(incomingDate: Date) {
     })
 }
 
-function validate() {
-    const validationResult = customDesign.value.offers?.every(offer => {
-        const result = formItemRef.value.validate()
+async function validate() {
+    const validatePromises: boolean[] = offerRefs.value.map((offerComponent: FormInstance) => {
+        const result = offerComponent.validate()
         return result
-        // const validateResult = validateOffer(offer)
-        // return validateResult
     })
-    return validationResult
-}
-
-function validateOffer(offer: IOffer) {
-    const name = offer.name
-    const inventoryMaxValue = offer.inventoryMaxValue
-    const price = offer.price
-    const isFilled = name || inventoryMaxValue || price
-    const isIncomplete = !name || !inventoryMaxValue || !price
-    return !(isFilled && isIncomplete)
+    const results = await Promise.all(validatePromises)
+    const isAllValid = results.every(value => !!value)
+    return isAllValid
 }
 
 defineExpose({

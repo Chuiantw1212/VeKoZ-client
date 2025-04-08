@@ -219,13 +219,12 @@ async function waitThenClearValidate() {
  */
 async function validate() {
     const formValidationResult = await formRef.value?.validate()
-    // offerRefs.value.forEach((offerComponent: any) => {
-    //     const offerValidatResult = offerComponent.validate()
-    //     console.log({
-    //         offerValidatResult
-    //     })
-    // })
-    return formValidationResult
+    const promises = offerRefs.value.map((offerComponent: any) => {
+        const offerValidatResult = offerComponent.validate()
+        return offerValidatResult
+    })
+    const result = await Promise.all(promises)
+    return formValidationResult && result
 }
 
 function handleRemove(index: number) {
