@@ -3,8 +3,8 @@
         <!-- date {{  date }} -->
         <!-- typeof date {{ typeof date }} -->
         <!-- date instanceOf Date {{ date instanceof Date }} -->
-        <el-date-picker class="dateTimeRange__date" :placeholder="props.placeholder" v-model="date"
-            :disabled-date="disablePastDays" :disabled="props.disabled" @blur="onDateChanged()"
+        <el-date-picker class="dateTimeRange__date" :clearable="false" :placeholder="props.placeholder" v-model="date"
+            :disabled-date="disablePastDays" :disabled="props.disabledDate || props.disabled" @blur="onDateChanged()"
             @clear="checkClearDate()"></el-date-picker>
         <!-- startDate {{ startDate }}
         endDate {{ endDate }} -->

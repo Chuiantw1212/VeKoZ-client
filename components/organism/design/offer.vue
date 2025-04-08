@@ -1,36 +1,54 @@
 <template>
     <!-- 檢視與編輯用 -->
-    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" @dragstart="emit('dragstart')">
+    <el-form-item v-if="!props.isDesigning" :label="customDesign.label" class="el-form-item">
         <div v-if="customDesign" class="offerList">
             <div v-for="(offer, index) in customDesign.offers" class="offer">
                 <template v-if="!disabled">
-                    <div class="offer__body">
-                        <div class="body__upper">
-                            <el-input v-if="!disabled" class="offer__name" placeholder="票券名" v-model="offer.name"
-                                :disabled="disabled" :maxlength="20" :show-word-limit="true"></el-input>
-                            <el-input-number class="offer__sku" placeholder="數量" v-model="offer.inventoryMaxValue"
-                                :min="0" :max="60" :disabled="disabled" controls-position="right">
-                                <template #suffix>
-                                    <span>張</span>
-                                </template>
-                            </el-input-number>
-                            <el-input-number class="offer__price" placeholder="票價" v-model="offer.price" :min="0"
-                                :disabled="disabled" controls-position="right">
-                                <template #suffix>
-                                    <span>元</span>
-                                </template>
-                            </el-input-number>
-                        </div>
-                        <div class="body__lower">
-                            <AtomVekozDateTimeRange v-model:start-date="offer.validFrom" :minDate="props.startDate"
-                                :maxDate="props.endDate" v-model:end-date="offer.validThrough" ref="dateTimeRangeRef"
-                                :disabledDate="true">
-                            </AtomVekozDateTimeRange>
-                            <el-input v-model="offer.description" type="textarea"
-                                placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
-                                :show-word-limit="true"></el-input>
-                        </div>
-                    </div>
+                    <el-card class="offer__card">
+                        <el-form class="offer__body" :model="offer" :rules="offerRules">
+                            <el-row class="body__row">
+                                <el-col :span="8">
+                                    <el-form-item prop="name">
+                                        <el-input v-if="!disabled" class="offer__name" placeholder="票券名"
+                                            v-model="offer.name" :disabled="disabled" :maxlength="20"
+                                            :show-word-limit="true"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item prop="inventoryMaxValue">
+                                        <el-input-number class="offer__sku" placeholder="數量"
+                                            v-model="offer.inventoryMaxValue" :min="0" :max="60" :disabled="disabled"
+                                            controls-position="right">
+                                            <template #suffix>
+                                                <span>張</span>
+                                            </template>
+                                        </el-input-number>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item prop="price">
+                                        <el-input-number class="offer__price" placeholder="票價" v-model="offer.price"
+                                            :min="0" :disabled="disabled" controls-position="right">
+                                            <template #suffix>
+                                                <span>元</span>
+                                            </template>
+                                        </el-input-number>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row class="body__row">
+                                <AtomVekozDateTimeRange v-model:start-date="offer.validFrom" :minDate="props.startDate"
+                                    :maxDate="props.endDate" v-model:end-date="offer.validThrough"
+                                    ref="dateTimeRangeRef" :disabledDate="true">
+                                </AtomVekozDateTimeRange>
+                            </el-row>
+                            <el-row class="body__row">
+                                <el-input v-model="offer.description" type="textarea"
+                                    placeholder="1. 上方欄位請輸入票券有效時間 2. 此欄位請輸入票券描述" :maxlength="150"
+                                    :show-word-limit="true"></el-input>
+                            </el-row>
+                        </el-form>
+                    </el-card>
                     <el-button v-if="index === 0" class="offer__btn" :disabled="disabled" @click="createOffer()">
                         <el-icon>
                             <Plus />
@@ -108,14 +126,14 @@
 </template>
 <script setup lang="ts">
 import { Plus, Close } from '@element-plus/icons-vue'
+import type { FormRules } from 'element-plus'
 import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IOffer } from '~/types/offer'
 const emit = defineEmits(['update:modelValue', 'remove', 'moveUp', 'moveDown', 'dragstart',])
 const isLoading = ref(false)
 const repoUI = useRepoUI()
-// const dateTimeRangeRef = ref()
 const dateTimeRangeRefs = useTemplateRef('dateTimeRangeRef')
-
+const formItemRef = ref()
 const customDesign = defineModel<ITemplateDesign>('modelValue', {
     default: {
         type: 'offers',
@@ -182,14 +200,29 @@ class Offer {
 onMounted(() => {
     setDefaultValue()
 })
-
-// 觸發更新
 watch(() => customDesign.value, (newValue) => {
     setDefaultValue()
     handleChange(newValue)
 }, { deep: true })
 
-// methods
+const offerRules = ref<FormRules<any>>({
+    name: [
+        { required: true, message: '票券名稱為必填', },
+        { validator: customValidate }
+    ],
+    inventoryMaxValue: [
+        { required: true, message: '數量為必填', },
+    ],
+    price: [
+        { required: true, message: '票價為必填', },
+    ]
+})
+
+// Methods
+function customValidate(rule: any, value: any, callback: any) {
+    console.log('validation executed')
+}
+
 function setDefaultValue() {
     if (customDesign.value.offers) {
         return
@@ -243,11 +276,50 @@ function setDate(incomingDate: Date) {
     })
 }
 
+function validate() {
+    const validationResult = customDesign.value.offers?.every(offer => {
+        const result = formItemRef.value.validate()
+        return result
+        // const validateResult = validateOffer(offer)
+        // return validateResult
+    })
+    return validationResult
+}
+
+function validateOffer(offer: IOffer) {
+    const name = offer.name
+    const inventoryMaxValue = offer.inventoryMaxValue
+    const price = offer.price
+    const isFilled = name || inventoryMaxValue || price
+    const isIncomplete = !name || !inventoryMaxValue || !price
+    return !(isFilled && isIncomplete)
+}
+
 defineExpose({
-    setDate
+    setDate,
+    validate
 })
 </script>
 <style lang="scss" scoped>
+// .el-form-item {
+//     display: flex;
+//     --font-size: 14px;
+//     margin-bottom: 18px;
+
+//     .el-form-item__label {
+//         display: inline-flex;
+//         justify-content: flex-end;
+//         align-items: flex-start;
+//         flex: 0 0 auto;
+//         font-size: var(--el-form-label-font-size);
+//         color: var(--el-text-color-regular);
+//         height: 32px;
+//         line-height: 32px;
+//         padding: 0 12px 0 0;
+//         box-sizing: border-box;
+//     }
+// }
+
 .offerList {
     display: flex;
     flex-direction: column;
@@ -260,15 +332,24 @@ defineExpose({
     gap: 4px;
     width: 100%;
 
+    .offer__card {
+        width: 100%;
+    }
+
     .offer__body {
         display: flex;
         flex-direction: column;
         gap: 4px;
         width: 100%;
 
+        .body__row {
+            margin-bottom: 18px;
+        }
+
         .body__upper {
             display: flex;
             gap: 4px;
+            margin-bottom: 18px;
         }
 
         .body__lower {

@@ -163,18 +163,26 @@ watch(() => template.value.designs, (designs: ITemplateDesign[]) => {
     })
 }, { deep: true })
 
-// methods
+// Methods
 function setFormRules() {
     /**
      * 動態檢核必須使用mounted設定，才不會出錯
      */
     template.value.designs.forEach(design => {
+        // 標準必填寫欄位
         if (design.formField) {
             formRules.value[design.formField] = {
                 required: true,
                 message: `${design.label}為必填`
             }
         }
+        // // 票券檢核
+        // if (design.type === 'offers') {
+        //     formRules.value['offers'] = {
+        //         required: true,
+        //         message: '測試'
+        //     }
+        // }
     })
     requestAnimationFrame(waitThenClearValidate)
 }
@@ -206,8 +214,18 @@ async function waitThenClearValidate() {
     }
 }
 
+/**
+ * 暴露給外部呼叫的validate
+ */
 async function validate() {
-    return await formRef.value?.validate()
+    const formValidationResult = await formRef.value?.validate()
+    // offerRefs.value.forEach((offerComponent: any) => {
+    //     const offerValidatResult = offerComponent.validate()
+    //     console.log({
+    //         offerValidatResult
+    //     })
+    // })
+    return formValidationResult
 }
 
 function handleRemove(index: number) {
