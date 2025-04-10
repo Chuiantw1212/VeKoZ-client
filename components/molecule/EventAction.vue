@@ -2,12 +2,12 @@
     <el-card class="event__actions" :body-class="'actions__body'">
         <div class="actions__offers">
             <div class="offers__options">
-                <el-select v-model="form.id" placeholder="請選擇" class="row__item row__item--select">
+                <el-select v-model="formOffer.id" placeholder="請選擇" class="row__item row__item--select">
                     <el-option v-for="(item, index) in offerList" :key="index" :label="`${item.name}`"
                         :value="String(item.id)" />
                 </el-select>
-                <el-input-number v-model="form.inventoryValue" class="row__item" :controls-position="'right'">
-
+                <el-input-number v-model="formOffer.inventoryValue" class="row__item" :min="1"
+                    :controls-position="'right'" @change="updateCount()">
                 </el-input-number>
             </div>
             <div class="offers__desc">
@@ -20,7 +20,7 @@
                     <el-icon :size="24">
                         <Money />
                     </el-icon>
-                    1,200
+                    {{ Number(offerPriceSum).toLocaleString() }}
                 </div>
             </el-button>
             <el-button class="btnGroup__btn" :icon="More" :disabled="true">
@@ -36,10 +36,11 @@ import type { IOffer, IOfferQuery } from '~/types/offer'
 const route = useRoute()
 const repoOffer = useRepoOffer()
 
-const form = ref<IOfferQuery>({
+const formOffer = ref<IOfferQuery>({
     id: '',
     inventoryValue: 1,
 })
+const offerPriceSum = ref<number>(0)
 
 const offerList = ref<IOffer[]>([])
 
@@ -62,10 +63,24 @@ async function getOfferList() {
     offerList.value = result
     const firstOffer = result[0]
     if (firstOffer) {
-        form.value = {
+        formOffer.value = {
             inventoryValue: 1,
             id: firstOffer.id
         }
+        updateCount()
+    }
+}
+
+function updateCount() {
+    const {
+        id,
+        inventoryValue
+    } = formOffer.value
+    const selectedOffer = offerList.value.find(offer => {
+        return offer.id === id
+    })
+    if (selectedOffer && inventoryValue) {
+        offerPriceSum.value = selectedOffer.price * inventoryValue
     }
 }
 
