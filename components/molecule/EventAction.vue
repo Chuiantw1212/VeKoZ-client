@@ -2,11 +2,11 @@
     <el-card class="event__actions" :body-class="'actions__body'">
         <div class="actions__offers">
             <div class="offers__options">
-                <el-select v-model="form.offerId" placeholder="請選擇" class="row__item row__item--select">
-                    <el-option v-for="(item, index) in ticketOptions" :key="index" :label="`${item.label}`"
-                        :value="item.value" />
+                <el-select v-model="form.id" placeholder="請選擇" class="row__item row__item--select">
+                    <el-option v-for="(item, index) in offerList" :key="index" :label="`${item.name}`"
+                        :value="String(item.id)" />
                 </el-select>
-                <el-input-number v-model="form.offerCount" class="row__item" :controls-position="'right'">
+                <el-input-number v-model="form.inventoryValue" class="row__item" :controls-position="'right'">
 
                 </el-input-number>
             </div>
@@ -30,23 +30,45 @@
     </el-card>
 </template>
 <script setup lang="ts">
-import { More, Money } from '@element-plus/icons-vue';
+import { More, Money } from '@element-plus/icons-vue'
+import type { IOffer, IOfferQuery } from '~/types/offer'
 
-const form = ref({
-    offerId: 'earlyBird',
-    offerCount: 1,
+const route = useRoute()
+const repoOffer = useRepoOffer()
+
+const form = ref<IOfferQuery>({
+    id: '',
+    inventoryValue: 1,
 })
 
-const ticketOptions = ref([
-    {
-        label: '早鳥票',
-        value: 'earlyBird'
-    },
-    {
-        label: '一般票',
-        value: 'normal'
-    },
-])
+const offerList = ref<IOffer[]>([])
+
+// Hooks
+onMounted(() => {
+    // getEvent()
+    getOfferList()
+})
+
+const eventId = computed(() => {
+    const { id } = route.params as any
+    return id ?? ""
+})
+
+// Methods
+async function getOfferList() {
+    const result = await repoOffer.getOfferList({
+        eventId: eventId.value,
+    })
+    offerList.value = result
+    const firstOffer = result[0]
+    if (firstOffer) {
+        form.value = {
+            inventoryValue: 1,
+            id: firstOffer.id
+        }
+    }
+}
+
 </script>
 <style lang="scss" scoped>
 .event__actions {

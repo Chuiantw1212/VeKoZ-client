@@ -4,18 +4,15 @@ export interface IPatchOffer {
 }
 
 export interface IOffer extends IOfferQuery {
-    id?: string,
     description?: string,
     name: string,
     inventoryMaxValue: any,
     price: any,
-    inventoryValue?: number,
     showInventoryValue?: boolean,
     sellerId?: string,
     sellerName?: string,
     offererId?: string,
     offererName?: string,
-    eventId?: string,
     eventName?: string,
     validFrom?: any,
     validThrough?: any,
@@ -24,5 +21,8 @@ export interface IOffer extends IOfferQuery {
 }
 
 export interface IOfferQuery {
+    id?: string,
+    eventId?: string,
+    inventoryValue?: number,
     offererIds?: string[],
 }

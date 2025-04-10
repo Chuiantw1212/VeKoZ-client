@@ -82,7 +82,6 @@ import type { ITemplateDesign } from '~/types/eventTemplate'
 import type { IEventCarouselCard } from '~/types/ui'
 const repoUI = useRepoUI()
 const repoEvent = useRepoEvent()
-const repoOffer = useRepoOffer()
 const repoUser = useRepoUser()
 const rpeoOrganization = useRepoOrganization()
 const route = useRoute()
@@ -112,24 +111,17 @@ watch(() => repoUI, (ui) => {
 
 onMounted(() => {
     getEvent()
-    getOfferList()
+})
+
+const eventId = computed(() => {
+    const { id } = route.params as any
+    return id ?? ""
 })
 
 // Methods
-async function getOfferList() {
-    const { id } = route.params as any
-    const result = await repoOffer.getOfferList({
-        eventId: id,
-    })
-}
-
 async function getEvent() {
-    const { id } = route.params as any
-    if (!id) {
-        return
-    }
     const result = await repoEvent.getEvent({
-        id: String(id),
+        id: String(eventId.value),
     })
     event.value = result
     if (result.designs) {
